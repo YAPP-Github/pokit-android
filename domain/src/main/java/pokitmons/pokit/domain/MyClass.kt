@@ -1,4 +1,3 @@
 package pokitmons.pokit.domain
 
-class MyClass {
-}
+class MyClass
