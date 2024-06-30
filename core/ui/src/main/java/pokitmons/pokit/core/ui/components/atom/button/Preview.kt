@@ -2,6 +2,7 @@ package pokitmons.pokit.core.ui.components.atom.button
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
@@ -36,16 +37,33 @@ fun PokitButtonPreview() {
                     enumValues<PokitButtonType>().forEach { type ->
                         enumValues<PokitButtonStyle>().forEach { style ->
                             for (enable in arrayOf(false, true)) {
-                                PokitButton(
-                                    text = "버튼",
-                                    icon = PokitButtonIcon(resourceId = R.drawable.icon_24_search, position = PokitButtonIconPosition.LEFT),
-                                    onClick = {},
-                                    enable = enable,
-                                    size = size,
-                                    shape = shape,
-                                    style = style,
-                                    type = type
-                                )
+                                Row(
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                ) {
+                                    enumValues<PokitButtonIconPosition>().forEach { iconPosition ->
+                                        PokitButton(
+                                            text = "버튼",
+                                            icon = PokitButtonIcon(resourceId = R.drawable.icon_24_search, position = iconPosition),
+                                            onClick = {},
+                                            enable = enable,
+                                            size = size,
+                                            shape = shape,
+                                            style = style,
+                                            type = type
+                                        )
+                                    }
+
+                                    PokitButton(
+                                        text = "버튼",
+                                        icon = null,
+                                        onClick = {},
+                                        enable = enable,
+                                        size = size,
+                                        shape = shape,
+                                        style = style,
+                                        type = type
+                                    )
+                                }
                             }
                         }
                     }

@@ -99,40 +99,56 @@ private fun getPadding(
 ): PaddingValues {
     return when (size) {
         PokitButtonSize.SMALL -> {
-            if (!hasText) { // icon only
-                PaddingValues(all = 8.dp)
-            } else if (iconPosition == PokitButtonIconPosition.LEFT) {
-                PaddingValues(start = 8.dp, top = 8.dp, bottom = 8.dp, end = 12.dp)
-            } else if (iconPosition == PokitButtonIconPosition.RIGHT) {
-                PaddingValues(start = 12.dp, top = 8.dp, bottom = 8.dp, end = 8.dp)
-            } else { // text only
-                PaddingValues(horizontal = 12.dp, vertical = 8.dp)
-            }
+            getPaddingBySize(
+                hasText = hasText,
+                iconPosition = iconPosition,
+                verticalPaddingSize = 8.dp,
+                textSidePaddingSize = 12.dp,
+                iconSidePaddingSize = 8.dp,
+                textOnlyPadding = 12.dp
+            )
         }
 
         PokitButtonSize.MIDDLE -> {
-            if (!hasText) { // icon only
-                PaddingValues(all = 10.dp)
-            } else if (iconPosition == PokitButtonIconPosition.LEFT) {
-                PaddingValues(start = 16.dp, top = 10.dp, bottom = 10.dp, end = 20.dp)
-            } else if (iconPosition == PokitButtonIconPosition.RIGHT) {
-                PaddingValues(start = 20.dp, top = 10.dp, bottom = 10.dp, end = 16.dp)
-            } else { // text only
-                PaddingValues(horizontal = 26.dp, vertical = 10.dp)
-            }
+            getPaddingBySize(
+                hasText = hasText,
+                iconPosition = iconPosition,
+                verticalPaddingSize = 10.dp,
+                textSidePaddingSize = 20.dp,
+                iconSidePaddingSize = 16.dp,
+                textOnlyPadding = 16.dp
+            )
         }
 
         PokitButtonSize.LARGE -> {
-            if (!hasText) { // icon only
-                PaddingValues(all = 12.dp)
-            } else if (iconPosition == PokitButtonIconPosition.LEFT) {
-                PaddingValues(start = 20.dp, top = 12.dp, bottom = 12.dp, end = 24.dp)
-            } else if (iconPosition == PokitButtonIconPosition.RIGHT) {
-                PaddingValues(start = 24.dp, top = 12.dp, bottom = 12.dp, end = 20.dp)
-            } else { // text only
-                PaddingValues(horizontal = 20.dp, vertical = 12.dp)
-            }
+            getPaddingBySize(
+                hasText = hasText,
+                iconPosition = iconPosition,
+                verticalPaddingSize = 12.dp,
+                textSidePaddingSize = 24.dp,
+                iconSidePaddingSize = 20.dp,
+                textOnlyPadding = 20.dp
+            )
         }
+    }
+}
+
+private fun getPaddingBySize(
+    hasText: Boolean,
+    iconPosition: PokitButtonIconPosition?,
+    verticalPaddingSize: Dp,
+    textSidePaddingSize: Dp,
+    iconSidePaddingSize: Dp,
+    textOnlyPadding: Dp,
+): PaddingValues {
+    return if (!hasText) { // icon only
+        PaddingValues(horizontal = iconSidePaddingSize, vertical = verticalPaddingSize)
+    } else if (iconPosition == PokitButtonIconPosition.LEFT) {
+        PaddingValues(start = iconSidePaddingSize, top = verticalPaddingSize, bottom = verticalPaddingSize, end = textSidePaddingSize)
+    } else if (iconPosition == PokitButtonIconPosition.RIGHT) {
+        PaddingValues(start = textSidePaddingSize, top = verticalPaddingSize, bottom = verticalPaddingSize, end = iconSidePaddingSize)
+    } else { // text only
+        PaddingValues(horizontal = textOnlyPadding, vertical = verticalPaddingSize)
     }
 }
 
