@@ -4,7 +4,7 @@ enum class PokitButtonShape {
     ROUND, RECTANGLE,
 }
 
-enum class PokitButtonState {
+internal enum class PokitButtonState {
     DEFAULT, DISABLE,
 }
 

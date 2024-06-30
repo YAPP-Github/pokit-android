@@ -42,9 +42,10 @@ internal fun Modifier.pokitButtonContainerModifier(
         .clip(
             shape = buttonShape
         )
-        .clickable {
-            onClick()
-        }
+        .clickable(
+            enabled = (state != PokitButtonState.DISABLE),
+            onClick = onClick
+        )
         .background(
             shape = buttonShape,
             color = backgroundColor
