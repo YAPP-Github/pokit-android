@@ -43,34 +43,34 @@ fun <T> CategoryCard(
         modifier = modifier
             .clickable(
                 enabled = state != CategoryCardState.DISABLE,
-                onClick = { onClickItem(item) },
+                onClick = { onClickItem(item) }
             )
             .padding(horizontal = 20.dp, vertical = 12.dp),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Image(
             painter = painter,
             contentDescription = null,
             modifier = Modifier.size(60.dp),
-            contentScale = ContentScale.Crop,
+            contentScale = ContentScale.Crop
         )
 
         Spacer(modifier = Modifier.width(12.dp))
 
         Column(
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.weight(1f)
         ) {
             Text(
                 text = title,
                 style = PokitTheme.typography.body1Bold.copy(color = titleTextColor),
-                overflow = TextOverflow.Ellipsis,
+                overflow = TextOverflow.Ellipsis
             )
 
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
                 text = sub,
-                style = PokitTheme.typography.detail1.copy(color = subTextColor),
+                style = PokitTheme.typography.detail1.copy(color = subTextColor)
             )
         }
 
@@ -79,12 +79,12 @@ fun <T> CategoryCard(
             modifier = Modifier
                 .padding(0.dp)
                 .align(Alignment.Top),
-            enabled = state != CategoryCardState.DISABLE,
+            enabled = state != CategoryCardState.DISABLE
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.icon_24_kebab),
                 contentDescription = null,
-                modifier = Modifier.size(24.dp),
+                modifier = Modifier.size(24.dp)
             )
         }
     }

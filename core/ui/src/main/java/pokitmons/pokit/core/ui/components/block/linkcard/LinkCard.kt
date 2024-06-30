@@ -38,15 +38,15 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
 fun<T> LinkCard(
-    item : T,
-    title : String,
-    sub : String,
-    painter : Painter,
-    indicatorVisible : Boolean,
-    bookmarked : Boolean,
-    badgeText : String,
-    onClickKebab : (T) -> Unit,
-    onClickItem : (T) -> Unit,
+    item: T,
+    title: String,
+    sub: String,
+    painter: Painter,
+    indicatorVisible: Boolean,
+    bookmarked: Boolean,
+    badgeText: String,
+    onClickKebab: (T) -> Unit,
+    onClickItem: (T) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
@@ -129,18 +129,18 @@ fun<T> LinkCard(
                             text = title,
                             style = PokitTheme.typography.body3Medium.copy(color = PokitTheme.colors.textPrimary),
                             maxLines = 2,
-                            minLines = 2,
+                            minLines = 2
                         )
 
                         IconButton(
-                            onClick = {onClickKebab(item)},
+                            onClick = { onClickKebab(item) },
                             modifier = Modifier.size(24.dp)
                         ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.icon_24_kebab),
-                                contentDescription = null)
+                                contentDescription = null
+                            )
                         }
-
                     }
 
                     Spacer(modifier = Modifier.height(8.dp))
@@ -167,4 +167,3 @@ fun<T> LinkCard(
         }
     }
 }
-

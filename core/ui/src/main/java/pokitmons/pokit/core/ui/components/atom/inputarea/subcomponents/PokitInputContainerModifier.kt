@@ -23,19 +23,19 @@ internal fun Modifier.pokitInputAreaContainerModifier(
 
     return this then Modifier
         .clip(
-            shape = inputContainerShape,
+            shape = inputContainerShape
         )
         .background(
             shape = inputContainerShape,
-            color = backgroundColor,
+            color = backgroundColor
         )
         .border(
             shape = inputContainerShape,
             width = 1.dp,
-            color = strokeColor,
+            color = strokeColor
         )
         .padding(
-            paddingValues = PaddingValues(16.dp),
+            paddingValues = PaddingValues(16.dp)
         )
 }
 

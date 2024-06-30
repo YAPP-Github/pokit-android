@@ -26,7 +26,7 @@ fun PokitButtonPreview() {
                 .fillMaxSize()
                 .padding(12.dp)
                 .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             enumValues<PokitCheckboxShape>().forEach { shape ->
                 enumValues<PokitCheckboxStyle>().forEach { style ->
@@ -39,7 +39,7 @@ fun PokitButtonPreview() {
                             onClick = {},
                             shape = shape,
                             style = style,
-                            enabled = true,
+                            enabled = true
                         )
 
                         PokitCheckbox(
@@ -47,7 +47,7 @@ fun PokitButtonPreview() {
                             onClick = {},
                             shape = shape,
                             style = style,
-                            enabled = true,
+                            enabled = true
                         )
 
                         PokitCheckbox(
@@ -55,7 +55,7 @@ fun PokitButtonPreview() {
                             onClick = {},
                             shape = shape,
                             style = style,
-                            enabled = false,
+                            enabled = false
                         )
 
                         PokitCheckbox(
@@ -63,7 +63,7 @@ fun PokitButtonPreview() {
                             onClick = {},
                             shape = shape,
                             style = style,
-                            enabled = false,
+                            enabled = false
                         )
                     }
                 }

@@ -41,7 +41,7 @@ fun PokitInput(
             readOnly = readOnly,
             focused = focused,
             error = isError,
-            text = text,
+            text = text
         )
     }
     val textColor = getTextColor(state = state)
@@ -61,7 +61,7 @@ fun PokitInput(
                 iconPosition = icon?.position,
                 modifier = modifier,
                 shape = shape,
-                state = state,
+                state = state
             ) {
                 if (icon == null) {
                     Box(modifier = Modifier.height(24.dp)) // 아이콘 없을 떄 공간 맞추기용
@@ -84,7 +84,7 @@ fun PokitInput(
                     PokitInputIcon(state = state, resourceId = icon.resourceId)
                 }
             }
-        },
+        }
     )
 }
 

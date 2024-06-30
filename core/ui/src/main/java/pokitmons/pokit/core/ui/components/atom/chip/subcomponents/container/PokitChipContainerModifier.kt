@@ -31,23 +31,23 @@ internal fun Modifier.pokitChipContainerModifier(
 
     return this then Modifier
         .clip(
-            shape = RoundedCornerShape(9999.dp),
+            shape = RoundedCornerShape(9999.dp)
         )
         .clickable(
             enabled = (onClick != null && state != PokitChipState.DISABLED),
-            onClick = onClick ?: {},
+            onClick = onClick ?: {}
         )
         .background(
             shape = RoundedCornerShape(9999.dp),
-            color = backgroundColor,
+            color = backgroundColor
         )
         .border(
             shape = RoundedCornerShape(9999.dp),
             width = 1.dp,
-            color = strokeColor,
+            color = strokeColor
         )
         .padding(
-            paddingValues = padding,
+            paddingValues = padding
         )
 }
 

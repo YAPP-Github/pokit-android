@@ -25,7 +25,6 @@ private fun PokitSwitchRadioPreview() {
 
     PokitTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-
             Surface(
                 modifier = Modifier.fillMaxSize(),
                 color = MaterialTheme.colorScheme.background
@@ -37,13 +36,13 @@ private fun PokitSwitchRadioPreview() {
 
             if (showBottomSheet) {
                 PokitBottomSheet(
-                    onHideBottomSheet = { showBottomSheet = false },
+                    onHideBottomSheet = { showBottomSheet = false }
                 ) {
                     PokitBottomSheetItem(
                         text = "즐겨찾기",
                         resourceId = R.drawable.icon_24_star_1,
                         data = "즐겨찾기",
-                        onClick = {  },
+                        onClick = { }
                     )
 
                     HorizontalDivider(
@@ -55,7 +54,8 @@ private fun PokitSwitchRadioPreview() {
                         text = "공유하기",
                         resourceId = R.drawable.icon_24_share,
                         data = "공유하기",
-                        onClick = { showBottomSheet = false })
+                        onClick = { showBottomSheet = false }
+                    )
                 }
             }
         }

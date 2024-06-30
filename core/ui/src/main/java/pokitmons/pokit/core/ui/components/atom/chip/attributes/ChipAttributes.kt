@@ -1,6 +1,6 @@
 package pokitmons.pokit.core.ui.components.atom.chip.attributes
 
-enum class PokitChipState{
+enum class PokitChipState {
     DEFAULT, FILLED, STROKE, DISABLED
 }
 

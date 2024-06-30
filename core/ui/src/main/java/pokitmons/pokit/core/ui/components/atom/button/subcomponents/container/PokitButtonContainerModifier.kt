@@ -40,23 +40,23 @@ internal fun Modifier.pokitButtonContainerModifier(
 
     return this then Modifier
         .clip(
-            shape = buttonShape,
+            shape = buttonShape
         )
         .clickable(
             enabled = (state != PokitButtonState.DISABLE),
-            onClick = onClick,
+            onClick = onClick
         )
         .background(
             shape = buttonShape,
-            color = backgroundColor,
+            color = backgroundColor
         )
         .border(
             shape = buttonShape,
             width = strokeWidth,
-            color = strokeColor,
+            color = strokeColor
         )
         .padding(
-            paddingValues = padding,
+            paddingValues = padding
         )
 }
 

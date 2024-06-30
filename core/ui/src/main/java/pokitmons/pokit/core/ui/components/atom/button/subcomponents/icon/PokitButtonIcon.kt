@@ -29,7 +29,7 @@ internal fun PokitButtonIcon(
         painter = painterResource(id = resourceId),
         contentDescription = null,
         tint = iconColor,
-        modifier = Modifier.size(iconSize),
+        modifier = Modifier.size(iconSize)
     )
 }
 

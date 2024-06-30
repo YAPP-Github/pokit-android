@@ -32,7 +32,7 @@ fun PokitInputArea(
             readOnly = readOnly,
             focused = focused,
             error = isError,
-            text = text,
+            text = text
         )
     }
     val textColor = getTextColor(state = state)
@@ -50,7 +50,7 @@ fun PokitInputArea(
         decorationBox = { innerTextField ->
             PokitInputAreaContainer(
                 state = state,
-                modifier = modifier,
+                modifier = modifier
             ) {
                 if (text.isEmpty() && !focused) {
                     Text(text = hintText, style = textStyle)
@@ -60,7 +60,7 @@ fun PokitInputArea(
                     innerTextField()
                 }
             }
-        },
+        }
     )
 }
 

@@ -22,10 +22,10 @@ internal fun PokitInputContainer(
             .pokitInputContainerModifier(
                 iconPosition = iconPosition,
                 shape = shape,
-                state = state,
+                state = state
             )
             .then(modifier),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         content()
     }

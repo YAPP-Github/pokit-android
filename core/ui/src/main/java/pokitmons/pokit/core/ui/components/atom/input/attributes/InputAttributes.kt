@@ -11,11 +11,10 @@ internal enum class PokitInputState {
 }
 
 data class PokitInputIcon(
-    val position : PokitInputIconPosition,
-    val resourceId : Int = R.drawable.icon_24_search,
+    val position: PokitInputIconPosition,
+    val resourceId: Int = R.drawable.icon_24_search,
 )
 
 enum class PokitInputIconPosition {
     RIGHT, LEFT,
 }
-

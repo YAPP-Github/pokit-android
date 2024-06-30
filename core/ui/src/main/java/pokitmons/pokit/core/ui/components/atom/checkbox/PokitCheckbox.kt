@@ -42,7 +42,7 @@ fun PokitCheckbox(
         modifier = Modifier
             .size(24.dp)
             .clip(
-                shape = checkboxShape,
+                shape = checkboxShape
             )
             .clickable(
                 indication = null,
@@ -50,16 +50,16 @@ fun PokitCheckbox(
                 enabled = enabled,
                 onClick = {
                     onClick(!checked)
-                },
+                }
             )
             .background(
-                color = backgroundColor,
+                color = backgroundColor
             )
             .border(
                 width = 1.dp,
                 color = strokeColor,
-                shape = checkboxShape,
-            ),
+                shape = checkboxShape
+            )
     )
 }
 

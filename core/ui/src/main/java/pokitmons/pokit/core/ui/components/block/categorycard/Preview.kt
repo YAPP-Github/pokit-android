@@ -18,7 +18,7 @@ fun CategoryCardPreview() {
     PokitTheme {
         Column(
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             CategoryCard(
                 state = CategoryCardState.DISABLE,
@@ -27,7 +27,7 @@ fun CategoryCardPreview() {
                 title = "카테고리입니당",
                 sub = "15개 항목",
                 onClickKebab = {},
-                onClickItem = {},
+                onClickItem = {}
             )
 
             CategoryCard(
@@ -37,7 +37,7 @@ fun CategoryCardPreview() {
                 title = "카테고리입니당",
                 sub = "15개 항목",
                 onClickKebab = {},
-                onClickItem = {},
+                onClickItem = {}
             )
 
             CategoryCard(
@@ -47,7 +47,7 @@ fun CategoryCardPreview() {
                 title = "카테고리입니당",
                 sub = "15개 항목",
                 onClickKebab = {},
-                onClickItem = {},
+                onClickItem = {}
             )
         }
     }

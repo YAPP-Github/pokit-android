@@ -11,11 +11,10 @@ import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.components.block.select.attributes.PokitSelectState
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
-
 @Composable
 internal fun Modifier.pokitSelectContentContainerModifier(
-    state : PokitSelectState
-) : Modifier {
+    state: PokitSelectState,
+): Modifier {
     val backgroundColor = getBackgroundColor(state = state)
     val strokeColor = getStrokeColor(state = state)
 
@@ -32,14 +31,13 @@ internal fun Modifier.pokitSelectContentContainerModifier(
             width = 1.dp,
             color = strokeColor
         )
-
 }
 
 @Composable
 private fun getBackgroundColor(
-    state : PokitSelectState
-) : Color {
-    return when(state) {
+    state: PokitSelectState,
+): Color {
+    return when (state) {
         PokitSelectState.DEFAULT -> {
             PokitTheme.colors.backgroundBase
         }
@@ -57,9 +55,9 @@ private fun getBackgroundColor(
 
 @Composable
 private fun getStrokeColor(
-    state : PokitSelectState
-) : Color {
-    return when(state) {
+    state: PokitSelectState,
+): Color {
+    return when (state) {
         PokitSelectState.DEFAULT -> {
             PokitTheme.colors.borderSecondary
         }

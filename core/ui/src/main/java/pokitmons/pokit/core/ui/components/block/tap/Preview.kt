@@ -18,7 +18,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
-
 @Preview(showBackground = true)
 @Composable
 private fun PokitSwitchRadioPreview() {
@@ -32,7 +31,7 @@ private fun PokitSwitchRadioPreview() {
                 .fillMaxSize()
                 .padding(12.dp)
                 .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth()
@@ -41,7 +40,7 @@ private fun PokitSwitchRadioPreview() {
                     PokitTap(
                         text = tap,
                         data = tap,
-                        onClick = {currentSelectedTap = it},
+                        onClick = { currentSelectedTap = it },
                         selectedItem = currentSelectedTap
                     )
                 }

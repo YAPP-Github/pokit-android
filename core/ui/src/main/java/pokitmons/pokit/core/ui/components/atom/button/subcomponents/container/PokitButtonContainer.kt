@@ -17,10 +17,10 @@ import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonType
 
 @Composable
 internal fun PokitButtonContainer(
-    hasText : Boolean,
-    iconPosition : PokitButtonIconPosition?,
-    modifier : Modifier = Modifier,
-    onClick : () -> Unit = {},
+    hasText: Boolean,
+    iconPosition: PokitButtonIconPosition?,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
     shape: PokitButtonShape = PokitButtonShape.RECTANGLE,
     state: PokitButtonState = PokitButtonState.DEFAULT,
     style: PokitButtonStyle = PokitButtonStyle.FILLED,
@@ -48,13 +48,13 @@ internal fun PokitButtonContainer(
             .spacedBy(
                 space = space,
                 alignment = Alignment.CenterHorizontally
-            ),
+            )
     ) {
         content()
     }
 }
 
-private fun getItemSpace(size: PokitButtonSize) : Dp {
+private fun getItemSpace(size: PokitButtonSize): Dp {
     return when (size) {
         PokitButtonSize.SMALL -> {
             4.dp

@@ -21,7 +21,7 @@ fun LinkCardPreview() {
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.LightGray)
-                .padding(12.dp),
+                .padding(12.dp)
         ) {
             LinkCard(
                 title = "타이틀\n컴포스는 왜 이런가",
@@ -32,7 +32,7 @@ fun LinkCardPreview() {
                 bookmarked = true,
                 item = 3,
                 onClickKebab = { value: Int -> },
-                onClickItem = { value: Int -> },
+                onClickItem = { value: Int -> }
             )
         }
     }

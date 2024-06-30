@@ -9,12 +9,12 @@ import pokitmons.pokit.core.ui.theme.color.LocalPokitColorScheme
 import pokitmons.pokit.core.ui.theme.color.PokitColors
 
 object PokitTheme {
-    val colors : PokitColors
+    val colors: PokitColors
         @Composable
         @ReadOnlyComposable
         get() = LocalPokitColorScheme.current
 
-    val typography : PokitTypography
+    val typography: PokitTypography
         @Composable
         @ReadOnlyComposable
         get() = LocalPokitTypography.current
@@ -24,7 +24,7 @@ object PokitTheme {
 fun PokitTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     typography: PokitTypography = PokitTheme.typography,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colorScheme = when {
         darkTheme -> LocalPokitColorDarkScheme.current

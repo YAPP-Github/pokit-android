@@ -32,15 +32,15 @@ fun PokitChipContainer(
                 state = state,
                 size = size,
                 type = type,
-                onClick = onClick,
+                onClick = onClick
             )
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement
             .spacedBy(
                 space = space,
-                alignment = Alignment.CenterHorizontally,
-            ),
+                alignment = Alignment.CenterHorizontally
+            )
     ) {
         content()
     }

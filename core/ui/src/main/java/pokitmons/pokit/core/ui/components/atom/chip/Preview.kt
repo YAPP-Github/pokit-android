@@ -28,7 +28,7 @@ fun PokitButtonPreview() {
                 .fillMaxSize()
                 .padding(12.dp)
                 .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             enumValues<PokitChipSize>().forEach { size ->
                 enumValues<PokitChipState>().forEach { state ->

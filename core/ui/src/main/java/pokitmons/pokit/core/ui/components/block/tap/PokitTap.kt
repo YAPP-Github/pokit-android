@@ -27,14 +27,14 @@ fun <T> PokitTap(
         modifier = modifier
             .clickable {
                 onClick(data)
-            },
+            }
     ) {
         Text(
             text = text,
             style = textStyle,
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .padding(bottom = 16.dp, top = 4.dp),
+                .padding(bottom = 16.dp, top = 4.dp)
         )
 
         if (selectedItem == data) {
@@ -43,7 +43,7 @@ fun <T> PokitTap(
                 color = PokitTheme.colors.brand,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
-                    .fillMaxWidth(),
+                    .fillMaxWidth()
             )
         }
     }

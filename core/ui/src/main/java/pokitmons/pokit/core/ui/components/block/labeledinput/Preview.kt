@@ -23,7 +23,7 @@ fun PokitInputPreview() {
                 .fillMaxSize()
                 .padding(12.dp)
                 .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             enumValues<PokitInputState>().forEach { state ->
                 LabeledInput(label = "Label", sub = "내용을 입력해주세요", maxLength = 10, inputText = "으앙", hintText = "내용을 입력해주세요", onChangeText = {})

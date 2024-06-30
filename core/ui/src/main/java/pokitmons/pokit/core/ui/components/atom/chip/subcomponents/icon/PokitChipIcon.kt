@@ -35,8 +35,8 @@ fun PokitChipIcon(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() },
                 onClick = onClick,
-                enabled = (state != PokitChipState.DISABLED),
-            ),
+                enabled = (state != PokitChipState.DISABLED)
+            )
     )
 }
 

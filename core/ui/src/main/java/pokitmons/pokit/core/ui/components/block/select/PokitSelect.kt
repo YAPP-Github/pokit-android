@@ -34,11 +34,11 @@ fun PokitSelect(
     val iconTintColor = getIconTintColor(state = state)
 
     Column(
-        modifier = modifier,
+        modifier = modifier
     ) {
         Text(
             text = label,
-            style = PokitTheme.typography.body2Medium.copy(color = labelTextColor),
+            style = PokitTheme.typography.body2Medium.copy(color = labelTextColor)
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -49,21 +49,21 @@ fun PokitSelect(
                 .clip(RoundedCornerShape(8.dp))
                 .clickable(
                     onClick = onClick,
-                    enabled = state != PokitSelectState.DISABLE,
+                    enabled = state != PokitSelectState.DISABLE
                 )
-                .padding(all = 12.dp),
+                .padding(all = 12.dp)
         ) {
             Text(
                 text = text,
                 style = PokitTheme.typography.body3Medium.copy(contentTextColor),
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(1f)
             )
 
             Icon(
                 painter = painterResource(id = R.drawable.icon_24_arrow_down),
                 contentDescription = null,
                 modifier = Modifier.size(24.dp),
-                tint = iconTintColor,
+                tint = iconTintColor
             )
         }
     }

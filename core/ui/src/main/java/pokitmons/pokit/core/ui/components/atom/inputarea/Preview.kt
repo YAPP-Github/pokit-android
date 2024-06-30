@@ -23,7 +23,7 @@ fun PokitInputAreaPreview() {
                 .fillMaxSize()
                 .padding(12.dp)
                 .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             for (isError in arrayOf(false, true)) {
                 for (enabled in arrayOf(false, true)) {

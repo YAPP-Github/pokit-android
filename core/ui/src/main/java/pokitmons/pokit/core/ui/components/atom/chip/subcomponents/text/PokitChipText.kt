@@ -10,9 +10,9 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
 fun PokitChipText(
-    text : String,
-    state : PokitChipState,
-    size : PokitChipSize,
+    text: String,
+    state: PokitChipState,
+    size: PokitChipSize,
 ) {
     val textStyle = getTextStyle(size = size)
     val textColor = getTextColor(state = state)
@@ -22,9 +22,9 @@ fun PokitChipText(
 
 @Composable
 private fun getTextColor(
-    state : PokitChipState,
-) : Color {
-    return when(state) {
+    state: PokitChipState,
+): Color {
+    return when (state) {
         PokitChipState.DEFAULT -> {
             PokitTheme.colors.textTertiary
         }
@@ -42,9 +42,9 @@ private fun getTextColor(
 
 @Composable
 private fun getTextStyle(
-    size : PokitChipSize,
-) : TextStyle {
-    return when(size) {
+    size: PokitChipSize,
+): TextStyle {
+    return when (size) {
         PokitChipSize.SMALL -> {
             PokitTheme.typography.label3Regular
         }
