@@ -11,6 +11,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -24,11 +26,16 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 @Composable
 fun PokitSelect(
     text: String,
+    hintText: String,
     label: String,
-    onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    state: PokitSelectState = PokitSelectState.DEFAULT,
+    onClick: () -> Unit = {},
+    readOnly: Boolean = false,
+    enable: Boolean = true,
 ) {
+    val state = remember(readOnly, enable, text) {
+        getState(text = text, readOnly = readOnly, enable = enable)
+    }
     val labelTextColor = getLabelTextColor(state = state)
     val contentTextColor = getContentTextColor(state = state)
     val iconTintColor = getIconTintColor(state = state)
@@ -49,12 +56,13 @@ fun PokitSelect(
                 .clip(RoundedCornerShape(8.dp))
                 .clickable(
                     onClick = onClick,
-                    enabled = state != PokitSelectState.DISABLE
+                    enabled = (state != PokitSelectState.DISABLE) && (state != PokitSelectState.READ_ONLY)
                 )
-                .padding(all = 12.dp)
+                .padding(all = 12.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = text,
+                text = text.ifEmpty { hintText },
                 style = PokitTheme.typography.body3Medium.copy(contentTextColor),
                 modifier = Modifier.weight(1f)
             )
@@ -65,6 +73,30 @@ fun PokitSelect(
                 modifier = Modifier.size(24.dp),
                 tint = iconTintColor
             )
+        }
+    }
+}
+
+private fun getState(
+    text: String,
+    readOnly: Boolean,
+    enable: Boolean,
+): PokitSelectState {
+    return when {
+        !enable -> {
+            PokitSelectState.DISABLE
+        }
+
+        readOnly -> {
+            PokitSelectState.READ_ONLY
+        }
+
+        text.isEmpty() -> {
+            PokitSelectState.DEFAULT
+        }
+
+        else -> {
+            PokitSelectState.INPUT
         }
     }
 }
