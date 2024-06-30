@@ -142,16 +142,8 @@ private fun getState(
 @Composable
 private fun getSubTextColor(state: PokitInputState): Color {
     return when (state) {
-        PokitInputState.ERROR -> {
-            PokitTheme.colors.error
-        }
-
-        PokitInputState.DISABLE -> {
-            PokitTheme.colors.textDisable
-        }
-
-        else -> {
-            PokitTheme.colors.textTertiary
-        }
+        PokitInputState.ERROR -> PokitTheme.colors.error
+        PokitInputState.DISABLE -> PokitTheme.colors.textDisable
+        else -> PokitTheme.colors.textTertiary
     }
 }

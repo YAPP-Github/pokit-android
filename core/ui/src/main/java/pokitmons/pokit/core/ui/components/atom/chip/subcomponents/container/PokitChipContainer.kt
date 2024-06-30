@@ -48,12 +48,7 @@ fun PokitChipContainer(
 
 private fun getItemSpace(size: PokitChipSize): Dp {
     return when (size) {
-        PokitChipSize.SMALL -> {
-            4.dp
-        }
-
-        PokitChipSize.MEDIUM -> {
-            0.dp
-        }
+        PokitChipSize.SMALL -> 4.dp
+        PokitChipSize.MEDIUM -> 0.dp
     }
 }

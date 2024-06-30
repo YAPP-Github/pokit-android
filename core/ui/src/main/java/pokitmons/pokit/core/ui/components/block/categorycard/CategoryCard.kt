@@ -95,17 +95,9 @@ private fun getTitleTextColor(
     state: CategoryCardState,
 ): Color {
     return when (state) {
-        CategoryCardState.DEFAULT -> {
-            PokitTheme.colors.textPrimary
-        }
-
-        CategoryCardState.ACTIVE -> {
-            PokitTheme.colors.textPrimary
-        }
-
-        CategoryCardState.DISABLE -> {
-            PokitTheme.colors.textDisable
-        }
+        CategoryCardState.DEFAULT -> PokitTheme.colors.textPrimary
+        CategoryCardState.ACTIVE -> PokitTheme.colors.textPrimary
+        CategoryCardState.DISABLE -> PokitTheme.colors.textDisable
     }
 }
 
@@ -114,16 +106,8 @@ private fun getSubTextColor(
     state: CategoryCardState,
 ): Color {
     return when (state) {
-        CategoryCardState.DEFAULT -> {
-            PokitTheme.colors.textTertiary
-        }
-
-        CategoryCardState.ACTIVE -> {
-            PokitTheme.colors.textTertiary
-        }
-
-        CategoryCardState.DISABLE -> {
-            PokitTheme.colors.textDisable
-        }
+        CategoryCardState.DEFAULT -> PokitTheme.colors.textTertiary
+        CategoryCardState.ACTIVE -> PokitTheme.colors.textTertiary
+        CategoryCardState.DISABLE -> PokitTheme.colors.textDisable
     }
 }

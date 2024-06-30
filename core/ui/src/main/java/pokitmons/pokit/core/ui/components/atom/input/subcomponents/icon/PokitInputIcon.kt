@@ -30,28 +30,16 @@ private fun getColor(
     state: PokitInputState,
 ): Color {
     return when (state) {
-        PokitInputState.DEFAULT -> {
-            PokitTheme.colors.iconSecondary
-        }
+        PokitInputState.DEFAULT -> PokitTheme.colors.iconSecondary
 
-        PokitInputState.INPUT -> {
-            PokitTheme.colors.iconPrimary
-        }
+        PokitInputState.INPUT -> PokitTheme.colors.iconPrimary
 
-        PokitInputState.ACTIVE -> {
-            PokitTheme.colors.iconPrimary
-        }
+        PokitInputState.ACTIVE -> PokitTheme.colors.iconPrimary
 
-        PokitInputState.DISABLE -> {
-            PokitTheme.colors.iconDisable
-        }
+        PokitInputState.DISABLE -> PokitTheme.colors.iconDisable
 
-        PokitInputState.READ_ONLY -> {
-            PokitTheme.colors.iconSecondary
-        }
+        PokitInputState.READ_ONLY -> PokitTheme.colors.iconSecondary
 
-        PokitInputState.ERROR -> {
-            PokitTheme.colors.error
-        }
+        PokitInputState.ERROR -> PokitTheme.colors.error
     }
 }

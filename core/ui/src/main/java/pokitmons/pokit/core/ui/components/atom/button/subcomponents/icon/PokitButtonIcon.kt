@@ -71,16 +71,8 @@ private fun getSize(
     size: PokitButtonSize,
 ): Dp {
     return when (size) {
-        PokitButtonSize.SMALL -> {
-            16.dp
-        }
-
-        PokitButtonSize.MIDDLE -> {
-            20.dp
-        }
-
-        PokitButtonSize.LARGE -> {
-            24.dp
-        }
+        PokitButtonSize.SMALL -> 16.dp
+        PokitButtonSize.MIDDLE -> 20.dp
+        PokitButtonSize.LARGE -> 24.dp
     }
 }

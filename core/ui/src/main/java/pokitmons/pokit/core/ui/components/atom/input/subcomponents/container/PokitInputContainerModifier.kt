@@ -49,13 +49,8 @@ private fun getShape(
     shape: PokitInputShape,
 ): Shape {
     return when (shape) {
-        PokitInputShape.RECTANGLE -> {
-            RoundedCornerShape(8.dp)
-        }
-
-        PokitInputShape.ROUND -> {
-            RoundedCornerShape(9999.dp)
-        }
+        PokitInputShape.RECTANGLE -> RoundedCornerShape(8.dp)
+        PokitInputShape.ROUND -> RoundedCornerShape(9999.dp)
     }
 }
 
@@ -87,29 +82,17 @@ private fun getBackgroundColor(
     state: PokitInputState,
 ): Color {
     return when (state) {
-        PokitInputState.DEFAULT -> {
-            PokitTheme.colors.backgroundBase
-        }
+        PokitInputState.DEFAULT -> PokitTheme.colors.backgroundBase
 
-        PokitInputState.INPUT -> {
-            PokitTheme.colors.backgroundBase
-        }
+        PokitInputState.INPUT -> PokitTheme.colors.backgroundBase
 
-        PokitInputState.ACTIVE -> {
-            PokitTheme.colors.backgroundBase
-        }
+        PokitInputState.ACTIVE -> PokitTheme.colors.backgroundBase
 
-        PokitInputState.DISABLE -> {
-            PokitTheme.colors.backgroundDisable
-        }
+        PokitInputState.DISABLE -> PokitTheme.colors.backgroundDisable
 
-        PokitInputState.READ_ONLY -> {
-            PokitTheme.colors.backgroundSecondary
-        }
+        PokitInputState.READ_ONLY -> PokitTheme.colors.backgroundSecondary
 
-        PokitInputState.ERROR -> {
-            PokitTheme.colors.backgroundBase
-        }
+        PokitInputState.ERROR -> PokitTheme.colors.backgroundBase
     }
 }
 
@@ -118,28 +101,16 @@ private fun getStrokeColor(
     state: PokitInputState,
 ): Color {
     return when (state) {
-        PokitInputState.DEFAULT -> {
-            PokitTheme.colors.borderSecondary
-        }
+        PokitInputState.DEFAULT -> PokitTheme.colors.borderSecondary
 
-        PokitInputState.INPUT -> {
-            PokitTheme.colors.borderSecondary
-        }
+        PokitInputState.INPUT -> PokitTheme.colors.borderSecondary
 
-        PokitInputState.ACTIVE -> {
-            PokitTheme.colors.brand
-        }
+        PokitInputState.ACTIVE -> PokitTheme.colors.brand
 
-        PokitInputState.DISABLE -> {
-            PokitTheme.colors.borderDisable
-        }
+        PokitInputState.DISABLE -> PokitTheme.colors.borderDisable
 
-        PokitInputState.READ_ONLY -> {
-            PokitTheme.colors.borderSecondary
-        }
+        PokitInputState.READ_ONLY -> PokitTheme.colors.borderSecondary
 
-        PokitInputState.ERROR -> {
-            PokitTheme.colors.error
-        }
+        PokitInputState.ERROR -> PokitTheme.colors.error
     }
 }

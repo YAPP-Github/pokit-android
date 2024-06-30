@@ -38,18 +38,10 @@ private fun getBackgroundColor(
     state: PokitSelectState,
 ): Color {
     return when (state) {
-        PokitSelectState.DEFAULT -> {
-            PokitTheme.colors.backgroundBase
-        }
-        PokitSelectState.INPUT -> {
-            PokitTheme.colors.backgroundBase
-        }
-        PokitSelectState.DISABLE -> {
-            PokitTheme.colors.backgroundDisable
-        }
-        PokitSelectState.READ_ONLY -> {
-            PokitTheme.colors.backgroundSecondary
-        }
+        PokitSelectState.DEFAULT -> PokitTheme.colors.backgroundBase
+        PokitSelectState.INPUT -> PokitTheme.colors.backgroundBase
+        PokitSelectState.DISABLE -> PokitTheme.colors.backgroundDisable
+        PokitSelectState.READ_ONLY -> PokitTheme.colors.backgroundSecondary
     }
 }
 
@@ -58,17 +50,9 @@ private fun getStrokeColor(
     state: PokitSelectState,
 ): Color {
     return when (state) {
-        PokitSelectState.DEFAULT -> {
-            PokitTheme.colors.borderSecondary
-        }
-        PokitSelectState.INPUT -> {
-            PokitTheme.colors.borderSecondary
-        }
-        PokitSelectState.DISABLE -> {
-            PokitTheme.colors.borderDisable
-        }
-        PokitSelectState.READ_ONLY -> {
-            PokitTheme.colors.borderSecondary
-        }
+        PokitSelectState.DEFAULT -> PokitTheme.colors.borderSecondary
+        PokitSelectState.INPUT -> PokitTheme.colors.borderSecondary
+        PokitSelectState.DISABLE -> PokitTheme.colors.borderDisable
+        PokitSelectState.READ_ONLY -> PokitTheme.colors.borderSecondary
     }
 }

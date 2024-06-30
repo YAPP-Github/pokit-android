@@ -87,13 +87,8 @@ private fun getBorderWidth(
     style: PokitButtonStyle,
 ): Dp {
     return when (style) {
-        PokitButtonStyle.FILLED -> {
-            0.dp
-        }
-
-        PokitButtonStyle.STROKE -> {
-            1.dp
-        }
+        PokitButtonStyle.FILLED -> 0.dp
+        PokitButtonStyle.STROKE -> 1.dp
     }
 }
 

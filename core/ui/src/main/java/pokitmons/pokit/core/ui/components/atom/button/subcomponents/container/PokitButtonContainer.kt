@@ -56,14 +56,8 @@ internal fun PokitButtonContainer(
 
 private fun getItemSpace(size: PokitButtonSize): Dp {
     return when (size) {
-        PokitButtonSize.SMALL -> {
-            4.dp
-        }
-        PokitButtonSize.MIDDLE -> {
-            8.dp
-        }
-        PokitButtonSize.LARGE -> {
-            12.dp
-        }
+        PokitButtonSize.SMALL -> 4.dp
+        PokitButtonSize.MIDDLE -> 8.dp
+        PokitButtonSize.LARGE -> 12.dp
     }
 }

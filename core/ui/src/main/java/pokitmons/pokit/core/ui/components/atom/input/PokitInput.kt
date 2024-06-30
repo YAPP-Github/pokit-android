@@ -93,29 +93,17 @@ private fun getTextColor(
     state: PokitInputState,
 ): Color {
     return when (state) {
-        PokitInputState.DEFAULT -> {
-            PokitTheme.colors.textTertiary
-        }
+        PokitInputState.DEFAULT -> PokitTheme.colors.textTertiary
 
-        PokitInputState.INPUT -> {
-            PokitTheme.colors.textSecondary
-        }
+        PokitInputState.INPUT -> PokitTheme.colors.textSecondary
 
-        PokitInputState.ACTIVE -> {
-            PokitTheme.colors.textSecondary
-        }
+        PokitInputState.ACTIVE -> PokitTheme.colors.textSecondary
 
-        PokitInputState.DISABLE -> {
-            PokitTheme.colors.textDisable
-        }
+        PokitInputState.DISABLE -> PokitTheme.colors.textDisable
 
-        PokitInputState.READ_ONLY -> {
-            PokitTheme.colors.textTertiary
-        }
+        PokitInputState.READ_ONLY -> PokitTheme.colors.textTertiary
 
-        PokitInputState.ERROR -> {
-            PokitTheme.colors.textSecondary
-        }
+        PokitInputState.ERROR -> PokitTheme.colors.textSecondary
     }
 }
 

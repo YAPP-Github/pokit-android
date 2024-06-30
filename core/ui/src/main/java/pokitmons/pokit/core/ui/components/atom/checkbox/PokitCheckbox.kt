@@ -68,13 +68,8 @@ private fun getShape(
     shape: PokitCheckboxShape,
 ): Shape {
     return when (shape) {
-        PokitCheckboxShape.RECTANGLE -> {
-            RoundedCornerShape(4.dp)
-        }
-
-        PokitCheckboxShape.CIRCLE -> {
-            CircleShape
-        }
+        PokitCheckboxShape.RECTANGLE -> RoundedCornerShape(4.dp)
+        PokitCheckboxShape.CIRCLE -> CircleShape
     }
 }
 

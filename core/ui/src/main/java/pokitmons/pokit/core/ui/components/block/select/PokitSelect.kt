@@ -106,13 +106,8 @@ private fun getLabelTextColor(
     state: PokitSelectState,
 ): Color {
     return when (state) {
-        PokitSelectState.DISABLE -> {
-            PokitTheme.colors.textDisable
-        }
-
-        else -> {
-            PokitTheme.colors.textSecondary
-        }
+        PokitSelectState.DISABLE -> PokitTheme.colors.textDisable
+        else -> PokitTheme.colors.textSecondary
     }
 }
 
@@ -121,17 +116,9 @@ private fun getContentTextColor(
     state: PokitSelectState,
 ): Color {
     return when (state) {
-        PokitSelectState.DISABLE -> {
-            PokitTheme.colors.textDisable
-        }
-
-        PokitSelectState.INPUT -> {
-            PokitTheme.colors.textSecondary
-        }
-
-        else -> {
-            PokitTheme.colors.textTertiary
-        }
+        PokitSelectState.DISABLE -> PokitTheme.colors.textDisable
+        PokitSelectState.INPUT -> PokitTheme.colors.textSecondary
+        else -> PokitTheme.colors.textTertiary
     }
 }
 
@@ -140,12 +127,7 @@ private fun getIconTintColor(
     state: PokitSelectState,
 ): Color {
     return when (state) {
-        PokitSelectState.DISABLE -> {
-            PokitTheme.colors.iconDisable
-        }
-
-        else -> {
-            PokitTheme.colors.iconSecondary
-        }
+        PokitSelectState.DISABLE -> PokitTheme.colors.iconDisable
+        else -> PokitTheme.colors.iconSecondary
     }
 }

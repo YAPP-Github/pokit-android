@@ -25,18 +25,10 @@ private fun getTextColor(
     state: PokitChipState,
 ): Color {
     return when (state) {
-        PokitChipState.DEFAULT -> {
-            PokitTheme.colors.textTertiary
-        }
-        PokitChipState.FILLED -> {
-            PokitTheme.colors.inverseWh
-        }
-        PokitChipState.STROKE -> {
-            PokitTheme.colors.textPrimary
-        }
-        PokitChipState.DISABLED -> {
-            PokitTheme.colors.textDisable
-        }
+        PokitChipState.DEFAULT -> PokitTheme.colors.textTertiary
+        PokitChipState.FILLED -> PokitTheme.colors.inverseWh
+        PokitChipState.STROKE -> PokitTheme.colors.textPrimary
+        PokitChipState.DISABLED -> PokitTheme.colors.textDisable
     }
 }
 
@@ -45,11 +37,7 @@ private fun getTextStyle(
     size: PokitChipSize,
 ): TextStyle {
     return when (size) {
-        PokitChipSize.SMALL -> {
-            PokitTheme.typography.label3Regular
-        }
-        PokitChipSize.MEDIUM -> {
-            PokitTheme.typography.label2Regular
-        }
+        PokitChipSize.SMALL -> PokitTheme.typography.label3Regular
+        PokitChipSize.MEDIUM -> PokitTheme.typography.label2Regular
     }
 }

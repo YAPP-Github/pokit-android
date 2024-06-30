@@ -45,21 +45,10 @@ private fun getIconTintColor(
     state: PokitChipState,
 ): Color {
     return when (state) {
-        PokitChipState.DEFAULT -> {
-            PokitTheme.colors.iconSecondary
-        }
-
-        PokitChipState.FILLED -> {
-            PokitTheme.colors.inverseWh
-        }
-
-        PokitChipState.STROKE -> {
-            PokitTheme.colors.iconPrimary
-        }
-
-        PokitChipState.DISABLED -> {
-            PokitTheme.colors.iconDisable
-        }
+        PokitChipState.DEFAULT -> PokitTheme.colors.iconSecondary
+        PokitChipState.FILLED -> PokitTheme.colors.inverseWh
+        PokitChipState.STROKE -> PokitTheme.colors.iconPrimary
+        PokitChipState.DISABLED -> PokitTheme.colors.iconDisable
     }
 }
 
@@ -68,12 +57,7 @@ private fun getIconSize(
     size: PokitChipSize,
 ): Dp {
     return when (size) {
-        PokitChipSize.SMALL -> {
-            16.dp
-        }
-
-        PokitChipSize.MEDIUM -> {
-            22.dp
-        }
+        PokitChipSize.SMALL -> 16.dp
+        PokitChipSize.MEDIUM -> 22.dp
     }
 }

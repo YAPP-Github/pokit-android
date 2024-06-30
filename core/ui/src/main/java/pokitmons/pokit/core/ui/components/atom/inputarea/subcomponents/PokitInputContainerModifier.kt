@@ -44,29 +44,17 @@ private fun getBackgroundColor(
     state: PokitInputAreaState,
 ): Color {
     return when (state) {
-        PokitInputAreaState.DEFAULT -> {
-            PokitTheme.colors.backgroundBase
-        }
+        PokitInputAreaState.DEFAULT -> PokitTheme.colors.backgroundBase
 
-        PokitInputAreaState.INPUT -> {
-            PokitTheme.colors.backgroundBase
-        }
+        PokitInputAreaState.INPUT -> PokitTheme.colors.backgroundBase
 
-        PokitInputAreaState.ACTIVE -> {
-            PokitTheme.colors.backgroundBase
-        }
+        PokitInputAreaState.ACTIVE -> PokitTheme.colors.backgroundBase
 
-        PokitInputAreaState.DISABLE -> {
-            PokitTheme.colors.backgroundDisable
-        }
+        PokitInputAreaState.DISABLE -> PokitTheme.colors.backgroundDisable
 
-        PokitInputAreaState.READ_ONLY -> {
-            PokitTheme.colors.backgroundSecondary
-        }
+        PokitInputAreaState.READ_ONLY -> PokitTheme.colors.backgroundSecondary
 
-        PokitInputAreaState.ERROR -> {
-            PokitTheme.colors.backgroundBase
-        }
+        PokitInputAreaState.ERROR -> PokitTheme.colors.backgroundBase
     }
 }
 
@@ -75,28 +63,16 @@ private fun getStrokeColor(
     state: PokitInputAreaState,
 ): Color {
     return when (state) {
-        PokitInputAreaState.DEFAULT -> {
-            PokitTheme.colors.borderSecondary
-        }
+        PokitInputAreaState.DEFAULT -> PokitTheme.colors.borderSecondary
 
-        PokitInputAreaState.INPUT -> {
-            PokitTheme.colors.borderSecondary
-        }
+        PokitInputAreaState.INPUT -> PokitTheme.colors.borderSecondary
 
-        PokitInputAreaState.ACTIVE -> {
-            PokitTheme.colors.brand
-        }
+        PokitInputAreaState.ACTIVE -> PokitTheme.colors.brand
 
-        PokitInputAreaState.DISABLE -> {
-            PokitTheme.colors.borderDisable
-        }
+        PokitInputAreaState.DISABLE -> PokitTheme.colors.borderDisable
 
-        PokitInputAreaState.READ_ONLY -> {
-            PokitTheme.colors.borderSecondary
-        }
+        PokitInputAreaState.READ_ONLY -> PokitTheme.colors.borderSecondary
 
-        PokitInputAreaState.ERROR -> {
-            PokitTheme.colors.error
-        }
+        PokitInputAreaState.ERROR -> PokitTheme.colors.error
     }
 }
