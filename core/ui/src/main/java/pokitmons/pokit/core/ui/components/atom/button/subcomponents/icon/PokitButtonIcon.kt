@@ -16,11 +16,11 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
 internal fun PokitButtonIcon(
-    size : PokitButtonSize,
+    size: PokitButtonSize,
     state: PokitButtonState,
     type: PokitButtonType,
     style: PokitButtonStyle,
-    resourceId : Int,
+    resourceId: Int,
 ) {
     val iconColor = getColor(state = state, type = type, style = style)
     val iconSize = getSize(size = size)
@@ -29,7 +29,7 @@ internal fun PokitButtonIcon(
         painter = painterResource(id = resourceId),
         contentDescription = null,
         tint = iconColor,
-        modifier = Modifier.size(iconSize)
+        modifier = Modifier.size(iconSize),
     )
 }
 
@@ -38,23 +38,28 @@ private fun getColor(
     state: PokitButtonState,
     type: PokitButtonType,
     style: PokitButtonStyle,
-) : Color {
+): Color {
     return when {
         state == PokitButtonState.DISABLE -> {
             PokitTheme.colors.iconDisable
         }
+
         type == PokitButtonType.PRIMARY && style == PokitButtonStyle.FILLED -> {
             PokitTheme.colors.inverseWh
         }
+
         type == PokitButtonType.PRIMARY && style == PokitButtonStyle.STROKE -> {
             PokitTheme.colors.iconPrimary
         }
+
         type == PokitButtonType.SECONDARY && style == PokitButtonStyle.FILLED -> {
             PokitTheme.colors.inverseWh
         }
+
         type == PokitButtonType.SECONDARY && style == PokitButtonStyle.STROKE -> {
             PokitTheme.colors.iconPrimary
         }
+
         else -> {
             PokitTheme.colors.iconPrimary
         }
@@ -64,14 +69,16 @@ private fun getColor(
 @Composable
 private fun getSize(
     size: PokitButtonSize,
-) : Dp {
-    return when(size) {
+): Dp {
+    return when (size) {
         PokitButtonSize.SMALL -> {
             16.dp
         }
+
         PokitButtonSize.MIDDLE -> {
             20.dp
         }
+
         PokitButtonSize.LARGE -> {
             24.dp
         }

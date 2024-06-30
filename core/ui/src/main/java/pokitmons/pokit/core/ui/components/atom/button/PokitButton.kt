@@ -16,11 +16,11 @@ import pokitmons.pokit.core.ui.components.atom.button.subcomponents.text.PokitBu
 
 @Composable
 fun PokitButton(
-    text : String?,
+    text: String?,
     icon: PokitButtonIcon?,
-    onClick : () -> Unit,
-    modifier : Modifier = Modifier,
-    enable : Boolean = true,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enable: Boolean = true,
     shape: PokitButtonShape = PokitButtonShape.RECTANGLE,
     style: PokitButtonStyle = PokitButtonStyle.FILLED,
     size: PokitButtonSize = PokitButtonSize.MIDDLE,
@@ -59,7 +59,7 @@ fun PokitButton(
     }
 }
 
-private fun getState(enable : Boolean) : PokitButtonState {
+private fun getState(enable: Boolean): PokitButtonState {
     return if (enable) {
         PokitButtonState.DEFAULT
     } else {

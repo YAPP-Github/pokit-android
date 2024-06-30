@@ -25,13 +25,13 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 internal fun Modifier.pokitButtonContainerModifier(
     hasText: Boolean,
     iconPosition: PokitButtonIconPosition?,
-    shape : PokitButtonShape,
-    state : PokitButtonState,
+    shape: PokitButtonShape,
+    state: PokitButtonState,
     style: PokitButtonStyle,
     size: PokitButtonSize,
     type: PokitButtonType,
-    onClick : () -> Unit = {},
-) : Modifier {
+    onClick: () -> Unit = {},
+): Modifier {
     val buttonShape = getShape(shape, size)
     val strokeWidth = getBorderWidth(style)
     val padding = getPadding(size, hasText, iconPosition)
@@ -40,40 +40,43 @@ internal fun Modifier.pokitButtonContainerModifier(
 
     return this then Modifier
         .clip(
-            shape = buttonShape
+            shape = buttonShape,
         )
         .clickable(
             enabled = (state != PokitButtonState.DISABLE),
-            onClick = onClick
+            onClick = onClick,
         )
         .background(
             shape = buttonShape,
-            color = backgroundColor
+            color = backgroundColor,
         )
         .border(
             shape = buttonShape,
             width = strokeWidth,
-            color = strokeColor
+            color = strokeColor,
         )
         .padding(
-            paddingValues = padding
+            paddingValues = padding,
         )
 }
 
 private fun getShape(
-    shape : PokitButtonShape,
+    shape: PokitButtonShape,
     size: PokitButtonSize,
-) : Shape {
+): Shape {
     return when {
         shape == PokitButtonShape.RECTANGLE && size == PokitButtonSize.SMALL -> {
             RoundedCornerShape(4.dp)
         }
+
         shape == PokitButtonShape.RECTANGLE && size == PokitButtonSize.MIDDLE -> {
             RoundedCornerShape(8.dp)
         }
+
         shape == PokitButtonShape.RECTANGLE && size == PokitButtonSize.LARGE -> {
             RoundedCornerShape(8.dp)
         }
+
         else -> { // rounded button
             RoundedCornerShape(9999.dp)
         }
@@ -81,12 +84,13 @@ private fun getShape(
 }
 
 private fun getBorderWidth(
-    style : PokitButtonStyle,
-) : Dp {
-    return when(style) {
+    style: PokitButtonStyle,
+): Dp {
+    return when (style) {
         PokitButtonStyle.FILLED -> {
             0.dp
         }
+
         PokitButtonStyle.STROKE -> {
             1.dp
         }
@@ -95,10 +99,10 @@ private fun getBorderWidth(
 
 private fun getPadding(
     size: PokitButtonSize,
-    hasText : Boolean,
-    iconPosition : PokitButtonIconPosition?,
-) : PaddingValues {
-    return when(size) {
+    hasText: Boolean,
+    iconPosition: PokitButtonIconPosition?,
+): PaddingValues {
+    return when (size) {
         PokitButtonSize.SMALL -> {
             if (!hasText) { // icon only
                 PaddingValues(all = 8.dp)
@@ -110,6 +114,7 @@ private fun getPadding(
                 PaddingValues(horizontal = 12.dp, vertical = 8.dp)
             }
         }
+
         PokitButtonSize.MIDDLE -> {
             if (!hasText) { // icon only
                 PaddingValues(all = 10.dp)
@@ -121,6 +126,7 @@ private fun getPadding(
                 PaddingValues(horizontal = 26.dp, vertical = 10.dp)
             }
         }
+
         PokitButtonSize.LARGE -> {
             if (!hasText) { // icon only
                 PaddingValues(all = 12.dp)
@@ -140,20 +146,24 @@ private fun getBackgroundColor(
     type: PokitButtonType,
     style: PokitButtonStyle,
     state: PokitButtonState,
-) : Color {
+): Color {
     return when {
         state == PokitButtonState.DISABLE -> {
             PokitTheme.colors.backgroundDisable
         }
+
         style == PokitButtonStyle.STROKE -> {
             PokitTheme.colors.backgroundBase
         }
+
         type == PokitButtonType.PRIMARY && style == PokitButtonStyle.FILLED -> {
             PokitTheme.colors.brand
         }
+
         type == PokitButtonType.SECONDARY && style == PokitButtonStyle.FILLED -> {
             PokitTheme.colors.backgroundTertiary
         }
+
         else -> {
             PokitTheme.colors.backgroundBase
         }
@@ -164,17 +174,20 @@ private fun getBackgroundColor(
 private fun getStrokeColor(
     type: PokitButtonType,
     state: PokitButtonState,
-) : Color {
+): Color {
     return when {
         state == PokitButtonState.DISABLE -> {
             Color.Unspecified
         }
+
         type == PokitButtonType.PRIMARY -> {
             PokitTheme.colors.brand
         }
+
         type == PokitButtonType.SECONDARY -> {
             PokitTheme.colors.borderSecondary
         }
+
         else -> {
             Color.Unspecified
         }

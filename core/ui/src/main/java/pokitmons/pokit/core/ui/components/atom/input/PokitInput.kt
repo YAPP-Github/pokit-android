@@ -24,15 +24,15 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
 fun PokitInput(
-    text : String,
-    hintText : String,
-    onChangeText : (String) -> Unit,
+    text: String,
+    hintText: String,
+    onChangeText: (String) -> Unit,
     icon: PokitInputIcon?,
-    modifier : Modifier = Modifier,
+    modifier: Modifier = Modifier,
     shape: PokitInputShape = PokitInputShape.RECTANGLE,
-    readOnly : Boolean = false,
-    enable : Boolean = true,
-    isError : Boolean = false,
+    readOnly: Boolean = false,
+    enable: Boolean = true,
+    isError: Boolean = false,
 ) {
     var focused by remember { mutableStateOf(false) }
     val state = remember(focused, isError, readOnly, enable) {
@@ -41,7 +41,7 @@ fun PokitInput(
             readOnly = readOnly,
             focused = focused,
             error = isError,
-            text = text
+            text = text,
         )
     }
     val textColor = getTextColor(state = state)
@@ -84,30 +84,35 @@ fun PokitInput(
                     PokitInputIcon(state = state, resourceId = icon.resourceId)
                 }
             }
-        }
+        },
     )
 }
 
 @Composable
 private fun getTextColor(
     state: PokitInputState,
-) : Color {
-    return when(state) {
+): Color {
+    return when (state) {
         PokitInputState.DEFAULT -> {
             PokitTheme.colors.textTertiary
         }
+
         PokitInputState.INPUT -> {
             PokitTheme.colors.textSecondary
         }
+
         PokitInputState.ACTIVE -> {
             PokitTheme.colors.textSecondary
         }
+
         PokitInputState.DISABLE -> {
             PokitTheme.colors.textDisable
         }
+
         PokitInputState.READ_ONLY -> {
             PokitTheme.colors.textTertiary
         }
+
         PokitInputState.ERROR -> {
             PokitTheme.colors.textSecondary
         }
@@ -115,28 +120,33 @@ private fun getTextColor(
 }
 
 private fun getState(
-    enabled : Boolean,
-    readOnly : Boolean,
-    focused : Boolean,
-    error : Boolean,
-    text : String,
-) : PokitInputState {
+    enabled: Boolean,
+    readOnly: Boolean,
+    focused: Boolean,
+    error: Boolean,
+    text: String,
+): PokitInputState {
     return when {
         !enabled -> {
             PokitInputState.DISABLE
         }
+
         readOnly -> {
             PokitInputState.READ_ONLY
         }
+
         focused -> {
             PokitInputState.ACTIVE
         }
+
         error -> {
             PokitInputState.ERROR
         }
+
         text.isEmpty() -> {
             PokitInputState.DEFAULT
         }
+
         else -> {
             PokitInputState.INPUT
         }

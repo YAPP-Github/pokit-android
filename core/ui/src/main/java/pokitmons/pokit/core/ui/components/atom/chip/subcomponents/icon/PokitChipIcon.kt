@@ -18,9 +18,9 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
 fun PokitChipIcon(
-    state : PokitChipState,
-    size : PokitChipSize,
-    onClick : () -> Unit,
+    state: PokitChipState,
+    size: PokitChipSize,
+    onClick: () -> Unit,
 ) {
     val iconTintColor = getIconTintColor(state = state)
     val iconSize = getIconSize(size = size)
@@ -35,25 +35,28 @@ fun PokitChipIcon(
                 indication = null,
                 interactionSource = remember { MutableInteractionSource() },
                 onClick = onClick,
-                enabled = (state != PokitChipState.DISABLED)
-            )
+                enabled = (state != PokitChipState.DISABLED),
+            ),
     )
 }
 
 @Composable
 private fun getIconTintColor(
-    state : PokitChipState,
-) : Color {
-    return when(state) {
+    state: PokitChipState,
+): Color {
+    return when (state) {
         PokitChipState.DEFAULT -> {
             PokitTheme.colors.iconSecondary
         }
+
         PokitChipState.FILLED -> {
             PokitTheme.colors.inverseWh
         }
+
         PokitChipState.STROKE -> {
             PokitTheme.colors.iconPrimary
         }
+
         PokitChipState.DISABLED -> {
             PokitTheme.colors.iconDisable
         }
@@ -62,12 +65,13 @@ private fun getIconTintColor(
 
 @Composable
 private fun getIconSize(
-    size : PokitChipSize,
-) : Dp {
-    return when(size) {
+    size: PokitChipSize,
+): Dp {
+    return when (size) {
         PokitChipSize.SMALL -> {
             16.dp
         }
+
         PokitChipSize.MEDIUM -> {
             22.dp
         }

@@ -19,7 +19,6 @@ import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonStyl
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonType
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
-
 @Preview(showBackground = true)
 @Composable
 fun PokitButtonPreview() {
@@ -30,7 +29,7 @@ fun PokitButtonPreview() {
                 .fillMaxSize()
                 .padding(12.dp)
                 .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             enumValues<PokitButtonSize>().forEach { size ->
                 enumValues<PokitButtonShape>().forEach { shape ->

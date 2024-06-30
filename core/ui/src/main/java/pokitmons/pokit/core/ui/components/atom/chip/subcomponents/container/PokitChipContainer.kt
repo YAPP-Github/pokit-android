@@ -26,34 +26,34 @@ fun PokitChipContainer(
     val space = getItemSpace(size)
 
     Row(
-        modifier = Modifier.
-            pokitChipContainerModifier(
+        modifier = Modifier
+            .pokitChipContainerModifier(
                 iconPosition = iconPosiion,
                 state = state,
                 size = size,
                 type = type,
-                onClick = onClick
+                onClick = onClick,
             )
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement
             .spacedBy(
                 space = space,
-                alignment = Alignment.CenterHorizontally
-            )
+                alignment = Alignment.CenterHorizontally,
+            ),
     ) {
         content()
     }
 }
 
-private fun getItemSpace(size : PokitChipSize) : Dp {
-    return when(size) {
+private fun getItemSpace(size: PokitChipSize): Dp {
+    return when (size) {
         PokitChipSize.SMALL -> {
             4.dp
         }
+
         PokitChipSize.MEDIUM -> {
             0.dp
         }
     }
 }
-

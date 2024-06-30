@@ -1,4 +1,4 @@
-package pokitmons.pokit.core.ui.components.atom.input_area
+package pokitmons.pokit.core.ui.components.atom.inputarea
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

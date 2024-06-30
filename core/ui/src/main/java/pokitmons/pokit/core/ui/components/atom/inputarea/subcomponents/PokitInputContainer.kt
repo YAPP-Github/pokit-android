@@ -1,23 +1,23 @@
-package pokitmons.pokit.core.ui.components.atom.input_area.subcomponents
+package pokitmons.pokit.core.ui.components.atom.inputarea.subcomponents
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import pokitmons.pokit.core.ui.components.atom.input_area.attributes.PokitInputAreaState
+import pokitmons.pokit.core.ui.components.atom.inputarea.attributes.PokitInputAreaState
 
 @Composable
 internal fun PokitInputAreaContainer(
-    modifier : Modifier = Modifier,
-    state : PokitInputAreaState = PokitInputAreaState.DEFAULT,
-    content : @Composable RowScope.() -> Unit,
+    modifier: Modifier = Modifier,
+    state: PokitInputAreaState = PokitInputAreaState.DEFAULT,
+    content: @Composable RowScope.() -> Unit,
 ) {
     Row(
         modifier = Modifier
             .pokitInputAreaContainerModifier(
                 state = state
             )
-            .then(modifier),
+            .then(modifier)
     ) {
         content()
     }

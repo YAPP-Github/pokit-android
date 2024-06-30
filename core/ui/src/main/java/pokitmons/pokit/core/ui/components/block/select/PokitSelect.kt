@@ -23,22 +23,22 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
 fun PokitSelect(
-    text : String,
-    label : String,
-    onClick : () -> Unit,
-    modifier : Modifier = Modifier,
-    state : PokitSelectState = PokitSelectState.DEFAULT,
+    text: String,
+    label: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    state: PokitSelectState = PokitSelectState.DEFAULT,
 ) {
     val labelTextColor = getLabelTextColor(state = state)
     val contentTextColor = getContentTextColor(state = state)
     val iconTintColor = getIconTintColor(state = state)
 
     Column(
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(
             text = label,
-            style = PokitTheme.typography.body2Medium.copy(color = labelTextColor)
+            style = PokitTheme.typography.body2Medium.copy(color = labelTextColor),
         )
 
         Spacer(modifier = Modifier.height(8.dp))
@@ -49,35 +49,35 @@ fun PokitSelect(
                 .clip(RoundedCornerShape(8.dp))
                 .clickable(
                     onClick = onClick,
-                    enabled = state != PokitSelectState.DISABLE
+                    enabled = state != PokitSelectState.DISABLE,
                 )
-                .padding(all = 12.dp)
+                .padding(all = 12.dp),
         ) {
             Text(
                 text = text,
                 style = PokitTheme.typography.body3Medium.copy(contentTextColor),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
 
             Icon(
                 painter = painterResource(id = R.drawable.icon_24_arrow_down),
                 contentDescription = null,
                 modifier = Modifier.size(24.dp),
-                tint = iconTintColor
+                tint = iconTintColor,
             )
         }
-
     }
 }
 
 @Composable
 private fun getLabelTextColor(
-    state : PokitSelectState
-) : Color {
-    return when(state) {
+    state: PokitSelectState,
+): Color {
+    return when (state) {
         PokitSelectState.DISABLE -> {
             PokitTheme.colors.textDisable
         }
+
         else -> {
             PokitTheme.colors.textSecondary
         }
@@ -86,15 +86,17 @@ private fun getLabelTextColor(
 
 @Composable
 private fun getContentTextColor(
-    state : PokitSelectState
-) : Color {
-    return when(state) {
+    state: PokitSelectState,
+): Color {
+    return when (state) {
         PokitSelectState.DISABLE -> {
             PokitTheme.colors.textDisable
         }
+
         PokitSelectState.INPUT -> {
             PokitTheme.colors.textSecondary
         }
+
         else -> {
             PokitTheme.colors.textTertiary
         }
@@ -103,12 +105,13 @@ private fun getContentTextColor(
 
 @Composable
 private fun getIconTintColor(
-    state : PokitSelectState
-) : Color {
-    return when(state) {
+    state: PokitSelectState,
+): Color {
+    return when (state) {
         PokitSelectState.DISABLE -> {
             PokitTheme.colors.iconDisable
         }
+
         else -> {
             PokitTheme.colors.iconSecondary
         }

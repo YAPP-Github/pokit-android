@@ -21,8 +21,8 @@ enum class PokitButtonType {
 }
 
 data class PokitButtonIcon(
-    val resourceId : Int,
-    val position : PokitButtonIconPosition,
+    val resourceId: Int,
+    val position: PokitButtonIconPosition,
 )
 
 enum class PokitButtonIconPosition {

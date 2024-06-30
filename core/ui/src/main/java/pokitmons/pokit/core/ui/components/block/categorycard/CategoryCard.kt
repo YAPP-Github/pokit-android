@@ -1,4 +1,4 @@
-package pokitmons.pokit.core.ui.components.block.category_card
+package pokitmons.pokit.core.ui.components.block.categorycard
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -22,19 +22,19 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.R
-import pokitmons.pokit.core.ui.components.block.category_card.attributes.CategoryCardState
+import pokitmons.pokit.core.ui.components.block.categorycard.attributes.CategoryCardState
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
-fun<T> CategoryCard(
-    item : T,
-    painter : Painter,
-    title : String,
-    sub : String,
-    onClickKebab : (T) -> Unit,
-    onClickItem : (T) -> Unit,
-    modifier : Modifier = Modifier,
-    state : CategoryCardState = CategoryCardState.DISABLE
+fun <T> CategoryCard(
+    item: T,
+    painter: Painter,
+    title: String,
+    sub: String,
+    onClickKebab: (T) -> Unit,
+    onClickItem: (T) -> Unit,
+    modifier: Modifier = Modifier,
+    state: CategoryCardState = CategoryCardState.DISABLE,
 ) {
     val titleTextColor = getTitleTextColor(state = state)
     val subTextColor = getSubTextColor(state = state)
@@ -43,7 +43,7 @@ fun<T> CategoryCard(
         modifier = modifier
             .clickable(
                 enabled = state != CategoryCardState.DISABLE,
-                onClick = { onClickItem(item) }
+                onClick = { onClickItem(item) },
             )
             .padding(horizontal = 20.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,
@@ -52,25 +52,25 @@ fun<T> CategoryCard(
             painter = painter,
             contentDescription = null,
             modifier = Modifier.size(60.dp),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
         )
 
         Spacer(modifier = Modifier.width(12.dp))
 
         Column(
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         ) {
             Text(
                 text = title,
                 style = PokitTheme.typography.body1Bold.copy(color = titleTextColor),
-                overflow = TextOverflow.Ellipsis
+                overflow = TextOverflow.Ellipsis,
             )
 
             Spacer(modifier = Modifier.height(4.dp))
 
             Text(
                 text = sub,
-                style = PokitTheme.typography.detail1.copy(color = subTextColor)
+                style = PokitTheme.typography.detail1.copy(color = subTextColor),
             )
         }
 
@@ -79,12 +79,12 @@ fun<T> CategoryCard(
             modifier = Modifier
                 .padding(0.dp)
                 .align(Alignment.Top),
-            enabled = state != CategoryCardState.DISABLE
+            enabled = state != CategoryCardState.DISABLE,
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.icon_24_kebab),
                 contentDescription = null,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(24.dp),
             )
         }
     }
@@ -92,15 +92,17 @@ fun<T> CategoryCard(
 
 @Composable
 private fun getTitleTextColor(
-    state : CategoryCardState
-) : Color {
+    state: CategoryCardState,
+): Color {
     return when (state) {
         CategoryCardState.DEFAULT -> {
             PokitTheme.colors.textPrimary
         }
+
         CategoryCardState.ACTIVE -> {
             PokitTheme.colors.textPrimary
         }
+
         CategoryCardState.DISABLE -> {
             PokitTheme.colors.textDisable
         }
@@ -109,15 +111,17 @@ private fun getTitleTextColor(
 
 @Composable
 private fun getSubTextColor(
-    state : CategoryCardState
-) : Color {
+    state: CategoryCardState,
+): Color {
     return when (state) {
         CategoryCardState.DEFAULT -> {
             PokitTheme.colors.textTertiary
         }
+
         CategoryCardState.ACTIVE -> {
             PokitTheme.colors.textTertiary
         }
+
         CategoryCardState.DISABLE -> {
             PokitTheme.colors.textDisable
         }

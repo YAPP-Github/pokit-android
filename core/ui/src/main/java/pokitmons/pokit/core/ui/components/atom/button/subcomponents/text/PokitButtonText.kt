@@ -12,7 +12,7 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
 internal fun PokitButtonText(
-    text : String,
+    text: String,
     size: PokitButtonSize,
     state: PokitButtonState,
     type: PokitButtonType,
@@ -26,23 +26,28 @@ internal fun PokitButtonText(
 @Composable
 private fun getStyle(
     size: PokitButtonSize,
-    state : PokitButtonState,
-    type : PokitButtonType,
+    state: PokitButtonState,
+    type: PokitButtonType,
     style: PokitButtonStyle,
-) : TextStyle {
+): TextStyle {
     return when {
         size == PokitButtonSize.SMALL -> {
             PokitTheme.typography.label3Regular
         }
+
         size == PokitButtonSize.MIDDLE -> {
             PokitTheme.typography.label2Regular
         }
-        (size == PokitButtonSize.LARGE &&
-            state == PokitButtonState.DEFAULT
-            && type == PokitButtonType.PRIMARY
-            && style == PokitButtonStyle.FILLED) -> {
+
+        (
+            size == PokitButtonSize.LARGE &&
+                state == PokitButtonState.DEFAULT &&
+                type == PokitButtonType.PRIMARY &&
+                style == PokitButtonStyle.FILLED
+            ) -> {
             PokitTheme.typography.label1Regular
         }
+
         else -> {
             PokitTheme.typography.label1Regular
         }
@@ -54,26 +59,30 @@ private fun getColor(
     state: PokitButtonState,
     type: PokitButtonType,
     style: PokitButtonStyle,
-) : Color {
+): Color {
     return when {
         state == PokitButtonState.DISABLE -> {
             PokitTheme.colors.textDisable
         }
+
         type == PokitButtonType.PRIMARY && style == PokitButtonStyle.FILLED -> {
             PokitTheme.colors.inverseWh
         }
+
         type == PokitButtonType.PRIMARY && style == PokitButtonStyle.STROKE -> {
             PokitTheme.colors.textSecondary
         }
+
         type == PokitButtonType.SECONDARY && style == PokitButtonStyle.FILLED -> {
             PokitTheme.colors.inverseWh
         }
+
         type == PokitButtonType.SECONDARY && style == PokitButtonStyle.STROKE -> {
             PokitTheme.colors.textPrimary
         }
+
         else -> {
             PokitTheme.colors.textPrimary
         }
     }
 }
-

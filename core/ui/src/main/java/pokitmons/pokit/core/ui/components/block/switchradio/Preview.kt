@@ -1,4 +1,4 @@
-package pokitmons.pokit.core.ui.components.block.switch_radio
+package pokitmons.pokit.core.ui.components.block.switchradio
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,7 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import pokitmons.pokit.core.ui.components.block.switch_radio.attributes.PokitSwitchRadioStyle
+import pokitmons.pokit.core.ui.components.block.switchradio.attributes.PokitSwitchRadioStyle
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Preview(showBackground = true)
@@ -25,16 +25,16 @@ private fun PokitSwitchRadioPreview() {
                 .fillMaxSize()
                 .padding(12.dp)
                 .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             enumValues<PokitSwitchRadioStyle>().forEach { style ->
                 PokitSwitchRadio(
-                   itemList = sampleItemList,
-                   selectedItem = sampleItemList[0],
-                   onClickItem = {},
-                   getTitleFromItem = { it },
-                   modifier = Modifier.fillMaxWidth(),
-                   style = style
+                    itemList = sampleItemList,
+                    selectedItem = sampleItemList[0],
+                    onClickItem = {},
+                    getTitleFromItem = { it },
+                    modifier = Modifier.fillMaxWidth(),
+                    style = style
                 )
 
                 PokitSwitchRadio(

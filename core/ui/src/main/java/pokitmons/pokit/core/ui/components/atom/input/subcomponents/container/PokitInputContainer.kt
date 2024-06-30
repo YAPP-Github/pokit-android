@@ -12,17 +12,17 @@ import pokitmons.pokit.core.ui.components.atom.input.attributes.PokitInputState
 @Composable
 internal fun PokitInputContainer(
     iconPosition: PokitInputIconPosition?,
-    modifier : Modifier = Modifier,
-    shape : PokitInputShape = PokitInputShape.RECTANGLE,
-    state : PokitInputState = PokitInputState.DEFAULT,
-    content : @Composable RowScope.() -> Unit,
+    modifier: Modifier = Modifier,
+    shape: PokitInputShape = PokitInputShape.RECTANGLE,
+    state: PokitInputState = PokitInputState.DEFAULT,
+    content: @Composable RowScope.() -> Unit,
 ) {
     Row(
         modifier = Modifier
             .pokitInputContainerModifier(
                 iconPosition = iconPosition,
                 shape = shape,
-                state = state
+                state = state,
             )
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically,

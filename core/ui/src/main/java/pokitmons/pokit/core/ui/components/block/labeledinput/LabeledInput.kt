@@ -1,4 +1,4 @@
-package pokitmons.pokit.core.ui.components.block.labeled_input
+package pokitmons.pokit.core.ui.components.block.labeledinput
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,16 +27,16 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
 fun LabeledInput(
-    label : String,
-    sub : String,
-    maxLength : Int,
-    inputText : String,
-    hintText : String,
-    onChangeText : (String) -> Unit,
-    modifier : Modifier = Modifier,
-    readOnly : Boolean = false,
-    enable : Boolean = true,
-    isError : Boolean = false,
+    label: String,
+    sub: String,
+    maxLength: Int,
+    inputText: String,
+    hintText: String,
+    onChangeText: (String) -> Unit,
+    modifier: Modifier = Modifier,
+    readOnly: Boolean = false,
+    enable: Boolean = true,
+    isError: Boolean = false,
 ) {
     var focused by remember { mutableStateOf(false) }
     val state = remember(focused, isError, readOnly, enable) {
@@ -51,10 +51,10 @@ fun LabeledInput(
     val subTextColor = getSubTextColor(state)
 
     Column(
-       modifier = modifier
-           .onFocusChanged { focusState ->
-               focused = focusState.hasFocus
-           }
+        modifier = modifier
+            .onFocusChanged { focusState ->
+                focused = focusState.hasFocus
+            }
     ) {
         Text(
             text = label,
@@ -77,7 +77,7 @@ fun LabeledInput(
 
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             if (state == PokitInputState.ERROR) {
                 Icon(
@@ -98,7 +98,7 @@ fun LabeledInput(
             Spacer(modifier = Modifier.weight(1f))
 
             Text(
-                text = "${inputText.length}/${maxLength}",
+                text = "${inputText.length}/$maxLength",
                 style = PokitTheme.typography.detail1.copy(color = subTextColor)
             )
         }
@@ -106,28 +106,33 @@ fun LabeledInput(
 }
 
 private fun getState(
-    enabled : Boolean,
-    readOnly : Boolean,
-    focused : Boolean,
-    error : Boolean,
-    text : String,
-) : PokitInputState {
+    enabled: Boolean,
+    readOnly: Boolean,
+    focused: Boolean,
+    error: Boolean,
+    text: String,
+): PokitInputState {
     return when {
         !enabled -> {
             PokitInputState.DISABLE
         }
+
         readOnly -> {
             PokitInputState.READ_ONLY
         }
+
         focused -> {
             PokitInputState.ACTIVE
         }
+
         error -> {
             PokitInputState.ERROR
         }
+
         text.isEmpty() -> {
             PokitInputState.DEFAULT
         }
+
         else -> {
             PokitInputState.INPUT
         }
@@ -135,14 +140,16 @@ private fun getState(
 }
 
 @Composable
-private fun getSubTextColor(state: PokitInputState) : Color {
-    return when(state) {
+private fun getSubTextColor(state: PokitInputState): Color {
+    return when (state) {
         PokitInputState.ERROR -> {
             PokitTheme.colors.error
         }
+
         PokitInputState.DISABLE -> {
             PokitTheme.colors.textDisable
         }
+
         else -> {
             PokitTheme.colors.textTertiary
         }

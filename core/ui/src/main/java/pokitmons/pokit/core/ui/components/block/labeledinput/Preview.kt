@@ -1,4 +1,4 @@
-package pokitmons.pokit.core.ui.components.block.labeled_input
+package pokitmons.pokit.core.ui.components.block.labeledinput
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column

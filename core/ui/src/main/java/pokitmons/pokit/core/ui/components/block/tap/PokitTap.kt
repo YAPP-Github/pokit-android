@@ -14,12 +14,12 @@ import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
-fun<T> PokitTap(
-    text : String,
-    data : T,
-    onClick : (T) -> Unit,
-    selectedItem : T,
-    modifier : Modifier = Modifier,
+fun <T> PokitTap(
+    text: String,
+    data: T,
+    onClick: (T) -> Unit,
+    selectedItem: T,
+    modifier: Modifier = Modifier,
 ) {
     val textStyle = getTextStyle(selected = (data == selectedItem))
 
@@ -27,7 +27,7 @@ fun<T> PokitTap(
         modifier = modifier
             .clickable {
                 onClick(data)
-            }
+            },
     ) {
         Text(
             text = text,
@@ -51,8 +51,8 @@ fun<T> PokitTap(
 
 @Composable
 private fun getTextStyle(
-    selected : Boolean,
-) : TextStyle {
+    selected: Boolean,
+): TextStyle {
     return if (selected) {
         PokitTheme.typography.label1SemiBold.copy(color = PokitTheme.colors.textSecondary)
     } else {

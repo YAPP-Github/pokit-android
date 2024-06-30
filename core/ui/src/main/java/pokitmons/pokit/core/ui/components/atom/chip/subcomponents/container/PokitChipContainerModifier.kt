@@ -24,54 +24,59 @@ internal fun Modifier.pokitChipContainerModifier(
     size: PokitChipSize,
     type: PokitChipType,
     onClick: (() -> Unit)? = null,
-) : Modifier {
+): Modifier {
     val backgroundColor = getBackgroundColor(state = state, type = type)
     val strokeColor = getStrokeColor(state = state, type = type)
     val padding = getPadding(iconPosition = iconPosition, size = size)
 
     return this then Modifier
         .clip(
-            shape = RoundedCornerShape(9999.dp)
+            shape = RoundedCornerShape(9999.dp),
         )
         .clickable(
             enabled = (onClick != null && state != PokitChipState.DISABLED),
-            onClick = onClick ?: {}
+            onClick = onClick ?: {},
         )
         .background(
             shape = RoundedCornerShape(9999.dp),
-            color = backgroundColor
+            color = backgroundColor,
         )
         .border(
             shape = RoundedCornerShape(9999.dp),
             width = 1.dp,
-            color = strokeColor
+            color = strokeColor,
         )
         .padding(
-            paddingValues = padding
+            paddingValues = padding,
         )
 }
 
 @Composable
 private fun getBackgroundColor(
-    state : PokitChipState,
-    type : PokitChipType,
-) : Color {
+    state: PokitChipState,
+    type: PokitChipType,
+): Color {
     return when {
         state == PokitChipState.DEFAULT -> {
             PokitTheme.colors.backgroundBase
         }
+
         state == PokitChipState.DISABLED -> {
             PokitTheme.colors.backgroundDisable
         }
+
         state == PokitChipState.STROKE -> {
             PokitTheme.colors.backgroundBase
         }
+
         state == PokitChipState.FILLED && type == PokitChipType.PRIMARY -> {
             PokitTheme.colors.brand
         }
+
         state == PokitChipState.FILLED && type == PokitChipType.SECONDARY -> {
             PokitTheme.colors.backgroundTertiary
         }
+
         else -> {
             PokitTheme.colors.backgroundBase
         }
@@ -80,25 +85,30 @@ private fun getBackgroundColor(
 
 @Composable
 private fun getStrokeColor(
-    state : PokitChipState,
-    type : PokitChipType,
-) : Color {
+    state: PokitChipState,
+    type: PokitChipType,
+): Color {
     return when {
         state == PokitChipState.DEFAULT -> {
             PokitTheme.colors.borderSecondary
         }
+
         state == PokitChipState.DISABLED -> {
             Color.Unspecified
         }
+
         state == PokitChipState.FILLED -> {
             Color.Unspecified
         }
+
         state == PokitChipState.STROKE && type == PokitChipType.PRIMARY -> {
             PokitTheme.colors.brand
         }
+
         state == PokitChipState.STROKE && type == PokitChipType.SECONDARY -> {
             PokitTheme.colors.borderPrimary
         }
+
         else -> {
             PokitTheme.colors.borderSecondary
         }
@@ -106,10 +116,10 @@ private fun getStrokeColor(
 }
 
 private fun getPadding(
-    iconPosition : PokitChipIconPosiion?,
-    size : PokitChipSize,
-) : PaddingValues {
-    return when(size) {
+    iconPosition: PokitChipIconPosiion?,
+    size: PokitChipSize,
+): PaddingValues {
+    return when (size) {
         PokitChipSize.SMALL -> {
             if (iconPosition == PokitChipIconPosiion.LEFT) {
                 PaddingValues(start = 8.dp, end = 12.dp, top = 8.dp, bottom = 8.dp)
@@ -119,6 +129,7 @@ private fun getPadding(
                 PaddingValues(all = 8.dp)
             }
         }
+
         PokitChipSize.MEDIUM -> {
             if (iconPosition == PokitChipIconPosiion.LEFT) {
                 PaddingValues(start = 12.dp, end = 16.dp, top = 8.dp, bottom = 8.dp)
