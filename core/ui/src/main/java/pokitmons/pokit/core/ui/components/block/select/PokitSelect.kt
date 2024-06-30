@@ -1,11 +1,9 @@
 package pokitmons.pokit.core.ui.components.block.select
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -17,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.components.block.select.attributes.PokitSelectState
@@ -114,27 +111,6 @@ private fun getIconTintColor(
         }
         else -> {
             PokitTheme.colors.iconSecondary
-        }
-    }
-}
-
-
-@Preview(showBackground = true)
-@Composable
-fun PokitSelectPreview() {
-    PokitTheme {
-        Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            enumValues<PokitSelectState>().forEach { state ->
-                PokitSelect(
-                    text = "선택해주세요",
-                    label = "Label",
-                    onClick = {},
-                    state = state
-                )
-            }
         }
     }
 }

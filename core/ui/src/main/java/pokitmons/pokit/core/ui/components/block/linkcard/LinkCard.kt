@@ -31,7 +31,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import pokitmons.pokit.core.ui.R
@@ -167,31 +166,5 @@ fun<T> LinkCard(
             }
         }
     }
-
 }
 
-
-@Preview(showBackground = true)
-@Composable
-fun LinkCardPreview() {
-    PokitTheme {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.LightGray)
-                .padding(12.dp)
-        ) {
-            LinkCard(
-                title = "타이틀\n컴포스는 왜 이런가",
-                sub = "2024.06.25. youtube.com",
-                badgeText = "텍스트",
-                painter = painterResource(id = R.drawable.icon_24_link),
-                indicatorVisible = true,
-                bookmarked = true,
-                item = 3,
-                onClickKebab = { value : Int ->  },
-                onClickItem = { value : Int ->  },
-            )
-        }
-    }
-}
