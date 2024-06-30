@@ -6,7 +6,7 @@ enum class PokitInputShape {
     ROUND, RECTANGLE,
 }
 
-enum class PokitInputState {
+internal enum class PokitInputState {
     DEFAULT, INPUT, ACTIVE, DISABLE, READ_ONLY, ERROR,
 }
 

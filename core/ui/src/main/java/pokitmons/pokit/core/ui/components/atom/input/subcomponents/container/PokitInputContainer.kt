@@ -10,7 +10,7 @@ import pokitmons.pokit.core.ui.components.atom.input.attributes.PokitInputShape
 import pokitmons.pokit.core.ui.components.atom.input.attributes.PokitInputState
 
 @Composable
-fun PokitInputContainer(
+internal fun PokitInputContainer(
     iconPosition: PokitInputIconPosition?,
     modifier : Modifier = Modifier,
     shape : PokitInputShape = PokitInputShape.RECTANGLE,

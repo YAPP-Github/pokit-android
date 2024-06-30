@@ -11,7 +11,7 @@ import pokitmons.pokit.core.ui.components.atom.input.attributes.PokitInputState
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
-fun PokitInputIcon(
+internal fun PokitInputIcon(
     state : PokitInputState,
     resourceId : Int,
 ) {

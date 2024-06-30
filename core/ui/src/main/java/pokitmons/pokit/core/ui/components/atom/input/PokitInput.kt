@@ -1,22 +1,19 @@
 package pokitmons.pokit.core.ui.components.atom.input
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.components.atom.input.attributes.PokitInputIcon
 import pokitmons.pokit.core.ui.components.atom.input.attributes.PokitInputIconPosition
 import pokitmons.pokit.core.ui.components.atom.input.attributes.PokitInputShape
@@ -33,8 +30,20 @@ fun PokitInput(
     icon: PokitInputIcon?,
     modifier : Modifier = Modifier,
     shape: PokitInputShape = PokitInputShape.RECTANGLE,
-    state: PokitInputState = PokitInputState.DEFAULT,
+    readOnly : Boolean = false,
+    enable : Boolean = true,
+    isError : Boolean = false,
 ) {
+    var focused by remember { mutableStateOf(false) }
+    val state = remember(focused, isError, readOnly, enable) {
+        getState(
+            enabled = enable,
+            readOnly = readOnly,
+            focused = focused,
+            error = isError,
+            text = text
+        )
+    }
     val textColor = getTextColor(state = state)
     val textStyle = PokitTheme.typography.body3Medium.copy(color = textColor)
 
@@ -42,7 +51,12 @@ fun PokitInput(
         value = text,
         onValueChange = onChangeText,
         textStyle = textStyle,
-        decorationBox = { innerTextFiled ->
+        enabled = (enable && !readOnly),
+        maxLines = 1,
+        modifier = Modifier.onFocusChanged { focusState ->
+            focused = focusState.isFocused
+        },
+        decorationBox = { innerTextField ->
             PokitInputContainer(
                 iconPosition = icon?.position,
                 modifier = modifier,
@@ -58,12 +72,12 @@ fun PokitInput(
                     Box(modifier = Modifier.width(8.dp))
                 }
 
-                if (text.isEmpty()) {
+                if (text.isEmpty() && !focused) {
                     Text(text = hintText, style = textStyle)
                 }
 
                 Box(modifier = Modifier.weight(1f)) {
-                    innerTextFiled()
+                    innerTextField()
                 }
 
                 if (icon?.position == PokitInputIconPosition.RIGHT) {
@@ -100,42 +114,31 @@ private fun getTextColor(
     }
 }
 
-
-
-@Preview(showBackground = true)
-@Composable
-fun PokitInputPreview() {
-    val scrollState = rememberScrollState()
-    PokitTheme {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(12.dp)
-                .verticalScroll(scrollState),
-            verticalArrangement = Arrangement.spacedBy(12.dp),
-        ) {
-            enumValues<PokitInputShape>().forEach { shape ->
-                enumValues<PokitInputState>().forEach { state ->
-                    enumValues<PokitInputIconPosition>().forEach { iconPosition ->
-                        PokitInput(
-                            text = "",
-                            hintText = "내용을 입력해주세요.",
-                            onChangeText = {},
-                            state = state,
-                            shape = shape,
-                            icon = PokitInputIcon(iconPosition, R.drawable.icon_24_search)
-                        )
-                    }
-                    PokitInput(
-                        text = "",
-                        hintText = "내용을 입력해주세요.",
-                        onChangeText = {},
-                        state = state,
-                        shape = shape,
-                        icon = null,
-                    )
-                }
-            }
+private fun getState(
+    enabled : Boolean,
+    readOnly : Boolean,
+    focused : Boolean,
+    error : Boolean,
+    text : String,
+) : PokitInputState {
+    return when {
+        !enabled -> {
+            PokitInputState.DISABLE
+        }
+        readOnly -> {
+            PokitInputState.READ_ONLY
+        }
+        focused -> {
+            PokitInputState.ACTIVE
+        }
+        error -> {
+            PokitInputState.ERROR
+        }
+        text.isEmpty() -> {
+            PokitInputState.DEFAULT
+        }
+        else -> {
+            PokitInputState.INPUT
         }
     }
 }
