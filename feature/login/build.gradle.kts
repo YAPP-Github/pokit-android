@@ -20,7 +20,7 @@ android {
     defaultConfig {
         minSdk = 24
 
-        buildConfigField("String", "WEB_CLIENT_ID", properties.getProperty("web_client_id"))
+        buildConfigField("String", "WEB_CLIENT_ID", properties.getProperty("web_client_id") ?: "")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
