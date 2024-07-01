@@ -37,7 +37,7 @@ fun LoginScreen() {
         try {
             val result = credentialManager.getCredential(
                 request = request,
-                context = context,
+                context = context
             )
             val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(result.credential.data)
             val googleIdToken = googleIdTokenCredential.idToken
