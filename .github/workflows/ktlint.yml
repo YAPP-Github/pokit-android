@@ -21,6 +21,12 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
+      - name: check google client id
+        env:
+          GOOGLE_CLIENT_ID: ${{secrets.GOOGLE_CLIENT_ID}}
+        run: |
+          echo web_client_id=\""$GOOGLE_CLIENT_ID"\" >> local.properties
+          
       - name: Run ktlint
         run: ./gradlew ktlintCheck
 
