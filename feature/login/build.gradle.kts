@@ -1,5 +1,5 @@
 plugins {
-    alias(libs.plugins.com.android.application)
+    alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
 }
 
@@ -8,11 +8,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "pokitmons.pokit.login"
         minSdk = 24
-        targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
