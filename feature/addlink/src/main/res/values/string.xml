@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="add_link">링크 추가</string>
+    <string name="link">링크</string>
+    <string name="placeholder_link">내용을 입력해주세요.</string>
+    <string name="title">제목</string>
+    <string name="placeholder_title">내용을 입력해주세요.</string>
+    <string name="pokit">포킷</string>
+    <string name="memo">메모</string>
+    <string name="placeholder_memo">내용을 입력해주세요.</string>
+    <string name="title_remind">리마인드 알림을 보내드릴까요?</string>
+    <string name="reject_remind">안받을래요</string>
+    <string name="accept_remind">받을래요</string>
+    <string name="sub_remind">일주일 후에 알림을 전송해드립니다.</string>
+    <string name="save">저장하기</string>
+    <string name="uncategorized">미분류</string>
+</resources>
