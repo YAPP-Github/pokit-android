@@ -142,7 +142,7 @@ private fun getPaddingBySize(
     textOnlyPadding: Dp,
 ): PaddingValues {
     return if (!hasText) { // icon only
-        PaddingValues(horizontal = iconSidePaddingSize, vertical = verticalPaddingSize)
+        PaddingValues(all = verticalPaddingSize)
     } else if (iconPosition == PokitButtonIconPosition.LEFT) {
         PaddingValues(start = iconSidePaddingSize, top = verticalPaddingSize, bottom = verticalPaddingSize, end = textSidePaddingSize)
     } else if (iconPosition == PokitButtonIconPosition.RIGHT) {
