@@ -49,7 +49,7 @@ fun PokitCard(
             .padding(all = 12.dp)
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth()
         ) {
             Text(
                 modifier = Modifier.weight(1f),
@@ -85,7 +85,7 @@ fun PokitCard(
             modifier = Modifier
                 .height(68.dp)
                 .fillMaxWidth(1f),
-            horizontalArrangement = Arrangement.End,
+            horizontalArrangement = Arrangement.End
         ) {
             if (painter != null) {
                 Image(

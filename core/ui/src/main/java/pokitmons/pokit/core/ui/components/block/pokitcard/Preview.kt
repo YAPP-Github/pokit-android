@@ -30,8 +30,8 @@ fun PokitardPreview() {
                     text = "요리/레시피",
                     linkCount = 10,
                     painter = null,
-                    onClick = {  },
-                    onClickKebab = {  }
+                    onClick = { },
+                    onClickKebab = { }
                 )
 
                 PokitCard(
@@ -39,8 +39,8 @@ fun PokitardPreview() {
                     text = "요리/레시피",
                     linkCount = 5,
                     painter = painterResource(id = R.drawable.icon_24_google),
-                    onClick = {  },
-                    onClickKebab = {  }
+                    onClick = { },
+                    onClickKebab = { }
                 )
             }
         }
