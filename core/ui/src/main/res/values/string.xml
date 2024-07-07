@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="pokit_count_format">링크 %d개</string>
+</resources>
