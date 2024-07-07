@@ -1,138 +1,158 @@
 package pokitmons.pokit.core.ui.theme
 
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.sp
+import pokitmons.pokit.core.ui.theme.typography.PokitTypo
 
 @Immutable
 data class PokitTypography(
-    val title1: TextStyle = TextStyle(
+    private val _title1: PokitTypo = PokitTypo(
         fontFamily = pretendard,
-        fontSize = 24.sp,
+        fontSize = 24,
         fontWeight = FontWeight.Bold,
-        lineHeight = 32.sp,
-        letterSpacing = (-0.26).sp
+        lineHeight = 32,
+        letterSpacing = (-0.26f)
     ),
-    val title2: TextStyle = TextStyle(
+    private val _title2: PokitTypo = PokitTypo(
         fontFamily = pretendard,
-        fontSize = 20.sp,
+        fontSize = 20,
         fontWeight = FontWeight.Bold,
-        lineHeight = 28.sp,
-        letterSpacing = (-0.6).sp
+        lineHeight = 28,
+        letterSpacing = (-0.6f)
     ),
-    val title3: TextStyle = TextStyle(
+    private val _title3: PokitTypo = PokitTypo(
         fontFamily = pretendard,
-        fontSize = 18.sp,
+        fontSize = 18,
         fontWeight = FontWeight.Medium,
-        lineHeight = 24.sp
+        lineHeight = 24
     ),
-    val body1Bold: TextStyle = TextStyle(
+    private val _body1Bold: PokitTypo = PokitTypo(
         fontFamily = pretendard,
-        fontSize = 18.sp,
+        fontSize = 18,
         fontWeight = FontWeight.Bold,
-        lineHeight = 24.sp,
-        letterSpacing = (-0.54).sp
+        lineHeight = 24,
+        letterSpacing = (-0.54f)
     ),
-    val body1Medium: TextStyle = TextStyle(
+    private val _body1Medium: PokitTypo = PokitTypo(
         fontFamily = pretendard,
-        fontSize = 18.sp,
+        fontSize = 18,
         fontWeight = FontWeight.Medium,
-        lineHeight = 24.sp,
-        letterSpacing = (-0.54).sp
+        lineHeight = 24,
+        letterSpacing = (-0.54f)
     ),
-    val body2Bold: TextStyle = TextStyle(
+    private val _body2Bold: PokitTypo = PokitTypo(
         fontFamily = pretendard,
-        fontSize = 16.sp,
+        fontSize = 16,
         fontWeight = FontWeight.Bold,
-        lineHeight = 20.sp,
-        letterSpacing = (-0.176).sp
+        lineHeight = 20,
+        letterSpacing = (-0.176f)
     ),
-    val body2Medium: TextStyle = TextStyle(
+    private val _body2Medium: PokitTypo = PokitTypo(
         fontFamily = pretendard,
-        fontSize = 16.sp,
+        fontSize = 16,
         fontWeight = FontWeight.Medium,
-        lineHeight = 20.sp,
-        letterSpacing = (-0.176).sp
+        lineHeight = 20,
+        letterSpacing = (-0.176f)
     ),
-    val body3Medium: TextStyle = TextStyle(
+    private val _body3Medium: PokitTypo = PokitTypo(
         fontFamily = pretendard,
-        fontSize = 14.sp,
+        fontSize = 14,
         fontWeight = FontWeight.Medium,
-        lineHeight = 18.sp,
-        letterSpacing = (-0.154).sp
+        lineHeight = 18,
+        letterSpacing = (-0.154f)
     ),
-    val body3Regular: TextStyle = TextStyle(
+    private val _body3Regular: PokitTypo = PokitTypo(
         fontFamily = pretendard,
-        fontSize = 14.sp,
+        fontSize = 14,
         fontWeight = FontWeight.W400,
-        lineHeight = 24.sp,
-        letterSpacing = (-0.42).sp
+        lineHeight = 24,
+        letterSpacing = (-0.42f)
     ),
-    val detail1: TextStyle = TextStyle(
+    private val _detail1: PokitTypo = PokitTypo(
         fontFamily = pretendard,
-        fontSize = 14.sp,
+        fontSize = 14,
         fontWeight = FontWeight.Medium,
-        lineHeight = 20.sp,
-        letterSpacing = (-0.154).sp
+        lineHeight = 20,
+        letterSpacing = (-0.154f)
     ),
-    val detail2: TextStyle = TextStyle(
+    private val _detail2: PokitTypo = PokitTypo(
         fontFamily = pretendard,
-        fontSize = 12.sp,
+        fontSize = 12,
         fontWeight = FontWeight.W400,
-        lineHeight = 16.sp,
-        letterSpacing = (-0.132).sp
+        lineHeight = 16,
+        letterSpacing = (-0.132f)
     ),
-    val label1SemiBold: TextStyle = TextStyle(
+    private val _label1SemiBold: PokitTypo = PokitTypo(
         fontFamily = pretendard,
-        fontSize = 18.sp,
+        fontSize = 18,
         fontWeight = FontWeight.SemiBold,
-        lineHeight = 24.sp,
-        letterSpacing = (-0.2).sp
+        lineHeight = 24,
+        letterSpacing = (-0.2f)
     ),
-    val label1Regular: TextStyle = TextStyle(
+    private val _label1Regular: PokitTypo = PokitTypo(
         fontFamily = pretendard,
-        fontSize = 18.sp,
+        fontSize = 18,
         fontWeight = FontWeight.W400,
-        lineHeight = 24.sp,
-        letterSpacing = (-0.2).sp
+        lineHeight = 24,
+        letterSpacing = (-0.2f)
     ),
-    val label2SemiBold: TextStyle = TextStyle(
+    private val _label2SemiBold: PokitTypo = PokitTypo(
         fontFamily = pretendard,
-        fontSize = 16.sp,
+        fontSize = 16,
         fontWeight = FontWeight.SemiBold,
-        lineHeight = 20.sp,
-        letterSpacing = (-0.18).sp
+        lineHeight = 20,
+        letterSpacing = (-0.18f)
     ),
-    val label2Regular: TextStyle = TextStyle(
+    private val _label2Regular: PokitTypo = PokitTypo(
         fontFamily = pretendard,
-        fontSize = 16.sp,
+        fontSize = 16,
         fontWeight = FontWeight.W400,
-        lineHeight = 20.sp,
-        letterSpacing = (-0.18).sp
+        lineHeight = 20,
+        letterSpacing = (-0.18f)
     ),
-    val label3SemiBold: TextStyle = TextStyle(
+    private val _label3SemiBold: PokitTypo = PokitTypo(
         fontFamily = pretendard,
-        fontSize = 14.sp,
+        fontSize = 14,
         fontWeight = FontWeight.SemiBold,
-        lineHeight = 16.sp,
-        letterSpacing = (-0.154).sp
+        lineHeight = 16,
+        letterSpacing = (-0.154f)
     ),
-    val label3Regular: TextStyle = TextStyle(
+    private val _label3Regular: PokitTypo = PokitTypo(
         fontFamily = pretendard,
-        fontSize = 14.sp,
+        fontSize = 14,
         fontWeight = FontWeight.W400,
-        lineHeight = 16.sp,
-        letterSpacing = (-0.154).sp
+        lineHeight = 16,
+        letterSpacing = (-0.154f)
     ),
-    val label4: TextStyle = TextStyle(
+    private val _label4: PokitTypo = PokitTypo(
         fontFamily = pretendard,
-        fontSize = 10.sp,
+        fontSize = 10,
         fontWeight = FontWeight.W400,
-        lineHeight = 12.sp,
-        letterSpacing = (-0.11).sp
+        lineHeight = 12,
+        letterSpacing = (-0.11f)
     ),
-)
+) {
+    val title1: TextStyle @Composable get() = _title1.toDpTextStyle
+    val title2: TextStyle @Composable get() = _title2.toDpTextStyle
+    val title3: TextStyle @Composable get() = _title3.toDpTextStyle
+    val body1Bold: TextStyle @Composable get() = _body1Bold.toDpTextStyle
+    val body1Medium: TextStyle @Composable get() = _body1Medium.toDpTextStyle
+    val body2Bold: TextStyle @Composable get() = _body2Bold.toDpTextStyle
+    val body2Medium: TextStyle @Composable get() = _body2Medium.toDpTextStyle
+    val body3Medium: TextStyle @Composable get() = _body3Medium.toDpTextStyle
+    val body3Regular: TextStyle @Composable get() = _body3Regular.toDpTextStyle
+    val detail1: TextStyle @Composable get() = _detail1.toDpTextStyle
+    val detail2: TextStyle @Composable get() = _detail2.toDpTextStyle
+    val label1SemiBold: TextStyle @Composable get() = _label1SemiBold.toDpTextStyle
+    val label1Regular: TextStyle @Composable get() = _label1Regular.toDpTextStyle
+    val label2SemiBold: TextStyle @Composable get() = _label2SemiBold.toDpTextStyle
+    val label2Regular: TextStyle @Composable get() = _label2Regular.toDpTextStyle
+    val label3SemiBold: TextStyle @Composable get() = _label3SemiBold.toDpTextStyle
+    val label3Regular: TextStyle @Composable get() = _label3Regular.toDpTextStyle
+    val label4: TextStyle @Composable get() = _label4.toDpTextStyle
+}
 
 internal val LocalPokitTypography = staticCompositionLocalOf { PokitTypography() }
