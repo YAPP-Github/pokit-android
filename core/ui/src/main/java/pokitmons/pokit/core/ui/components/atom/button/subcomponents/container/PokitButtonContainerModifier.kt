@@ -124,7 +124,7 @@ private fun getPadding(
             getPaddingBySize(
                 hasText = hasText,
                 iconPosition = iconPosition,
-                verticalPaddingSize = 12.dp,
+                verticalPaddingSize = 13.dp,
                 textSidePaddingSize = 24.dp,
                 iconSidePaddingSize = 20.dp,
                 textOnlyPadding = 20.dp
