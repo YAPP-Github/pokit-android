@@ -10,6 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.components.atom.input.attributes.PokitInputIconPosition
 import pokitmons.pokit.core.ui.components.atom.input.attributes.PokitInputShape
@@ -58,21 +59,36 @@ private fun getPadding(
     shape: PokitInputShape,
     iconPosition: PokitInputIconPosition?,
 ): PaddingValues {
+    val verticalPadding = getVerticalPadding(shape = shape)
+
     return when {
         shape == PokitInputShape.RECTANGLE -> {
-            PaddingValues(horizontal = 12.dp, vertical = 12.dp)
+            PaddingValues(horizontal = 12.dp, vertical = verticalPadding)
         }
 
         shape == PokitInputShape.ROUND && iconPosition == null -> {
-            PaddingValues(horizontal = 20.dp, vertical = 12.dp)
+            PaddingValues(horizontal = 20.dp, vertical = verticalPadding)
         }
 
         shape == PokitInputShape.ROUND && iconPosition == PokitInputIconPosition.LEFT -> {
-            PaddingValues(horizontal = 16.dp, vertical = 12.dp)
+            PaddingValues(horizontal = 16.dp, vertical = verticalPadding)
         }
 
         else -> {
-            PaddingValues(start = 20.dp, end = 16.dp, top = 12.dp, bottom = 12.dp)
+            PaddingValues(start = 20.dp, end = 16.dp, top = verticalPadding, bottom = verticalPadding)
+        }
+    }
+}
+
+private fun getVerticalPadding(
+    shape: PokitInputShape,
+): Dp {
+    return when (shape) {
+        PokitInputShape.ROUND -> {
+            8.dp
+        }
+        PokitInputShape.RECTANGLE -> {
+            13.dp
         }
     }
 }
@@ -82,9 +98,9 @@ private fun getBackgroundColor(
     state: PokitInputState,
 ): Color {
     return when (state) {
-        PokitInputState.DEFAULT -> PokitTheme.colors.backgroundBase
+        PokitInputState.DEFAULT -> PokitTheme.colors.backgroundPrimary
 
-        PokitInputState.INPUT -> PokitTheme.colors.backgroundBase
+        PokitInputState.INPUT -> PokitTheme.colors.backgroundPrimary
 
         PokitInputState.ACTIVE -> PokitTheme.colors.backgroundBase
 
@@ -101,9 +117,9 @@ private fun getStrokeColor(
     state: PokitInputState,
 ): Color {
     return when (state) {
-        PokitInputState.DEFAULT -> PokitTheme.colors.borderSecondary
+        PokitInputState.DEFAULT -> Color.Unspecified
 
-        PokitInputState.INPUT -> PokitTheme.colors.borderSecondary
+        PokitInputState.INPUT -> Color.Unspecified
 
         PokitInputState.ACTIVE -> PokitTheme.colors.brand
 
