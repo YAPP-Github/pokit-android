@@ -1,6 +1,5 @@
-package pokitmons.pokit.core.ui.components.block.categorycard
+package pokitmons.pokit.core.ui.components.block.pokitlist
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -16,25 +15,22 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.R
-import pokitmons.pokit.core.ui.components.block.categorycard.attributes.CategoryCardState
+import pokitmons.pokit.core.ui.components.block.pokitlist.attributes.PokitListState
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
-fun <T> CategoryCard(
+fun <T> PokitList(
     item: T,
-    painter: Painter,
     title: String,
     sub: String,
     onClickKebab: (T) -> Unit,
     onClickItem: (T) -> Unit,
     modifier: Modifier = Modifier,
-    state: CategoryCardState = CategoryCardState.DISABLE,
+    state: PokitListState = PokitListState.DISABLE,
 ) {
     val titleTextColor = getTitleTextColor(state = state)
     val subTextColor = getSubTextColor(state = state)
@@ -42,20 +38,13 @@ fun <T> CategoryCard(
     Row(
         modifier = modifier
             .clickable(
-                enabled = state != CategoryCardState.DISABLE,
+                enabled = state != PokitListState.DISABLE,
                 onClick = { onClickItem(item) }
             )
             .padding(horizontal = 20.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Image(
-            painter = painter,
-            contentDescription = null,
-            modifier = Modifier.size(60.dp),
-            contentScale = ContentScale.Crop
-        )
-
-        Spacer(modifier = Modifier.width(12.dp))
+        Spacer(modifier = Modifier.width(8.dp))
 
         Column(
             modifier = Modifier.weight(1f)
@@ -79,7 +68,7 @@ fun <T> CategoryCard(
             modifier = Modifier
                 .padding(0.dp)
                 .align(Alignment.Top),
-            enabled = state != CategoryCardState.DISABLE
+            enabled = state != PokitListState.DISABLE
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.icon_24_kebab),
@@ -92,22 +81,22 @@ fun <T> CategoryCard(
 
 @Composable
 private fun getTitleTextColor(
-    state: CategoryCardState,
+    state: PokitListState,
 ): Color {
     return when (state) {
-        CategoryCardState.DEFAULT -> PokitTheme.colors.textPrimary
-        CategoryCardState.ACTIVE -> PokitTheme.colors.textPrimary
-        CategoryCardState.DISABLE -> PokitTheme.colors.textDisable
+        PokitListState.DEFAULT -> PokitTheme.colors.textPrimary
+        PokitListState.ACTIVE -> PokitTheme.colors.textPrimary
+        PokitListState.DISABLE -> PokitTheme.colors.textDisable
     }
 }
 
 @Composable
 private fun getSubTextColor(
-    state: CategoryCardState,
+    state: PokitListState,
 ): Color {
     return when (state) {
-        CategoryCardState.DEFAULT -> PokitTheme.colors.textTertiary
-        CategoryCardState.ACTIVE -> PokitTheme.colors.textTertiary
-        CategoryCardState.DISABLE -> PokitTheme.colors.textDisable
+        PokitListState.DEFAULT -> PokitTheme.colors.textTertiary
+        PokitListState.ACTIVE -> PokitTheme.colors.textTertiary
+        PokitListState.DISABLE -> PokitTheme.colors.textDisable
     }
 }
