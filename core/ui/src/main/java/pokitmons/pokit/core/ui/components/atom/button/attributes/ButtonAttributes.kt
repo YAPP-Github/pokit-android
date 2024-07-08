@@ -41,5 +41,5 @@ data class PokitLoginResource(
     val textColor: Color,
     val backgroundColor: Color,
     val borderColor: Color,
-    val text: String
+    val text: String,
 )

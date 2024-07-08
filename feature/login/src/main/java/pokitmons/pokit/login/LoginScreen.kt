@@ -10,14 +10,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.launch
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.components.atom.button.PokitLoginButton
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitLoginButtonType
 
@@ -26,9 +26,8 @@ fun LoginScreen() {
     // TODO 서버 api 개발완료 후 viewmodel 연동 및 아키텍처 구축
     Box(
         modifier = Modifier
-            .fillMaxSize(),
-    )
-    {
+            .fillMaxSize()
+    ) {
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
@@ -36,14 +35,14 @@ fun LoginScreen() {
                     start = 20.dp,
                     end = 20.dp,
                     bottom = 32.dp
-                ),
+                )
         ) {
             PokitLoginButton(
                 loginType = PokitLoginButtonType.APPLE,
                 onClick = { }
             )
 
-            Spacer(modifier = Modifier.padding(top = 4.dp, bottom = 4.dp),)
+            Spacer(modifier = Modifier.padding(top = 4.dp, bottom = 4.dp))
 
             PokitLoginButton(
                 loginType = PokitLoginButtonType.GOOGLE,

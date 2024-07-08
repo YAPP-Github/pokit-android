@@ -31,7 +31,6 @@ fun PokitLoginButton(
     onClick: () -> Unit,
     loginType: PokitLoginButtonType,
 ) {
-
     val loginResource: PokitLoginResource = getLoginResource(loginType)
 
     Surface(
@@ -56,14 +55,14 @@ fun PokitLoginButton(
                     .size(24.dp),
                 painter = painterResource(id = loginResource.iconResourceId),
                 tint = loginResource.iconTintColor,
-                contentDescription = null,
+                contentDescription = null
             )
             Text(
                 modifier = Modifier
                     .padding(start = 12.dp),
                 text = loginResource.text,
                 color = loginResource.textColor,
-                style = PokitTheme.typography.label3Regular,
+                style = PokitTheme.typography.label3Regular
             )
         }
     }
