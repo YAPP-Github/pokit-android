@@ -1,5 +1,7 @@
 package pokitmons.pokit.core.ui.components.atom.button.attributes
 
+import androidx.compose.ui.graphics.Color
+
 enum class PokitButtonShape {
     ROUND, RECTANGLE,
 }
@@ -28,3 +30,16 @@ data class PokitButtonIcon(
 enum class PokitButtonIconPosition {
     RIGHT, LEFT,
 }
+
+enum class PokitLoginButtonType {
+    GOOGLE, APPLE
+}
+
+data class PokitLoginResource(
+    val iconResourceId: Int,
+    val iconTintColor: Color = Color.Unspecified,
+    val textColor: Color,
+    val backgroundColor: Color,
+    val borderColor: Color,
+    val text: String
+)
