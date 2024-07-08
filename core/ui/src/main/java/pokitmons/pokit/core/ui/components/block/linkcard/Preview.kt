@@ -28,8 +28,7 @@ fun LinkCardPreview() {
                 sub = "2024.06.25. youtube.com",
                 badgeText = "텍스트",
                 painter = painterResource(id = R.drawable.icon_24_link),
-                indicatorVisible = true,
-                bookmarked = true,
+                notRead = true,
                 item = 3,
                 onClickKebab = { value: Int -> },
                 onClickItem = { value: Int -> }

@@ -35,7 +35,7 @@ fun PokitInputPreview() {
                             enumValues<PokitInputIconPosition>().forEach { iconPosition ->
                                 PokitInput(
                                     text = "",
-                                    hintText = "내용을 입력해주세요.",
+                                    hintText = "error:$isError, enabled:$enabled, readOnly:$readOnly",
                                     onChangeText = {},
                                     shape = shape,
                                     enable = enabled,
@@ -45,8 +45,8 @@ fun PokitInputPreview() {
                                 )
                             }
                             PokitInput(
-                                text = "",
-                                hintText = "내용을 입력해주세요.",
+                                text = "val",
+                                hintText = "error:$isError, enabled:$enabled, readOnly:$readOnly",
                                 onChangeText = {},
                                 shape = shape,
                                 enable = enabled,

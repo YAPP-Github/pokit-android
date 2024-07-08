@@ -63,6 +63,17 @@ fun PokitButtonPreview() {
                                         style = style,
                                         type = type
                                     )
+
+                                    PokitButton(
+                                        text = null,
+                                        icon = PokitButtonIcon(resourceId = R.drawable.icon_24_search, position = PokitButtonIconPosition.LEFT),
+                                        onClick = {},
+                                        enable = enable,
+                                        size = size,
+                                        shape = shape,
+                                        style = style,
+                                        type = type
+                                    )
                                 }
                             }
                         }

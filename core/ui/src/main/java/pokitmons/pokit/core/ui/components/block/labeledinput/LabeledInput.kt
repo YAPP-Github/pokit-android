@@ -28,12 +28,12 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 @Composable
 fun LabeledInput(
     label: String,
-    sub: String,
-    maxLength: Int,
     inputText: String,
     hintText: String,
     onChangeText: (String) -> Unit,
     modifier: Modifier = Modifier,
+    sub: String = "",
+    maxLength: Int? = null,
     readOnly: Boolean = false,
     enable: Boolean = true,
     isError: Boolean = false,
@@ -97,10 +97,12 @@ fun LabeledInput(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Text(
-                text = "${inputText.length}/$maxLength",
-                style = PokitTheme.typography.detail1.copy(color = subTextColor)
-            )
+            if (maxLength != null) {
+                Text(
+                    text = "${inputText.length}/$maxLength",
+                    style = PokitTheme.typography.detail1.copy(color = subTextColor)
+                )
+            }
         }
     }
 }
