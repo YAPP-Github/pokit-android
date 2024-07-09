@@ -18,10 +18,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.strayalpaca.addlink.model.Link
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
 fun Link(
+    link: Link,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -49,7 +51,7 @@ fun Link(
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = "자연 친화적인 라이프스타일을 위한 환경 보호 방법",
+                text = link.title,
                 maxLines = 2,
                 style = PokitTheme.typography.body3Medium.copy(color = PokitTheme.colors.textSecondary)
             )
@@ -58,7 +60,7 @@ fun Link(
 
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = "https://pokit.com/watch?v=xSTwqkUyM8k",
+                text = link.url,
                 maxLines = 2,
                 style = PokitTheme.typography.detail2.copy(color = PokitTheme.colors.textTertiary)
             )
