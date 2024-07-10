@@ -4,19 +4,11 @@ import com.strayalpaca.addlink.R
 
 data class AddLinkScreenState(
     val link: Link? = null,
-    val linkUrl: String = "",
-    val title: String = "",
     val currentPokit: Pokit? = null,
     val pokitList: List<Pokit> = emptyList(),
-    val memo: String = "",
     val useRemind: Boolean = false,
     val step: ScreenStep = ScreenStep.IDLE,
-    val pokitAddInput: String = "",
-) {
-    fun saveButtonEnable(): Boolean {
-        return link != null && linkUrl.isNotEmpty() && title.isNotEmpty() && step == ScreenStep.IDLE
-    }
-}
+)
 
 sealed class ScreenStep {
     data object LOADING : ScreenStep()

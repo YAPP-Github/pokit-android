@@ -18,6 +18,10 @@ fun AddLinkScreenPreview() {
         ) {
             AddLinkScreen(
                 isModifyLink = false,
+                url="",
+                title = "",
+                memo = "",
+                pokitName = "",
                 state = AddLinkScreenState(),
                 inputUrl = {},
                 inputTitle = {},

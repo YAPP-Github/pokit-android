@@ -11,6 +11,10 @@ import com.strayalpaca.addlink.model.samplePokitList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
@@ -21,6 +25,18 @@ import org.orbitmvi.orbit.viewmodel.container
 
 class AddLinkViewModel : ContainerHost<AddLinkScreenState, AddLinkScreenSideEffect>, ViewModel() {
     override val container: Container<AddLinkScreenState, AddLinkScreenSideEffect> = container(AddLinkScreenState())
+
+    private val _linkUrl = MutableStateFlow("")
+    val linkUrl : StateFlow<String> = _linkUrl.asStateFlow()
+
+    private val _title = MutableStateFlow("")
+    val title : StateFlow<String> = _title.asStateFlow()
+
+    private val _memo = MutableStateFlow("")
+    val memo : StateFlow<String> = _memo.asStateFlow()
+
+    private val _pokitName = MutableStateFlow("")
+    val pokitName : StateFlow<String> = _pokitName.asStateFlow()
 
     init {
         loadPokitList()
@@ -55,24 +71,27 @@ class AddLinkViewModel : ContainerHost<AddLinkScreenState, AddLinkScreenSideEffe
         }
     }
 
-    fun inputLinkUrl(linkUrl: String) = intent {
-        reduce { state.copy(linkUrl = linkUrl) }
-        inputLinkJob?.cancel()
-        inputLinkJob = viewModelScope.launch(Dispatchers.IO) {
-            delay(1000L)
-            reduce { state.copy(step = ScreenStep.LINK_LOADING, linkUrl = linkUrl) }
-            // todo 링크 카드 정보 가져오기 api 연결
-            delay(1000L)
-            reduce { state.copy(step = ScreenStep.IDLE, link = sampleLink.copy(url = linkUrl)) }
+    fun inputLinkUrl(linkUrl: String) {
+        this._linkUrl.update { linkUrl }
+
+        intent {
+            inputLinkJob?.cancel()
+            inputLinkJob = viewModelScope.launch(Dispatchers.IO) {
+                delay(1000L)
+                reduce { state.copy(step = ScreenStep.LINK_LOADING) }
+                // todo 링크 카드 정보 가져오기 api 연결
+                delay(1000L)
+                reduce { state.copy(step = ScreenStep.IDLE, link = sampleLink.copy(url = linkUrl)) }
+            }
         }
     }
 
-    fun inputTitle(title: String) = intent {
-        reduce { state.copy(title = title) }
+    fun inputTitle(title: String) {
+        _title.update { title }
     }
 
-    fun inputMemo(memo: String) = intent {
-        reduce { state.copy(memo = memo) }
+    fun inputMemo(memo: String) {
+        _memo.update { memo }
     }
 
     fun showAddPokitBottomSheet() = intent {
@@ -110,10 +129,8 @@ class AddLinkViewModel : ContainerHost<AddLinkScreenState, AddLinkScreenSideEffe
         }
     }
 
-    fun inputNewPokitName(pokitName: String) = intent {
-        viewModelScope.launch(Dispatchers.IO) {
-            reduce { state.copy(pokitAddInput = pokitName) }
-        }
+    fun inputNewPokitName(pokitName: String) {
+        _pokitName.update { pokitName }
     }
 
     fun savePokit() = intent {

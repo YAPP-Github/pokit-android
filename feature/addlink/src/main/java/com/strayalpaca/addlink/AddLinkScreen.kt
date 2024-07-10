@@ -19,6 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -81,9 +82,18 @@ fun AddLinkScreenContainer(
         }
     }
 
+    val url by viewModel.linkUrl.collectAsState()
+    val title by viewModel.title.collectAsState()
+    val memo by viewModel.memo.collectAsState()
+    val pokitName by viewModel.pokitName.collectAsState()
+
     AddLinkScreen(
         isModifyLink = (linkId != null),
+        url = url,
+        title = title,
+        memo = memo,
         state = state,
+        pokitName = pokitName,
         inputUrl = viewModel::inputLinkUrl,
         inputTitle = viewModel::inputTitle,
         inputMemo = viewModel::inputMemo,
@@ -104,6 +114,10 @@ fun AddLinkScreenContainer(
 @Composable
 fun AddLinkScreen(
     isModifyLink: Boolean,
+    url: String,
+    title: String,
+    memo: String,
+    pokitName: String,
     state: AddLinkScreenState,
     inputUrl: (String) -> Unit,
     inputTitle: (String) -> Unit,
@@ -159,7 +173,7 @@ fun AddLinkScreen(
                     label = stringResource(id = R.string.link),
                     sub = "",
                     maxLength = null,
-                    inputText = state.linkUrl,
+                    inputText = url,
                     hintText = stringResource(id = R.string.placeholder_link),
                     onChangeText = inputUrl,
                     enable = enable
@@ -171,7 +185,7 @@ fun AddLinkScreen(
                     label = stringResource(id = R.string.title),
                     sub = "",
                     maxLength = 20,
-                    inputText = state.title,
+                    inputText = title,
                     hintText = stringResource(id = R.string.placeholder_title),
                     onChangeText = inputTitle,
                     enable = enable
@@ -216,7 +230,7 @@ fun AddLinkScreen(
                 Spacer(modifier = Modifier.height(8.dp))
 
                 PokitInputArea(
-                    text = state.memo,
+                    text = memo,
                     hintText = stringResource(id = R.string.placeholder_memo),
                     onChangeText = inputMemo,
                     enable = enable
@@ -226,7 +240,7 @@ fun AddLinkScreen(
 
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "${state.memo.length}/100",
+                    text = "${memo.length}/100",
                     style = PokitTheme.typography.detail1.copy(color = PokitTheme.colors.textTertiary),
                     textAlign = TextAlign.End
                 )
@@ -273,8 +287,7 @@ fun AddLinkScreen(
                     icon = null,
                     onClick = onClickSaveButton,
                     modifier = Modifier.fillMaxWidth(),
-                    size = PokitButtonSize.LARGE,
-                    enable = state.saveButtonEnable()
+                    size = PokitButtonSize.LARGE
                 )
             }
         }
@@ -305,7 +318,7 @@ fun AddLinkScreen(
                 ) {
                     LabeledInput(
                         label = "",
-                        inputText = state.pokitAddInput,
+                        inputText = pokitName,
                         hintText = stringResource(id = R.string.placeholder_input_pokit_name),
                         onChangeText = inputNewPokitName,
                         maxLength = 10
@@ -319,7 +332,7 @@ fun AddLinkScreen(
                         onClick = onClickSavePokit,
                         modifier = Modifier.fillMaxWidth(),
                         size = PokitButtonSize.LARGE,
-                        enable = state.pokitAddInput.isNotEmpty()
+                        enable = pokitName.isNotEmpty()
                     )
                 }
             }
