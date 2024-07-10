@@ -31,11 +31,25 @@ class AddLinkViewModel : ContainerHost<AddLinkScreenState, AddLinkScreenSideEffe
     private fun loadPokitList() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             reduce { state.copy(step = ScreenStep.LOADING) }
+            // todo 포킷 목록 가져오기 api 연결
             delay(1000L)
             reduce {
                 state.copy(
                     step = ScreenStep.IDLE,
                     pokitList = samplePokitList
+                )
+            }
+        }
+    }
+
+    fun loadPokitLink(linkId: String) = intent {
+        viewModelScope.launch(Dispatchers.IO) {
+            reduce { state.copy(step = ScreenStep.LOADING) }
+            // todo 포킷 링크 가져오기 api 연결
+            delay(1000L)
+            reduce {
+                state.copy(
+                    step = ScreenStep.IDLE
                 )
             }
         }
@@ -47,7 +61,7 @@ class AddLinkViewModel : ContainerHost<AddLinkScreenState, AddLinkScreenSideEffe
         inputLinkJob = viewModelScope.launch(Dispatchers.IO) {
             delay(1000L)
             reduce { state.copy(step = ScreenStep.LINK_LOADING, linkUrl = linkUrl) }
-            // todo 링크 가져오기 api 연결
+            // todo 링크 카드 정보 가져오기 api 연결
             delay(1000L)
             reduce { state.copy(step = ScreenStep.IDLE, link = sampleLink.copy(url = linkUrl)) }
         }

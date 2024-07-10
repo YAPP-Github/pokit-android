@@ -18,6 +18,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -49,9 +50,9 @@ import pokitmons.pokit.core.ui.components.block.switchradio.attributes.PokitSwit
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
-// manifest, activity, imePadding
 @Composable
 fun AddLinkScreenContainer(
+    linkId: String?,
     viewModel: AddLinkViewModel,
     onBackPressed: () -> Unit,
 ) {
@@ -59,6 +60,12 @@ fun AddLinkScreenContainer(
     val context = LocalContext.current
 
     BackPressHandler(onBackPressed = viewModel::onBackPressed)
+
+    LaunchedEffect(Unit) {
+        linkId?.let {
+            viewModel.loadPokitLink(it)
+        }
+    }
 
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
@@ -74,9 +81,8 @@ fun AddLinkScreenContainer(
         }
     }
 
-    // backPress override
-
     AddLinkScreen(
+        isModifyLink = (linkId != null),
         state = state,
         inputUrl = viewModel::inputLinkUrl,
         inputTitle = viewModel::inputTitle,
@@ -97,6 +103,7 @@ fun AddLinkScreenContainer(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AddLinkScreen(
+    isModifyLink: Boolean,
     state: AddLinkScreenState,
     inputUrl: (String) -> Unit,
     inputTitle: (String) -> Unit,
@@ -123,7 +130,7 @@ fun AddLinkScreen(
         Toolbar(
             modifier = Modifier.fillMaxWidth(),
             onClickBack = onBackPressed,
-            title = stringResource(id = R.string.add_link)
+            title = if (isModifyLink) stringResource(id = R.string.modify_link) else stringResource(id = R.string.add_link)
         )
 
         CompositionLocalProvider(

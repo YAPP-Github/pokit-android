@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="add_link">링크 추가</string>
+    <string name="modify_link">링크 수정</string>
     <string name="link">링크</string>
     <string name="placeholder_link">내용을 입력해주세요.</string>
     <string name="title">제목</string>

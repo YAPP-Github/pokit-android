@@ -17,6 +17,7 @@ fun AddLinkScreenPreview() {
             modifier = Modifier.fillMaxSize().background(PokitTheme.colors.backgroundBase)
         ) {
             AddLinkScreen(
+                isModifyLink = false,
                 state = AddLinkScreenState(),
                 inputUrl = {},
                 inputTitle = {},
