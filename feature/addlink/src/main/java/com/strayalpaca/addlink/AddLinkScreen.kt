@@ -121,7 +121,12 @@ fun AddLinkScreen(
 ) {
     val scrollState = rememberScrollState()
     val enable = remember(state.step) {
-        !(state.step == ScreenStep.SAVE_LOADING || state.step == ScreenStep.LOADING || state.step == ScreenStep.POKIT_ADD_LOADING)
+        !(
+            state.step == ScreenStep.SAVE_LOADING ||
+                state.step == ScreenStep.LOADING ||
+                state.step == ScreenStep.POKIT_ADD_LOADING ||
+                state.step == ScreenStep.LINK_LOADING
+            )
     }
 
     Column(

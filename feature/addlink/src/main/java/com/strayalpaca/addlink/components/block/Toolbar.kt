@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
-fun Toolbar(
+internal fun Toolbar(
     onClickBack: () -> Unit,
     title: String,
     modifier: Modifier = Modifier,

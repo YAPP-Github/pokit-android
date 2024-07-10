@@ -22,7 +22,7 @@ import com.strayalpaca.addlink.model.Link
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
-fun Link(
+internal fun Link(
     link: Link,
     modifier: Modifier = Modifier,
 ) {
