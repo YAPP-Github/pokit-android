@@ -27,16 +27,16 @@ class AddLinkViewModel : ContainerHost<AddLinkScreenState, AddLinkScreenSideEffe
     override val container: Container<AddLinkScreenState, AddLinkScreenSideEffect> = container(AddLinkScreenState())
 
     private val _linkUrl = MutableStateFlow("")
-    val linkUrl : StateFlow<String> = _linkUrl.asStateFlow()
+    val linkUrl: StateFlow<String> = _linkUrl.asStateFlow()
 
     private val _title = MutableStateFlow("")
-    val title : StateFlow<String> = _title.asStateFlow()
+    val title: StateFlow<String> = _title.asStateFlow()
 
     private val _memo = MutableStateFlow("")
-    val memo : StateFlow<String> = _memo.asStateFlow()
+    val memo: StateFlow<String> = _memo.asStateFlow()
 
     private val _pokitName = MutableStateFlow("")
-    val pokitName : StateFlow<String> = _pokitName.asStateFlow()
+    val pokitName: StateFlow<String> = _pokitName.asStateFlow()
 
     init {
         loadPokitList()
