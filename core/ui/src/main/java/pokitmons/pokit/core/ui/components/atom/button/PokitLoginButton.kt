@@ -30,6 +30,7 @@ fun PokitLoginButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     loginType: PokitLoginButtonType,
+    text: String
 ) {
     val loginResource: PokitLoginResource = getLoginResource(loginType)
 
@@ -60,7 +61,7 @@ fun PokitLoginButton(
             Text(
                 modifier = Modifier
                     .padding(start = 12.dp),
-                text = loginResource.text,
+                text = text,
                 color = loginResource.textColor,
                 style = PokitTheme.typography.label3Regular
             )
@@ -76,7 +77,6 @@ private fun getLoginResource(loginType: PokitLoginButtonType): PokitLoginResourc
             textColor = Color.White,
             backgroundColor = Gray700,
             borderColor = Gray700,
-            text = "Apple로 시작하기"
         )
 
         PokitLoginButtonType.GOOGLE -> PokitLoginResource(
@@ -84,7 +84,6 @@ private fun getLoginResource(loginType: PokitLoginButtonType): PokitLoginResourc
             textColor = Gray900,
             backgroundColor = Color.White,
             borderColor = Gray200,
-            text = "Google로 시작하기"
         )
     }
 }
