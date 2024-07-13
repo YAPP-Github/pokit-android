@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_add_pokit">포킷 추가</string>
+    <string name="pokit_name">포킷 이름</string>
+    <string name="placeholder_pokit_name">카테고리 이름을 입력해주세요.</string>
+    <string name="save">저장하기</string>
+    <string name="my_pokit">내 포킷</string>
+
+    <string name="text_length_limit_format">최대 10자까지 입력 가능합니다.</string>
+    <string name="already_used_pokit_name">사용 중인 포킷명입니다.</string>
+</resources>
