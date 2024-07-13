@@ -109,7 +109,7 @@ private fun getStrokeColor(
             Color.Unspecified
         }
 
-        !checked -> {
+        !checked && (style != PokitCheckboxStyle.ICON_ONLY) -> {
             PokitTheme.colors.borderSecondary
         }
 
@@ -134,8 +134,8 @@ private fun getBackgroundColor(
             PokitTheme.colors.backgroundDisable
         }
 
-        !checked -> {
-            PokitTheme.colors.backgroundBase
+        !checked && (style != PokitCheckboxStyle.ICON_ONLY) -> {
+            PokitTheme.colors.borderSecondary
         }
 
         style == PokitCheckboxStyle.FILLED -> {
