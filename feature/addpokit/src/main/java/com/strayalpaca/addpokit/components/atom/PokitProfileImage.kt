@@ -14,6 +14,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.strayalpaca.addpokit.model.PokitProfile
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.R.drawable as coreDrawable
 
 @Composable
 fun PokitProfileImage(
@@ -31,7 +32,7 @@ fun PokitProfileImage(
     }
 
     Image(
-        painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.icon_24_plus_r),
+        painter = painterResource(id = coreDrawable.icon_24_plus_r),
         contentDescription = "pokit profile image",
         modifier = Modifier
             .size(66.dp)

@@ -53,6 +53,8 @@ import pokitmons.pokit.core.ui.components.block.pokitlist.PokitList
 import pokitmons.pokit.core.ui.components.block.pokitlist.attributes.PokitListState
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.R.drawable as coreDrawable
+import pokitmons.pokit.core.ui.R.string as coreString
 
 @Composable
 fun AddPokitScreenContainer(
@@ -123,7 +125,7 @@ fun AddPokitScreen(
 
         Box(modifier = Modifier.size(80.dp)) {
             Image(
-                painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.icon_24_google),
+                painter = painterResource(id = coreDrawable.icon_24_google),
                 contentDescription = null,
                 modifier = Modifier
                     .size(80.dp)
@@ -153,7 +155,7 @@ fun AddPokitScreen(
                     .padding(3.dp)
             ) {
                 Image(
-                    painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.icon_24_edit),
+                    painter = painterResource(id = coreDrawable.icon_24_edit),
                     contentDescription = "null",
                     modifier = Modifier
                         .size(18.dp),
@@ -203,7 +205,7 @@ fun AddPokitScreen(
                     PokitList(
                         item = item,
                         title = item.title,
-                        sub = stringResource(id = pokitmons.pokit.core.ui.R.string.pokit_count_format, item.count),
+                        sub = stringResource(id = coreString.pokit_count_format, item.count),
                         onClickKebab = {},
                         onClickItem = {},
                         state = PokitListState.DEFAULT

@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.R.drawable as coreDrawable
 
 @Composable
 internal fun Toolbar(
@@ -36,7 +37,7 @@ internal fun Toolbar(
             onClick = onClickBack
         ) {
             Icon(
-                painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.icon_24_arrow_left),
+                painter = painterResource(id = coreDrawable.icon_24_arrow_left),
                 contentDescription = "back button"
             )
         }
