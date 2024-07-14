@@ -6,6 +6,7 @@ import com.strayalpaca.addpokit.model.AddPokitScreenState
 import com.strayalpaca.addpokit.model.AddPokitScreenStep
 import com.strayalpaca.addpokit.model.AddPokitSideEffect
 import com.strayalpaca.addpokit.model.PokitInputErrorMessage
+import com.strayalpaca.addpokit.model.PokitProfile
 import com.strayalpaca.addpokit.model.samplePokitList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +17,7 @@ import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.Container
 import org.orbitmvi.orbit.ContainerHost
 import org.orbitmvi.orbit.syntax.simple.intent
+import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 
@@ -23,7 +25,7 @@ class AddPokitViewModel : ContainerHost<AddPokitScreenState, AddPokitSideEffect>
     override val container: Container<AddPokitScreenState, AddPokitSideEffect> = container(AddPokitScreenState())
 
     private val _pokitName = MutableStateFlow("")
-    val pokitName : StateFlow<String> = _pokitName.asStateFlow()
+    val pokitName: StateFlow<String> = _pokitName.asStateFlow()
 
     init {
         loadPokitList()
@@ -50,12 +52,17 @@ class AddPokitViewModel : ContainerHost<AddPokitScreenState, AddPokitSideEffect>
         }
     }
 
-    fun inputPokitName(pokitName : String) {
+    fun inputPokitName(pokitName: String) {
         _pokitName.update { pokitName }
 
         intent {
-            val errorMessage = if (pokitName.length > 10) {
+            val isInAvailableLength = pokitName.length > 10
+            val isDuplicatePokitName = state.pokitList.find { it.title == pokitName } != null
+
+            val errorMessage = if (isInAvailableLength) {
                 PokitInputErrorMessage.TEXT_LENGTH_LIMIT
+            } else if (isDuplicatePokitName) {
+                PokitInputErrorMessage.ALREADY_USED_POKIT_NAME
             } else {
                 null
             }
@@ -63,11 +70,46 @@ class AddPokitViewModel : ContainerHost<AddPokitScreenState, AddPokitSideEffect>
         }
     }
 
-    fun savePokit() {
-
+    fun savePokit() = intent {
+        reduce {
+            state.copy(step = AddPokitScreenStep.POKIT_SAVE_LOADING)
+        }
+        // todo 포킷 저장 api 연동
+        delay(1000L)
+        reduce {
+            state.copy(step = AddPokitScreenStep.IDLE)
+        }
+        postSideEffect(AddPokitSideEffect.AddPokitSuccess)
     }
 
-    fun onBackPressed() {
+    fun onBackPressed() = intent {
+        val currentStep = state.step
+        when (currentStep) {
+            AddPokitScreenStep.POKIT_SAVE_LOADING -> {} // discard
+            AddPokitScreenStep.SELECT_PROFILE -> {
+                reduce { state.copy(step = AddPokitScreenStep.IDLE) }
+            }
+            else -> {
+                postSideEffect(AddPokitSideEffect.OnNavigationBack)
+            }
+        }
+    }
 
+    fun showPokitProfileSelectBottomSheet() = intent {
+        reduce {
+            state.copy(step = AddPokitScreenStep.SELECT_PROFILE)
+        }
+    }
+
+    fun hidePokitProfileSelectBottomSheet() = intent {
+        reduce {
+            state.copy(step = AddPokitScreenStep.IDLE)
+        }
+    }
+
+    fun selectPoktiProfile(pokitProfile: PokitProfile) = intent {
+        reduce {
+            state.copy(pokitProfile = pokitProfile)
+        }
     }
 }

@@ -4,6 +4,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,6 +16,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,11 +36,14 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.strayalpaca.addpokit.components.atom.PokitProfileImage
 import com.strayalpaca.addpokit.components.block.Toolbar
 import com.strayalpaca.addpokit.model.AddPokitScreenState
 import com.strayalpaca.addpokit.model.AddPokitScreenStep
 import com.strayalpaca.addpokit.model.AddPokitSideEffect
 import com.strayalpaca.addpokit.model.Pokit
+import com.strayalpaca.addpokit.model.PokitProfile
+import com.strayalpaca.addpokit.model.samplePokitProfileList
 import com.strayalpaca.addpokit.utils.BackPressHandler
 import org.orbitmvi.orbit.compose.collectSideEffect
 import pokitmons.pokit.core.ui.components.atom.button.PokitButton
@@ -44,6 +51,7 @@ import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.components.block.labeledinput.LabeledInput
 import pokitmons.pokit.core.ui.components.block.pokitlist.PokitList
 import pokitmons.pokit.core.ui.components.block.pokitlist.attributes.PokitListState
+import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
@@ -52,14 +60,14 @@ fun AddPokitScreenContainer(
     onBackPressed: () -> Unit,
 ) {
     val state by viewModel.container.stateFlow.collectAsState()
-
     val pokitName by viewModel.pokitName.collectAsState()
 
     val saveButtonEnable = remember {
         derivedStateOf {
             state.step != AddPokitScreenStep.POKIT_SAVE_LOADING &&
                 state.step != AddPokitScreenStep.POKIT_LIST_LOADING &&
-                state.pokitInputErrorMessage == null
+                state.pokitInputErrorMessage == null &&
+                state.pokitProfile != null
         }
     }
 
@@ -83,7 +91,10 @@ fun AddPokitScreenContainer(
         saveButtonEnable = saveButtonEnable.value,
         onclickAddPokit = viewModel::savePokit,
         inputPokitName = viewModel::inputPokitName,
-        onBackPressed = viewModel::onBackPressed
+        onBackPressed = viewModel::onBackPressed,
+        hideProfileSelectBottomSheet = viewModel::hidePokitProfileSelectBottomSheet,
+        showSelectProfileBottomSheet = viewModel::showPokitProfileSelectBottomSheet,
+        selectPokitProfileImage = viewModel::selectPoktiProfile
     )
 }
 
@@ -95,8 +106,10 @@ fun AddPokitScreen(
     onclickAddPokit: () -> Unit = {},
     inputPokitName: (String) -> Unit = {},
     onBackPressed: () -> Unit = {},
+    hideProfileSelectBottomSheet: () -> Unit = {},
+    showSelectProfileBottomSheet: () -> Unit = {},
+    selectPokitProfileImage: (PokitProfile) -> Unit = {},
 ) {
-
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -134,9 +147,9 @@ fun AddPokitScreen(
                     .clip(
                         shape = CircleShape
                     )
-                    .clickable {
-
-                    }
+                    .clickable(
+                        onClick = showSelectProfileBottomSheet
+                    )
                     .padding(3.dp)
             ) {
                 Image(
@@ -202,7 +215,7 @@ fun AddPokitScreen(
                 CircularProgressIndicator(
                     modifier = Modifier.width(64.dp),
                     color = PokitTheme.colors.brand,
-                    trackColor = PokitTheme.colors.backgroundSecondary,
+                    trackColor = PokitTheme.colors.backgroundSecondary
                 )
             }
         }
@@ -220,6 +233,25 @@ fun AddPokitScreen(
                 size = PokitButtonSize.LARGE,
                 enable = saveButtonEnable
             )
+        }
+
+        if (state.step == AddPokitScreenStep.SELECT_PROFILE) {
+            PokitBottomSheet(onHideBottomSheet = hideProfileSelectBottomSheet) {
+                LazyVerticalGrid(
+                    modifier = Modifier.padding(vertical = 12.dp, horizontal = 40.dp),
+                    columns = GridCells.Adaptive(66.dp),
+                    horizontalArrangement = Arrangement.spacedBy(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(samplePokitProfileList) { profileImage ->
+                        PokitProfileImage(
+                            pokitProfile = profileImage,
+                            onClick = selectPokitProfileImage,
+                            focused = (state.pokitProfile?.id == profileImage.id)
+                        )
+                    }
+                }
+            }
         }
     }
 }
