@@ -11,9 +11,7 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Preview(showBackground = true)
 @Composable
-fun Preview(
-
-) {
+fun Preview() {
     PokitTheme {
         Column(
             modifier = Modifier.fillMaxSize()

@@ -9,7 +9,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 
-
 @Composable
 internal fun BackPressHandler(
     backPressedDispatcher: OnBackPressedDispatcher? =
