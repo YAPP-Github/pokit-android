@@ -2,6 +2,7 @@ package com.strayalpaca.addpokit
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.strayalpaca.addpokit.const.POKIT_NAME_MAX_LENGTH
 import com.strayalpaca.addpokit.model.AddPokitScreenState
 import com.strayalpaca.addpokit.model.AddPokitScreenStep
 import com.strayalpaca.addpokit.model.AddPokitSideEffect
@@ -56,7 +57,7 @@ class AddPokitViewModel : ContainerHost<AddPokitScreenState, AddPokitSideEffect>
         _pokitName.update { pokitName }
 
         intent {
-            val isInAvailableLength = pokitName.length > 10
+            val isInAvailableLength = pokitName.length > POKIT_NAME_MAX_LENGTH
             val isDuplicatePokitName = state.pokitList.find { it.title == pokitName } != null
 
             val errorMessage = if (isInAvailableLength) {
