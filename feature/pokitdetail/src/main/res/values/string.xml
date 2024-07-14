@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="sort">정렬</string>
+    <string name="sort_recent">최신순</string>
+    <string name="sort_old">오래된순</string>
+    <string name="collect_look">모아보기</string>
+    <string name="bookmark">즐겨찾기</string>
+    <string name="not_read">안읽음</string>
+    <string name="filter">필터</string>
+    <string name="confirmation">확인</string>
+
+    <string name="link_count_format">링크 %d개</string>
+
+    <string name="badge_text">텍스트</string>
+</resources>
