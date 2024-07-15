@@ -135,7 +135,7 @@ private fun getBackgroundColor(
         }
 
         !checked && (style != PokitCheckboxStyle.ICON_ONLY) -> {
-            PokitTheme.colors.borderSecondary
+            PokitTheme.colors.backgroundBase
         }
 
         style == PokitCheckboxStyle.FILLED -> {
