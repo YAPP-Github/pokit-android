@@ -206,7 +206,6 @@ fun AddPokitScreen(
                         item = item,
                         title = item.title,
                         sub = stringResource(id = coreString.pokit_count_format, item.count),
-                        onClickKebab = {},
                         onClickItem = {},
                         state = PokitListState.DEFAULT
                     )

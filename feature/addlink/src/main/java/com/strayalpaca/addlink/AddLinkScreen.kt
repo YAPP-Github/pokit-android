@@ -302,7 +302,6 @@ fun AddLinkScreen(
                             item = it,
                             title = it.title,
                             sub = stringResource(id = R.string.count_format, it.count),
-                            onClickKebab = onClickSelectPokitItem,
                             onClickItem = onClickSelectPokitItem,
                             state = PokitListState.ACTIVE
                         )
