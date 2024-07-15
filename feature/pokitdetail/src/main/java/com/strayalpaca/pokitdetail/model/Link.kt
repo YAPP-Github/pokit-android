@@ -10,6 +10,9 @@ data class Link(
     val domainUrl: String,
     val isRead: Boolean,
     val linkType: LinkType,
+    val url: String,
+    val memo: String,
+    val bookmark: Boolean,
 )
 
 enum class LinkType(val textResourceId: Int) {
@@ -24,7 +27,10 @@ internal val sampleLinkList = listOf(
         dateString = "2024.04.12",
         domainUrl = "youtu.be",
         isRead = true,
-        linkType = LinkType.TEXT
+        linkType = LinkType.TEXT,
+        url = "",
+        memo = "",
+        bookmark = true
     ),
     Link(
         id = "2",
@@ -33,7 +39,10 @@ internal val sampleLinkList = listOf(
         dateString = "2024.05.12",
         domainUrl = "youtu.be",
         isRead = false,
-        linkType = LinkType.TEXT
+        linkType = LinkType.TEXT,
+        url = "",
+        memo = "",
+        bookmark = true
     ),
     Link(
         id = "3",
@@ -42,7 +51,10 @@ internal val sampleLinkList = listOf(
         dateString = "2024.04.12",
         domainUrl = "pokitmons.pokit",
         isRead = true,
-        linkType = LinkType.TEXT
+        linkType = LinkType.TEXT,
+        url = "",
+        memo = "",
+        bookmark = true
     ),
     Link(
         id = "4",
@@ -51,7 +63,10 @@ internal val sampleLinkList = listOf(
         dateString = "2024.06.12",
         domainUrl = "youtu.be",
         isRead = true,
-        linkType = LinkType.TEXT
+        linkType = LinkType.TEXT,
+        url = "",
+        memo = "",
+        bookmark = true
     ),
     Link(
         id = "5",
@@ -60,6 +75,9 @@ internal val sampleLinkList = listOf(
         dateString = "2024.07.14",
         domainUrl = "youtu.be",
         isRead = false,
-        linkType = LinkType.TEXT
+        linkType = LinkType.TEXT,
+        url = "",
+        memo = "",
+        bookmark = true
     )
 )
