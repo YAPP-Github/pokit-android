@@ -4,8 +4,8 @@
     <string name="service_privacy_title">서비스 이용을 위해\n이용약 동의가 필요합니다</string>
     <string name="privacy_all_agree">약관 전체동의</string>
     <string name="personal_data_agree">(필수)개인정보 수집 및 이용 동의</string>
-    <string name="service_agree">서비스 이용약관</string>
-    <string name="marketing_agree">마케팅 정보 수신</string>
+    <string name="service_agree">(필수)서비스 이용약관</string>
+    <string name="marketing_agree">(선택)마케팅 정보 수신</string>
     <string name="input_nickname_title">Pokit에 사용할 닉네임을\n입력해주세요</string>
     <string name="input_nickname_hint">내용을 입력해주세요.</string>
     <string name="input_restriction_message">한글, 영어, 숫자로만 입력이 가능합니다.</string>
