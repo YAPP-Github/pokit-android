@@ -31,17 +31,17 @@ fun LoginScreen(
     // TODO 서버 api 개발완료 후 viewmodel 연동 및 아키텍처 구축
     Box(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
     ) {
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(start = 20.dp, end = 20.dp, bottom = 32.dp),
+                .padding(start = 20.dp, end = 20.dp, bottom = 32.dp)
         ) {
             PokitLoginButton(
                 loginType = PokitLoginButtonType.APPLE,
                 text = stringResource(id = R.string.apple_login),
-                onClick = { onNavigateToMainScreen() },
+                onClick = { onNavigateToMainScreen() }
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -49,7 +49,7 @@ fun LoginScreen(
             PokitLoginButton(
                 loginType = PokitLoginButtonType.GOOGLE,
                 text = stringResource(id = R.string.google_login),
-                onClick = { onNavigateToTermsOfServiceScreen() },
+                onClick = { onNavigateToTermsOfServiceScreen() }
             )
         }
     }

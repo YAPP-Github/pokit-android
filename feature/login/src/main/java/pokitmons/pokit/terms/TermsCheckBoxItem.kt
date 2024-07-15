@@ -19,9 +19,9 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 fun TermsCheckBoxItem(
     text: String,
     isChecked: Boolean,
-    click:() -> Unit
+    click: () -> Unit,
 ) {
-    Box(modifier = Modifier.fillMaxWidth(),) {
+    Box(modifier = Modifier.fillMaxWidth()) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             PokitCheckbox(
                 checked = isChecked,

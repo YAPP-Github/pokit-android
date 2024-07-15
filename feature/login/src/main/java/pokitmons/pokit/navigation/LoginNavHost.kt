@@ -20,7 +20,7 @@ fun LoginNavHost() {
         composable(route = LoginRoute.LoginScreen.name) {
             LoginScreen(
                 onNavigateToTermsOfServiceScreen = { navController.navigate(route = LoginRoute.TermsOfServiceScreen.name) },
-                onNavigateToMainScreen = {  }, // TODO 메인 화면 구현후 수정
+                onNavigateToMainScreen = { } // TODO 메인 화면 구현후 수정
             )
         }
 
@@ -47,7 +47,7 @@ fun LoginNavHost() {
 
         composable(route = LoginRoute.SignUpSuccessScreen.name) {
             SignUpSuccessScreen(
-                onNavigateToMainScreen = {  }, // TODO 메인 화면 구현후 수정
+                onNavigateToMainScreen = { } // TODO 메인 화면 구현후 수정
             )
         }
     }

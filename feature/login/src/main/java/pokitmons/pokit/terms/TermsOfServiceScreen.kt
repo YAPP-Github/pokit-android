@@ -32,7 +32,7 @@ import pokitmons.pokit.login.R
 @Composable
 fun TermsOfServiceScreen(
     onNavigateToInputNicknameScreen: () -> Unit,
-    popBackStack:() -> Unit,
+    popBackStack: () -> Unit,
 ) {
     val termsViewModel: TermsViewModel = viewModel() // TODO hiltViewModel 마이그레이션 예정
     val termsState by termsViewModel.termsState.collectAsState()
@@ -40,13 +40,13 @@ fun TermsOfServiceScreen(
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 28.dp),
+            .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 28.dp)
     ) {
         Column {
             Icon(
                 painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.icon_24_arrow_left),
                 contentDescription = "뒤로가기",
-                modifier = Modifier.clickable { popBackStack() },
+                modifier = Modifier.clickable { popBackStack() }
             )
 
             Spacer(modifier = Modifier.height(32.dp))
@@ -74,7 +74,7 @@ fun TermsOfServiceScreen(
                 PokitCheckbox(
                     style = PokitCheckboxStyle.STROKE,
                     checked = termsState.isAllChecked,
-                    onClick = { termsViewModel.checkAllTerms() },
+                    onClick = { termsViewModel.checkAllTerms() }
                 )
                 Text(
                     modifier = Modifier.padding(start = 16.dp),

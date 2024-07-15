@@ -31,14 +31,15 @@ private const val NICKNAME_MIN_LENGTH = 1 // TODO 매직넘버를 포함하는 �
 @Composable
 fun InputNicknameScreen(
     onNavigateToKeywordScreen: () -> Unit,
-    popBackStack: () -> Unit
+    popBackStack: () -> Unit,
 ) {
     val inputNicknameViewModel: InputNicknameViewModel = viewModel() // TODO hiltViewModel 마이그레이션 예정
     val inputNicknameState by inputNicknameViewModel.inputNicknameState.collectAsState()
 
-    Box(modifier = Modifier
-        .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 28.dp)
-        .fillMaxSize()
+    Box(
+        modifier = Modifier
+            .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 28.dp)
+            .fillMaxSize()
     ) {
         Column() {
             Icon(
@@ -74,7 +75,7 @@ fun InputNicknameScreen(
                     if (text.length <= NICKNAME_MAX_LENGTH) {
                         inputNicknameViewModel.inputText(text)
                     }
-                },
+                }
             )
         }
 

@@ -26,14 +26,13 @@ import pokitmons.pokit.login.R
 
 @Composable
 fun SignUpSuccessScreen(
-    onNavigateToMainScreen: () -> Unit
+    onNavigateToMainScreen: () -> Unit,
 ) {
     Box(
         modifier = Modifier
             .padding(all = 20.dp)
             .padding(bottom = 8.dp)
     ) {
-
         Icon(
             painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.icon_24_arrow_left),
             contentDescription = null
@@ -45,15 +44,13 @@ fun SignUpSuccessScreen(
                 .offset(y = (-110).dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
-        )
-        {
+        ) {
             Image(
                 painter = painterResource(id = R.drawable.ic_launcher_foreground),
                 contentDescription = "회원가입 완료 이미지"
             )
 
             Spacer(modifier = Modifier.height(28.dp))
-
 
             Text(
                 style = PokitTheme.typography.title1,
@@ -76,6 +73,7 @@ fun SignUpSuccessScreen(
             text = stringResource(id = R.string.next),
             icon = null,
             size = PokitButtonSize.LARGE,
-            onClick = { onNavigateToMainScreen() })
+            onClick = { onNavigateToMainScreen() }
+        )
     }
 }

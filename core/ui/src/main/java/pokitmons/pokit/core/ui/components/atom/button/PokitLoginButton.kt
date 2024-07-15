@@ -30,7 +30,7 @@ fun PokitLoginButton(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
     loginType: PokitLoginButtonType,
-    text: String
+    text: String,
 ) {
     val loginResource: PokitLoginResource = getLoginResource(loginType)
 
@@ -76,14 +76,14 @@ private fun getLoginResource(loginType: PokitLoginButtonType): PokitLoginResourc
             iconTintColor = Color.White,
             textColor = Color.White,
             backgroundColor = Gray700,
-            borderColor = Gray700,
+            borderColor = Gray700
         )
 
         PokitLoginButtonType.GOOGLE -> PokitLoginResource(
             iconResourceId = R.drawable.icon_24_google,
             textColor = Gray900,
             backgroundColor = Color.White,
-            borderColor = Gray200,
+            borderColor = Gray200
         )
     }
 }

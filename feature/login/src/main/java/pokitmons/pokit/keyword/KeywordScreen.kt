@@ -16,18 +16,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import pokitmons.pokit.core.ui.R as Ui
 import pokitmons.pokit.core.ui.components.atom.button.PokitButton
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.components.atom.chip.PokitChip
 import pokitmons.pokit.core.ui.components.atom.chip.attributes.PokitChipSize
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.R as Ui
 import pokitmons.pokit.login.R as LoginStringResource
 
 @Composable
 fun KeywordScreen(
-    onNavigateToSignUpScreen:() -> Unit,
-    popBackStack:() -> Unit
+    onNavigateToSignUpScreen: () -> Unit,
+    popBackStack: () -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -65,7 +65,7 @@ fun KeywordScreen(
                     stringResource(id = LoginStringResource.string.self_development),
                     stringResource(id = LoginStringResource.string.humor),
                     stringResource(id = LoginStringResource.string.music),
-                    stringResource(id = LoginStringResource.string.job_info),
+                    stringResource(id = LoginStringResource.string.job_info)
                 ).chunked(3)
 
                 Row {
