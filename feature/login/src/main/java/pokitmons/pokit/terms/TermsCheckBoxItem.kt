@@ -1,6 +1,6 @@
 package pokitmons.pokit.terms
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -17,27 +17,26 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
 fun TermsCheckBoxItem(
-    text: String
+    text: String,
+    isChecked: Boolean,
+    click:() -> Unit
 ) {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
+    Box(modifier = Modifier.fillMaxWidth(),) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            PokitCheckbox(
+                checked = isChecked,
+                style = PokitCheckboxStyle.ICON_ONLY,
+                onClick = { click() }
+            )
 
-    ) {
-        PokitCheckbox(
-            checked = false,
-            style = PokitCheckboxStyle.ICON_ONLY,
-            onClick = { }
-        )
-
-        Text(
-            modifier = Modifier.padding(start = 4.dp),
-            text = text,
-            style = PokitTheme.typography.body2Medium
-        )
-
+            Text(
+                modifier = Modifier.padding(start = 4.dp),
+                text = text,
+                style = PokitTheme.typography.body2Medium
+            )
+        }
         Icon(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.align(Alignment.CenterEnd),
             painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.icon_24_arrow_right),
             contentDescription = "화살표"
         )

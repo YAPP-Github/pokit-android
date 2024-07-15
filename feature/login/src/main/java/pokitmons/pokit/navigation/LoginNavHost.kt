@@ -27,18 +27,21 @@ fun LoginNavHost() {
         composable(route = LoginRoute.TermsOfServiceScreen.name) {
             TermsOfServiceScreen(
                 onNavigateToInputNicknameScreen = { navController.navigate(route = LoginRoute.InputNicknameScreen.name) },
+                popBackStack = { navController.popBackStack() }
             )
         }
 
         composable(route = LoginRoute.InputNicknameScreen.name) {
             InputNicknameScreen(
                 onNavigateToKeywordScreen = { navController.navigate(route = LoginRoute.KeywordScreen.name) },
+                popBackStack = { navController.popBackStack() }
             )
         }
 
         composable(route = LoginRoute.KeywordScreen.name) {
             KeywordScreen(
                 onNavigateToSignUpScreen = { navController.navigate(route = LoginRoute.SignUpSuccessScreen.name) },
+                popBackStack = { navController.popBackStack() }
             )
         }
 
