@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
@@ -23,33 +24,32 @@ import pokitmons.pokit.core.ui.components.atom.button.PokitLoginButton
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitLoginButtonType
 
 @Composable
-fun LoginScreen() {
+fun LoginScreen(
+    onNavigateToTermsOfServiceScreen: () -> Unit,
+    onNavigateToMainScreen: () -> Unit,
+) {
     // TODO 서버 api 개발완료 후 viewmodel 연동 및 아키텍처 구축
     Box(
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxSize(),
     ) {
         Column(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
-                .padding(
-                    start = 20.dp,
-                    end = 20.dp,
-                    bottom = 32.dp
-                )
+                .padding(start = 20.dp, end = 20.dp, bottom = 32.dp),
         ) {
             PokitLoginButton(
                 loginType = PokitLoginButtonType.APPLE,
                 text = stringResource(id = R.string.apple_login),
-                onClick = { }
+                onClick = { onNavigateToMainScreen() },
             )
 
-            Spacer(modifier = Modifier.padding(top = 4.dp, bottom = 4.dp))
+            Spacer(modifier = Modifier.height(8.dp))
 
             PokitLoginButton(
                 loginType = PokitLoginButtonType.GOOGLE,
                 text = stringResource(id = R.string.google_login),
-                onClick = { }
+                onClick = { onNavigateToTermsOfServiceScreen() },
             )
         }
     }
