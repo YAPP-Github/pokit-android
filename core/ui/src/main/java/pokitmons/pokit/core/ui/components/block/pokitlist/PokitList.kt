@@ -16,9 +16,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import pokitmons.pokit.core.ui.R
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.components.block.pokitlist.attributes.PokitListState
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
@@ -28,9 +28,11 @@ fun <T> PokitList(
     title: String,
     sub: String,
     onClickKebab: (T) -> Unit,
-    onClickItem: (T) -> Unit,
     modifier: Modifier = Modifier,
     state: PokitListState = PokitListState.DISABLE,
+    onClickItem: (T) -> Unit,
+    modifier: Modifier = Modifier,
+    state: PokitListState = PokitListState.DEFAULT,
 ) {
     val titleTextColor = getTitleTextColor(state = state)
     val subTextColor = getSubTextColor(state = state)
