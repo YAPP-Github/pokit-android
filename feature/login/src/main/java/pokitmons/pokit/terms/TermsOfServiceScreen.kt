@@ -27,7 +27,8 @@ import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.components.atom.checkbox.PokitCheckbox
 import pokitmons.pokit.core.ui.components.atom.checkbox.attributes.PokitCheckboxStyle
 import pokitmons.pokit.core.ui.theme.PokitTheme
-import pokitmons.pokit.login.R
+import pokitmons.pokit.core.ui.R as UI
+import pokitmons.pokit.login.R as Login
 
 @Composable
 fun TermsOfServiceScreen(
@@ -44,7 +45,7 @@ fun TermsOfServiceScreen(
     ) {
         Column {
             Icon(
-                painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.icon_24_arrow_left),
+                painter = painterResource(id = UI.drawable.icon_24_arrow_left),
                 contentDescription = "뒤로가기",
                 modifier = Modifier.clickable { popBackStack() }
             )
@@ -52,7 +53,7 @@ fun TermsOfServiceScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             Text(
-                text = stringResource(id = R.string.service_privacy_title),
+                text = stringResource(id = Login.string.service_privacy_title),
                 style = PokitTheme.typography.title1
             )
 
@@ -78,7 +79,7 @@ fun TermsOfServiceScreen(
                 )
                 Text(
                     modifier = Modifier.padding(start = 16.dp),
-                    text = stringResource(id = R.string.privacy_all_agree),
+                    text = stringResource(id = Login.string.privacy_all_agree),
                     style = PokitTheme.typography.body1Bold
                 )
             }
@@ -91,21 +92,21 @@ fun TermsOfServiceScreen(
                     .fillMaxWidth()
             ) {
                 TermsCheckBoxItem(
-                    text = stringResource(id = R.string.personal_data_agree),
+                    text = stringResource(id = Login.string.personal_data_agree),
                     isChecked = termsState.isPersonalDataChecked,
                     click = { termsViewModel.checkPersonalData() }
                 )
                 Spacer(modifier = Modifier.padding(top = 16.dp))
 
                 TermsCheckBoxItem(
-                    text = stringResource(id = R.string.service_agree),
+                    text = stringResource(id = Login.string.service_agree),
                     isChecked = termsState.isServiceChecked,
                     click = { termsViewModel.checkServiceTerm() }
                 )
                 Spacer(modifier = Modifier.padding(top = 16.dp))
 
                 TermsCheckBoxItem(
-                    text = stringResource(id = R.string.marketing_agree),
+                    text = stringResource(id = Login.string.marketing_agree),
                     isChecked = termsState.isMarketingChecked,
                     click = { termsViewModel.checkMarketing() }
                 )
@@ -116,7 +117,7 @@ fun TermsOfServiceScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter),
-            text = stringResource(id = R.string.next),
+            text = stringResource(id = Login.string.next),
             icon = null,
             size = PokitButtonSize.LARGE,
             enable = termsState.isPersonalDataChecked && termsState.isServiceChecked,

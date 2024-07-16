@@ -19,7 +19,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import pokitmons.pokit.core.ui.R
+import pokitmons.pokit.core.ui.R as UI
+import pokitmons.pokit.login.R as Login
 import pokitmons.pokit.core.ui.components.atom.button.PokitButton
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.components.block.labeledinput.LabeledInput
@@ -44,7 +45,7 @@ fun InputNicknameScreen(
         Column() {
             Icon(
                 modifier = Modifier.clickable { popBackStack() },
-                painter = painterResource(id = R.drawable.icon_24_arrow_left),
+                painter = painterResource(id = UI.drawable.icon_24_arrow_left),
                 contentDescription = "뒤로가기"
             )
 
@@ -52,7 +53,7 @@ fun InputNicknameScreen(
 
             Text(
                 style = PokitTheme.typography.title1,
-                text = stringResource(id = pokitmons.pokit.login.R.string.input_nickname_title)
+                text = stringResource(id = Login.string.input_nickname_title)
             )
 
             Spacer(modifier = Modifier.padding(top = 28.dp))
@@ -65,12 +66,12 @@ fun InputNicknameScreen(
                 inputText = inputNicknameState,
                 maxLength = NICKNAME_MAX_LENGTH,
                 sub = if (inputNicknameState.length < NICKNAME_MAX_LENGTH) {
-                    stringResource(id = pokitmons.pokit.login.R.string.input_restriction_message)
+                    stringResource(id = Login.string.input_restriction_message)
                 } else {
-                    stringResource(id = pokitmons.pokit.login.R.string.input_max_length)
+                    stringResource(id = Login.string.input_max_length)
                 },
                 isError = inputNicknameState.length > NICKNAME_MAX_LENGTH,
-                hintText = stringResource(id = pokitmons.pokit.login.R.string.input_nickname_hint),
+                hintText = stringResource(id = Login.string.input_nickname_hint),
                 onChangeText = { text ->
                     if (text.length <= NICKNAME_MAX_LENGTH) {
                         inputNicknameViewModel.inputText(text)

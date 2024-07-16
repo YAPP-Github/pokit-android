@@ -22,7 +22,7 @@ import pokitmons.pokit.core.ui.components.atom.chip.PokitChip
 import pokitmons.pokit.core.ui.components.atom.chip.attributes.PokitChipSize
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.core.ui.R as Ui
-import pokitmons.pokit.login.R as LoginStringResource
+import pokitmons.pokit.login.R as Login
 
 @Composable
 fun KeywordScreen(
@@ -39,12 +39,12 @@ fun KeywordScreen(
             Icon(painter = painterResource(id = Ui.drawable.icon_24_arrow_left), contentDescription = null)
             Spacer(modifier = Modifier.height(32.dp))
             Text(
-                text = stringResource(id = LoginStringResource.string.keyword_title),
+                text = stringResource(id = Login.string.keyword_title),
                 style = PokitTheme.typography.title1
             )
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                text = stringResource(id = LoginStringResource.string.select_keyword),
+                text = stringResource(id = Login.string.select_keyword),
                 style = PokitTheme.typography.title3
             )
             Spacer(modifier = Modifier.height(36.dp))
@@ -52,20 +52,20 @@ fun KeywordScreen(
             // TODO FlowRow도 사용해보기
             Column {
                 val categories: List<List<String>> = listOf(
-                    stringResource(id = LoginStringResource.string.sports_and_leisure),
-                    stringResource(id = LoginStringResource.string.phrases_and_office),
-                    stringResource(id = LoginStringResource.string.fashion),
-                    stringResource(id = LoginStringResource.string.travel),
-                    stringResource(id = LoginStringResource.string.economy_and_politics),
-                    stringResource(id = LoginStringResource.string.movies_and_dramas),
-                    stringResource(id = LoginStringResource.string.restaurants),
-                    stringResource(id = LoginStringResource.string.interior),
-                    stringResource(id = LoginStringResource.string.it),
-                    stringResource(id = LoginStringResource.string.design),
-                    stringResource(id = LoginStringResource.string.self_development),
-                    stringResource(id = LoginStringResource.string.humor),
-                    stringResource(id = LoginStringResource.string.music),
-                    stringResource(id = LoginStringResource.string.job_info)
+                    stringResource(id = Login.string.sports_and_leisure),
+                    stringResource(id = Login.string.phrases_and_office),
+                    stringResource(id = Login.string.fashion),
+                    stringResource(id = Login.string.travel),
+                    stringResource(id = Login.string.economy_and_politics),
+                    stringResource(id = Login.string.movies_and_dramas),
+                    stringResource(id = Login.string.restaurants),
+                    stringResource(id = Login.string.interior),
+                    stringResource(id = Login.string.it),
+                    stringResource(id = Login.string.design),
+                    stringResource(id = Login.string.self_development),
+                    stringResource(id = Login.string.humor),
+                    stringResource(id = Login.string.music),
+                    stringResource(id = Login.string.job_info)
                 ).chunked(3)
 
                 Row {
