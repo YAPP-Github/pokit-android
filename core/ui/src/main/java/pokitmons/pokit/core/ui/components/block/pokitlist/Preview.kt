@@ -23,7 +23,6 @@ fun PokitListPreview() {
                 item = "STRING",
                 title = "카테고리입니당",
                 sub = "15개 항목",
-                onClickKebab = {},
                 onClickItem = {}
             )
 
@@ -32,7 +31,6 @@ fun PokitListPreview() {
                 item = "STRING",
                 title = "카테고리입니당",
                 sub = "15개 항목",
-                onClickKebab = {},
                 onClickItem = {}
             )
 
@@ -41,7 +39,6 @@ fun PokitListPreview() {
                 item = "STRING",
                 title = "카테고리입니당",
                 sub = "15개 항목",
-                onClickKebab = {},
                 onClickItem = {}
             )
         }
