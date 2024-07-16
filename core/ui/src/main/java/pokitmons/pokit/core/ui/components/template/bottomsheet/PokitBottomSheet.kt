@@ -28,7 +28,7 @@ fun PokitBottomSheet(
     onHideBottomSheet: () -> Unit,
     content: @Composable (ColumnScope.() -> Unit),
 ) {
-    val bottomSheetState = rememberModalBottomSheetState()
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     ModalBottomSheet(
         onDismissRequest = onHideBottomSheet,

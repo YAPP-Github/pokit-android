@@ -1,9 +1,9 @@
 package com.strayalpaca.pokitdetail.model
 
 data class Pokit(
-    val title: String,
-    val id: String,
-    val count: Int,
+    val title: String = "",
+    val id: String = "",
+    val count: Int = 0,
 )
 
 internal val samplePokitList = listOf(

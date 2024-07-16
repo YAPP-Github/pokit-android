@@ -34,8 +34,9 @@ import pokitmons.pokit.core.ui.R.drawable as coreDrawable
 @Composable
 fun LinkDetailBottomSheet(
     link: Link,
+    onHideBottomSheet: () -> Unit
 ) {
-    PokitBottomSheet(onHideBottomSheet = {}) {
+    PokitBottomSheet(onHideBottomSheet = onHideBottomSheet) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
@@ -135,7 +136,7 @@ fun LinkDetailBottomSheet(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 10.dp, start = 10.dp, end = 10.dp, bottom = 18.dp),
+                .padding(top = 10.dp, start = 10.dp, end = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Image(

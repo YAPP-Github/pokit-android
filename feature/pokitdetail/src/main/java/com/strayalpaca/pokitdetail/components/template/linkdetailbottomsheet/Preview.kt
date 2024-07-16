@@ -25,7 +25,7 @@ fun LinkCardPreview() {
                 .padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            LinkDetailBottomSheet(link = sampleLinkList[0])
+            LinkDetailBottomSheet(link = sampleLinkList[0], onHideBottomSheet = {})
         }
     }
 }
