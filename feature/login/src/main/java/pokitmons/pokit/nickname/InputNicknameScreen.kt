@@ -19,12 +19,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import pokitmons.pokit.core.ui.R as UI
-import pokitmons.pokit.login.R as Login
 import pokitmons.pokit.core.ui.components.atom.button.PokitButton
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.components.block.labeledinput.LabeledInput
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.R as UI
+import pokitmons.pokit.login.R as Login
 
 private const val NICKNAME_MAX_LENGTH = 10 // TODO 매직넘버를 포함하는 모듈화 추가 후 마이그레이션 예정
 private const val NICKNAME_MIN_LENGTH = 1 // TODO 매직넘버를 포함하는 모듈화 추가 후 마이그레이션 예정
