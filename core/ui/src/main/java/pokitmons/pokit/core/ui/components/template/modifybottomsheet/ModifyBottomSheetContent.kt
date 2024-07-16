@@ -20,7 +20,7 @@ fun ModifyBottomSheetContent(
     ) {
         onClickShare?.let { onClickShare ->
             ModifyBottomSheetItem(
-                onClick = {},
+                onClick = onClickShare,
                 title = stringResource(id = R.string.share),
                 painter = painterResource(id = R.drawable.icon_24_share)
             )
