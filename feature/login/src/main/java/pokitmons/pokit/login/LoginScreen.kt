@@ -20,8 +20,8 @@ import androidx.credentials.GetCredentialRequest
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.launch
-import pokitmons.pokit.core.ui.components.atom.button.PokitLoginButton
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitLoginButtonType
+import pokitmons.pokit.core.ui.components.atom.loginbutton.PokitLoginButton
 
 @Composable
 fun LoginScreen(

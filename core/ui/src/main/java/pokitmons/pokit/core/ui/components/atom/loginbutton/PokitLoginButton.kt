@@ -1,4 +1,4 @@
-package pokitmons.pokit.core.ui.components.atom.button
+package pokitmons.pokit.core.ui.components.atom.loginbutton
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
