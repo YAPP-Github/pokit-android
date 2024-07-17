@@ -14,16 +14,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitLoginButtonType
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitLoginResource
 import pokitmons.pokit.core.ui.theme.PokitTheme
-import pokitmons.pokit.core.ui.theme.color.Gray200
-import pokitmons.pokit.core.ui.theme.color.Gray700
-import pokitmons.pokit.core.ui.theme.color.Gray900
 
 @Composable
 fun PokitLoginButton(
