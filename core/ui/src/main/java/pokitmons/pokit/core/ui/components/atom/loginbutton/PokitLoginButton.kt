@@ -63,27 +63,28 @@ fun PokitLoginButton(
                     .padding(start = 12.dp),
                 text = text,
                 color = loginResource.textColor,
-                style = PokitTheme.typography.label3Regular
+                style = PokitTheme.typography.label1Regular
             )
         }
     }
 }
 
+@Composable
 private fun getLoginResource(loginType: PokitLoginButtonType): PokitLoginResource {
     return when (loginType) {
         PokitLoginButtonType.APPLE -> PokitLoginResource(
             iconResourceId = R.drawable.icon_24_apple,
-            iconTintColor = Color.White,
-            textColor = Color.White,
-            backgroundColor = Gray700,
-            borderColor = Gray700
+            iconTintColor = PokitTheme.colors.inverseWh,
+            textColor = PokitTheme.colors.inverseWh,
+            backgroundColor = PokitTheme.colors.backgroundTertiary,
+            borderColor = PokitTheme.colors.backgroundTertiary
         )
 
         PokitLoginButtonType.GOOGLE -> PokitLoginResource(
             iconResourceId = R.drawable.icon_24_google,
-            textColor = Gray900,
-            backgroundColor = Color.White,
-            borderColor = Gray200
+            textColor = PokitTheme.colors.textPrimary,
+            backgroundColor = PokitTheme.colors.backgroundBase,
+            borderColor = PokitTheme.colors.borderSecondary
         )
     }
 }
