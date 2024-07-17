@@ -30,8 +30,7 @@ fun SignUpSuccessScreen(
 ) {
     Box(
         modifier = Modifier
-            .padding(all = 20.dp)
-            .padding(bottom = 8.dp)
+            .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 28.dp)
     ) {
         Icon(
             painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.icon_24_arrow_left),
