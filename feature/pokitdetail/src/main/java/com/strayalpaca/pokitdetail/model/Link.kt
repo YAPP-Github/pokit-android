@@ -16,7 +16,7 @@ data class Link(
 )
 
 enum class LinkType(val textResourceId: Int) {
-    TEXT(R.string.badge_text)
+    TEXT(R.string.badge_text),
 }
 
 internal val sampleLinkList = listOf(

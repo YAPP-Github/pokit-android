@@ -34,7 +34,7 @@ import pokitmons.pokit.core.ui.R.drawable as coreDrawable
 @Composable
 fun LinkDetailBottomSheet(
     link: Link,
-    onHideBottomSheet: () -> Unit
+    onHideBottomSheet: () -> Unit,
 ) {
     PokitBottomSheet(onHideBottomSheet = onHideBottomSheet) {
         Column(

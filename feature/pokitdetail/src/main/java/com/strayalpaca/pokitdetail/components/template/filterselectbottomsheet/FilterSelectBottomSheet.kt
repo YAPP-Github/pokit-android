@@ -119,7 +119,7 @@ internal fun FilterSelectBottomSheet(
                 icon = null,
                 onClick = remember { { onFilterChange(currentFilter) } },
                 modifier = Modifier.fillMaxWidth(),
-                size = PokitButtonSize.LARGE,
+                size = PokitButtonSize.LARGE
             )
         }
     }

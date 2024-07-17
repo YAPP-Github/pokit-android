@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import com.strayalpaca.pokitdetail.model.sampleLinkList
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
-
 @Preview(showBackground = true)
 @Composable
 fun LinkCardPreview() {

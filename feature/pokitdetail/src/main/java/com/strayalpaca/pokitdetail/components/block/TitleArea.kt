@@ -33,7 +33,7 @@ internal fun TitleArea(
     sub: String,
     onClickSelectPokit: () -> Unit,
     onClickSelectFilter: () -> Unit,
-){
+) {
     Column(
         modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp)
     ) {
@@ -67,7 +67,7 @@ internal fun TitleArea(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
-        ){
+        ) {
             Text(
                 text = sub,
                 style = PokitTheme.typography.detail1.copy(color = PokitTheme.colors.textSecondary)
@@ -85,5 +85,4 @@ internal fun TitleArea(
             )
         }
     }
-
 }

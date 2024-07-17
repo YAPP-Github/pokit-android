@@ -18,7 +18,7 @@ class PokitDetailViewModel : ViewModel() {
     val state: StateFlow<PokitDetailScreenState> = _state.asStateFlow()
 
     private val _pokitList = MutableStateFlow(samplePokitList)
-    val pokitList : StateFlow<List<Pokit>> = _pokitList.asStateFlow()
+    val pokitList: StateFlow<List<Pokit>> = _pokitList.asStateFlow()
 
     private val _linkList = MutableStateFlow(sampleLinkList)
     val linkList: StateFlow<List<Link>> = _linkList.asStateFlow()
@@ -43,7 +43,7 @@ class PokitDetailViewModel : ViewModel() {
         _state.update { it.copy(pokitBottomSheetType = null) }
     }
 
-    fun showLinkModifyBottomSheet(link : Link) {
+    fun showLinkModifyBottomSheet(link: Link) {
         _state.update { it.copy(linkBottomSheetType = BottomSheetType.MODIFY, currentLink = link) }
     }
 

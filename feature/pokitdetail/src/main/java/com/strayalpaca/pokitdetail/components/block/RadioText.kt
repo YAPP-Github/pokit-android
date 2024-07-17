@@ -43,7 +43,7 @@ internal fun RadioText(
                     width = 2.dp,
                     color = tintColor,
                     shape = CircleShape
-                ),
+                )
         ) {
             Box(
                 modifier = Modifier
@@ -64,8 +64,8 @@ internal fun RadioText(
 
 @Composable
 private fun getRadioTintColor(
-    selected: Boolean
-) : Color {
+    selected: Boolean,
+): Color {
     return if (selected) {
         PokitTheme.colors.brand
     } else {

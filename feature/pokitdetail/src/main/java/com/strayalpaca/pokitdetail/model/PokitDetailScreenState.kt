@@ -9,7 +9,7 @@ data class PokitDetailScreenState(
     val filterChangeBottomSheetVisible: Boolean = false,
     val pokitSelectBottomSheetVisible: Boolean = false,
     val linkDetailBottomSheetVisible: Boolean = false,
-    val enable : Boolean = true
+    val enable: Boolean = true,
 )
 
 enum class BottomSheetType {

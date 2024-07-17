@@ -38,7 +38,7 @@ import pokitmons.pokit.core.ui.R.drawable as coreDrawable
 @Composable
 fun PokitDetailScreenContainer(
     viewModel: PokitDetailViewModel,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
     val linkList by viewModel.linkList.collectAsState()
@@ -85,7 +85,7 @@ fun PokitDetailScreen(
     state: PokitDetailScreenState = PokitDetailScreenState(),
     linkList: List<Link> = emptyList(),
     pokitList: List<Pokit> = emptyList(),
-    onClickLink: (Link) -> Unit = {}
+    onClickLink: (Link) -> Unit = {},
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
