@@ -1,3 +1,32 @@
 <resources>
-    <string name="app_name">login</string>
+    <string name="google_login">Google로 시작하기</string>
+    <string name="apple_login">Apple로 시작하기</string>
+    <string name="service_privacy_title">서비스 이용을 위해\n이용약 동의가 필요합니다</string>
+    <string name="privacy_all_agree">약관 전체동의</string>
+    <string name="personal_data_agree">(필수)개인정보 수집 및 이용 동의</string>
+    <string name="service_agree">(필수)서비스 이용약관</string>
+    <string name="marketing_agree">(선택)마케팅 정보 수신</string>
+    <string name="input_nickname_title">Pokit에 사용할 닉네임을\n입력해주세요</string>
+    <string name="input_nickname_hint">내용을 입력해주세요.</string>
+    <string name="input_restriction_message">한글, 영어, 숫자로만 입력이 가능합니다.</string>
+    <string name="input_max_length">최대 20자까지 입력 가능합니다.</string>
+    <string name="keyword_title">어떤 분야에 관심이 있으세요?</string>
+    <string name="select_keyword">최대 3개를 골라주시면,\n관련 콘텐츠를 추천해드릴게요!</string>
+    <string name="sports_and_leisure">스포츠/레저</string>
+    <string name="phrases_and_office">문구/오피스</string>
+    <string name="fashion">패션</string>
+    <string name="travel">여행</string>
+    <string name="economy_and_politics">경제/시사</string>
+    <string name="movies_and_dramas">영화/드라마</string>
+    <string name="restaurants">맛집</string>
+    <string name="interior">인테리어</string>
+    <string name="it">IT</string>
+    <string name="design">디자인</string>
+    <string name="self_development">자기계발</string>
+    <string name="humor">유머</string>
+    <string name="music">음악</string>
+    <string name="job_info">취업정보</string>
+    <string name="sign_up_success">회원가입이 완료되었습니다!</string>
+    <string name="manage_links">POKIT을 통해 많은 링크를\n간편하게 관리하세요</string>
+    <string name="next">다음</string>
 </resources>
