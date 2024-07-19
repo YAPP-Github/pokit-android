@@ -28,6 +28,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.theme.PokitTheme
@@ -83,10 +84,12 @@ fun<T> LinkCard(
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
+                            modifier = Modifier.weight(1f),
                             text = title,
                             style = PokitTheme.typography.body3Medium.copy(color = PokitTheme.colors.textPrimary),
                             maxLines = 2,
-                            minLines = 2
+                            minLines = 2,
+                            overflow = TextOverflow.Ellipsis
                         )
 
                         IconButton(
