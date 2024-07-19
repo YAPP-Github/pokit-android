@@ -29,6 +29,7 @@ fun PokitInput(
     onChangeText: (String) -> Unit,
     icon: PokitInputIcon?,
     modifier: Modifier = Modifier,
+    onClickIcon: (() -> Unit)? = null,
     shape: PokitInputShape = PokitInputShape.RECTANGLE,
     readOnly: Boolean = false,
     enable: Boolean = true,
@@ -68,7 +69,7 @@ fun PokitInput(
                 }
 
                 if (icon?.position == PokitInputIconPosition.LEFT) {
-                    PokitInputIcon(state = state, resourceId = icon.resourceId)
+                    PokitInputIcon(state = state, resourceId = icon.resourceId, onClick = onClickIcon)
                     Box(modifier = Modifier.width(8.dp))
                 }
 
@@ -81,7 +82,7 @@ fun PokitInput(
                 }
 
                 if (icon?.position == PokitInputIconPosition.RIGHT) {
-                    PokitInputIcon(state = state, resourceId = icon.resourceId)
+                    PokitInputIcon(state = state, resourceId = icon.resourceId, onClick = onClickIcon)
                 }
             }
         }
