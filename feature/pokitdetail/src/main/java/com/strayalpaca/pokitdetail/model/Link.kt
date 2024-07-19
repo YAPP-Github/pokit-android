@@ -5,7 +5,6 @@ import com.strayalpaca.pokitdetail.R
 data class Link(
     val id: String,
     val title: String,
-    val imageUrl: String?,
     val dateString: String,
     val domainUrl: String,
     val isRead: Boolean,
@@ -13,6 +12,7 @@ data class Link(
     val url: String,
     val memo: String,
     val bookmark: Boolean,
+    val imageUrl: String? = null,
 )
 
 enum class LinkType(val textResourceId: Int) {

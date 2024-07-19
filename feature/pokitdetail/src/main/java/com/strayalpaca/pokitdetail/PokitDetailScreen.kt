@@ -147,11 +147,11 @@ fun PokitDetailScreen(
                 LazyColumn {
                     items(
                         items = pokitList
-                    ) {
+                    ) { pokit ->
                         PokitList(
-                            item = it,
-                            title = it.title,
-                            sub = stringResource(id = R.string.link_count_format, it.count),
+                            item = pokit,
+                            title = pokit.title,
+                            sub = stringResource(id = R.string.link_count_format, pokit.count),
                             onClickItem = changePokit,
                             state = PokitListState.ACTIVE
                         )
