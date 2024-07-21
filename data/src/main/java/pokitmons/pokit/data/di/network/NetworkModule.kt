@@ -9,11 +9,15 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
 private const val BASE_URL = "https://pokit.site"
 private const val API = "api"
 private const val VERSION = "v1"
+
+private const val READ_TIME_OUT = 20000L
+private const val WRITE_TIME_OUT = 20000L
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -21,8 +25,9 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideOkHttpClient() : OkHttpClient {
-        return OkHttpClient
-            .Builder()
+        return OkHttpClient.Builder()
+            .readTimeout(READ_TIME_OUT, TimeUnit.SECONDS)
+            .writeTimeout(WRITE_TIME_OUT, TimeUnit.SECONDS)
             .build()
     }
 
