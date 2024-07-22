@@ -13,4 +13,13 @@
     <string name="sort_order_older">오래된순</string>
 
     <string name="text">텍스트</string>
+
+    <string name="filter">필터</string>
+    <string name="pokit_name">포킷명</string>
+    <string name="pokit">포킷</string>
+    <string name="period">기간</string>
+    <string name="collect_show">모아보기</string>
+    <string name="bookmark">즐겨찾기</string>
+    <string name="not_read">안읽음</string>
+    <string name="search">검색하기</string>
 </resources>
