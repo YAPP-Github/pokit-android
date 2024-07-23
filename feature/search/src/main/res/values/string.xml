@@ -22,4 +22,14 @@
     <string name="bookmark">즐겨찾기</string>
     <string name="not_read">안읽음</string>
     <string name="search">검색하기</string>
+
+    <string name="MON">월</string>
+    <string name="TUE">화</string>
+    <string name="WED">수</string>
+    <string name="THU">목</string>
+    <string name="FRI">금</string>
+    <string name="SAT">토</string>
+    <string name="SUN">일</string>
+
+    <string name="format_calendar">%d년 %d월</string>
 </resources>
