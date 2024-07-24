@@ -18,6 +18,16 @@ data class Filter(
             this.copy(selectedPokits = listOf(pokit) + selectedPokits)
         }
     }
+
+    fun getDateString() : String? {
+        return if (startDate != null && endDate != null) {
+            "${startDate}~${endDate}"
+        } else if (startDate != null) {
+            "$startDate"
+        } else {
+            null
+        }
+    }
 }
 
 enum class FilterType(val stringResourceId : Int, val index : Int) {

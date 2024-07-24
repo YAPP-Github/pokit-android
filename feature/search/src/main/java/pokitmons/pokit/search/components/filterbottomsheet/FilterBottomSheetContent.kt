@@ -39,6 +39,8 @@ import pokitmons.pokit.core.ui.components.block.pokitlist.PokitList
 import pokitmons.pokit.core.ui.components.block.tap.PokitTap
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.search.R
+import pokitmons.pokit.search.components.calendar.CalendarView
+import pokitmons.pokit.search.model.CalendarPage
 import pokitmons.pokit.search.model.Filter
 import pokitmons.pokit.search.model.FilterType
 import pokitmons.pokit.search.model.Pokit
@@ -154,7 +156,32 @@ fun FilterBottomSheetContent(
                 }
 
                 FilterType.Period -> {
-
+                    CalendarView(
+                        calendarPage = CalendarPage(filter.endDate),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(20.dp),
+                        startDate = currentFilter.startDate,
+                        endDate = currentFilter.endDate,
+                        onClickCell = remember {
+                            { date ->
+                                val startDate = currentFilter.startDate
+                                val endDate = currentFilter.endDate
+                                currentFilter = if (startDate != null && endDate == null) {
+                                    if (date <= startDate) {
+                                        currentFilter.copy(startDate = date)
+                                    } else {
+                                        currentFilter.copy(endDate = date)
+                                    }
+                                } else {
+                                    currentFilter.copy(
+                                        startDate = date,
+                                        endDate = null
+                                    )
+                                }
+                            }
+                        }
+                    )
                 }
             }
         }
@@ -220,10 +247,10 @@ fun FilterBottomSheetContent(
                 )
             }
 
-            if (currentFilter.startDate != null && currentFilter.endDate != null) {
+            currentFilter.getDateString()?.let { dateString ->
                 PokitChip(
-                    data = "${currentFilter.startDate}~${currentFilter.endDate}",
-                    text = "${currentFilter.startDate}~${currentFilter.endDate}",
+                    data = dateString,
+                    text = dateString,
                     removeIconPosition = PokitChipIconPosiion.RIGHT,
                     state = PokitChipState.STROKE,
                     onClickRemove = remember {

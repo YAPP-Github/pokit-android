@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.search.model.CalendarPage
 import pokitmons.pokit.search.model.Date
 
 @Preview(showBackground = true)
@@ -27,8 +28,7 @@ private fun Preview() {
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             CalendarView(
-                year = 2024,
-                month = 7,
+                calendarPage = CalendarPage(endDate),
                 startDate = startDate,
                 endDate = endDate,
                 onClickCell = remember{{ date ->

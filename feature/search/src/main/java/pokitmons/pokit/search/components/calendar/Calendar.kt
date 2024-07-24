@@ -17,7 +17,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -30,25 +30,24 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.search.R
 import pokitmons.pokit.search.components.atom.CalendarCellState
 import pokitmons.pokit.search.components.atom.CalendarCellView
+import pokitmons.pokit.search.model.CalendarPage
 import pokitmons.pokit.search.model.Date
 import pokitmons.pokit.search.utils.getCells
 import pokitmons.pokit.search.utils.weekDayStringResources
 
 @Composable
 internal fun CalendarView(
-    year: Int,
-    month: Int,
+    calendarPage: CalendarPage,
     modifier: Modifier = Modifier,
     startDate: Date? = null,
     endDate: Date? = null,
     onClickCell: (Date) -> Unit = {},
 ) {
-    var currentYear by remember { mutableIntStateOf(year) }
-    var currentMonth by remember { mutableIntStateOf(month) }
+    var currentPage by remember { mutableStateOf(calendarPage)}
     val calendarCells = remember(
-        currentYear, currentMonth, startDate, endDate
+        currentPage, startDate, endDate
     ) {
-        getCells(year = currentYear, month = currentMonth, startDate = startDate, endDate = endDate)
+        getCells(year = currentPage.year, month = currentPage.month, startDate = startDate, endDate = endDate)
     }
 
     Column(
@@ -59,7 +58,7 @@ internal fun CalendarView(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = stringResource(id = R.string.format_calendar, currentYear, currentMonth),
+                text = stringResource(id = R.string.format_calendar, currentPage.year, currentPage.month),
                 style = PokitTheme.typography.body1Bold.copy(color = PokitTheme.colors.textPrimary)
             )
 
@@ -69,12 +68,7 @@ internal fun CalendarView(
                 modifier = Modifier.size(40.dp),
                 onClick = remember {
                     {
-                        if (currentMonth == 1) {
-                            currentMonth = 12
-                            currentYear -= 1
-                        } else {
-                            currentMonth -= 1
-                        }
+                        currentPage = currentPage.prevPage()
                     }
                 }
             ) {
@@ -90,12 +84,7 @@ internal fun CalendarView(
                 modifier = Modifier.size(40.dp),
                 onClick = remember {
                     {
-                        if (currentMonth == 12) {
-                            currentMonth = 1
-                            currentYear += 1
-                        } else {
-                            currentMonth += 1
-                        }
+                        currentPage = currentPage.nextPage()
                     }
                 }
             ) {
@@ -127,7 +116,7 @@ internal fun CalendarView(
             }
 
             items(calendarCells) { cell ->
-                if (cell.date.year != currentYear || cell.date.month != currentMonth) {
+                if (cell.date.year != currentPage.year || cell.date.month != currentPage.month) {
                     CalendarCellView(
                         date = cell.date,
                         onClick = null,
@@ -137,9 +126,16 @@ internal fun CalendarView(
                     CalendarCellView(
                         date = cell.date,
                         onClick = onClickCell,
-                        state = if (cell.date == startDate || cell.date == endDate) CalendarCellState.SELECTED else CalendarCellState.IN_RANGE
+                        state = CalendarCellState.SELECTED
                     )
-                } else {
+                } else if (cell.inSelectRange) {
+                    CalendarCellView(
+                        date = cell.date,
+                        onClick = onClickCell,
+                        state = CalendarCellState.IN_RANGE
+                    )
+                }
+                else {
                     CalendarCellView(
                         date = cell.date,
                         onClick = onClickCell,
