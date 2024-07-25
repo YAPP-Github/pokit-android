@@ -129,7 +129,10 @@ fun FilterBottomSheetContent(
                                 }
                                 .padding(12.dp)
                         ) {
-                            PokitCheckbox(checked = currentFilter.bookmark, onClick = {})
+                            PokitCheckbox(
+                                checked = currentFilter.bookmark,
+                                onClick = {currentFilter = currentFilter.copy(bookmark = !currentFilter.bookmark)}
+                            )
                             Spacer(modifier = Modifier.width(16.dp))
                             Text(
                                 text = stringResource(id = R.string.bookmark),
@@ -140,12 +143,21 @@ fun FilterBottomSheetContent(
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(24.dp)
-                                .clickable {
+                                .padding(12.dp)
+                                .clickable(
+                                    indication = null,
+                                    interactionSource = remember { MutableInteractionSource() }
+                                ) {
                                     currentFilter = currentFilter.copy(notRead = !currentFilter.notRead)
                                 }
+                                .padding(12.dp)
                         ) {
-                            PokitCheckbox(checked = currentFilter.notRead, onClick = {})
+                            PokitCheckbox(
+                                checked = currentFilter.notRead,
+                                onClick = {
+                                    currentFilter = currentFilter.copy(notRead = !currentFilter.notRead)
+                                }
+                            )
                             Spacer(modifier = Modifier.width(16.dp))
                             Text(
                                 text = stringResource(id = R.string.not_read),
@@ -198,7 +210,7 @@ fun FilterBottomSheetContent(
                 .horizontalScroll(scrollState),
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            Spacer(modifier = Modifier.width(20.dp))
+            Spacer(modifier = Modifier.width(20.dp).height(32.dp))
 
             currentFilter.selectedPokits.map { pokit ->
                 PokitChip(

@@ -6,8 +6,8 @@ import pokitmons.pokit.search.R
 @Immutable
 data class Filter(
     val selectedPokits: List<Pokit> = emptyList(),
-    val bookmark: Boolean = true,
-    val notRead: Boolean = true,
+    val bookmark: Boolean = false,
+    val notRead: Boolean = false,
     val startDate: Date? = null,
     val endDate: Date? = null
 ) {

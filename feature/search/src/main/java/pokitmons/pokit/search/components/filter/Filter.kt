@@ -1,9 +1,13 @@
 package pokitmons.pokit.search.components.filter
 
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -27,12 +31,16 @@ fun FilterArea(
     onClickPokitName: () -> Unit = {},
     onClickBookmark: () -> Unit = {}
 ) {
+    val scrollState = rememberScrollState()
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 24.dp),
+            .padding(top = 20.dp, bottom = 24.dp)
+            .horizontalScroll(scrollState),
         horizontalArrangement = Arrangement.spacedBy(6.dp)
     ) {
+        Spacer(modifier = Modifier.width(20.dp))
 
         if (filter == null) {
             PokitButton(
@@ -141,9 +149,9 @@ fun FilterArea(
                 )
             }
 
-            if (filter.startDate != null && filter.endDate != null) {
+            filter.getDateString()?.let { dateString ->
                 PokitButton(
-                    text = "${filter.startDate}~${filter.endDate}",
+                    text = dateString,
                     icon = PokitButtonIcon(
                         resourceId = coreDrawable.icon_24_arrow_down,
                         position = PokitButtonIconPosition.RIGHT
@@ -154,7 +162,8 @@ fun FilterArea(
                     style = PokitButtonStyle.STROKE
                 )
             }
-
         }
+
+        Spacer(modifier = Modifier.width(20.dp))
     }
 }
