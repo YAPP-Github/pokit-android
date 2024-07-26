@@ -7,7 +7,7 @@ data class SearchScreenState(
     val useRecentSearchWord: Boolean = false,
     val showFilterBottomSheet: Boolean = false,
     val firstBottomSheetFilterType: FilterType = FilterType.Pokit,
-    val sortRecent: Boolean = true
+    val sortRecent: Boolean = true,
 )
 
 enum class SearchScreenStep {

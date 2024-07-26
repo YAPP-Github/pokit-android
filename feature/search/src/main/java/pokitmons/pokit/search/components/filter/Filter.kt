@@ -20,8 +20,8 @@ import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonStyle
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonType
 import pokitmons.pokit.search.R
-import pokitmons.pokit.core.ui.R.drawable as coreDrawable
 import pokitmons.pokit.search.model.Filter
+import pokitmons.pokit.core.ui.R.drawable as coreDrawable
 
 @Composable
 fun FilterArea(
@@ -29,7 +29,7 @@ fun FilterArea(
     onClickFilter: () -> Unit = {},
     onClickPeriod: () -> Unit = {},
     onClickPokitName: () -> Unit = {},
-    onClickBookmark: () -> Unit = {}
+    onClickBookmark: () -> Unit = {},
 ) {
     val scrollState = rememberScrollState()
 

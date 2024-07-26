@@ -13,8 +13,8 @@ import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.search.components.filter.FilterArea
 import pokitmons.pokit.search.components.filterbottomsheet.FilterBottomSheet
-import pokitmons.pokit.search.components.searchitemlist.SearchItemList
 import pokitmons.pokit.search.components.recentsearchword.RecentSearchWord
+import pokitmons.pokit.search.components.searchitemlist.SearchItemList
 import pokitmons.pokit.search.components.toolbar.Toolbar
 import pokitmons.pokit.search.model.Filter
 import pokitmons.pokit.search.model.FilterType
@@ -25,7 +25,7 @@ import pokitmons.pokit.search.model.SearchScreenStep
 @Composable
 fun SearchScreenContainer(
     viewModel: SearchViewModel,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
     val searchWord by viewModel.searchWord.collectAsState()
@@ -54,7 +54,7 @@ fun SearchScreenContainer(
 fun SearchScreen(
     state: SearchScreenState = SearchScreenState(),
     currentSearchWord: String = "",
-    linkList : List<Link> = emptyList(),
+    linkList: List<Link> = emptyList(),
     onClickBack: () -> Unit = {},
     inputSearchWord: (String) -> Unit = {},
     onClickSearch: () -> Unit = {},
@@ -65,63 +65,63 @@ fun SearchScreen(
     onClickFilterSelect: () -> Unit = {},
     onClickFilterItem: (FilterType) -> Unit = {},
     hideBottomSheet: () -> Unit = {},
-    onClickFilterSave : (Filter) -> Unit = {},
+    onClickFilterSave: (Filter) -> Unit = {},
     toggleSortOrder: () -> Unit = {},
 ) {
-   Column(
-       modifier = Modifier.fillMaxSize()
-   ) {
-       Toolbar(
-           onClickBack = onClickBack,
-           inputSearchWord = inputSearchWord,
-           currentSearchWord = currentSearchWord,
-           onClickSearch = onClickSearch,
-           onClickRemove = remember {{ inputSearchWord("") }}
-       )
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Toolbar(
+            onClickBack = onClickBack,
+            inputSearchWord = inputSearchWord,
+            currentSearchWord = currentSearchWord,
+            onClickSearch = onClickSearch,
+            onClickRemove = remember { { inputSearchWord("") } }
+        )
 
-       if (state.step == SearchScreenStep.INPUT) {
-           RecentSearchWord(
-               onClickRemoveAll = onClickRemoveAllRecentSearchWord,
-               onToggleAutoSave = onClickUseRecentSearchWord,
-               useAutoSave = state.useRecentSearchWord,
-               recentSearchWords = state.recentSearchWords,
-               onClickRemoveSearchWord = onClickRemoveRecentSearchWord,
-               onClickSearchWord = onClickRecentSearchWord
-           )
-       }
+        if (state.step == SearchScreenStep.INPUT) {
+            RecentSearchWord(
+                onClickRemoveAll = onClickRemoveAllRecentSearchWord,
+                onToggleAutoSave = onClickUseRecentSearchWord,
+                useAutoSave = state.useRecentSearchWord,
+                recentSearchWords = state.recentSearchWords,
+                onClickRemoveSearchWord = onClickRemoveRecentSearchWord,
+                onClickSearchWord = onClickRecentSearchWord
+            )
+        }
 
-       if (state.step == SearchScreenStep.RESULT){
-           FilterArea(
-               filter = state.filter,
-               onClickFilter = onClickFilterSelect,
-               onClickBookmark = remember{{ onClickFilterItem(FilterType.Collect) }},
-               onClickPokitName = remember {{ onClickFilterItem(FilterType.Pokit) }},
-               onClickPeriod = remember {{ onClickFilterItem(FilterType.Period) }}
-           )
-       }
+        if (state.step == SearchScreenStep.RESULT) {
+            FilterArea(
+                filter = state.filter,
+                onClickFilter = onClickFilterSelect,
+                onClickBookmark = remember { { onClickFilterItem(FilterType.Collect) } },
+                onClickPokitName = remember { { onClickFilterItem(FilterType.Pokit) } },
+                onClickPeriod = remember { { onClickFilterItem(FilterType.Period) } }
+            )
+        }
 
-       HorizontalDivider(
-           thickness = 6.dp,
-           color = PokitTheme.colors.backgroundPrimary
-       )
+        HorizontalDivider(
+            thickness = 6.dp,
+            color = PokitTheme.colors.backgroundPrimary
+        )
 
-       if (state.step == SearchScreenStep.RESULT) {
-           SearchItemList(
-               modifier = Modifier
-                   .fillMaxWidth()
-                   .weight(1f),
-               onToggleSort = toggleSortOrder,
-               useRecentOrder = state.sortRecent,
-               links = linkList
-           )
-       }
+        if (state.step == SearchScreenStep.RESULT) {
+            SearchItemList(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                onToggleSort = toggleSortOrder,
+                useRecentOrder = state.sortRecent,
+                links = linkList
+            )
+        }
 
-       FilterBottomSheet(
-           filter = state.filter ?: Filter(),
-           firstShowType = state.firstBottomSheetFilterType,
-           show = state.showFilterBottomSheet,
-           onDismissRequest = hideBottomSheet,
-           onSaveClilck = onClickFilterSave
-       )
-   }
+        FilterBottomSheet(
+            filter = state.filter ?: Filter(),
+            firstShowType = state.firstBottomSheetFilterType,
+            show = state.showFilterBottomSheet,
+            onDismissRequest = hideBottomSheet,
+            onSaveClilck = onClickFilterSave
+        )
+    }
 }

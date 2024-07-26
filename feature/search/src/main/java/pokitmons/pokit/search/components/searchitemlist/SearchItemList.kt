@@ -21,8 +21,8 @@ import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.search.model.Link
-import pokitmons.pokit.search.R.string as SearchString
 import pokitmons.pokit.core.ui.R.drawable as coreDrawable
+import pokitmons.pokit.search.R.string as SearchString
 
 @Composable
 internal fun SearchItemList(
@@ -31,7 +31,7 @@ internal fun SearchItemList(
     useRecentOrder: Boolean = true,
     links: List<Link> = emptyList(),
     onClickLinkKebab: (Link) -> Unit = {},
-    onClickLink: (Link) -> Unit = {}
+    onClickLink: (Link) -> Unit = {},
 ) {
     Column(
         modifier = modifier

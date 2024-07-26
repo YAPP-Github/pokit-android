@@ -6,7 +6,7 @@ data class Date(
     val day: Int = 1,
 ) : Comparable<Date> {
     override fun compareTo(other: Date): Int {
-        return compareValuesBy(this, other, {it.year}, {it.month}, {it.day})
+        return compareValuesBy(this, other, { it.year }, { it.month }, { it.day })
     }
 
     override fun toString(): String {

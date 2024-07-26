@@ -39,7 +39,6 @@ internal fun RecentSearchWord(
             .padding(start = 20.dp, end = 20.dp, top = 16.dp, bottom = 28.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
@@ -115,6 +114,5 @@ internal fun RecentSearchWord(
                 }
             }
         }
-
     }
 }

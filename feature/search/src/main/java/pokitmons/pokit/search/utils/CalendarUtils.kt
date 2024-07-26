@@ -10,7 +10,7 @@ fun getCells(
     month: Int,
     startDate: Date?,
     endDate: Date?,
-) : List<CalendarCell> {
+): List<CalendarCell> {
     val cells = getDefaultCalendarCells(year = year, month = month)
     if (startDate == null && endDate == null) {
         return cells
@@ -28,7 +28,6 @@ fun getCells(
 
     return changedCells
 }
-
 
 private fun getDayAmountOfMonth(year: Int, month: Int): Int {
     return when (month) {
@@ -49,7 +48,6 @@ private fun getDayAmountOfMonth(year: Int, month: Int): Int {
         }
     }
 }
-
 
 /**
  * 달력 상에서 이전달에 해당하는 요일의 리스트를 리턴합니다.
@@ -89,7 +87,7 @@ private fun firstDaysOfNextMonth(year: Int, month: Int): List<Int> {
     return List(8 - startDayOfWeek) { it + 1 }
 }
 
-private fun getDefaultCalendarCells(year : Int, month: Int) : List<CalendarCell> {
+private fun getDefaultCalendarCells(year: Int, month: Int): List<CalendarCell> {
     val lastMonthCells = lastDaysOfPrevMonth(year, month).map { day ->
         if (month == 1) {
             CalendarCell(date = Date(year = year - 1, month = 12, day = day), currentMonth = false)

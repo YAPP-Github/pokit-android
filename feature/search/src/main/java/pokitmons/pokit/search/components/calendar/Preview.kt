@@ -31,19 +31,21 @@ private fun Preview() {
                 calendarPage = CalendarPage(endDate),
                 startDate = startDate,
                 endDate = endDate,
-                onClickCell = remember{{ date ->
-                    val currentStartDate = startDate
-                    if (currentStartDate != null && endDate == null) {
-                        if (date <= currentStartDate) {
-                            startDate = date
+                onClickCell = remember {
+                    { date ->
+                        val currentStartDate = startDate
+                        if (currentStartDate != null && endDate == null) {
+                            if (date <= currentStartDate) {
+                                startDate = date
+                            } else {
+                                endDate = date
+                            }
                         } else {
-                            endDate = date
+                            startDate = date
+                            endDate = null
                         }
-                    } else {
-                        startDate = date
-                        endDate = null
-                    }
-                }}
+                    } 
+                }
             )
         }
     }

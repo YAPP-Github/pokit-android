@@ -11,7 +11,7 @@ data class CalendarPage(
         month = date?.month ?: (Calendar.getInstance().get(Calendar.MONTH) + 1)
     )
 
-    fun prevPage() : CalendarPage {
+    fun prevPage(): CalendarPage {
         return if (month == 1) {
             CalendarPage(
                 year = year - 1,
@@ -25,7 +25,7 @@ data class CalendarPage(
         }
     }
 
-    fun nextPage() : CalendarPage {
+    fun nextPage(): CalendarPage {
         return if (month == 12) {
             CalendarPage(
                 year = year + 1,

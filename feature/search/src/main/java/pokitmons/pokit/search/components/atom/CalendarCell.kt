@@ -22,7 +22,7 @@ import pokitmons.pokit.search.model.Date
 internal fun CalendarCellView(
     date: Date,
     onClick: ((Date) -> Unit)? = null,
-    state: CalendarCellState = CalendarCellState.ACTIVE
+    state: CalendarCellState = CalendarCellState.ACTIVE,
 ) {
     val backgroundColor = getBackgroundColor(state = state)
     val textColor = getTextColor(state = state)
@@ -48,7 +48,7 @@ internal fun CalendarCellView(
             modifier = Modifier.align(Alignment.Center),
             textAlign = TextAlign.Center,
             text = date.day.toString(),
-            style = PokitTheme.typography.body1Medium.copy(color = textColor),
+            style = PokitTheme.typography.body1Medium.copy(color = textColor)
         )
     }
 }
@@ -58,7 +58,7 @@ enum class CalendarCellState {
 }
 
 @Composable
-private fun getTextColor(state: CalendarCellState) : Color {
+private fun getTextColor(state: CalendarCellState): Color {
     return when (state) {
         CalendarCellState.INACTIVE -> {
             PokitTheme.colors.textTertiary
@@ -76,7 +76,7 @@ private fun getTextColor(state: CalendarCellState) : Color {
 }
 
 @Composable
-private fun getBackgroundColor(state: CalendarCellState) : Color {
+private fun getBackgroundColor(state: CalendarCellState): Color {
     return when (state) {
         CalendarCellState.IN_RANGE -> {
             Orange100

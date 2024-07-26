@@ -31,7 +31,7 @@ private fun Preview() {
             FilterArea(
                 filter = Filter(
                     startDate = Date(year = 2024, month = 7, day = 20),
-                    endDate = Date(year = 2024, month = 7, day = 20),
+                    endDate = Date(year = 2024, month = 7, day = 20)
                 )
             )
 

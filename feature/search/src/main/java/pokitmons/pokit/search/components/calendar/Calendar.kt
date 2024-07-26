@@ -43,9 +43,11 @@ internal fun CalendarView(
     endDate: Date? = null,
     onClickCell: (Date) -> Unit = {},
 ) {
-    var currentPage by remember { mutableStateOf(calendarPage)}
+    var currentPage by remember { mutableStateOf(calendarPage) }
     val calendarCells = remember(
-        currentPage, startDate, endDate
+        currentPage,
+        startDate,
+        endDate
     ) {
         getCells(year = currentPage.year, month = currentPage.month, startDate = startDate, endDate = endDate)
     }
@@ -134,8 +136,7 @@ internal fun CalendarView(
                         onClick = onClickCell,
                         state = CalendarCellState.IN_RANGE
                     )
-                }
-                else {
+                } else {
                     CalendarCellView(
                         date = cell.date,
                         onClick = onClickCell,
@@ -145,5 +146,4 @@ internal fun CalendarView(
             }
         }
     }
-
 }

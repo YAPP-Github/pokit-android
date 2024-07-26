@@ -40,7 +40,7 @@ fun FilterBottomSheet(
     onSaveClilck: (Filter) -> Unit = {},
     pokits: List<Pokit> = samplePokits,
     show: Boolean = false,
-    onDismissRequest: () -> Unit = {}
+    onDismissRequest: () -> Unit = {},
 ) {
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var visibility by remember { mutableStateOf(show) }
@@ -61,10 +61,12 @@ fun FilterBottomSheet(
 
     if (visibility) {
         ModalBottomSheet(
-            onDismissRequest = remember{{
-                onDismissRequest()
-                visibility = false
-            }},
+            onDismissRequest = remember {
+                {
+                    onDismissRequest()
+                    visibility = false
+                } 
+            },
             sheetState = bottomSheetState,
             scrimColor = Color.Transparent,
             shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
@@ -99,5 +101,4 @@ fun FilterBottomSheet(
             )
         }
     }
-
 }

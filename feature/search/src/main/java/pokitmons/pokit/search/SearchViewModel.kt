@@ -87,7 +87,7 @@ class SearchViewModel : ViewModel() {
         }
     }
 
-    fun showFilterBottomSheetWithType(type : FilterType) {
+    fun showFilterBottomSheetWithType(type: FilterType) {
         _state.update { state ->
             state.copy(
                 showFilterBottomSheet = true,
@@ -112,7 +112,7 @@ class SearchViewModel : ViewModel() {
                     null
                 } else {
                     filter
-                },
+                }
             )
         }
 

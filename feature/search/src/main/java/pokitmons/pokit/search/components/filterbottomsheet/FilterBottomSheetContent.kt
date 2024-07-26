@@ -123,7 +123,7 @@ fun FilterBottomSheetContent(
                                 .padding(12.dp)
                                 .clickable(
                                     indication = null,
-                                    interactionSource = remember { MutableInteractionSource() },
+                                    interactionSource = remember { MutableInteractionSource() }
                                 ) {
                                     currentFilter = currentFilter.copy(bookmark = !currentFilter.bookmark)
                                 }
@@ -131,7 +131,7 @@ fun FilterBottomSheetContent(
                         ) {
                             PokitCheckbox(
                                 checked = currentFilter.bookmark,
-                                onClick = {currentFilter = currentFilter.copy(bookmark = !currentFilter.bookmark)}
+                                onClick = { currentFilter = currentFilter.copy(bookmark = !currentFilter.bookmark) }
                             )
                             Spacer(modifier = Modifier.width(16.dp))
                             Text(

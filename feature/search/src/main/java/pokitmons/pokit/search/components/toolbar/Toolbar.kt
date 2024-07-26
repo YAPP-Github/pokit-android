@@ -22,8 +22,8 @@ import pokitmons.pokit.core.ui.components.atom.input.PokitInput
 import pokitmons.pokit.core.ui.components.atom.input.attributes.PokitInputIcon
 import pokitmons.pokit.core.ui.components.atom.input.attributes.PokitInputIconPosition
 import pokitmons.pokit.core.ui.components.atom.input.attributes.PokitInputShape
-import pokitmons.pokit.search.R.string as SearchString
 import pokitmons.pokit.core.ui.R.drawable as coreDrawable
+import pokitmons.pokit.search.R.string as SearchString
 
 @Composable
 internal fun Toolbar(
@@ -40,7 +40,7 @@ internal fun Toolbar(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 12.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         IconButton(
             modifier = Modifier.size(40.dp),
@@ -60,12 +60,15 @@ internal fun Toolbar(
             hintText = stringResource(id = SearchString.placeholder_input_search_word),
             onChangeText = inputSearchWord,
             shape = PokitInputShape.ROUND,
-            icon = if (currentSearchWord.isNotEmpty())
+            icon = if (currentSearchWord.isNotEmpty()) {
                 PokitInputIcon(
                     position = PokitInputIconPosition.RIGHT,
                     resourceId = coreDrawable.icon_24_x
-                ) else null,
-            onClickIcon = remember{
+                )
+            } else {
+                null
+            },
+            onClickIcon = remember {
                 {
                     onClickRemove()
                     focusRequester.requestFocus()

@@ -9,9 +9,9 @@ data class Filter(
     val bookmark: Boolean = false,
     val notRead: Boolean = false,
     val startDate: Date? = null,
-    val endDate: Date? = null
+    val endDate: Date? = null,
 ) {
-    fun addPokit(pokit: Pokit) : Filter {
+    fun addPokit(pokit: Pokit): Filter {
         return if (selectedPokits.contains(pokit)) {
             this
         } else {
@@ -19,9 +19,9 @@ data class Filter(
         }
     }
 
-    fun getDateString() : String? {
+    fun getDateString(): String? {
         return if (startDate != null && endDate != null) {
-            "${startDate}~${endDate}"
+            "$startDate~$endDate"
         } else if (startDate != null) {
             "$startDate"
         } else {
@@ -34,6 +34,6 @@ data class Filter(
     }
 }
 
-enum class FilterType(val stringResourceId : Int, val index : Int) {
+enum class FilterType(val stringResourceId: Int, val index: Int) {
     Pokit(R.string.pokit, 0), Collect(R.string.collect_show, 1), Period(R.string.period, 2)
 }
