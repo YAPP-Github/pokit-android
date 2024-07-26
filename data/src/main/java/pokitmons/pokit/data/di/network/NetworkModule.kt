@@ -8,6 +8,8 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
+import pokitmons.pokit.data.api.AuthApi
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -26,6 +28,11 @@ object NetworkModule {
     @Provides
     fun provideOkHttpClient() : OkHttpClient {
         return OkHttpClient.Builder()
+            .addInterceptor(
+                HttpLoggingInterceptor().apply {
+                    level = HttpLoggingInterceptor.Level.BODY
+                }
+            )
             .readTimeout(READ_TIME_OUT, TimeUnit.SECONDS)
             .writeTimeout(WRITE_TIME_OUT, TimeUnit.SECONDS)
             .build()
@@ -53,5 +60,10 @@ object NetworkModule {
             .addConverterFactory(converterFactory)
             .client(okHttpClient)
             .build()
+    }
+
+    @Provides
+    fun provideAuthService(retrofit: Retrofit): AuthApi{
+        return retrofit.create(AuthApi::class.java)
     }
 }

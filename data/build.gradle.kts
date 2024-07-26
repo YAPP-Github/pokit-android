@@ -7,6 +7,10 @@ plugins {
 }
 
 android {
+    tasks.withType<Test>().configureEach {
+        useJUnitPlatform()
+    }
+
     namespace = "pokitmons.pokit.data"
     compileSdk = 34
 
@@ -41,8 +45,12 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
+    testImplementation(project(":feature:login"))
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    testImplementation("io.kotest:kotest-runner-junit5:5.9.1") // 2024.06.08 기준 최신버전
+    testImplementation("org.jetbrains.kotlin:kotlin-reflect:1.9.23") // Kotlin reflection
 
     // hilt
     implementation(libs.hilt)
@@ -55,6 +63,8 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.serialization)
     implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
 
     implementation(project(":domain"))
+
 }
