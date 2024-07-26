@@ -1,5 +1,6 @@
 package pokitmons.pokit.nickname
 
+import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,7 +19,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import org.orbitmvi.orbit.compose.collectAsState
+import pokitmons.pokit.LoginState
+import pokitmons.pokit.LoginViewModel
 import pokitmons.pokit.core.ui.components.atom.button.PokitButton
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.components.block.labeledinput.LabeledInput
@@ -31,18 +34,25 @@ private const val NICKNAME_MIN_LENGTH = 1 // TODO 매직넘버를 포함하는 �
 
 @Composable
 fun InputNicknameScreen(
+    loginViewModel: LoginViewModel,
     onNavigateToKeywordScreen: () -> Unit,
     popBackStack: () -> Unit,
 ) {
-    val inputNicknameViewModel: InputNicknameViewModel = viewModel() // TODO hiltViewModel 마이그레이션 예정
-    val inputNicknameState by inputNicknameViewModel.inputNicknameState.collectAsState()
+    val inputNicknameState by loginViewModel.inputNicknameState.collectAsState()
+    val loginState: LoginState = loginViewModel.collectAsState().value
+
+    // TODO : 리팩토링
+    when (loginState) {
+        is LoginState.Init -> Unit
+        else -> onNavigateToKeywordScreen()
+    }
 
     Box(
         modifier = Modifier
             .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 28.dp)
             .fillMaxSize()
     ) {
-        Column() {
+        Column {
             Icon(
                 modifier = Modifier.clickable { popBackStack() },
                 painter = painterResource(id = UI.drawable.icon_24_arrow_left),
@@ -74,7 +84,7 @@ fun InputNicknameScreen(
                 hintText = stringResource(id = Login.string.input_nickname_hint),
                 onChangeText = { text ->
                     if (text.length <= NICKNAME_MAX_LENGTH) {
-                        inputNicknameViewModel.inputText(text)
+                        loginViewModel.inputText(text)
                     }
                 }
             )
