@@ -38,10 +38,11 @@ fun LoginScreen(
     val context: Context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
+    // TODO : 리팩토링
     when (loginState) {
         is LoginState.Init -> Unit
         is LoginState.Login -> onNavigateToTermsOfServiceScreen()
-        is LoginState.Error -> onNavigateToTermsOfServiceScreen()
+        else -> onNavigateToTermsOfServiceScreen()
     }
 
     Box(
