@@ -108,12 +108,22 @@ class SearchViewModel : ViewModel() {
         _state.update { state ->
             state.copy(
                 showFilterBottomSheet = false,
-                filter = filter,
+                filter = if (filter == Filter.DefaultFilter) {
+                    null
+                } else {
+                    filter
+                },
             )
         }
 
-        _linkList.update {
-            emptyList()
+        // todo refresh 기능 구현
+    }
+
+    fun toggleSortOrder() {
+        _state.update { state ->
+            state.copy(sortRecent = !state.sortRecent)
         }
+
+        // todo refresh 기능 구현
     }
 }

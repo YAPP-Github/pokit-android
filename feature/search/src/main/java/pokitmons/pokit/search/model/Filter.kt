@@ -28,6 +28,10 @@ data class Filter(
             null
         }
     }
+
+    companion object {
+        val DefaultFilter = Filter()
+    }
 }
 
 enum class FilterType(val stringResourceId : Int, val index : Int) {

@@ -128,7 +128,7 @@ fun FilterArea(
                         resourceId = coreDrawable.icon_24_arrow_down,
                         position = PokitButtonIconPosition.RIGHT
                     ),
-                    onClick = onClickPokitName,
+                    onClick = onClickBookmark,
                     size = PokitButtonSize.SMALL,
                     shape = PokitButtonShape.ROUND,
                     style = PokitButtonStyle.STROKE
@@ -142,7 +142,7 @@ fun FilterArea(
                         resourceId = coreDrawable.icon_24_arrow_down,
                         position = PokitButtonIconPosition.RIGHT
                     ),
-                    onClick = onClickPokitName,
+                    onClick = onClickBookmark,
                     size = PokitButtonSize.SMALL,
                     shape = PokitButtonShape.ROUND,
                     style = PokitButtonStyle.STROKE

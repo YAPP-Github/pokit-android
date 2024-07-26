@@ -46,6 +46,7 @@ fun SearchScreenContainer(
         onClickFilterItem = viewModel::showFilterBottomSheetWithType,
         hideBottomSheet = viewModel::hideFilterBottomSheet,
         onClickFilterSave = viewModel::setFilter,
+        toggleSortOrder = viewModel::toggleSortOrder
     )
 }
 
@@ -64,7 +65,8 @@ fun SearchScreen(
     onClickFilterSelect: () -> Unit = {},
     onClickFilterItem: (FilterType) -> Unit = {},
     hideBottomSheet: () -> Unit = {},
-    onClickFilterSave : (Filter) -> Unit = {}
+    onClickFilterSave : (Filter) -> Unit = {},
+    toggleSortOrder: () -> Unit = {},
 ) {
    Column(
        modifier = Modifier.fillMaxSize()
@@ -73,7 +75,8 @@ fun SearchScreen(
            onClickBack = onClickBack,
            inputSearchWord = inputSearchWord,
            currentSearchWord = currentSearchWord,
-           onClickSearch = onClickSearch
+           onClickSearch = onClickSearch,
+           onClickRemove = remember {{ inputSearchWord("") }}
        )
 
        if (state.step == SearchScreenStep.INPUT) {
@@ -107,6 +110,8 @@ fun SearchScreen(
                modifier = Modifier
                    .fillMaxWidth()
                    .weight(1f),
+               onToggleSort = toggleSortOrder,
+               useRecentOrder = state.sortRecent,
                links = linkList
            )
        }
