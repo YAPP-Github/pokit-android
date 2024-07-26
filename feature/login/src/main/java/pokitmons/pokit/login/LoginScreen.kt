@@ -1,6 +1,7 @@
 package pokitmons.pokit.login
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,18 +18,32 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.orbitmvi.orbit.compose.collectAsState
+import pokitmons.pokit.LoginState
+import pokitmons.pokit.LoginViewModel
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitLoginButtonType
 import pokitmons.pokit.core.ui.components.atom.loginbutton.PokitLoginButton
 
 @Composable
 fun LoginScreen(
+    loginViewModel: LoginViewModel = hiltViewModel(),
     onNavigateToTermsOfServiceScreen: () -> Unit,
-    onNavigateToMainScreen: () -> Unit,
 ) {
-    // TODO 서버 api 개발완료 후 viewmodel 연동 및 아키텍처 구축
+    val loginState: LoginState = loginViewModel.collectAsState().value
+    val context: Context = LocalContext.current
+    val coroutineScope = rememberCoroutineScope()
+
+    when (loginState) {
+        is LoginState.Init -> Unit
+        is LoginState.Login -> onNavigateToTermsOfServiceScreen()
+        is LoginState.Error -> onNavigateToTermsOfServiceScreen()
+    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -41,7 +56,7 @@ fun LoginScreen(
             PokitLoginButton(
                 loginType = PokitLoginButtonType.APPLE,
                 text = stringResource(id = R.string.apple_login),
-                onClick = { onNavigateToMainScreen() }
+                onClick = {  }
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -49,18 +64,25 @@ fun LoginScreen(
             PokitLoginButton(
                 loginType = PokitLoginButtonType.GOOGLE,
                 text = stringResource(id = R.string.google_login),
-                onClick = { onNavigateToTermsOfServiceScreen() }
+                onClick = {
+                    googleLogin(
+                        loginViewModel = loginViewModel,
+                        coroutineScope = coroutineScope,
+                        context = context
+                    )
+                }
             )
         }
     }
 }
 
 @SuppressLint("CoroutineCreationDuringComposition")
-@Composable
-private fun googleLogin() {
-    val coroutineScope = rememberCoroutineScope()
+private fun googleLogin(
+    loginViewModel: LoginViewModel,
+    coroutineScope: CoroutineScope,
+    context: Context
+) {
 
-    val context = LocalContext.current
     val credentialManager = CredentialManager.create(context)
 
     val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()
@@ -81,9 +103,13 @@ private fun googleLogin() {
             )
             val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(result.credential.data)
             val googleIdToken = googleIdTokenCredential.idToken
-            Log.d("success: ", googleIdToken)
+
+            loginViewModel.snsLogin(
+                authPlatform = "구글",
+                idToken = googleIdToken
+            )
         } catch (e: Exception) {
-            Log.d("failed : ", e.message.toString())
+            Log.d("failed!!: ", e.message.toString())
         }
     }
 }

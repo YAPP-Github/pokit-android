@@ -18,6 +18,10 @@ class AuthRepositoryImpl @Inject constructor(
         val snsLoginResponse = remoteAuthDataSource.snsLogin(snsLoginRequest)
         AuthMapper.mapperToSNSLogin(snsLoginResponse)
     }.onFailure { throwable ->
-        throw Exception(throwable)
+        try {
+
+        } catch (e: Exception) {
+
+        }
     }
 }
