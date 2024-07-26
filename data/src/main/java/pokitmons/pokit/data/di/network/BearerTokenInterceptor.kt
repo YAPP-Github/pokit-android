@@ -13,9 +13,11 @@ class BearerTokenInterceptor : Interceptor {
         val requestWithToken: Request = originalRequest.newBuilder()
             .header(
                 "Authorization",
-                "Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzIxNjU4MjUxLCJleHAiOjMwMDE3MjE2NTgyNTF9.gw6LZimKLuZJ2y0UV5cgvk3F7o92pkRIDgx-qlD_S7qEI01QAFt9dZDyHADabftI"
+                "Bearer eyJhbGciOiJIUzM4NCJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzIxNjU4MjUxLCJleHAiOj" +
+                    "MwMDE3MjE2NTgyNTF9.gw6LZimKLuZJ2y0UV5cgvk3F7o92pkRIDgx-qlD_S7qEI01QAFt9dZDyHADabftI"
             )
             .build()
+
         return chain.proceed(requestWithToken)
     }
 }
