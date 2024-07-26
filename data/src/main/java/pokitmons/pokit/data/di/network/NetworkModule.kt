@@ -28,6 +28,7 @@ object NetworkModule {
     @Provides
     fun provideOkHttpClient() : OkHttpClient {
         return OkHttpClient.Builder()
+            .addInterceptor(BearerTokenInterceptor())
             .addInterceptor(
                 HttpLoggingInterceptor().apply {
                     level = HttpLoggingInterceptor.Level.BODY
