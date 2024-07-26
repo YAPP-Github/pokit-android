@@ -57,7 +57,7 @@ fun LoginScreen(
             PokitLoginButton(
                 loginType = PokitLoginButtonType.APPLE,
                 text = stringResource(id = R.string.apple_login),
-                onClick = {  }
+                onClick = { }
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -81,9 +81,8 @@ fun LoginScreen(
 private fun googleLogin(
     loginViewModel: LoginViewModel,
     coroutineScope: CoroutineScope,
-    context: Context
+    context: Context,
 ) {
-
     val credentialManager = CredentialManager.create(context)
 
     val googleIdOption: GetGoogleIdOption = GetGoogleIdOption.Builder()

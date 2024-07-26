@@ -67,5 +67,4 @@ dependencies {
     implementation(libs.logging.interceptor)
 
     implementation(project(":domain"))
-
 }

@@ -18,13 +18,13 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val loginUseCase: SNSLoginUseCase
+    private val loginUseCase: SNSLoginUseCase,
 ) : ViewModel(), ContainerHost<LoginState, Nothing> {
 
     private var apiRequestJob: Job? = null
 
     override val container: Container<LoginState, Nothing> = container(
-        initialState = LoginState.Init,
+        initialState = LoginState.Init
     )
 
     private val _inputNicknameState = MutableStateFlow("")
@@ -40,11 +40,11 @@ class LoginViewModel @Inject constructor(
             loginUseCase.snsLogin(
                 authPlatform = authPlatform,
                 idToken = idToken
-            ).onSuccess {  snsLoginResult ->
+            ).onSuccess { snsLoginResult ->
                 accessToken = snsLoginResult.accessToken
                 refreshToken = snsLoginResult.refreshToken
                 reduce { LoginState.Login(snsLoginResult) }
-            }.onFailure {  throwble ->
+            }.onFailure { throwble ->
                 reduce { LoginState.Error }
             }
         }

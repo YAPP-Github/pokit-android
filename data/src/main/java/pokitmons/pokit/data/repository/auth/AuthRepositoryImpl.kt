@@ -8,20 +8,18 @@ import pokitmons.pokit.domain.repository.auth.AuthRepository
 import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
-    private val remoteAuthDataSource: AuthDataSource
+    private val remoteAuthDataSource: AuthDataSource,
 ) : AuthRepository {
     override suspend fun snsLogin(
         authPlatform: String,
-        idToken: String
+        idToken: String,
     ): Result<SNSLogin> = runCatching {
         val snsLoginRequest = SNSLoginRequest(authPlatform = authPlatform, idToken = idToken)
         val snsLoginResponse = remoteAuthDataSource.snsLogin(snsLoginRequest)
         AuthMapper.mapperToSNSLogin(snsLoginResponse)
     }.onFailure { throwable ->
         try {
-
         } catch (e: Exception) {
-
         }
     }
 }

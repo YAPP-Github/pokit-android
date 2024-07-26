@@ -26,7 +26,7 @@ private const val WRITE_TIME_OUT = 20000L
 object NetworkModule {
     @Singleton
     @Provides
-    fun provideOkHttpClient() : OkHttpClient {
+    fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .addInterceptor(BearerTokenInterceptor())
             .addInterceptor(
@@ -53,18 +53,18 @@ object NetworkModule {
     @Provides
     fun provideRetrofit(
         okHttpClient: OkHttpClient,
-        json: Json
+        json: Json,
     ): Retrofit {
         val converterFactory = json.asConverterFactory("application/json; charset=UTF8".toMediaType())
         return Retrofit.Builder()
-            .baseUrl("${BASE_URL}/${API}/${VERSION}/")
+            .baseUrl("$BASE_URL/$API/$VERSION/")
             .addConverterFactory(converterFactory)
             .client(okHttpClient)
             .build()
     }
 
     @Provides
-    fun provideAuthService(retrofit: Retrofit): AuthApi{
+    fun provideAuthService(retrofit: Retrofit): AuthApi {
         return retrofit.create(AuthApi::class.java)
     }
 }

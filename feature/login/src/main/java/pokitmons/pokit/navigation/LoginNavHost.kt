@@ -23,7 +23,7 @@ fun LoginNavHost() {
         composable(route = LoginRoute.LoginScreen.name) {
             LoginScreen(
                 loginViewModel = loginViewModel,
-                onNavigateToTermsOfServiceScreen = { navController.navigate(route = LoginRoute.TermsOfServiceScreen.name) },
+                onNavigateToTermsOfServiceScreen = { navController.navigate(route = LoginRoute.TermsOfServiceScreen.name) }
             )
         }
 

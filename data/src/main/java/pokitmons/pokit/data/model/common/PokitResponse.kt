@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class PokitResponse<T>(
     val data: T,
     val message: String,
-    val code: String
+    val code: String,
 )
