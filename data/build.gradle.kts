@@ -49,8 +49,9 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    testImplementation("io.kotest:kotest-runner-junit5:5.9.1") // 2024.06.08 기준 최신버전
-    testImplementation("org.jetbrains.kotlin:kotlin-reflect:1.9.23") // Kotlin reflection
+    // kotest
+    testImplementation(libs.kotest.runner.junit5)
+    testImplementation(libs.kotlin.reflect)
 
     // hilt
     implementation(libs.hilt)
