@@ -1,0 +1,104 @@
+package pokitmons.pokit.search.components.filterbottomsheet
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsIgnoringVisibility
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
+import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.search.model.Filter
+import pokitmons.pokit.search.model.FilterType
+import pokitmons.pokit.search.model.Pokit
+import pokitmons.pokit.search.model.samplePokits
+
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
+@Composable
+fun FilterBottomSheet(
+    filter: Filter = Filter(),
+    firstShowType: FilterType = FilterType.Pokit,
+    onSaveClilck: (Filter) -> Unit = {},
+    pokits: List<Pokit> = samplePokits,
+    show: Boolean = false,
+    onDismissRequest: () -> Unit = {},
+) {
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var visibility by remember { mutableStateOf(show) }
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(show) {
+        if (visibility && !show) {
+            scope.launch {
+                bottomSheetState.hide()
+            }.invokeOnCompletion {
+                onDismissRequest()
+                visibility = false
+            }
+        } else {
+            visibility = show
+        }
+    }
+
+    if (visibility) {
+        ModalBottomSheet(
+            onDismissRequest = remember {
+                {
+                    onDismissRequest()
+                    visibility = false
+                } 
+            },
+            sheetState = bottomSheetState,
+            scrimColor = Color.Transparent,
+            shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+            containerColor = PokitTheme.colors.backgroundBase,
+            dragHandle = {
+                Column {
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Box(
+                        Modifier
+                            .clip(RoundedCornerShape(4.dp))
+                            .width(36.dp)
+                            .height(4.dp)
+                            .background(color = PokitTheme.colors.iconTertiary)
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+            }
+        ) {
+            FilterBottomSheetContent(
+                filter = filter,
+                firstShowType = firstShowType,
+                onSaveClilck = onSaveClilck,
+                pokits = pokits
+            )
+
+            Spacer(
+                Modifier.windowInsetsBottomHeight(
+                    WindowInsets.navigationBarsIgnoringVisibility
+                )
+            )
+        }
+    }
+}
