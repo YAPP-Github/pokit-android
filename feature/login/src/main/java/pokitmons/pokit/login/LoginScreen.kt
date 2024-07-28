@@ -2,7 +2,6 @@ package pokitmons.pokit.login
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.compose.collectAsState
 import pokitmons.pokit.LoginState
@@ -31,7 +31,7 @@ import pokitmons.pokit.core.ui.components.atom.loginbutton.PokitLoginButton
 
 @Composable
 fun LoginScreen(
-    loginViewModel: LoginViewModel = hiltViewModel(),
+    loginViewModel: LoginViewModel,
     onNavigateToTermsOfServiceScreen: () -> Unit,
 ) {
     val loginState: LoginState = loginViewModel.collectAsState().value
@@ -67,7 +67,7 @@ fun LoginScreen(
                 text = stringResource(id = R.string.google_login),
                 onClick = {
                     googleLogin(
-                        loginViewModel = loginViewModel,
+                        snsLogin = loginViewModel::snsLogin,
                         coroutineScope = coroutineScope,
                         context = context
                     )
@@ -79,7 +79,7 @@ fun LoginScreen(
 
 @SuppressLint("CoroutineCreationDuringComposition")
 private fun googleLogin(
-    loginViewModel: LoginViewModel,
+    snsLogin: (String, String) -> Job,
     coroutineScope: CoroutineScope,
     context: Context,
 ) {
@@ -103,13 +103,9 @@ private fun googleLogin(
             )
             val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(result.credential.data)
             val googleIdToken = googleIdTokenCredential.idToken
-
-            loginViewModel.snsLogin(
-                authPlatform = "구글",
-                idToken = googleIdToken
-            )
+            snsLogin("구글", googleIdToken)
         } catch (e: Exception) {
-            Log.d("failed!!: ", e.message.toString())
+            // 기획쪽
         }
     }
 }
