@@ -81,6 +81,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // google login
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
@@ -93,11 +94,11 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.hilt.navigation.compose)
 
-    // orbit
-    implementation(libs.orbit.core)
-    implementation(libs.orbit.compose)
-    implementation(libs.orbit.viewmodel)
+    // firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth.ktx)
 
+    // module
     implementation(project(":core:ui"))
     implementation(project(":domain"))
 }

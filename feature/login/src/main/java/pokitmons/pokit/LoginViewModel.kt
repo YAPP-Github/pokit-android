@@ -7,6 +7,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import pokitmons.pokit.domain.usecase.auth.SNSLoginUseCase
 import javax.inject.Inject
@@ -18,9 +19,13 @@ class LoginViewModel @Inject constructor(
 
     private var apiRequestJob: Job? = null
 
+    private val _loginState:MutableStateFlow<LoginState> = MutableStateFlow(LoginState.Init)
+    val loginState: StateFlow<LoginState>
+        get() = _loginState.asStateFlow()
+
     private val _inputNicknameState = MutableStateFlow("")
     val inputNicknameState: StateFlow<String>
-        get() = _inputNicknameState
+        get() = _inputNicknameState.asStateFlow()
 
     fun inputText(text: String) {
         _inputNicknameState.value = text
@@ -34,9 +39,9 @@ class LoginViewModel @Inject constructor(
             ).onSuccess { snsLoginResult ->
                 accessToken = snsLoginResult.accessToken
                 refreshToken = snsLoginResult.refreshToken
-//                reduce { LoginState.Login(snsLoginResult) }
+                _loginState.emit(LoginState.Login)
             }.onFailure { throwble ->
-//                reduce { LoginState.Error }
+                _loginState.emit(LoginState.Failed)
             }
         }
     }

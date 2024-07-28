@@ -1,7 +1,9 @@
 package pokitmons.pokit.login
 
-import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -9,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -17,13 +21,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
+import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.AuthResult
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.OAuthProvider
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.compose.collectAsState
 import pokitmons.pokit.LoginState
 import pokitmons.pokit.LoginViewModel
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitLoginButtonType
@@ -34,15 +39,14 @@ fun LoginScreen(
     loginViewModel: LoginViewModel,
     onNavigateToTermsOfServiceScreen: () -> Unit,
 ) {
-    val loginState: LoginState = loginViewModel.collectAsState().value
+    val loginState by loginViewModel.loginState.collectAsState()
     val context: Context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
-    // TODO : 리팩토링
     when (loginState) {
         is LoginState.Init -> Unit
         is LoginState.Login -> onNavigateToTermsOfServiceScreen()
-        else -> onNavigateToTermsOfServiceScreen()
+        is LoginState.Failed -> Toast.makeText(context, "실패", Toast.LENGTH_SHORT).show()
     }
 
     Box(
@@ -57,7 +61,12 @@ fun LoginScreen(
             PokitLoginButton(
                 loginType = PokitLoginButtonType.APPLE,
                 text = stringResource(id = R.string.apple_login),
-                onClick = { }
+                onClick = {
+                    appleLogin(
+                        context = context,
+                        snsLogin = loginViewModel::snsLogin
+                    )
+                }
             )
 
             Spacer(modifier = Modifier.height(8.dp))
@@ -77,9 +86,8 @@ fun LoginScreen(
     }
 }
 
-@SuppressLint("CoroutineCreationDuringComposition")
 private fun googleLogin(
-    snsLogin: (String, String) -> Job,
+    snsLogin: (String, String) -> Unit,
     coroutineScope: CoroutineScope,
     context: Context,
 ) {
@@ -105,7 +113,52 @@ private fun googleLogin(
             val googleIdToken = googleIdTokenCredential.idToken
             snsLogin("구글", googleIdToken)
         } catch (e: Exception) {
-            // 기획쪽
+            // TODO 로그인 실패 바텀시트 렌더링
+        }
+    }
+}
+
+private fun appleLogin(
+    context: Context,
+    snsLogin: (String, String) -> Unit,
+) {
+    val provider = OAuthProvider.newBuilder("apple.com").apply {
+        addCustomParameter("locale", "ko")
+    }
+
+    // 이미 응답을 수신 했는지 확인
+    val auth = FirebaseAuth.getInstance()
+    val pending = auth.pendingAuthResult
+    if (pending != null) {
+        pending.addOnSuccessListener { authResult ->
+            handleAuthResult(authResult, snsLogin)
+        }.addOnFailureListener { e ->
+            // TODO 로그인 실패 바텀시트 렌더링
+        }
+    } else {
+        auth.startActivityForSignInWithProvider(context as Activity, provider.build()).addOnSuccessListener { authResult ->
+            handleAuthResult(authResult, snsLogin)
+        }.addOnFailureListener {
+            // TODO 로그인 실패 바텀시트 렌더링
+        }
+    }
+}
+
+private fun handleAuthResult(
+    authResult: AuthResult,
+    snsLogin: (String, String) -> Unit
+) {
+    val user = authResult.user
+    user?.getIdToken(true)?.addOnCompleteListener { task ->
+        if (task.isSuccessful) {
+            val idToken = task.result?.token
+            if (idToken != null) {
+                snsLogin("애플", idToken)
+            } else {
+                // TODO 로그인 실패 바텀시트 렌더링
+            }
+        } else {
+            // TODO 로그인 실패 바텀시트 렌더링
         }
     }
 }
