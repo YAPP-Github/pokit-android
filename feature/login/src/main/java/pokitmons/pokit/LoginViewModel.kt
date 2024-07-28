@@ -8,24 +8,15 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import org.orbitmvi.orbit.Container
-import org.orbitmvi.orbit.ContainerHost
-import org.orbitmvi.orbit.syntax.simple.intent
-import org.orbitmvi.orbit.syntax.simple.reduce
-import org.orbitmvi.orbit.viewmodel.container
 import pokitmons.pokit.domain.usecase.auth.SNSLoginUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: SNSLoginUseCase,
-) : ViewModel(), ContainerHost<LoginState, Nothing> {
+) : ViewModel() {
 
     private var apiRequestJob: Job? = null
-
-    override val container: Container<LoginState, Nothing> = container(
-        initialState = LoginState.Init
-    )
 
     private val _inputNicknameState = MutableStateFlow("")
     val inputNicknameState: StateFlow<String>
@@ -35,7 +26,7 @@ class LoginViewModel @Inject constructor(
         _inputNicknameState.value = text
     }
 
-    fun snsLogin(authPlatform: String, idToken: String) = intent {
+    fun snsLogin(authPlatform: String, idToken: String) {
         viewModelScope.launch {
             loginUseCase.snsLogin(
                 authPlatform = authPlatform,
@@ -43,14 +34,15 @@ class LoginViewModel @Inject constructor(
             ).onSuccess { snsLoginResult ->
                 accessToken = snsLoginResult.accessToken
                 refreshToken = snsLoginResult.refreshToken
-                reduce { LoginState.Login(snsLoginResult) }
+//                reduce { LoginState.Login(snsLoginResult) }
             }.onFailure { throwble ->
-                reduce { LoginState.Error }
+//                reduce { LoginState.Error }
             }
         }
     }
 
     fun checkDuplicateNickname(nickname: String) {
+
         apiRequestJob?.cancel()
         apiRequestJob = viewModelScope.launch {
             delay(1.second())
