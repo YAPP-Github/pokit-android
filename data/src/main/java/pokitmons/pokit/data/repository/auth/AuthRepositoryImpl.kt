@@ -8,6 +8,7 @@ import pokitmons.pokit.data.model.auth.request.SNSLoginRequest
 import pokitmons.pokit.data.model.auth.response.DuplicateNicknameResponse
 import pokitmons.pokit.data.model.auth.response.SNSLoginResponse
 import pokitmons.pokit.data.model.common.PokitErrorResponse
+import pokitmons.pokit.data.model.common.parseErrorResult
 import pokitmons.pokit.domain.commom.PokitError
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.auth.DuplicateNicknameResult
@@ -41,17 +42,4 @@ class AuthRepositoryImpl @Inject constructor(
             parseErrorResult(throwable)
         }
     }
-
-    private fun <T> parseErrorResult(throwable: Throwable, ): PokitResult<T> {
-        return try {
-            val error: PokitErrorResponse = throwable.message?.let { errorBody ->
-                Json.decodeFromString<PokitErrorResponse>(errorBody)
-            } ?: PokitErrorResponse()
-            val pokitError = PokitError(message = error.message, code = error.code)
-            PokitResult.Error(pokitError)
-        } catch (e: Exception) {
-            PokitResult.Error(PokitError())
-        }
-    }
 }
-
