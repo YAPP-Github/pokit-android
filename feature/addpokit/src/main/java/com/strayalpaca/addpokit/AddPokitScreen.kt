@@ -236,21 +236,22 @@ fun AddPokitScreen(
             )
         }
 
-        if (state.step == AddPokitScreenStep.SELECT_PROFILE) {
-            PokitBottomSheet(onHideBottomSheet = hideProfileSelectBottomSheet) {
-                LazyVerticalGrid(
-                    modifier = Modifier.padding(vertical = 12.dp, horizontal = 40.dp),
-                    columns = GridCells.Adaptive(66.dp),
-                    horizontalArrangement = Arrangement.spacedBy(20.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    items(samplePokitProfileList) { profileImage ->
-                        PokitProfileImage(
-                            pokitProfile = profileImage,
-                            onClick = selectPokitProfileImage,
-                            focused = (state.pokitProfile?.id == profileImage.id)
-                        )
-                    }
+        PokitBottomSheet(
+            onHideBottomSheet = hideProfileSelectBottomSheet,
+            show = state.step == AddPokitScreenStep.SELECT_PROFILE
+        ) {
+            LazyVerticalGrid(
+                modifier = Modifier.padding(vertical = 12.dp, horizontal = 40.dp),
+                columns = GridCells.Adaptive(66.dp),
+                horizontalArrangement = Arrangement.spacedBy(20.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                items(samplePokitProfileList) { profileImage ->
+                    PokitProfileImage(
+                        pokitProfile = profileImage,
+                        onClick = selectPokitProfileImage,
+                        focused = (state.pokitProfile?.id == profileImage.id)
+                    )
                 }
             }
         }

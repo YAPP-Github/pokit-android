@@ -3,15 +3,15 @@ package com.strayalpaca.pokitdetail.model
 import com.strayalpaca.pokitdetail.R
 
 data class Link(
-    val id: String,
-    val title: String,
-    val dateString: String,
-    val domainUrl: String,
-    val isRead: Boolean,
-    val linkType: LinkType,
-    val url: String,
-    val memo: String,
-    val bookmark: Boolean,
+    val id: String = "",
+    val title: String = "",
+    val dateString: String = "",
+    val domainUrl: String = "",
+    val isRead: Boolean = false,
+    val linkType: LinkType = LinkType.TEXT,
+    val url: String = "",
+    val memo: String = "",
+    val bookmark: Boolean = false,
     val imageUrl: String? = null,
 )
 
