@@ -46,7 +46,10 @@ fun LoginScreen(
     when (loginState) {
         is LoginState.Init -> Unit
         is LoginState.Login -> onNavigateToTermsOfServiceScreen()
-        is LoginState.Failed -> Toast.makeText(context, "실패", Toast.LENGTH_SHORT).show()
+        is LoginState.Failed -> {
+            // TODO 로그인 실패 바텀시트 렌더링
+            Toast.makeText(context, (loginState as LoginState.Failed).error.toString(), Toast.LENGTH_SHORT).show()
+        }
     }
 
     Box(

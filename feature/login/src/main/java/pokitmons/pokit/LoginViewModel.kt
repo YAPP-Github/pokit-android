@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import pokitmons.pokit.domain.model.PokitResult
 import pokitmons.pokit.domain.usecase.auth.SNSLoginUseCase
 import javax.inject.Inject
 
@@ -33,15 +34,18 @@ class LoginViewModel @Inject constructor(
 
     fun snsLogin(authPlatform: String, idToken: String) {
         viewModelScope.launch {
-            loginUseCase.snsLogin(
+            val loginResult = loginUseCase.snsLogin(
                 authPlatform = authPlatform,
                 idToken = idToken
-            ).onSuccess { snsLoginResult ->
-                accessToken = snsLoginResult.accessToken
-                refreshToken = snsLoginResult.refreshToken
-                _loginState.emit(LoginState.Login)
-            }.onFailure { throwble ->
-                _loginState.emit(LoginState.Failed)
+            )
+
+            when (loginResult) {
+                is PokitResult.Success -> {
+                    accessToken = loginResult.result.accessToken
+                    refreshToken = loginResult.result.refreshToken
+                    _loginState.emit(LoginState.Login)
+                }
+                is PokitResult.Error -> _loginState.emit(LoginState.Failed(loginResult.error))
             }
         }
     }

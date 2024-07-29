@@ -3,8 +3,7 @@ package pokitmons.pokit.data.model.common
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class PokitResponse<T>(
-    val data: T,
-    val message: String,
-    val code: String,
+data class PokitErrorResponse(
+    val message: String = "그 외",
+    val code: String = "U_0000"
 )
