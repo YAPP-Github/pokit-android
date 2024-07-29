@@ -12,3 +12,4 @@ trim_trailing_whitespace = true
 insert_final_newline = true
 tab_width = 4
 ij_kotlin_allow_trailing_comma = true
+ktlint_standard_function-name = false
