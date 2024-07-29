@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class PokitErrorResponse(
     val message: String = "그 외",
-    val code: String = "U_0000"
+    val code: String = "U_0000",
 )

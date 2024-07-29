@@ -7,4 +7,3 @@ sealed class LoginState {
     data object Login : LoginState()
     data class Failed(val error: PokitError) : LoginState()
 }
-

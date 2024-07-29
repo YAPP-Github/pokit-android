@@ -16,6 +16,6 @@ interface AuthApi {
 
     @GET("user/duplicate/{nickname}")
     suspend fun checkDuplicateNickname(
-        @Path(value = "nickname") nickname: String
+        @Path(value = "nickname") nickname: String,
     ): DuplicateNicknameResponse
 }

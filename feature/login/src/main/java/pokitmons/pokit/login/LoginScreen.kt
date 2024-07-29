@@ -2,7 +2,6 @@ package pokitmons.pokit.login
 
 import android.app.Activity
 import android.content.Context
-import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -23,7 +22,6 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
-import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthProvider
@@ -150,7 +148,7 @@ private fun appleLogin(
 
 private fun handleAuthResult(
     authResult: AuthResult,
-    snsLogin: (String, String) -> Unit
+    snsLogin: (String, String) -> Unit,
 ) {
     val user = authResult.user
     user?.getIdToken(true)?.addOnCompleteListener { task ->

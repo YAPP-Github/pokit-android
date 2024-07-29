@@ -5,7 +5,6 @@ import pokitmons.pokit.data.model.auth.response.SNSLoginResponse
 import pokitmons.pokit.domain.model.auth.DuplicateNicknameResult
 import pokitmons.pokit.domain.model.auth.SNSLoginResult
 
-
 object AuthMapper {
     fun mapperToSNSLogin(snsLoginResponse: SNSLoginResponse): SNSLoginResult {
         return SNSLoginResult(

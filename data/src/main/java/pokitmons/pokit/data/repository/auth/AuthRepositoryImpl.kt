@@ -1,15 +1,11 @@
 package pokitmons.pokit.data.repository.auth
 
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 import pokitmons.pokit.data.datasource.remote.auth.AuthDataSource
 import pokitmons.pokit.data.mapper.auth.AuthMapper
 import pokitmons.pokit.data.model.auth.request.SNSLoginRequest
 import pokitmons.pokit.data.model.auth.response.DuplicateNicknameResponse
 import pokitmons.pokit.data.model.auth.response.SNSLoginResponse
-import pokitmons.pokit.data.model.common.PokitErrorResponse
 import pokitmons.pokit.data.model.common.parseErrorResult
-import pokitmons.pokit.domain.commom.PokitError
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.auth.DuplicateNicknameResult
 import pokitmons.pokit.domain.model.auth.SNSLoginResult

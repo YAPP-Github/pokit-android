@@ -20,7 +20,7 @@ class LoginViewModel @Inject constructor(
 
     private var apiRequestJob: Job? = null
 
-    private val _loginState:MutableStateFlow<LoginState> = MutableStateFlow(LoginState.Init)
+    private val _loginState: MutableStateFlow<LoginState> = MutableStateFlow(LoginState.Init)
     val loginState: StateFlow<LoginState>
         get() = _loginState.asStateFlow()
 
@@ -51,7 +51,6 @@ class LoginViewModel @Inject constructor(
     }
 
     fun checkDuplicateNickname(nickname: String) {
-
         apiRequestJob?.cancel()
         apiRequestJob = viewModelScope.launch {
             delay(1.second())
