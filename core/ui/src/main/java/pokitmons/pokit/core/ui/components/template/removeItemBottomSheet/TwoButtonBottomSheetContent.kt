@@ -20,14 +20,16 @@ import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonShap
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonStyle
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonType
-import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.attributes.RemoveItemType
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
-fun RemoveItemBottomSheetContent(
-    removeItemType: RemoveItemType,
-    onClickCancel: () -> Unit,
-    onClickRemove: () -> Unit,
+fun TwoButtonBottomSheetContent(
+    title: String,
+    sub: String? = null,
+    leftButtonText: String = stringResource(id = R.string.cancellation),
+    rightButtonText: String = stringResource(id = R.string.removal),
+    onClickLeftButton: () -> Unit,
+    onClickRightButton: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -36,17 +38,19 @@ fun RemoveItemBottomSheetContent(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            text = stringResource(id = removeItemType.titleStringResourceId),
+            text = title,
             style = PokitTheme.typography.title2.copy(color = PokitTheme.colors.textPrimary)
         )
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        Text(
-            text = stringResource(id = removeItemType.subStringResourceId),
-            style = PokitTheme.typography.body2Medium.copy(color = PokitTheme.colors.textSecondary),
-            textAlign = TextAlign.Center
-        )
+        sub?.let { subString ->
+            Text(
+                text = subString,
+                style = PokitTheme.typography.body2Medium.copy(color = PokitTheme.colors.textSecondary),
+                textAlign = TextAlign.Center
+            )
+        }
     }
 
     Row(
@@ -56,9 +60,9 @@ fun RemoveItemBottomSheetContent(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         PokitButton(
-            text = stringResource(id = R.string.cancellation),
+            text = leftButtonText,
             icon = null,
-            onClick = onClickCancel,
+            onClick = onClickLeftButton,
             shape = PokitButtonShape.RECTANGLE,
             type = PokitButtonType.SECONDARY,
             size = PokitButtonSize.LARGE,
@@ -67,9 +71,9 @@ fun RemoveItemBottomSheetContent(
         )
 
         PokitButton(
-            text = stringResource(id = R.string.removal),
+            text = rightButtonText,
             icon = null,
-            onClick = onClickRemove,
+            onClick = onClickRightButton,
             shape = PokitButtonShape.RECTANGLE,
             type = PokitButtonType.PRIMARY,
             size = PokitButtonSize.LARGE,

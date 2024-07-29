@@ -1,4 +1,4 @@
-package pokitmons.pokit.core.ui.components.template.removeItemBottomSheet
+package pokitmons.pokit.core.ui.components.template.onebuttonbottomsheet
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -15,25 +15,23 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Preview(showBackground = true)
 @Composable
-private fun RemoveItemBottomSheetContentPreview() {
+private fun Preview() {
     PokitTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            Column(modifier = Modifier.fillMaxWidth()) {
-                TwoButtonBottomSheetContent(
-                    title = "포킷을 정말 삭제하시겠습니까?",
-                    sub = "함께 저장한 모든 링크가 삭제되며,\n복구하실 수 없습니다.",
-                    onClickLeftButton = {},
-                    onClickRightButton = {}
+            Column(
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                OneButtonBottomSheetContent(
+                    title = "로그인 오류",
+                    sub = "현재 서버 오류로 로그인에 실패했습니다.\n잠시 후에 다시 시도해 주세요.",
                 )
 
                 HorizontalDivider(
                     modifier = Modifier.height(16.dp).background(PokitTheme.colors.borderTertiary)
                 )
 
-                TwoButtonBottomSheetContent(
-                    title = "로그아웃 하시겠습니까?",
-                    onClickLeftButton = {},
-                    onClickRightButton = {}
+                OneButtonBottomSheetContent(
+                    title = "여기에 타이틀이 들어갑니다",
                 )
             }
         }

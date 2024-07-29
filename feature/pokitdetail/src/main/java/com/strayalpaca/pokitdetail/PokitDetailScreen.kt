@@ -30,8 +30,7 @@ import pokitmons.pokit.core.ui.components.block.pokitlist.PokitList
 import pokitmons.pokit.core.ui.components.block.pokitlist.attributes.PokitListState
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.components.template.modifybottomsheet.ModifyBottomSheetContent
-import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.RemoveItemBottomSheetContent
-import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.attributes.RemoveItemType
+import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButtonBottomSheetContent
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.core.ui.R.drawable as coreDrawable
 
@@ -176,10 +175,11 @@ fun PokitDetailScreen(
                 }
 
                 BottomSheetType.REMOVE -> {
-                    RemoveItemBottomSheetContent(
-                        removeItemType = RemoveItemType.LINK,
-                        onClickCancel = hideLinkModifyBottomSheet,
-                        onClickRemove = {}
+                    TwoButtonBottomSheetContent(
+                        title = stringResource(id = R.string.title_remove_link),
+                        sub = stringResource(id = R.string.sub_remove_link),
+                        onClickLeftButton = hideLinkModifyBottomSheet,
+                        onClickRightButton = {}
                     )
                 }
 
@@ -201,10 +201,11 @@ fun PokitDetailScreen(
                 }
 
                 BottomSheetType.REMOVE -> {
-                    RemoveItemBottomSheetContent(
-                        removeItemType = RemoveItemType.POKIT,
-                        onClickCancel = hidePokitModifyBottomSheet,
-                        onClickRemove = {}
+                    TwoButtonBottomSheetContent(
+                        title = stringResource(id = R.string.title_remove_pokit),
+                        sub = stringResource(id = R.string.sub_remove_pokit),
+                        onClickLeftButton = hidePokitModifyBottomSheet,
+                        onClickRightButton = {}
                     )
                 }
 
