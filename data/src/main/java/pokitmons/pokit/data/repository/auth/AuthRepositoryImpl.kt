@@ -27,7 +27,6 @@ class AuthRepositoryImpl @Inject constructor(
             val snsLoginMapper = AuthMapper.mapperToSNSLogin(snsLoginResponse)
             PokitResult.Success(snsLoginMapper)
         }.getOrElse { throwable ->
-            Log.d("!! :", throwable.message.toString())
             try {
                 val error: PokitErrorResponse = throwable.message?.let { errorBody ->
                     Json.decodeFromString<PokitErrorResponse>(errorBody)
