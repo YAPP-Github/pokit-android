@@ -35,7 +35,7 @@ import pokitmons.pokit.core.ui.R.drawable as coreDrawable
 fun LinkDetailBottomSheet(
     link: Link,
     onHideBottomSheet: () -> Unit,
-    show: Boolean = false
+    show: Boolean = false,
 ) {
     PokitBottomSheet(
         onHideBottomSheet = onHideBottomSheet,

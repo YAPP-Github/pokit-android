@@ -23,7 +23,7 @@ private fun Preview() {
             ) {
                 OneButtonBottomSheetContent(
                     title = "로그인 오류",
-                    sub = "현재 서버 오류로 로그인에 실패했습니다.\n잠시 후에 다시 시도해 주세요.",
+                    sub = "현재 서버 오류로 로그인에 실패했습니다.\n잠시 후에 다시 시도해 주세요."
                 )
 
                 HorizontalDivider(
@@ -31,7 +31,7 @@ private fun Preview() {
                 )
 
                 OneButtonBottomSheetContent(
-                    title = "여기에 타이틀이 들어갑니다",
+                    title = "여기에 타이틀이 들어갑니다"
                 )
             }
         }

@@ -36,7 +36,7 @@ internal fun FilterSelectBottomSheet(
     filter: Filter = Filter(),
     onHideRequest: () -> Unit = {},
     onFilterChange: (Filter) -> Unit = {},
-    show: Boolean = false
+    show: Boolean = false,
 ) {
     var currentFilter by remember { mutableStateOf(filter) }
 

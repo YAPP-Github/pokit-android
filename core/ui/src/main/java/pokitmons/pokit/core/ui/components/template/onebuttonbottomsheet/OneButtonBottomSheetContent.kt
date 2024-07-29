@@ -59,7 +59,7 @@ fun OneButtonBottomSheetContent(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 16.dp, start = 20.dp, end = 20.dp, bottom = 28.dp),
+                .padding(top = 16.dp, start = 20.dp, end = 20.dp, bottom = 28.dp)
         ) {
             PokitButton(
                 text = buttonText,

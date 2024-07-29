@@ -44,7 +44,7 @@ private fun Preview() {
                             startDate = date
                             endDate = null
                         }
-                    } 
+                    }
                 }
             )
         }
