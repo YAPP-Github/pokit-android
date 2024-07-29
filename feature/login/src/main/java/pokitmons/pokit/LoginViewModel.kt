@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import pokitmons.pokit.domain.model.PokitResult
+import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.usecase.auth.SNSLoginUseCase
 import javax.inject.Inject
 

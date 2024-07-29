@@ -1,6 +1,6 @@
 package pokitmons.pokit
 
-import pokitmons.pokit.domain.model.PokitError
+import pokitmons.pokit.domain.commom.PokitError
 
 sealed class LoginState {
     data object Init : LoginState()

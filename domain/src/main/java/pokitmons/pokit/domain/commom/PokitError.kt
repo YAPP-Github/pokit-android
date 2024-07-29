@@ -1,4 +1,4 @@
-package pokitmons.pokit.domain.model
+package pokitmons.pokit.domain.commom
 
 data class PokitError(
     val message: String = "그 외",

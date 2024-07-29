@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -18,8 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import org.orbitmvi.orbit.compose.collectAsState
-import pokitmons.pokit.LoginState
 import pokitmons.pokit.LoginViewModel
 import pokitmons.pokit.core.ui.components.atom.button.PokitButton
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
@@ -38,13 +37,6 @@ fun InputNicknameScreen(
     popBackStack: () -> Unit,
 ) {
     val inputNicknameState by loginViewModel.inputNicknameState.collectAsState()
-    val loginState: LoginState = loginViewModel.collectAsState().value
-
-    // TODO : 리팩토링
-    when (loginState) {
-        is LoginState.Init -> Unit
-        else -> onNavigateToKeywordScreen()
-    }
 
     Box(
         modifier = Modifier
@@ -58,14 +50,12 @@ fun InputNicknameScreen(
                 contentDescription = "뒤로가기"
             )
 
-            Spacer(modifier = Modifier.padding(top = 32.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
             Text(
                 style = PokitTheme.typography.title1,
                 text = stringResource(id = Login.string.input_nickname_title)
             )
-
-            Spacer(modifier = Modifier.padding(top = 28.dp))
 
             LabeledInput(
                 modifier = Modifier

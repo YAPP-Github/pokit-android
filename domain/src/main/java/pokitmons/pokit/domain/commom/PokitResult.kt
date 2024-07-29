@@ -1,4 +1,4 @@
-package pokitmons.pokit.domain.model
+package pokitmons.pokit.domain.commom
 
 sealed interface PokitResult<out T> {
     data class Success<T>(val result: T) : PokitResult<T>
