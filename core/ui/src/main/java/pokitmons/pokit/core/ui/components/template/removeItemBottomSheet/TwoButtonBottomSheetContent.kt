@@ -25,7 +25,7 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 @Composable
 fun TwoButtonBottomSheetContent(
     title: String,
-    sub: String? = null,
+    subText: String? = null,
     leftButtonText: String = stringResource(id = R.string.cancellation),
     rightButtonText: String = stringResource(id = R.string.removal),
     onClickLeftButton: () -> Unit,
@@ -44,7 +44,7 @@ fun TwoButtonBottomSheetContent(
 
         Spacer(modifier = Modifier.height(8.dp))
 
-        sub?.let { subString ->
+        subText?.let { subString ->
             Text(
                 text = subString,
                 style = PokitTheme.typography.body2Medium.copy(color = PokitTheme.colors.textSecondary),

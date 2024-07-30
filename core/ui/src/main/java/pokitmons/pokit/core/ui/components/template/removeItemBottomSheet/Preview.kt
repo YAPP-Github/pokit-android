@@ -21,7 +21,7 @@ private fun RemoveItemBottomSheetContentPreview() {
             Column(modifier = Modifier.fillMaxWidth()) {
                 TwoButtonBottomSheetContent(
                     title = "포킷을 정말 삭제하시겠습니까?",
-                    sub = "함께 저장한 모든 링크가 삭제되며,\n복구하실 수 없습니다.",
+                    subText = "함께 저장한 모든 링크가 삭제되며,\n복구하실 수 없습니다.",
                     onClickLeftButton = {},
                     onClickRightButton = {}
                 )

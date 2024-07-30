@@ -301,11 +301,11 @@ fun AddLinkScreen(
             LazyColumn {
                 items(
                     items = state.pokitList
-                ) {
+                ) { pokit ->
                     PokitList(
-                        item = it,
-                        title = it.title,
-                        sub = stringResource(id = R.string.count_format, it.count),
+                        item = pokit,
+                        title = pokit.title,
+                        sub = stringResource(id = R.string.count_format, pokit.count),
                         onClickItem = onClickSelectPokitItem,
                         state = PokitListState.ACTIVE
                     )

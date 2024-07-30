@@ -23,7 +23,7 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 @Composable
 fun OneButtonBottomSheetContent(
     title: String,
-    sub: String? = null,
+    subText: String? = null,
     buttonText: String = stringResource(id = R.string.confirmation),
     onClickButton: () -> Unit = {},
 ) {
@@ -41,7 +41,7 @@ fun OneButtonBottomSheetContent(
             style = PokitTheme.typography.title2.copy(color = PokitTheme.colors.textPrimary)
         )
 
-        sub?.let { subText ->
+        subText?.let { subText ->
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(

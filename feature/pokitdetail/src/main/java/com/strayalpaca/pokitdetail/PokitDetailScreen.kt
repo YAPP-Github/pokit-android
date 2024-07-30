@@ -177,7 +177,7 @@ fun PokitDetailScreen(
                 BottomSheetType.REMOVE -> {
                     TwoButtonBottomSheetContent(
                         title = stringResource(id = R.string.title_remove_link),
-                        sub = stringResource(id = R.string.sub_remove_link),
+                        subText = stringResource(id = R.string.sub_remove_link),
                         onClickLeftButton = hideLinkModifyBottomSheet,
                         onClickRightButton = {}
                     )
@@ -203,7 +203,7 @@ fun PokitDetailScreen(
                 BottomSheetType.REMOVE -> {
                     TwoButtonBottomSheetContent(
                         title = stringResource(id = R.string.title_remove_pokit),
-                        sub = stringResource(id = R.string.sub_remove_pokit),
+                        subText = stringResource(id = R.string.sub_remove_pokit),
                         onClickLeftButton = hidePokitModifyBottomSheet,
                         onClickRightButton = {}
                     )
