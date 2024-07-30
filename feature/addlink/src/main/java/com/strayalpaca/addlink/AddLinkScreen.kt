@@ -73,9 +73,11 @@ fun AddLinkScreenContainer(
             AddLinkScreenSideEffect.AddLinkSuccess -> {
                 onBackPressed()
             }
+
             AddLinkScreenSideEffect.OnNavigationBack -> {
                 onBackPressed()
             }
+
             is AddLinkScreenSideEffect.ToastMessage -> {
                 Toast.makeText(context, context.getString(sideEffect.toastMessageEvent.stringResourceId), Toast.LENGTH_SHORT).show()
             }
@@ -292,48 +294,50 @@ fun AddLinkScreen(
             }
         }
 
-        if (state.step == ScreenStep.POKIT_SELECT) {
-            PokitBottomSheet(onHideBottomSheet = dismissPokitSelectBottomSheet) {
-                LazyColumn {
-                    items(
-                        items = state.pokitList
-                    ) {
-                        PokitList(
-                            item = it,
-                            title = it.title,
-                            sub = stringResource(id = R.string.count_format, it.count),
-                            onClickItem = onClickSelectPokitItem,
-                            state = PokitListState.ACTIVE
-                        )
-                    }
+        PokitBottomSheet(
+            onHideBottomSheet = dismissPokitSelectBottomSheet,
+            show = state.step == ScreenStep.POKIT_SELECT
+        ) {
+            LazyColumn {
+                items(
+                    items = state.pokitList
+                ) { pokit ->
+                    PokitList(
+                        item = pokit,
+                        title = pokit.title,
+                        sub = stringResource(id = R.string.count_format, pokit.count),
+                        onClickItem = onClickSelectPokitItem,
+                        state = PokitListState.ACTIVE
+                    )
                 }
             }
         }
 
-        if (state.step == ScreenStep.POKIT_ADD) {
-            PokitBottomSheet(onHideBottomSheet = dismissPokitAddBottomSheet) {
-                Column(
-                    modifier = Modifier.padding(horizontal = 20.dp)
-                ) {
-                    LabeledInput(
-                        label = "",
-                        inputText = pokitName,
-                        hintText = stringResource(id = R.string.placeholder_input_pokit_name),
-                        onChangeText = inputNewPokitName,
-                        maxLength = 10
-                    )
+        PokitBottomSheet(
+            onHideBottomSheet = dismissPokitAddBottomSheet,
+            show = state.step == ScreenStep.POKIT_ADD
+        ) {
+            Column(
+                modifier = Modifier.padding(horizontal = 20.dp)
+            ) {
+                LabeledInput(
+                    label = "",
+                    inputText = pokitName,
+                    hintText = stringResource(id = R.string.placeholder_input_pokit_name),
+                    onChangeText = inputNewPokitName,
+                    maxLength = 10
+                )
 
-                    Spacer(modifier = Modifier.height(12.dp))
+                Spacer(modifier = Modifier.height(12.dp))
 
-                    PokitButton(
-                        text = stringResource(id = R.string.add),
-                        icon = null,
-                        onClick = onClickSavePokit,
-                        modifier = Modifier.fillMaxWidth(),
-                        size = PokitButtonSize.LARGE,
-                        enable = pokitName.isNotEmpty()
-                    )
-                }
+                PokitButton(
+                    text = stringResource(id = R.string.add),
+                    icon = null,
+                    onClick = onClickSavePokit,
+                    modifier = Modifier.fillMaxWidth(),
+                    size = PokitButtonSize.LARGE,
+                    enable = pokitName.isNotEmpty()
+                )
             }
         }
     }

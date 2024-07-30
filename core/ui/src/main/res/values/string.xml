@@ -3,15 +3,12 @@
     <string name="not_read">안읽음</string>
     <string name="pokit_count_format">링크 %d개</string>
 
-    <string name="title_remove_pokit">포킷을 정말 삭제하시겠습니까?</string>
-    <string name="sub_remove_pokit">함께 저장한 모든 링크가 삭제되며,\n복구하실 수 없습니다.</string>
-    <string name="title_remove_link">링크를 정말 삭제하시겠습니까?</string>
-    <string name="sub_remove_link">함께 저장한 모든 정보가 삭제되며,\n복구하실 수 없습니다.</string>
-
     <string name="cancellation">취소</string>
     <string name="removal">삭제</string>
 
     <string name="share">공유하기</string>
     <string name="modify">수정하기</string>
     <string name="remove">삭제하기</string>
+
+    <string name="confirmation">확인</string>
 </resources>

@@ -30,8 +30,7 @@ import pokitmons.pokit.core.ui.components.block.pokitlist.PokitList
 import pokitmons.pokit.core.ui.components.block.pokitlist.attributes.PokitListState
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.components.template.modifybottomsheet.ModifyBottomSheetContent
-import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.RemoveItemBottomSheetContent
-import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.attributes.RemoveItemType
+import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButtonBottomSheetContent
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.core.ui.R.drawable as coreDrawable
 
@@ -130,75 +129,87 @@ fun PokitDetailScreen(
             }
         }
 
-        if (state.linkDetailBottomSheetVisible && state.currentLink != null) {
-            LinkDetailBottomSheet(link = state.currentLink, onHideBottomSheet = hideLinkDetailBottomSheet)
-        }
+        LinkDetailBottomSheet(
+            show = state.linkDetailBottomSheetVisible && state.currentLink != null,
+            link = state.currentLink ?: Link(),
+            onHideBottomSheet = hideLinkDetailBottomSheet
+        )
 
-        if (state.filterChangeBottomSheetVisible) {
-            FilterSelectBottomSheet(
-                filter = state.currentFilter,
-                onHideRequest = hideFilterChangeBottomSheet,
-                onFilterChange = changeFilter
-            )
-        }
+        FilterSelectBottomSheet(
+            filter = state.currentFilter,
+            onHideRequest = hideFilterChangeBottomSheet,
+            onFilterChange = changeFilter,
+            show = state.filterChangeBottomSheetVisible
+        )
 
-        if (state.pokitSelectBottomSheetVisible) {
-            PokitBottomSheet(onHideBottomSheet = hidePokitSelectBottomSheet) {
-                LazyColumn {
-                    items(
-                        items = pokitList
-                    ) { pokit ->
-                        PokitList(
-                            item = pokit,
-                            title = pokit.title,
-                            sub = stringResource(id = R.string.link_count_format, pokit.count),
-                            onClickItem = changePokit,
-                            state = PokitListState.ACTIVE
-                        )
-                    }
+        PokitBottomSheet(
+            onHideBottomSheet = hidePokitSelectBottomSheet,
+            show = state.pokitSelectBottomSheetVisible
+        ) {
+            LazyColumn {
+                items(
+                    items = pokitList
+                ) { pokit ->
+                    PokitList(
+                        item = pokit,
+                        title = pokit.title,
+                        sub = stringResource(id = R.string.link_count_format, pokit.count),
+                        onClickItem = changePokit,
+                        state = PokitListState.ACTIVE
+                    )
                 }
             }
         }
 
-        if (state.linkBottomSheetType != null) {
-            PokitBottomSheet(onHideBottomSheet = hideLinkModifyBottomSheet) {
-                when (state.linkBottomSheetType) {
-                    BottomSheetType.MODIFY -> {
-                        ModifyBottomSheetContent(
-                            onClickShare = {},
-                            onClickModify = {},
-                            onClickRemove = showLinkRemoveBottomSheet
-                        )
-                    }
-                    BottomSheetType.REMOVE -> {
-                        RemoveItemBottomSheetContent(
-                            removeItemType = RemoveItemType.LINK,
-                            onClickCancel = hideLinkModifyBottomSheet,
-                            onClickRemove = {}
-                        )
-                    }
+        PokitBottomSheet(
+            onHideBottomSheet = hideLinkModifyBottomSheet,
+            show = state.linkBottomSheetType != null
+        ) {
+            when (state.linkBottomSheetType) {
+                BottomSheetType.MODIFY -> {
+                    ModifyBottomSheetContent(
+                        onClickShare = {},
+                        onClickModify = {},
+                        onClickRemove = showLinkRemoveBottomSheet
+                    )
                 }
+
+                BottomSheetType.REMOVE -> {
+                    TwoButtonBottomSheetContent(
+                        title = stringResource(id = R.string.title_remove_link),
+                        subText = stringResource(id = R.string.sub_remove_link),
+                        onClickLeftButton = hideLinkModifyBottomSheet,
+                        onClickRightButton = {}
+                    )
+                }
+
+                else -> {}
             }
         }
 
-        if (state.pokitBottomSheetType != null) {
-            PokitBottomSheet(onHideBottomSheet = hidePokitModifyBottomSheet) {
-                when (state.pokitBottomSheetType) {
-                    BottomSheetType.MODIFY -> {
-                        ModifyBottomSheetContent(
-                            onClickShare = {},
-                            onClickModify = {},
-                            onClickRemove = showPokitRemoveBottomSheet
-                        )
-                    }
-                    BottomSheetType.REMOVE -> {
-                        RemoveItemBottomSheetContent(
-                            removeItemType = RemoveItemType.POKIT,
-                            onClickCancel = hidePokitModifyBottomSheet,
-                            onClickRemove = {}
-                        )
-                    }
+        PokitBottomSheet(
+            onHideBottomSheet = hidePokitModifyBottomSheet,
+            show = state.pokitBottomSheetType != null
+        ) {
+            when (state.pokitBottomSheetType) {
+                BottomSheetType.MODIFY -> {
+                    ModifyBottomSheetContent(
+                        onClickShare = {},
+                        onClickModify = {},
+                        onClickRemove = showPokitRemoveBottomSheet
+                    )
                 }
+
+                BottomSheetType.REMOVE -> {
+                    TwoButtonBottomSheetContent(
+                        title = stringResource(id = R.string.title_remove_pokit),
+                        subText = stringResource(id = R.string.sub_remove_pokit),
+                        onClickLeftButton = hidePokitModifyBottomSheet,
+                        onClickRightButton = {}
+                    )
+                }
+
+                else -> {}
             }
         }
     }

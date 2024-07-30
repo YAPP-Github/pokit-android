@@ -36,10 +36,14 @@ internal fun FilterSelectBottomSheet(
     filter: Filter = Filter(),
     onHideRequest: () -> Unit = {},
     onFilterChange: (Filter) -> Unit = {},
+    show: Boolean = false,
 ) {
     var currentFilter by remember { mutableStateOf(filter) }
 
-    PokitBottomSheet(onHideBottomSheet = onHideRequest) {
+    PokitBottomSheet(
+        onHideBottomSheet = onHideRequest,
+        show = show
+    ) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()

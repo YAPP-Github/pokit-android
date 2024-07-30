@@ -16,48 +16,78 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun PokitBottomSheet(
     onHideBottomSheet: () -> Unit,
+    show: Boolean = false,
     content: @Composable (ColumnScope.() -> Unit),
 ) {
     val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    var visibility by remember { mutableStateOf(show) }
+    val scope = rememberCoroutineScope()
 
-    ModalBottomSheet(
-        onDismissRequest = onHideBottomSheet,
-        sheetState = bottomSheetState,
-        scrimColor = Color.Transparent,
-        shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
-        containerColor = PokitTheme.colors.backgroundBase,
-        dragHandle = {
-            Column {
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Box(
-                    Modifier
-                        .clip(RoundedCornerShape(4.dp))
-                        .width(36.dp)
-                        .height(4.dp)
-                        .background(color = PokitTheme.colors.iconTertiary)
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
+    LaunchedEffect(show) {
+        if (visibility && !show) {
+            scope.launch {
+                bottomSheetState.hide()
+            }.invokeOnCompletion {
+                onHideBottomSheet()
+                visibility = false
             }
+        } else {
+            visibility = show
         }
-    ) {
-        content()
+    }
 
-        Spacer(
-            Modifier.windowInsetsBottomHeight(
-                WindowInsets.navigationBarsIgnoringVisibility
+    if (visibility) {
+        ModalBottomSheet(
+            onDismissRequest = remember {
+                {
+                    onHideBottomSheet()
+                    visibility = false
+                }
+            },
+            sheetState = bottomSheetState,
+            scrimColor = Color.Transparent,
+            shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
+            containerColor = PokitTheme.colors.backgroundBase,
+            dragHandle = {
+                Column {
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Box(
+                        Modifier
+                            .clip(RoundedCornerShape(4.dp))
+                            .width(36.dp)
+                            .height(4.dp)
+                            .background(color = PokitTheme.colors.iconTertiary)
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+                }
+            }
+        ) {
+            content()
+
+            Spacer(
+                Modifier.windowInsetsBottomHeight(
+                    WindowInsets.navigationBarsIgnoringVisibility
+                )
             )
-        )
+        }
     }
 }
