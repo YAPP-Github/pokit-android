@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="placeholder_input_search_word">내용을 입력해주세요.</string>
+    
+    <string name="recent_search_word">최근 검색어</string>
+    <string name="remove_all">전체 삭제</string>
+    <string name="on_auto_save">자동 저장 켜기</string>
+    <string name="off_use_auto_save">자동 저장 끄기</string>
+    <string name="describe_auto_save_is_off">최근 검색 저장 기능이 꺼져있습니다.</string>
+    <string name="describe_recent_search_word_is_empty">검색 내역이 없습니다.</string>
+
+    <string name="sort_order_recent">최신순</string>
+    <string name="sort_order_older">오래된순</string>
+
+    <string name="text">텍스트</string>
+
+    <string name="filter">필터</string>
+    <string name="pokit_name">포킷명</string>
+    <string name="pokit">포킷</string>
+    <string name="period">기간</string>
+    <string name="collect_show">모아보기</string>
+    <string name="bookmark">즐겨찾기</string>
+    <string name="not_read">안읽음</string>
+    <string name="search">검색하기</string>
+
+    <string name="MON">월</string>
+    <string name="TUE">화</string>
+    <string name="WED">수</string>
+    <string name="THU">목</string>
+    <string name="FRI">금</string>
+    <string name="SAT">토</string>
+    <string name="SUN">일</string>
+
+    <string name="format_calendar">%d년 %d월</string>
+</resources>
