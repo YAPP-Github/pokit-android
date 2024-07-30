@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "217769178527",
+    "project_id": "pokit-f5c83",
+    "storage_bucket": "pokit-f5c83.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:217769178527:android:5d7efa4ceafe61c37af9aa",
+        "android_client_info": {
+          "package_name": "pokitmons.pokit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "217769178527-jaa8p8nfmic1j1065qs5a7vfqt18qec0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pokitmons.pokit",
+            "certificate_hash": "9ded6dcd446add68f506001f3c1b457cc1c3be9e"
+          }
+        },
+        {
+          "client_id": "217769178527-mmbheg9v5npdhdrbfq78slpsk8lt2nga.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "pokitmons.pokit",
+            "certificate_hash": "b2f3e34f8e02d15beb0d10d3d48a05148e943642"
+          }
+        },
+        {
+          "client_id": "217769178527-tslgsrrr1o8bli4hr4qnas2u9kg80a9h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMh93QvJGUUX8-E-wyJoSS3cFrwfw8Q3w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "217769178527-l4prj2q9qsuvkodc2cpi84psvul5rth2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "217769178527-021j3dpbues9rhbkp6cffnn19mdajorq.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.pokitmons.pokit.App"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

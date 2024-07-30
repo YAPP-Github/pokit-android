@@ -19,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import pokitmons.pokit.LoginViewModel
 import pokitmons.pokit.core.ui.components.atom.button.PokitButton
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.theme.PokitTheme
@@ -26,6 +27,7 @@ import pokitmons.pokit.login.R
 
 @Composable
 fun SignUpSuccessScreen(
+    loginViewModel: LoginViewModel,
     onNavigateToMainScreen: () -> Unit,
 ) {
     Box(

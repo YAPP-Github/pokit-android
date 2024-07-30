@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
@@ -18,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
+import pokitmons.pokit.LoginViewModel
 import pokitmons.pokit.core.ui.components.atom.button.PokitButton
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.components.block.labeledinput.LabeledInput
@@ -31,32 +32,30 @@ private const val NICKNAME_MIN_LENGTH = 1 // TODO 매직넘버를 포함하는 �
 
 @Composable
 fun InputNicknameScreen(
+    loginViewModel: LoginViewModel,
     onNavigateToKeywordScreen: () -> Unit,
     popBackStack: () -> Unit,
 ) {
-    val inputNicknameViewModel: InputNicknameViewModel = viewModel() // TODO hiltViewModel 마이그레이션 예정
-    val inputNicknameState by inputNicknameViewModel.inputNicknameState.collectAsState()
+    val inputNicknameState by loginViewModel.inputNicknameState.collectAsState()
 
     Box(
         modifier = Modifier
             .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 28.dp)
             .fillMaxSize()
     ) {
-        Column() {
+        Column {
             Icon(
                 modifier = Modifier.clickable { popBackStack() },
                 painter = painterResource(id = UI.drawable.icon_24_arrow_left),
                 contentDescription = "뒤로가기"
             )
 
-            Spacer(modifier = Modifier.padding(top = 32.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
             Text(
                 style = PokitTheme.typography.title1,
                 text = stringResource(id = Login.string.input_nickname_title)
             )
-
-            Spacer(modifier = Modifier.padding(top = 28.dp))
 
             LabeledInput(
                 modifier = Modifier
@@ -74,7 +73,7 @@ fun InputNicknameScreen(
                 hintText = stringResource(id = Login.string.input_nickname_hint),
                 onChangeText = { text ->
                     if (text.length <= NICKNAME_MAX_LENGTH) {
-                        inputNicknameViewModel.inputText(text)
+                        loginViewModel.inputText(text)
                     }
                 }
             )

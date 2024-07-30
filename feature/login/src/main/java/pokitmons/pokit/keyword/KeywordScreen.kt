@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import pokitmons.pokit.LoginViewModel
 import pokitmons.pokit.core.ui.components.atom.button.PokitButton
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.components.atom.chip.PokitChip
@@ -26,6 +27,7 @@ import pokitmons.pokit.login.R as Login
 
 @Composable
 fun KeywordScreen(
+    loginViewModel: LoginViewModel,
     onNavigateToSignUpScreen: () -> Unit,
     popBackStack: () -> Unit,
 ) {

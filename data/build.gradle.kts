@@ -1,9 +1,16 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.hilt)
+    id("kotlin-kapt")
 }
 
 android {
+    tasks.withType<Test>().configureEach {
+        useJUnitPlatform()
+    }
+
     namespace = "pokitmons.pokit.data"
     compileSdk = 34
 
@@ -38,6 +45,26 @@ dependencies {
     implementation(libs.appcompat)
     implementation(libs.material)
     testImplementation(libs.junit)
+    testImplementation(project(":feature:login"))
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // kotest
+    testImplementation(libs.kotest.runner.junit5)
+    testImplementation(libs.kotlin.reflect)
+
+    // hilt
+    implementation(libs.hilt)
+    kapt(libs.hilt.compiler)
+
+    // serialization
+    implementation(libs.kotlinx.serialization.json)
+
+    // retrofit
+    implementation(libs.retrofit)
+    implementation(libs.retrofit.converter.serialization)
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
+
+    implementation(project(":domain"))
 }

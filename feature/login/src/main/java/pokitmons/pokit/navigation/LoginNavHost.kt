@@ -1,9 +1,11 @@
 package pokitmons.pokit.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import pokitmons.pokit.LoginViewModel
 import pokitmons.pokit.keyword.KeywordScreen
 import pokitmons.pokit.login.LoginScreen
 import pokitmons.pokit.nickname.InputNicknameScreen
@@ -13,14 +15,15 @@ import pokitmons.pokit.terms.TermsOfServiceScreen
 @Composable
 fun LoginNavHost() {
     val navController = rememberNavController()
+    val loginViewModel: LoginViewModel = hiltViewModel()
     NavHost(
         navController = navController,
         startDestination = LoginRoute.LoginScreen.name
     ) {
         composable(route = LoginRoute.LoginScreen.name) {
             LoginScreen(
-                onNavigateToTermsOfServiceScreen = { navController.navigate(route = LoginRoute.TermsOfServiceScreen.name) },
-                onNavigateToMainScreen = { } // TODO 메인 화면 구현후 수정
+                loginViewModel = loginViewModel,
+                onNavigateToTermsOfServiceScreen = { navController.navigate(route = LoginRoute.TermsOfServiceScreen.name) }
             )
         }
 
@@ -33,6 +36,7 @@ fun LoginNavHost() {
 
         composable(route = LoginRoute.InputNicknameScreen.name) {
             InputNicknameScreen(
+                loginViewModel = loginViewModel,
                 onNavigateToKeywordScreen = { navController.navigate(route = LoginRoute.KeywordScreen.name) },
                 popBackStack = { navController.popBackStack() }
             )
@@ -40,6 +44,7 @@ fun LoginNavHost() {
 
         composable(route = LoginRoute.KeywordScreen.name) {
             KeywordScreen(
+                loginViewModel = loginViewModel,
                 onNavigateToSignUpScreen = { navController.navigate(route = LoginRoute.SignUpSuccessScreen.name) },
                 popBackStack = { navController.popBackStack() }
             )
@@ -47,6 +52,7 @@ fun LoginNavHost() {
 
         composable(route = LoginRoute.SignUpSuccessScreen.name) {
             SignUpSuccessScreen(
+                loginViewModel = loginViewModel,
                 onNavigateToMainScreen = { } // TODO 메인 화면 구현후 수정
             )
         }

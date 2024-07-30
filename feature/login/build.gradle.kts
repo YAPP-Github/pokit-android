@@ -4,6 +4,8 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.hilt)
+    id("kotlin-kapt")
 }
 
 val properties = Properties()
@@ -79,9 +81,24 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    // google login
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
 
+    // hilt
+    implementation(libs.hilt)
+    kapt(libs.hilt.compiler)
+
+    // navigation
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.hilt.navigation.compose)
+
+    // firebase
+    implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.auth.ktx)
+
+    // module
     implementation(project(":core:ui"))
+    implementation(project(":domain"))
 }
