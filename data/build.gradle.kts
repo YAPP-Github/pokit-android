@@ -66,5 +66,8 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.logging.interceptor)
 
+    // datastore
+    implementation (libs.datastore)
+
     implementation(project(":domain"))
 }
