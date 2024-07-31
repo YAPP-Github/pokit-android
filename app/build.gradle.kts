@@ -72,7 +72,11 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":data"))
     implementation(project(":domain"))
+    implementation(project(":feature:addlink"))
+    implementation(project(":feature:addpokit"))
     implementation(project(":feature:login"))
+    implementation(project(":feature:pokitdetail"))
+    implementation(project(":feature:search"))
 
     // hilt
     implementation(libs.hilt)
@@ -81,4 +85,13 @@ dependencies {
     // firebase
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.auth.ktx)
+
+    // navigation
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.hilt.navigation.compose)
+
+    // orbit
+    implementation(libs.orbit.compose)
+    implementation(libs.orbit.core)
+    implementation(libs.orbit.viewmodel)
 }
