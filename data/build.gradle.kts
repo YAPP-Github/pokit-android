@@ -67,7 +67,7 @@ dependencies {
     implementation(libs.logging.interceptor)
 
     // datastore
-    implementation (libs.datastore)
+    implementation(libs.androidx.datastore.core.android)
 
     implementation(project(":domain"))
 }
