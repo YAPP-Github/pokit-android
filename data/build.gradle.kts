@@ -68,6 +68,7 @@ dependencies {
 
     // datastore
     implementation(libs.androidx.datastore.core.android)
+    implementation(libs.androidx.datastore.preferences.core.jvm)
 
     implementation(project(":domain"))
 }
