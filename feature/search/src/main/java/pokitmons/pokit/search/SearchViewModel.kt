@@ -1,6 +1,7 @@
 package pokitmons.pokit.search
 
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -10,8 +11,10 @@ import pokitmons.pokit.search.model.Link
 import pokitmons.pokit.search.model.SearchScreenState
 import pokitmons.pokit.search.model.SearchScreenStep
 import pokitmons.pokit.search.model.sampleLinks
+import javax.inject.Inject
 
-class SearchViewModel : ViewModel() {
+@HiltViewModel
+class SearchViewModel @Inject constructor() : ViewModel() {
     private val _searchWord = MutableStateFlow("")
     val searchWord = _searchWord.asStateFlow()
 

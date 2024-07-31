@@ -8,12 +8,15 @@ import com.strayalpaca.pokitdetail.model.Pokit
 import com.strayalpaca.pokitdetail.model.PokitDetailScreenState
 import com.strayalpaca.pokitdetail.model.sampleLinkList
 import com.strayalpaca.pokitdetail.model.samplePokitList
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import javax.inject.Inject
 
-class PokitDetailViewModel : ViewModel() {
+@HiltViewModel
+class PokitDetailViewModel @Inject constructor() : ViewModel() {
     private val _state = MutableStateFlow(PokitDetailScreenState())
     val state: StateFlow<PokitDetailScreenState> = _state.asStateFlow()
 

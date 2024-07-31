@@ -1,6 +1,8 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
+    alias(libs.plugins.hilt)
+    id("kotlin-kapt")
 }
 
 android {
@@ -59,6 +61,10 @@ dependencies {
     implementation(libs.orbit.compose)
     implementation(libs.orbit.core)
     implementation(libs.orbit.viewmodel)
+
+    // hilt
+    implementation(libs.hilt)
+    kapt(libs.hilt.compiler)
 
     implementation(project(":core:ui"))
 }

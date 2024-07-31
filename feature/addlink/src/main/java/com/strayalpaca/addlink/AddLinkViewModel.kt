@@ -8,6 +8,7 @@ import com.strayalpaca.addlink.model.Pokit
 import com.strayalpaca.addlink.model.ScreenStep
 import com.strayalpaca.addlink.model.sampleLink
 import com.strayalpaca.addlink.model.samplePokitList
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -22,8 +23,10 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import javax.inject.Inject
 
-class AddLinkViewModel : ContainerHost<AddLinkScreenState, AddLinkScreenSideEffect>, ViewModel() {
+@HiltViewModel
+class AddLinkViewModel @Inject constructor() : ContainerHost<AddLinkScreenState, AddLinkScreenSideEffect>, ViewModel() {
     override val container: Container<AddLinkScreenState, AddLinkScreenSideEffect> = container(AddLinkScreenState())
 
     private val _linkUrl = MutableStateFlow("")
