@@ -3,22 +3,18 @@ package pokitmons.pokit.navigation
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
-interface RootDestination {
-    val route: String
+object Login {
+    val route: String = "login"
 }
 
-object Login : RootDestination {
-    override val route: String = "login"
+object Home {
+    val route: String = "home"
 }
 
-object Home : RootDestination {
-    override val route: String = "home"
-}
-
-object AddLink : RootDestination {
-    override val route: String = "addLink"
-    const val linkIdArg = "link_id"
-    val routeWithArgs = "$route/{$linkIdArg}"
+object AddLink {
+    val route: String = "addLink"
+    val linkIdArg = "link_id"
+    val routeWithArgs = "$route?$linkIdArg={$linkIdArg}"
     var arguments = listOf(
         navArgument(linkIdArg) {
             nullable = true
@@ -27,10 +23,10 @@ object AddLink : RootDestination {
     )
 }
 
-object AddPokit : RootDestination {
-    override val route: String = "addPokit"
-    const val pokitIdArg = "pokit_id"
-    val routeWithArgs = "${AddLink.route}/{$pokitIdArg}"
+object AddPokit {
+    val route: String = "addPokit"
+    val pokitIdArg = "pokit_id"
+    val routeWithArgs = "$route?$pokitIdArg={$pokitIdArg}"
     var arguments = listOf(
         navArgument(pokitIdArg) {
             nullable = true
@@ -39,13 +35,13 @@ object AddPokit : RootDestination {
     )
 }
 
-object PokitDetail : RootDestination {
-    override val route: String = "pokitDetail"
-    const val pokitIdArg = "pokit_id"
-    val routeWithArgs = "${AddLink.route}/{${AddPokit.pokitIdArg}}"
-    var arguments = listOf(navArgument(AddPokit.pokitIdArg) { nullable = true })
+object PokitDetail {
+    val route: String = "pokitDetail"
+    val pokitIdArg = "pokit_id"
+    val routeWithArgs = "$route/{$pokitIdArg}"
+    var arguments = listOf(navArgument(pokitIdArg) { defaultValue = "-" })
 }
 
-object Search : RootDestination {
-    override val route: String = "search"
+object Search {
+    val route: String = "search"
 }

@@ -10,6 +10,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
+import pokitmons.pokit.core.ui.components.template.modifybottomsheet.ModifyBottomSheetContent
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.search.components.filter.FilterArea
 import pokitmons.pokit.search.components.filterbottomsheet.FilterBottomSheet
@@ -26,6 +28,7 @@ import pokitmons.pokit.search.model.SearchScreenStep
 fun SearchScreenContainer(
     viewModel: SearchViewModel,
     onBackPressed: () -> Unit,
+    onNavigateToLinkModify: (String) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
     val searchWord by viewModel.searchWord.collectAsState()
@@ -46,7 +49,10 @@ fun SearchScreenContainer(
         onClickFilterItem = viewModel::showFilterBottomSheetWithType,
         hideBottomSheet = viewModel::hideFilterBottomSheet,
         onClickFilterSave = viewModel::setFilter,
-        toggleSortOrder = viewModel::toggleSortOrder
+        toggleSortOrder = viewModel::toggleSortOrder,
+        showLinkModifyBottomSheet = viewModel::showLinkModifyBottomSheet,
+        hideLinkModifyBottomSheet = viewModel::hideLinkModifyBottomSheet,
+        onClickLinkModify = onNavigateToLinkModify
     )
 }
 
@@ -67,6 +73,9 @@ fun SearchScreen(
     hideBottomSheet: () -> Unit = {},
     onClickFilterSave: (Filter) -> Unit = {},
     toggleSortOrder: () -> Unit = {},
+    showLinkModifyBottomSheet: (Link) -> Unit = {},
+    hideLinkModifyBottomSheet: () -> Unit = {},
+    onClickLinkModify: (String) -> Unit = {},
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -112,6 +121,7 @@ fun SearchScreen(
                     .weight(1f),
                 onToggleSort = toggleSortOrder,
                 useRecentOrder = state.sortRecent,
+                onClickLinkKebab = showLinkModifyBottomSheet,
                 links = linkList
             )
         }
@@ -123,5 +133,21 @@ fun SearchScreen(
             onDismissRequest = hideBottomSheet,
             onSaveClilck = onClickFilterSave
         )
+
+        PokitBottomSheet(
+            onHideBottomSheet = hideLinkModifyBottomSheet,
+            show = state.currentLink != null
+        ) {
+            ModifyBottomSheetContent(
+                onClickModify = remember {
+                    {
+                        state.currentLink?.let { link ->
+                            hideLinkModifyBottomSheet()
+                            onClickLinkModify(link.id)
+                        }
+                    }
+                }
+            )
+        }
     }
 }

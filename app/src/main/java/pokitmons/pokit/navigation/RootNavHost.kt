@@ -23,8 +23,8 @@ import pokitmons.pokit.search.SearchViewModel
 fun RootNavHost(
     navHostController: NavHostController,
 ) {
-    NavHost(navController = navHostController, startDestination = AddPokit.routeWithArgs) {
-        composable(Login.route) { navBackStackEntry ->
+    NavHost(navController = navHostController, startDestination = Login.route) {
+        composable(Login.route) {
             val viewModel: LoginViewModel = hiltViewModel()
             LoginScreen(
                 loginViewModel = viewModel,
@@ -32,7 +32,7 @@ fun RootNavHost(
             )
         }
 
-        composable(Home.route) { navBackStackEntry ->
+        composable(Home.route) {
             Box(modifier = Modifier.fillMaxSize())
         }
 
@@ -45,16 +45,18 @@ fun RootNavHost(
             AddLinkScreenContainer(
                 linkId = linkId,
                 viewModel = viewModel,
-                onBackPressed = navHostController::popBackStack
+                onBackPressed = navHostController::popBackStack,
+                onNavigateToAddPokit = {
+                    navHostController.navigate(AddPokit.route)
+                }
             )
         }
 
         composable(
             route = AddPokit.routeWithArgs,
             arguments = AddPokit.arguments
-        ) { navBackStackEntry ->
+        ) {
             val viewModel: AddPokitViewModel = hiltViewModel()
-            val pokitId = navBackStackEntry.arguments?.getString(AddPokit.pokitIdArg)
             AddPokitScreenContainer(
                 viewModel = viewModel,
                 onBackPressed = navHostController::popBackStack
@@ -68,7 +70,13 @@ fun RootNavHost(
             val viewModel: PokitDetailViewModel = hiltViewModel()
             PokitDetailScreenContainer(
                 viewModel = viewModel,
-                onBackPressed = navHostController::popBackStack
+                onBackPressed = navHostController::popBackStack,
+                onNavigateToLinkModify = { linkId ->
+                    navHostController.navigate("${AddLink.route}?${AddLink.linkIdArg}=$linkId")
+                },
+                onNavigateToPokitModify = { pokitId ->
+                    navHostController.navigate("${AddPokit.route}?${AddPokit.pokitIdArg}=$pokitId")
+                }
             )
         }
 
@@ -78,7 +86,10 @@ fun RootNavHost(
             val viewModel: SearchViewModel = hiltViewModel()
             SearchScreenContainer(
                 viewModel = viewModel,
-                onBackPressed = navHostController::popBackStack
+                onBackPressed = navHostController::popBackStack,
+                onNavigateToLinkModify = { linkId ->
+                    navHostController.navigate("${AddLink.route}?${AddLink.linkIdArg}=$linkId")
+                }
             )
         }
     }

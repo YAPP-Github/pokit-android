@@ -12,6 +12,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -38,6 +39,8 @@ import pokitmons.pokit.core.ui.R.drawable as coreDrawable
 fun PokitDetailScreenContainer(
     viewModel: PokitDetailViewModel,
     onBackPressed: () -> Unit,
+    onNavigateToLinkModify: (String) -> Unit,
+    onNavigateToPokitModify: (String) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
     val linkList by viewModel.linkList.collectAsState()
@@ -61,7 +64,9 @@ fun PokitDetailScreenContainer(
         state = state,
         linkList = linkList,
         pokitList = pokitList,
-        onClickLink = viewModel::showLinkDetailBottomSheet
+        onClickLink = viewModel::showLinkDetailBottomSheet,
+        onClickPokitModify = onNavigateToLinkModify,
+        onClickLinkModify = onNavigateToPokitModify
     )
 }
 
@@ -85,6 +90,8 @@ fun PokitDetailScreen(
     linkList: List<Link> = emptyList(),
     pokitList: List<Pokit> = emptyList(),
     onClickLink: (Link) -> Unit = {},
+    onClickPokitModify: (String) -> Unit = {},
+    onClickLinkModify: (String) -> Unit = {},
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -169,7 +176,14 @@ fun PokitDetailScreen(
                 BottomSheetType.MODIFY -> {
                     ModifyBottomSheetContent(
                         onClickShare = {},
-                        onClickModify = {},
+                        onClickModify = remember {
+                            {
+                                state.currentLink?.let { link ->
+                                    hideLinkModifyBottomSheet()
+                                    onClickLinkModify(link.id)
+                                }
+                            }
+                        },
                         onClickRemove = showLinkRemoveBottomSheet
                     )
                 }
@@ -195,7 +209,12 @@ fun PokitDetailScreen(
                 BottomSheetType.MODIFY -> {
                     ModifyBottomSheetContent(
                         onClickShare = {},
-                        onClickModify = {},
+                        onClickModify = remember {
+                            {
+                                hidePokitModifyBottomSheet()
+                                onClickPokitModify(state.currentPokit.id)
+                            }
+                        },
                         onClickRemove = showPokitRemoveBottomSheet
                     )
                 }

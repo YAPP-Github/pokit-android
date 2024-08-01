@@ -107,6 +107,22 @@ class SearchViewModel @Inject constructor() : ViewModel() {
         }
     }
 
+    fun showLinkModifyBottomSheet(link: Link) {
+        _state.update { state ->
+            state.copy(
+                currentLink = link
+            )
+        }
+    }
+
+    fun hideLinkModifyBottomSheet() {
+        _state.update { state ->
+            state.copy(
+                currentLink = null
+            )
+        }
+    }
+
     fun setFilter(filter: Filter) {
         _state.update { state ->
             state.copy(
