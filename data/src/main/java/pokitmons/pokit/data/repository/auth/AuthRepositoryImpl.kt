@@ -43,7 +43,7 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun signUp(nickname: String, categories: List<String>): PokitResult<SignUpResult> {
         return runCatching {
-            val signUpResponse: SignUpResponse = remoteAuthDataSource.signUp(SignUpRequest(nickname = nickname, interests = categories))
+            val signUpResponse: SignUpResponse = remoteAuthDataSource.signUp(SignUpRequest(nickName = nickname, interests = categories))
             val signUpMapper: SignUpResult = AuthMapper.mapperToSignUp(signUpResponse)
             PokitResult.Success(signUpMapper)
         }.getOrElse { throwable ->

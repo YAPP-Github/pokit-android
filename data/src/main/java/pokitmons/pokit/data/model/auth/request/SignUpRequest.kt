@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SignUpRequest(
-    val nickname: String,
+    val nickName: String,
     val interests: List<String>,
 )
