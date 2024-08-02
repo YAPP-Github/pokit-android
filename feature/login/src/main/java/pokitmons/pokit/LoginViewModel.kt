@@ -1,5 +1,6 @@
 package pokitmons.pokit
 
+import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,13 +14,16 @@ import kotlinx.coroutines.launch
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.usecase.auth.InputNicknameUseCase
 import pokitmons.pokit.domain.usecase.auth.SNSLoginUseCase
+import pokitmons.pokit.domain.usecase.auth.SignUpUseCase
+import pokitmons.pokit.model.CategoryState
 import pokitmons.pokit.model.DuplicateNicknameState
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: SNSLoginUseCase,
-    private val nicknameUseCase: InputNicknameUseCase
+    private val nicknameUseCase: InputNicknameUseCase,
+    private val signUpUseCase: SignUpUseCase
 ) : ViewModel() {
 
     private var duplicateNicknameJob: Job? = null
@@ -31,6 +35,9 @@ class LoginViewModel @Inject constructor(
     private val _inputNicknameState = MutableStateFlow(DuplicateNicknameState())
     val inputNicknameState: StateFlow<DuplicateNicknameState>
         get() = _inputNicknameState.asStateFlow()
+
+    private val _categories = mutableStateListOf<CategoryState>()
+    val categories: List<CategoryState> get() = _categories
 
     fun inputText(inputNickname: String) {
         _inputNicknameState.update { duplicateNicknameState ->
@@ -56,6 +63,24 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    fun signUp() {
+        viewModelScope.launch {
+            when (val signUpResult = signUpUseCase.signUp(
+                nickname = _inputNicknameState.value.nickname,
+                categories = _categories
+                    .filter { category -> category.isSelected.value }
+                    .map { categoryState -> categoryState.name }
+            )) {
+                is PokitResult.Success -> {
+
+                }
+                is PokitResult.Error -> {
+
+                }
+            }
+        }
+    }
+
     fun checkDuplicateNickname(nickname: String) {
         duplicateNicknameJob?.cancel()
         duplicateNicknameJob = viewModelScope.launch {
@@ -71,7 +96,20 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    val categories: ArrayList<String> = arrayListOf()
+    fun setCategories(categoryNames: List<String>) {
+        _categories.clear()
+        _categories.addAll(categoryNames.map { name -> CategoryState(name = name) })
+    }
+
+    fun onClickCategoryItem(category: CategoryState) {
+        if (category.isSelected.value || isLimitSelected()) {
+            category.isSelected.value = !category.isSelected.value
+        }
+    }
+
+    private fun isLimitSelected(): Boolean {
+        return _categories.count { it.isSelected.value } < LIMIT_SELECTED_COUNT
+    }
 
     var accessToken: String = ""
         private set
@@ -84,5 +122,7 @@ class LoginViewModel @Inject constructor(
         private fun Int.second(): Long {
             return (this * 1000L)
         }
+
+        private const val LIMIT_SELECTED_COUNT = 3
     }
 }
