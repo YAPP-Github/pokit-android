@@ -62,18 +62,21 @@ fun InputNicknameScreen(
                     .fillMaxWidth()
                     .imePadding(),
                 label = "",
-                inputText = inputNicknameState,
+                inputText = inputNicknameState.nickname,
                 maxLength = NICKNAME_MAX_LENGTH,
-                sub = if (inputNicknameState.length < NICKNAME_MAX_LENGTH) {
-                    stringResource(id = Login.string.input_restriction_message)
-                } else {
-                    stringResource(id = Login.string.input_max_length)
+                sub = when {
+                    inputNicknameState.nickname.length < NICKNAME_MAX_LENGTH -> stringResource(id = Login.string.input_restriction_message)
+                    !inputNicknameState.isDuplicate -> stringResource(id = Login.string.nickname_already_in_use)
+                    else -> stringResource(id = Login.string.input_max_length)
                 },
-                isError = inputNicknameState.length > NICKNAME_MAX_LENGTH,
+                isError = inputNicknameState.nickname.length > NICKNAME_MAX_LENGTH || !inputNicknameState.isDuplicate,
                 hintText = stringResource(id = Login.string.input_nickname_hint),
                 onChangeText = { text ->
                     if (text.length <= NICKNAME_MAX_LENGTH) {
-                        loginViewModel.inputText(text)
+                        loginViewModel.apply {
+                            inputText(text)
+                            checkDuplicateNickname(text)
+                        }
                     }
                 }
             )
@@ -86,7 +89,7 @@ fun InputNicknameScreen(
             text = stringResource(id = pokitmons.pokit.login.R.string.next),
             icon = null,
             size = PokitButtonSize.LARGE,
-            enable = inputNicknameState.length >= NICKNAME_MIN_LENGTH,
+            enable = !inputNicknameState.isDuplicate,
             onClick = { onNavigateToKeywordScreen() }
         )
     }

@@ -8,28 +8,34 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pokitmons.pokit.domain.commom.PokitResult
+import pokitmons.pokit.domain.usecase.auth.InputNicknameUseCase
 import pokitmons.pokit.domain.usecase.auth.SNSLoginUseCase
+import pokitmons.pokit.model.DuplicateNicknameState
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     private val loginUseCase: SNSLoginUseCase,
+    private val nicknameUseCase: InputNicknameUseCase
 ) : ViewModel() {
 
-    private var apiRequestJob: Job? = null
+    private var duplicateNicknameJob: Job? = null
 
     private val _loginState: MutableStateFlow<LoginState> = MutableStateFlow(LoginState.Init)
     val loginState: StateFlow<LoginState>
         get() = _loginState.asStateFlow()
 
-    private val _inputNicknameState = MutableStateFlow("")
-    val inputNicknameState: StateFlow<String>
+    private val _inputNicknameState = MutableStateFlow(DuplicateNicknameState())
+    val inputNicknameState: StateFlow<DuplicateNicknameState>
         get() = _inputNicknameState.asStateFlow()
 
-    fun inputText(text: String) {
-        _inputNicknameState.value = text
+    fun inputText(inputNickname: String) {
+        _inputNicknameState.update { duplicateNicknameState ->
+            duplicateNicknameState.copy(nickname = inputNickname)
+        }
     }
 
     fun snsLogin(authPlatform: String, idToken: String) {
@@ -51,10 +57,17 @@ class LoginViewModel @Inject constructor(
     }
 
     fun checkDuplicateNickname(nickname: String) {
-        apiRequestJob?.cancel()
-        apiRequestJob = viewModelScope.launch {
+        duplicateNicknameJob?.cancel()
+        duplicateNicknameJob = viewModelScope.launch {
             delay(1.second())
-            // TOOD api 연동
+            when (val duplicateNicknameResult = nicknameUseCase.checkDuplicateNickname(nickname)) {
+                is PokitResult.Success -> {
+                    _inputNicknameState.update { duplicateNicknameState ->
+                        duplicateNicknameState.copy(isDuplicate = duplicateNicknameResult.result.isDuplicate)
+                    }
+                }
+                is PokitResult.Error -> {}
+            }
         }
     }
 
@@ -64,9 +77,6 @@ class LoginViewModel @Inject constructor(
         private set
 
     var refreshToken: String = ""
-        private set
-
-    var nickname: String = ""
         private set
 
     // TODO 확장함수 모듈 생성하기
