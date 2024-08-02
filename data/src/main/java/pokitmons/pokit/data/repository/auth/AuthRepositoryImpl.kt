@@ -12,7 +12,6 @@ import pokitmons.pokit.domain.model.auth.SNSLoginResult
 import pokitmons.pokit.domain.repository.auth.AuthRepository
 import javax.inject.Inject
 
-// TODO getOrElse 반복되는 로직 함수화
 class AuthRepositoryImpl @Inject constructor(
     private val remoteAuthDataSource: AuthDataSource,
 ) : AuthRepository {
