@@ -97,7 +97,7 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun setCategories() {
+     fun setCategories() {
         val categoryNames: List<String> = listOf(
             context.getString(R.string.sports_and_leisure),
             context.getString(R.string.phrases_and_office),
