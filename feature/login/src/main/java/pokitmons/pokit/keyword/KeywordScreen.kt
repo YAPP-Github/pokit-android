@@ -37,25 +37,8 @@ fun KeywordScreen(
     onNavigateToSignUpScreen: () -> Unit,
     popBackStack: () -> Unit,
 ) {
-    val categoryNames: List<String> = listOf(
-        stringResource(id = Login.string.sports_and_leisure),
-        stringResource(id = Login.string.phrases_and_office),
-        stringResource(id = Login.string.fashion),
-        stringResource(id = Login.string.travel),
-        stringResource(id = Login.string.economy_and_politics),
-        stringResource(id = Login.string.movies_and_dramas),
-        stringResource(id = Login.string.restaurants),
-        stringResource(id = Login.string.interior),
-        stringResource(id = Login.string.it),
-        stringResource(id = Login.string.design),
-        stringResource(id = Login.string.self_development),
-        stringResource(id = Login.string.humor),
-        stringResource(id = Login.string.music),
-        stringResource(id = Login.string.job_info)
-    )
-
-    LaunchedEffect(key1 = categoryNames) {
-        loginViewModel.setCategories(categoryNames)
+    LaunchedEffect(Unit) {
+        loginViewModel.setCategories()
     }
 
     Box(

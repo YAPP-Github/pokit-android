@@ -1,9 +1,11 @@
 package pokitmons.pokit
 
+import android.content.Context
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,17 +17,18 @@ import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.usecase.auth.InputNicknameUseCase
 import pokitmons.pokit.domain.usecase.auth.SNSLoginUseCase
 import pokitmons.pokit.domain.usecase.auth.SignUpUseCase
+import pokitmons.pokit.login.R
 import pokitmons.pokit.model.CategoryState
 import pokitmons.pokit.model.DuplicateNicknameState
 import javax.inject.Inject
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     private val loginUseCase: SNSLoginUseCase,
     private val nicknameUseCase: InputNicknameUseCase,
     private val signUpUseCase: SignUpUseCase,
 ) : ViewModel() {
-
     private var duplicateNicknameJob: Job? = null
 
     private val _loginState: MutableStateFlow<LoginState> = MutableStateFlow(LoginState.Init)
@@ -73,10 +76,8 @@ class LoginViewModel @Inject constructor(
                         .map { categoryState -> categoryState.name }
                 )
             ) {
-                is PokitResult.Success -> {
-                }
-                is PokitResult.Error -> {
-                }
+                is PokitResult.Success -> { }
+                is PokitResult.Error -> { }
             }
         }
     }
@@ -96,7 +97,24 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    fun setCategories(categoryNames: List<String>) {
+    private fun setCategories() {
+        val categoryNames: List<String> = listOf(
+            context.getString(R.string.sports_and_leisure),
+            context.getString(R.string.phrases_and_office),
+            context.getString(R.string.fashion),
+            context.getString(R.string.travel),
+            context.getString(R.string.economy_and_politics),
+            context.getString(R.string.movies_and_dramas),
+            context.getString(R.string.restaurants),
+            context.getString(R.string.interior),
+            context.getString(R.string.it),
+            context.getString(R.string.design),
+            context.getString(R.string.self_development),
+            context.getString(R.string.humor),
+            context.getString(R.string.music),
+            context.getString(R.string.job_info)
+        )
+
         _categories.clear()
         _categories.addAll(categoryNames.map { name -> CategoryState(name = name) })
     }
