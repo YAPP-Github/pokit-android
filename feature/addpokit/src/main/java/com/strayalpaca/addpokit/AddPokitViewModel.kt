@@ -9,6 +9,7 @@ import com.strayalpaca.addpokit.model.AddPokitSideEffect
 import com.strayalpaca.addpokit.model.PokitInputErrorMessage
 import com.strayalpaca.addpokit.model.PokitProfile
 import com.strayalpaca.addpokit.model.samplePokitList
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -21,8 +22,10 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import javax.inject.Inject
 
-class AddPokitViewModel : ContainerHost<AddPokitScreenState, AddPokitSideEffect>, ViewModel() {
+@HiltViewModel
+class AddPokitViewModel @Inject constructor() : ContainerHost<AddPokitScreenState, AddPokitSideEffect>, ViewModel() {
     override val container: Container<AddPokitScreenState, AddPokitSideEffect> = container(AddPokitScreenState())
 
     private val _pokitName = MutableStateFlow("")

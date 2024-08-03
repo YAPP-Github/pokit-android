@@ -56,6 +56,7 @@ fun AddLinkScreenContainer(
     linkId: String?,
     viewModel: AddLinkViewModel,
     onBackPressed: () -> Unit,
+    onNavigateToAddPokit: () -> Unit,
 ) {
     val state by viewModel.collectAsState()
     val context = LocalContext.current
@@ -100,7 +101,7 @@ fun AddLinkScreenContainer(
         inputTitle = viewModel::inputTitle,
         inputMemo = viewModel::inputMemo,
         inputNewPokitName = viewModel::inputNewPokitName,
-        onClickAddPokit = viewModel::showAddPokitBottomSheet,
+        onClickAddPokit = onNavigateToAddPokit,
         onClickSavePokit = viewModel::savePokit,
         dismissPokitAddBottomSheet = viewModel::hideAddPokitBottomSheet,
         onClickSelectPokit = viewModel::showSelectPokitBottomSheet,
