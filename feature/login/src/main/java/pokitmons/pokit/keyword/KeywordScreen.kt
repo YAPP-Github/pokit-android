@@ -99,7 +99,7 @@ fun KeywordScreen(
                         text = category.name,
                         removeIconPosition = null,
                         onClickRemove = { },
-                        onClickItem = { loginViewModel.onClickCategoryItem(category) },
+                        onClickItem = { loginViewModel.onClickCategoryItem(category) }
                     )
                 }
             }

@@ -5,5 +5,5 @@ import androidx.compose.runtime.mutableStateOf
 
 data class CategoryState(
     val name: String,
-    var isSelected: MutableState<Boolean> = mutableStateOf(false)
+    var isSelected: MutableState<Boolean> = mutableStateOf(false),
 )

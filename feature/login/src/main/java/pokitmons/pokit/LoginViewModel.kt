@@ -23,7 +23,7 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     private val loginUseCase: SNSLoginUseCase,
     private val nicknameUseCase: InputNicknameUseCase,
-    private val signUpUseCase: SignUpUseCase
+    private val signUpUseCase: SignUpUseCase,
 ) : ViewModel() {
 
     private var duplicateNicknameJob: Job? = null
@@ -65,17 +65,17 @@ class LoginViewModel @Inject constructor(
 
     fun signUp() {
         viewModelScope.launch {
-            when (val signUpResult = signUpUseCase.signUp(
-                nickname = _inputNicknameState.value.nickname,
-                categories = _categories
-                    .filter { category -> category.isSelected.value }
-                    .map { categoryState -> categoryState.name }
-            )) {
+            when (
+                val signUpResult = signUpUseCase.signUp(
+                    nickname = _inputNicknameState.value.nickname,
+                    categories = _categories
+                        .filter { category -> category.isSelected.value }
+                        .map { categoryState -> categoryState.name }
+                )
+            ) {
                 is PokitResult.Success -> {
-
                 }
                 is PokitResult.Error -> {
-
                 }
             }
         }

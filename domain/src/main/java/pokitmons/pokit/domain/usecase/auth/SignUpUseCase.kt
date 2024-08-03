@@ -8,9 +8,9 @@ import javax.inject.Inject
 class SignUpUseCase @Inject constructor(private val authRepository: AuthRepository) {
     suspend fun signUp(
         nickname: String,
-        categories: List<String>
+        categories: List<String>,
     ): PokitResult<SignUpResult> {
-        return when(val signUpResult = authRepository.signUp(nickname, categories)) {
+        return when (val signUpResult = authRepository.signUp(nickname, categories)) {
             is PokitResult.Success -> PokitResult.Success(signUpResult.result)
             is PokitResult.Error -> PokitResult.Error(signUpResult.error)
         }
