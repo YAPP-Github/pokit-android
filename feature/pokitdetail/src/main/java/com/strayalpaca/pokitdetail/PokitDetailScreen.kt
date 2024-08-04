@@ -65,8 +65,8 @@ fun PokitDetailScreenContainer(
         linkList = linkList,
         pokitList = pokitList,
         onClickLink = viewModel::showLinkDetailBottomSheet,
-        onClickPokitModify = onNavigateToLinkModify,
-        onClickLinkModify = onNavigateToPokitModify
+        onClickPokitModify = onNavigateToPokitModify,
+        onClickLinkModify = onNavigateToLinkModify
     )
 }
 
