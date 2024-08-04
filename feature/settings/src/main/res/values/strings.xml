@@ -1,0 +1,11 @@
+<resources>
+    <string name="settings">설정</string>
+    <string name="nickname_settings">닉네임 설정</string>
+    <string name="notification_settings">알림 설정</string>
+    <string name="announcements">공지사항</string>
+    <string name="terms_of_service">서비스 이용약관</string>
+    <string name="privacy_policy">개인정보 처리방침</string>
+    <string name="customer_support">고객문의</string>
+    <string name="logout">로그아웃</string>
+    <string name="delete_account">회원탈퇴</string>
+</resources>
