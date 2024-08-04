@@ -1,4 +1,4 @@
-package pokitmons.pokit.settings
+package pokitmons.pokit.settings.nickname
 
 import androidx.compose.runtime.Composable
 
