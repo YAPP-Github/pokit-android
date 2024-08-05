@@ -18,6 +18,8 @@ import pokitmons.pokit.LoginViewModel
 import pokitmons.pokit.login.LoginScreen
 import pokitmons.pokit.search.SearchScreenContainer
 import pokitmons.pokit.search.SearchViewModel
+import pokitmons.pokit.settings.SettingViewModel
+import pokitmons.pokit.settings.setting.SettingsScreen
 
 @Composable
 fun RootNavHost(
@@ -91,6 +93,19 @@ fun RootNavHost(
                     navHostController.navigate("${AddLink.route}?${AddLink.linkIdArg}=$linkId")
                 }
             )
+        }
+
+        composable(
+            route = Setting.route
+        ) {
+            val viewModel: SettingViewModel = hiltViewModel()
+            SettingsScreen(settingViewModel = viewModel)
+        }
+
+        composable(
+            route = EditNickname.route
+        ) {
+            val viewModel: SettingViewModel = hiltViewModel()
         }
     }
 }

@@ -8,4 +8,7 @@
     <string name="customer_support">고객문의</string>
     <string name="logout">로그아웃</string>
     <string name="delete_account">회원탈퇴</string>
+    <string name="logout_title">로그아웃하시겠습니까?</string>
+    <string name="delete_account_title">회원 탈퇴하시겠습니까?</string>
+    <string name="delete_account_sub">함께 저장된 모든 정보가 삭제되며, 복구하실 수 없습니다.</string>
 </resources>

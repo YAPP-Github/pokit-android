@@ -22,7 +22,7 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 @Composable
 fun SettingItem(
     title: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier
