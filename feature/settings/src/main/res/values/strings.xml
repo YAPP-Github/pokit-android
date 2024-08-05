@@ -11,4 +11,10 @@
     <string name="logout_title">로그아웃하시겠습니까?</string>
     <string name="delete_account_title">회원 탈퇴하시겠습니까?</string>
     <string name="delete_account_sub">함께 저장된 모든 정보가 삭제되며, 복구하실 수 없습니다.</string>
+    <string name="edit_nickname_title">닉네임 설정</string>
+    <string name="save">저장</string>
+    <string name="input_restriction_message">한글, 영어, 숫자로만 입력이 가능합니다.</string>
+    <string name="nickname_already_in_use">사용 중인 닉네임입니다.</string>
+    <string name="input_max_length">최대 20자까지 입력 가능합니다.</string>
+    <string name="input_nickname_hint">닉네임을 입력해주세요</string>
 </resources>

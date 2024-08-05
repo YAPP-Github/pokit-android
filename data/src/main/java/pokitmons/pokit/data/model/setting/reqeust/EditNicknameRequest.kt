@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class EditNicknameRequest(
-    val nickname: String
+    val nickname: String,
 )

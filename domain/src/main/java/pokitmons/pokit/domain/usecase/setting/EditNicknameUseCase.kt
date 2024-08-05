@@ -1,9 +1,7 @@
 package pokitmons.pokit.domain.usecase.setting
 
 import pokitmons.pokit.domain.commom.PokitResult
-import pokitmons.pokit.domain.model.auth.DuplicateNicknameResult
 import pokitmons.pokit.domain.model.setting.EditNicknameResult
-import pokitmons.pokit.domain.repository.auth.AuthRepository
 import pokitmons.pokit.domain.repository.setting.SettingRepository
 import javax.inject.Inject
 

@@ -22,7 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class SettingViewModel @Inject constructor(
     private val nicknameUseCase: InputNicknameUseCase,
-    private val editNicknameUseCase: EditNicknameUseCase
+    private val editNicknameUseCase: EditNicknameUseCase,
 ) : ViewModel() {
     private var duplicateNicknameJob: Job? = null
 

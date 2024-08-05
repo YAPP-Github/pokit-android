@@ -108,7 +108,7 @@ fun RootNavHost(
             val viewModel: SettingViewModel = hiltViewModel()
             EditNicknameScreen(
                 settingViewModel = viewModel,
-                onBackPressed = navHostController::popBackStack,
+                onBackPressed = navHostController::popBackStack
             )
         }
     }

@@ -32,7 +32,7 @@ fun SettingHeader() {
             modifier = Modifier
                 .align(Alignment.CenterStart)
                 .clickable { }
-                .size(24.dp),
+                .size(24.dp)
         )
 
         Text(
@@ -42,4 +42,3 @@ fun SettingHeader() {
         )
     }
 }
-

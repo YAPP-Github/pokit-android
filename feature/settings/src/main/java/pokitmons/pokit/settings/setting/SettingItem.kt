@@ -34,12 +34,12 @@ fun SettingItem(
                 interactionSource = remember { MutableInteractionSource() }
             ) {
                 onClick()
-              },
-        verticalAlignment = Alignment.CenterVertically,
+            },
+        verticalAlignment = Alignment.CenterVertically
     ) {
         Text(
             text = title,
-            style = PokitTheme.typography.title3,
+            style = PokitTheme.typography.title3
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -48,7 +48,7 @@ fun SettingItem(
             painter = painterResource(id = R.drawable.icon_24_arrow_right),
             contentDescription = null,
             modifier = Modifier
-                .size(24.dp),
+                .size(24.dp)
         )
     }
 }

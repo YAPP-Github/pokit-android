@@ -16,7 +16,7 @@ import pokitmons.pokit.settings.R.string as StringResource
 @Composable
 fun SettingsScreen(
     settingViewModel: SettingViewModel,
-    onNavigateToEditNickname: () -> Unit
+    onNavigateToEditNickname: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         SettingHeader()
@@ -26,22 +26,17 @@ fun SettingsScreen(
                 onNavigateToEditNickname()
             }
             SettingItem(title = stringResource(StringResource.notification_settings)) {
-
             }
 
             DividerItem()
 
             SettingItem(title = stringResource(StringResource.announcements)) {
-
             }
             SettingItem(title = stringResource(StringResource.terms_of_service)) {
-
             }
             SettingItem(title = stringResource(StringResource.privacy_policy)) {
-
             }
             SettingItem(title = stringResource(StringResource.customer_support)) {
-
             }
 
             DividerItem()

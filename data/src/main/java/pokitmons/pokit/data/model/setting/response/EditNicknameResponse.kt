@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class EditNicknameResponse(
     val email: String,
     val id: Int,
-    val nickname: String
+    val nickname: String,
 )

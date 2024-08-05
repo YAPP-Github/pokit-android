@@ -6,7 +6,3 @@ import pokitmons.pokit.data.model.setting.response.EditNicknameResponse
 interface SettingDataSource {
     suspend fun editNickname(editNicknameRequest: EditNicknameRequest): EditNicknameResponse
 }
-
-
-
-
