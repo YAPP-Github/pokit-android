@@ -68,7 +68,7 @@ fun EditNicknameScreen(
             icon = null,
             size = PokitButtonSize.LARGE,
             enable = !inputNicknameState.isDuplicate,
-            onClick = { }
+            onClick = { settingViewModel.editNickname() }
         )
     }
 }
