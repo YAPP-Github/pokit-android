@@ -62,6 +62,7 @@ dependencies {
 
     implementation(project(":core:ui"))
     implementation(project(":domain"))
+    implementation(project(":feature:login"))
 
     // hilt
     implementation(libs.hilt)

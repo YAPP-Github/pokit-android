@@ -15,14 +15,15 @@ import pokitmons.pokit.settings.R.string as StringResource
 
 @Composable
 fun SettingsScreen(
-    settingViewModel: SettingViewModel
+    settingViewModel: SettingViewModel,
+    onNavigateToEditNickname: () -> Unit
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         SettingHeader()
         Spacer(modifier = Modifier.height(16.dp))
         Column(modifier = Modifier.fillMaxWidth()) {
             SettingItem(title = stringResource(StringResource.nickname_settings)) {
-
+                onNavigateToEditNickname()
             }
             SettingItem(title = stringResource(StringResource.notification_settings)) {
 
