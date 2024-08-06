@@ -1,30 +1,49 @@
 package com.strayalpaca.pokitdetail
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.strayalpaca.pokitdetail.model.BottomSheetType
 import com.strayalpaca.pokitdetail.model.Filter
 import com.strayalpaca.pokitdetail.model.Link
 import com.strayalpaca.pokitdetail.model.Pokit
 import com.strayalpaca.pokitdetail.model.PokitDetailScreenState
 import com.strayalpaca.pokitdetail.model.sampleLinkList
-import com.strayalpaca.pokitdetail.model.samplePokitList
+import com.strayalpaca.pokitdetail.paging.PokitPaging
+import com.strayalpaca.pokitdetail.paging.SimplePagingState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import pokitmons.pokit.domain.commom.PokitResult
+import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
+import pokitmons.pokit.domain.model.pokit.Pokit as DomainPokit
 import javax.inject.Inject
 
 @HiltViewModel
-class PokitDetailViewModel @Inject constructor() : ViewModel() {
+class PokitDetailViewModel @Inject constructor(
+    private val getPokitsUseCase: GetPokitsUseCase
+) : ViewModel() {
+    private val pokitPaging = PokitPaging(
+        getPokits = ::getPokits,
+        perPage = 10,
+        coroutineScope = viewModelScope,
+        initPage = 0
+    )
+
     private val _state = MutableStateFlow(PokitDetailScreenState())
     val state: StateFlow<PokitDetailScreenState> = _state.asStateFlow()
 
-    private val _pokitList = MutableStateFlow(samplePokitList)
-    val pokitList: StateFlow<List<Pokit>> = _pokitList.asStateFlow()
+    val pokitList: StateFlow<List<Pokit>> = pokitPaging.pagingData
+    val pokitListState : StateFlow<SimplePagingState> = pokitPaging.pagingState
 
     private val _linkList = MutableStateFlow(sampleLinkList)
     val linkList: StateFlow<List<Link>> = _linkList.asStateFlow()
+
+    private suspend fun getPokits(size : Int, page : Int) : PokitResult<List<DomainPokit>> {
+        return getPokitsUseCase.getPokits(size = size, page = page)
+    }
 
     fun changePokit(pokit: Pokit) {
         _state.update { it.copy(currentPokit = pokit, pokitSelectBottomSheetVisible = false) }
@@ -80,5 +99,17 @@ class PokitDetailViewModel @Inject constructor() : ViewModel() {
 
     fun hidePokitSelectBottomSheet() {
         _state.update { it.copy(pokitSelectBottomSheetVisible = false) }
+    }
+
+    fun loadNextPokits() {
+        viewModelScope.launch {
+            pokitPaging.load()
+        }
+    }
+
+    fun refreshPokits() {
+        viewModelScope.launch {
+            pokitPaging.refresh()
+        }
     }
 }
