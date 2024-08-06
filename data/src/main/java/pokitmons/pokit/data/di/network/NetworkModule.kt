@@ -10,6 +10,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import pokitmons.pokit.data.api.AuthApi
+import pokitmons.pokit.data.api.LinkApi
 import pokitmons.pokit.data.api.PokitApi
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
@@ -72,5 +73,10 @@ object NetworkModule {
     @Provides
     fun providePokitService(retrofit: Retrofit): PokitApi {
         return retrofit.create(PokitApi::class.java)
+    }
+
+    @Provides
+    fun provideLinkService(retrofit: Retrofit): LinkApi {
+        return retrofit.create(LinkApi::class.java)
     }
 }
