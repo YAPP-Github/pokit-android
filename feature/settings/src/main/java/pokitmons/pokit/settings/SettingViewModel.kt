@@ -26,16 +26,16 @@ class SettingViewModel @Inject constructor(
 ) : ViewModel() {
     private var duplicateNicknameJob: Job? = null
 
-    private val _isBottomSheetHide: MutableState<Boolean> = mutableStateOf(false)
-    val isBottomSheetHide: Boolean
-        get() = _isBottomSheetHide.value
+    private val _isBottomSheetVisible: MutableState<Boolean> = mutableStateOf(false)
+    val isBottomSheetVisible: Boolean
+        get() = _isBottomSheetVisible.value
 
     private val _inputNicknameState = MutableStateFlow(DuplicateNicknameState())
     val inputNicknameState: StateFlow<DuplicateNicknameState>
         get() = _inputNicknameState.asStateFlow()
 
     fun changeBottomSheetHideState() {
-        _isBottomSheetHide.value = !_isBottomSheetHide.value
+        _isBottomSheetVisible.value = !_isBottomSheetVisible.value
     }
 
     fun inputText(inputNickname: String) {
@@ -61,15 +61,14 @@ class SettingViewModel @Inject constructor(
     }
 
     fun editNickname() {
-        Log.d("!! : ", "call")
         viewModelScope.launch {
             when (val editNicknameResult = editNicknameUseCase.editNickname(_inputNicknameState.value.nickname)) {
                 is PokitResult.Success -> {
-                    Log.d("!! : ", editNicknameResult.result.toString())
+
                 }
 
                 is PokitResult.Error -> {
-                    Log.d("!! : ", editNicknameResult.error.toString())
+
                 }
             }
         }

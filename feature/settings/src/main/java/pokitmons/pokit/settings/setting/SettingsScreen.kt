@@ -53,7 +53,7 @@ fun SettingsScreen(
     // TODO 회원탈퇴 분기
     PokitBottomSheet(
         onHideBottomSheet = { },
-        show = settingViewModel.isBottomSheetHide
+        show = settingViewModel.isBottomSheetVisible
     ) {
         TwoButtonBottomSheetContent(
             title = stringResource(id = StringResource.logout_title),
