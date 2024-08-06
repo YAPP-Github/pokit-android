@@ -18,6 +18,9 @@ import pokitmons.pokit.LoginViewModel
 import pokitmons.pokit.login.LoginScreen
 import pokitmons.pokit.search.SearchScreenContainer
 import pokitmons.pokit.search.SearchViewModel
+import pokitmons.pokit.settings.SettingViewModel
+import pokitmons.pokit.settings.nickname.EditNicknameScreen
+import pokitmons.pokit.settings.setting.SettingsScreen
 
 @Composable
 fun RootNavHost(
@@ -90,6 +93,22 @@ fun RootNavHost(
                 onNavigateToLinkModify = { linkId ->
                     navHostController.navigate("${AddLink.route}?${AddLink.linkIdArg}=$linkId")
                 }
+            )
+        }
+
+        composable(route = Setting.route) {
+            val viewModel: SettingViewModel = hiltViewModel()
+            SettingsScreen(
+                settingViewModel = viewModel,
+                onNavigateToEditNickname = { navHostController.navigate(EditNickname.route) }
+            )
+        }
+
+        composable(route = EditNickname.route) {
+            val viewModel: SettingViewModel = hiltViewModel()
+            EditNicknameScreen(
+                settingViewModel = viewModel,
+                onBackPressed = navHostController::popBackStack
             )
         }
     }

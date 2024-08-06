@@ -45,3 +45,11 @@ object PokitDetail {
 object Search {
     val route: String = "search"
 }
+
+object Setting {
+    val route: String = "setting"
+}
+
+object EditNickname {
+    val route: String = "editNickname"
+}
