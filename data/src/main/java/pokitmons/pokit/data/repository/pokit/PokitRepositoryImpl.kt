@@ -3,7 +3,9 @@ package pokitmons.pokit.data.repository.pokit
 import pokitmons.pokit.data.datasource.remote.pokit.PokitDataSource
 import pokitmons.pokit.data.mapper.pokit.PokitMapper
 import pokitmons.pokit.data.model.common.parseErrorResult
+import pokitmons.pokit.data.model.pokit.request.CreatePokitRequest
 import pokitmons.pokit.data.model.pokit.request.GetPokitsRequest
+import pokitmons.pokit.data.model.pokit.request.ModifyPokitRequest
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.pokit.Pokit
 import pokitmons.pokit.domain.model.pokit.PokitsSort
@@ -29,6 +31,27 @@ class PokitRepositoryImpl @Inject constructor(
             val response = pokitDataSource.getPokits(request)
             val mappedResponse = PokitMapper.mapperToPokits(response)
             PokitResult.Success(mappedResponse)
+        }.getOrElse { throwable ->
+            parseErrorResult(throwable)
+        }
+    }
+
+    override suspend fun createPokit(name: String, imageId: Int): PokitResult<Int> {
+        return kotlin.runCatching {
+            val request = CreatePokitRequest(categoryName = name, categoryImageId = imageId)
+            val response = pokitDataSource.createPokit(request)
+            val pokitId = response.categoryId
+            PokitResult.Success(pokitId)
+        }.getOrElse { throwable ->
+            parseErrorResult(throwable)
+        }
+    }
+
+    override suspend fun modifyPokit(pokitId: Int, name: String, imageId: Int): PokitResult<Int> {
+        return kotlin.runCatching {
+            val request = ModifyPokitRequest(categoryName = name, categoryImageId = imageId)
+            val response = pokitDataSource.modifyPokit(pokitId, request)
+            PokitResult.Success(response.categoryId)
         }.getOrElse { throwable ->
             parseErrorResult(throwable)
         }

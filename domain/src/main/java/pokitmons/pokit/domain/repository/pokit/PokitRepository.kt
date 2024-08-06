@@ -11,4 +11,15 @@ interface PokitRepository {
         page : Int = 0,
         sort: PokitsSort = PokitsSort.RECENT
     ) : PokitResult<List<Pokit>>
+
+    suspend fun createPokit(
+        name : String,
+        imageId : Int
+    ) : PokitResult<Int>
+
+    suspend fun modifyPokit(
+        pokitId : Int,
+        name : String,
+        imageId: Int
+    ) : PokitResult<Int>
 }
