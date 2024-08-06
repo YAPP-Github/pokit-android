@@ -1,6 +1,5 @@
 package pokitmons.pokit.settings
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -64,11 +63,9 @@ class SettingViewModel @Inject constructor(
         viewModelScope.launch {
             when (val editNicknameResult = editNicknameUseCase.editNickname(_inputNicknameState.value.nickname)) {
                 is PokitResult.Success -> {
-
                 }
 
                 is PokitResult.Error -> {
-
                 }
             }
         }
