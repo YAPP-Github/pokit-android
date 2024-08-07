@@ -4,11 +4,11 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetLinksResponse(
-    val data: List<Data>,
-    val page: Int,
-    val size: Int,
-    val sort: List<Sort>,
-    val hasNext: Boolean
+    val data: List<Data> = emptyList(),
+    val page: Int = 0,
+    val size: Int = 10,
+    val sort: List<Sort> = emptyList(),
+    val hasNext: Boolean = true,
 ) {
     @Serializable
     data class Data(
@@ -22,7 +22,7 @@ data class GetLinksResponse(
         val alertYn: String,
         val createdAt: String,
         val isRead: Boolean,
-        val thumbNail: String
+        val thumbNail: String,
     )
 
     @Serializable
@@ -31,6 +31,6 @@ data class GetLinksResponse(
         val nullHandling: String,
         val ascending: Boolean,
         val property: String,
-        val ignoreCase: Boolean
+        val ignoreCase: Boolean,
     )
 }

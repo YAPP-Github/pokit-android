@@ -10,15 +10,34 @@ import pokitmons.pokit.domain.repository.link.LinkRepository
 import javax.inject.Inject
 
 class LinkRepositoryImpl @Inject constructor(
-    private val dataSource: LinkDataSource
+    private val dataSource: LinkDataSource,
 ) : LinkRepository {
-    override suspend fun getLinks(categoryId: Int, size: Int, page: Int, sort: LinksSort): PokitResult<List<Link>> {
+    override suspend fun getLinks(
+        categoryId: Int,
+        size: Int,
+        page: Int,
+        sort: LinksSort,
+        isRead: Boolean,
+        favorite: Boolean,
+        startDate: String?,
+        endDate: String?,
+        categoryIds: List<Int>?,
+    ): PokitResult<List<Link>> {
         return kotlin.runCatching {
-            val response = dataSource.getLinks(categoryId =categoryId, size = size, page= page, sort = listOf(sort.value))
+            val response = dataSource.getLinks(
+                categoryId = categoryId,
+                size = size,
+                page = page,
+                sort = listOf(sort.value),
+                isRead = isRead,
+                favorites = favorite,
+                startDate = startDate,
+                endDate = endDate,
+                categoryIds = categoryIds
+            )
             val mappedResponse = LinkMapper.mapperToLinks(response)
             PokitResult.Success(mappedResponse)
         }.getOrElse { throwable ->
-            println("<><> ${throwable.message}")
             parseErrorResult(throwable)
         }
     }

@@ -14,12 +14,22 @@ class GetLinksUseCase @Inject constructor(
         size: Int = 10,
         page: Int = 0,
         sort: LinksSort = LinksSort.RECENT,
+        isRead: Boolean = false,
+        favorite: Boolean = false,
+        startDate: String? = null,
+        endDate: String? = null,
+        categoryIds: List<Int>? = null,
     ): PokitResult<List<Link>> {
         return repository.getLinks(
             categoryId = categoryId,
             size = size,
             page = page,
-            sort = sort
+            sort = sort,
+            isRead = isRead,
+            favorite = favorite,
+            startDate = startDate,
+            endDate = endDate,
+            categoryIds = categoryIds
         )
     }
 }

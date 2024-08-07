@@ -48,6 +48,7 @@ fun PokitDetailScreenContainer(
 ) {
     val state by viewModel.state.collectAsState()
     val linkList by viewModel.linkList.collectAsState()
+    val linkListState by viewModel.linkListState.collectAsState()
     val pokitList by viewModel.pokitList.collectAsState()
     val pokitListState by viewModel.pokitListState.collectAsState()
 
@@ -68,13 +69,16 @@ fun PokitDetailScreenContainer(
         hideLinkDetailBottomSheet = viewModel::hideLinkDetailBottomSheet,
         state = state,
         linkList = linkList,
+        linkListState = linkListState,
         pokitList = pokitList,
         pokitListState = pokitListState,
         onClickLink = viewModel::showLinkDetailBottomSheet,
         onClickPokitModify = onNavigateToPokitModify,
         onClickLinkModify = onNavigateToLinkModify,
         loadNextPokits = viewModel::loadNextPokits,
-        refreshPokits = viewModel::refreshPokits
+        refreshPokits = viewModel::refreshPokits,
+        loadNextLinks = viewModel::loadNextLinks,
+        refreshLinks = viewModel::refreshLinks
     )
 }
 
@@ -96,6 +100,7 @@ fun PokitDetailScreen(
     hideLinkDetailBottomSheet: () -> Unit = {},
     state: PokitDetailScreenState = PokitDetailScreenState(),
     linkList: List<Link> = emptyList(),
+    linkListState : SimplePagingState = SimplePagingState.IDLE,
     pokitList: List<Pokit> = emptyList(),
     pokitListState: SimplePagingState = SimplePagingState.IDLE,
     onClickLink: (Link) -> Unit = {},
@@ -103,6 +108,8 @@ fun PokitDetailScreen(
     onClickLinkModify: (String) -> Unit = {},
     loadNextPokits: () -> Unit = {},
     refreshPokits: () -> Unit = {},
+    loadNextLinks: () -> Unit = {},
+    refreshLinks: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -121,10 +128,30 @@ fun PokitDetailScreen(
             onClickSelectFilter = onClickFilter
         )
 
+        val linkLazyColumnListState = rememberLazyListState()
+        val startLinkPaging = remember {
+            derivedStateOf {
+                linkLazyColumnListState.layoutInfo.visibleItemsInfo.lastOrNull()?.let { last ->
+                    last.index >= linkLazyColumnListState.layoutInfo.totalItemsCount - 3
+                } ?: false
+            }
+        }
+
+        LaunchedEffect(Unit) {
+            refreshLinks()
+        }
+
+        LaunchedEffect(startLinkPaging.value) {
+            if (startLinkPaging.value && linkListState == SimplePagingState.IDLE) {
+                loadNextLinks()
+            }
+        }
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
+                .weight(1f),
+            state = linkLazyColumnListState
         ) {
             items(linkList) { link ->
                 LinkCard(
