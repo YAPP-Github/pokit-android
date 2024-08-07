@@ -32,6 +32,7 @@ class PokitPaging(
     override suspend fun refresh() {
         requestJob?.cancel()
 
+        _pagingData.update { emptyList() }
         _pagingState.update { SimplePagingState.LOADING_INIT }
         requestJob = coroutineScope.launch {
             try {
