@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.link.LinksSort
 import pokitmons.pokit.domain.usecase.link.GetLinksUseCase
+import pokitmons.pokit.domain.usecase.pokit.GetPokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
 import pokitmons.pokit.domain.model.pokit.Pokit as DomainPokit
 import pokitmons.pokit.domain.model.link.Link as DomainLink
@@ -29,6 +30,7 @@ import javax.inject.Inject
 class PokitDetailViewModel @Inject constructor(
     private val getPokitsUseCase: GetPokitsUseCase,
     private val getLinksUseCase: GetLinksUseCase,
+    private val getPokitUseCase: GetPokitUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val pokitPaging = PokitPaging(
@@ -60,6 +62,7 @@ class PokitDetailViewModel @Inject constructor(
             linkPaging.changeOptions(categoryId = pokitId, sort = LinksSort.RECENT)
             viewModelScope.launch {
                 linkPaging.refresh()
+                getPokit(pokitId)
             }
         }
     }
@@ -78,6 +81,13 @@ class PokitDetailViewModel @Inject constructor(
             isRead = !currentFilter.notReadChecked,
             favorite = currentFilter.bookmarkChecked,
         )
+    }
+
+    private suspend fun getPokit(pokitId: Int) {
+        val response = getPokitUseCase.getPokit(pokitId)
+        if (response is PokitResult.Success) {
+            _state.update { it.copy(currentPokit = Pokit.fromDomainPokit(response.result)) }
+        }
     }
 
     fun changePokit(pokit: Pokit) {
