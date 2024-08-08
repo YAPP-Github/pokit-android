@@ -3,6 +3,8 @@ package pokitmons.pokit.data.api
 import pokitmons.pokit.data.model.pokit.request.CreatePokitRequest
 import pokitmons.pokit.data.model.pokit.request.ModifyPokitRequest
 import pokitmons.pokit.data.model.pokit.response.CreatePokitResponse
+import pokitmons.pokit.data.model.pokit.response.GetPokitImagesResponseItem
+import pokitmons.pokit.data.model.pokit.response.GetPokitResponse
 import pokitmons.pokit.data.model.pokit.response.GetPokitsResponse
 import pokitmons.pokit.data.model.pokit.response.ModifyPokitResponse
 import pokitmons.pokit.domain.model.pokit.PokitsSort
@@ -32,4 +34,12 @@ interface PokitApi {
         @Path("categoryId") categoryId : Int,
         @Body modifyPokitRequest: ModifyPokitRequest
     ) : ModifyPokitResponse
+
+    @GET("category/images")
+    suspend fun getPokitImages(): List<GetPokitImagesResponseItem>
+
+    @GET("category/{categoryId}")
+    suspend fun getPokit(
+        @Path("categoryId") categoryId: Int
+    ): GetPokitResponse
 }

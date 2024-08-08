@@ -37,7 +37,7 @@ class PokitRepositoryImpl @Inject constructor(
     }
 
     override suspend fun createPokit(name: String, imageId: Int): PokitResult<Int> {
-        return kotlin.runCatching {
+        return runCatching {
             val request = CreatePokitRequest(categoryName = name, categoryImageId = imageId)
             val response = pokitDataSource.createPokit(request)
             val pokitId = response.categoryId
@@ -48,10 +48,30 @@ class PokitRepositoryImpl @Inject constructor(
     }
 
     override suspend fun modifyPokit(pokitId: Int, name: String, imageId: Int): PokitResult<Int> {
-        return kotlin.runCatching {
+        return runCatching {
             val request = ModifyPokitRequest(categoryName = name, categoryImageId = imageId)
             val response = pokitDataSource.modifyPokit(pokitId, request)
             PokitResult.Success(response.categoryId)
+        }.getOrElse { throwable ->
+            parseErrorResult(throwable)
+        }
+    }
+
+    override suspend fun getPokitImages(): PokitResult<List<Pokit.Image>> {
+        return runCatching {
+            val response = pokitDataSource.getPokitImages()
+            val mappedResponse = PokitMapper.mapperToPokitImages(response)
+            PokitResult.Success(mappedResponse)
+        }.getOrElse { throwable ->
+            parseErrorResult(throwable)
+        }
+    }
+
+    override suspend fun getPokit(pokitId: Int): PokitResult<Pokit> {
+        return kotlin.runCatching {
+            val response = pokitDataSource.getPokit(pokitId)
+            val mappedResponse = PokitMapper.mapperToPokit(response)
+            PokitResult.Success(mappedResponse)
         }.getOrElse { throwable ->
             parseErrorResult(throwable)
         }

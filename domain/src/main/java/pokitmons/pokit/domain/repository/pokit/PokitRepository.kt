@@ -22,4 +22,8 @@ interface PokitRepository {
         name : String,
         imageId: Int
     ) : PokitResult<Int>
+
+    suspend fun getPokitImages() : PokitResult<List<Pokit.Image>>
+
+    suspend fun getPokit(pokitId: Int): PokitResult<Pokit>
 }

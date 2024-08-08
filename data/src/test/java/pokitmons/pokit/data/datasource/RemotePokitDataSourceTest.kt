@@ -12,6 +12,7 @@ import pokitmons.pokit.data.model.pokit.request.CreatePokitRequest
 import pokitmons.pokit.data.model.pokit.request.GetPokitsRequest
 import pokitmons.pokit.data.model.pokit.request.ModifyPokitRequest
 import pokitmons.pokit.data.model.pokit.response.CreatePokitResponse
+import pokitmons.pokit.data.model.pokit.response.GetPokitResponse
 import pokitmons.pokit.data.model.pokit.response.GetPokitsResponse
 import pokitmons.pokit.data.model.pokit.response.ModifyPokitResponse
 
@@ -73,6 +74,26 @@ class RemotePokitDataSourceTest : DescribeSpec({
             it("동일한 에러가 발생한다.") {
                 val exception = shouldThrow<Exception> {
                     remotePokitDataSource.modifyPokit(pokitId = 0, modifyPokitRequest = ModifyPokitRequest())
+                }
+                exception.message shouldBe "error"
+            }
+        }
+    }
+
+    describe("포킷 조회시") {
+        context("조회가 성공적으로 수행되면") {
+            coEvery { pokitApi.getPokit(0) } returns GetPokitResponse()
+            it("해당 포킷의 정보가 반환된다.") {
+                val response = remotePokitDataSource.getPokit(0)
+                response.shouldBeInstanceOf<GetPokitResponse>()
+            }
+        }
+
+        context("조회 도중 에러가 발생했다면") {
+            coEvery { pokitApi.getPokit(0) } throws IllegalArgumentException("error")
+            it("동일한 에러가 발생한다.") {
+                val exception = shouldThrow<Exception> {
+                    remotePokitDataSource.getPokit(0)
                 }
                 exception.message shouldBe "error"
             }
