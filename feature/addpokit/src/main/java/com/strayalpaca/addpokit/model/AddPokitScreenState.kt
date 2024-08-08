@@ -6,14 +6,13 @@ import com.strayalpaca.addpokit.R
 @Immutable
 data class AddPokitScreenState(
     val pokitInputErrorMessage: PokitInputErrorMessage? = null,
-    val pokitList: List<Pokit> = emptyList(),
-    val step: AddPokitScreenStep = AddPokitScreenStep.POKIT_LIST_LOADING,
-    val pokitProfile: PokitProfile? = null,
+    val step: AddPokitScreenStep = AddPokitScreenStep.IDLE,
+    val pokitImage: PokitImage? = null,
+    val isModify: Boolean = false
 )
 
 sealed class AddPokitScreenStep {
     data object IDLE : AddPokitScreenStep()
-    data object POKIT_LIST_LOADING : AddPokitScreenStep()
     data object POKIT_SAVE_LOADING : AddPokitScreenStep()
     data object SELECT_PROFILE : AddPokitScreenStep()
 }
