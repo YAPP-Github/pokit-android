@@ -1,4 +1,4 @@
-package pokitmons.pokit.home.pokit
+package pokitmons.pokit.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,7 +25,7 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.core.ui.R.drawable as DrawableResource
 
 @Composable
-fun PokitScreen() {
+fun HomeMid() {
     Spacer(modifier = Modifier.height(8.dp))
     Column(
         modifier = Modifier
@@ -49,7 +49,7 @@ fun PokitScreen() {
             Spacer(modifier = Modifier.padding(start = 12.dp))
 
             PokitButton(
-                text = "포킷",
+                text = "미분류",
                 shape = PokitButtonShape.ROUND,
                 icon = PokitButtonIcon(
                     DrawableResource.icon_24_info,
@@ -84,5 +84,5 @@ fun PokitScreen() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewCustomRow() {
-    PokitScreen()
+    HomeMid()
 }
