@@ -8,8 +8,8 @@ object LinkMapper {
         return linksResponse.data.map { data ->
             Link(
                 id = data.contentId,
-                categoryId = data.categoryId,
-                categoryName = data.categoryName,
+                categoryId = data.category.categoryId,
+                categoryName = data.category.categoryName,
                 data = data.data,
                 domain = data.domain,
                 title = data.title,

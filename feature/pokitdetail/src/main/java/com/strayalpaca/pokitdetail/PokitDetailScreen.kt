@@ -78,7 +78,6 @@ fun PokitDetailScreenContainer(
         loadNextPokits = viewModel::loadNextPokits,
         refreshPokits = viewModel::refreshPokits,
         loadNextLinks = viewModel::loadNextLinks,
-        refreshLinks = viewModel::refreshLinks
     )
 }
 
@@ -109,7 +108,6 @@ fun PokitDetailScreen(
     loadNextPokits: () -> Unit = {},
     refreshPokits: () -> Unit = {},
     loadNextLinks: () -> Unit = {},
-    refreshLinks: () -> Unit = {}
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -135,10 +133,6 @@ fun PokitDetailScreen(
                     last.index >= linkLazyColumnListState.layoutInfo.totalItemsCount - 3
                 } ?: false
             }
-        }
-
-        LaunchedEffect(Unit) {
-            refreshLinks()
         }
 
         LaunchedEffect(startLinkPaging.value) {

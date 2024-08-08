@@ -1,5 +1,6 @@
 package com.strayalpaca.pokitdetail
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.strayalpaca.pokitdetail.model.BottomSheetType
@@ -27,7 +28,8 @@ import javax.inject.Inject
 @HiltViewModel
 class PokitDetailViewModel @Inject constructor(
     private val getPokitsUseCase: GetPokitsUseCase,
-    private val getLinksUseCase: GetLinksUseCase
+    private val getLinksUseCase: GetLinksUseCase,
+    savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val pokitPaging = PokitPaging(
         getPokits = ::getPokits,
@@ -52,6 +54,15 @@ class PokitDetailViewModel @Inject constructor(
 
     val linkList: StateFlow<List<Link>> = linkPaging.pagingData
     val linkListState : StateFlow<SimplePagingState> = linkPaging.pagingState
+
+    init {
+        savedStateHandle.get<String>("pokit_id")?.toIntOrNull()?.let { pokitId ->
+            linkPaging.changeOptions(categoryId = pokitId, sort = LinksSort.RECENT)
+            viewModelScope.launch {
+                linkPaging.refresh()
+            }
+        }
+    }
 
     private suspend fun getPokits(size : Int, page : Int) : PokitResult<List<DomainPokit>> {
         return getPokitsUseCase.getPokits(size = size, page = page)
@@ -153,12 +164,6 @@ class PokitDetailViewModel @Inject constructor(
     fun loadNextLinks() {
         viewModelScope.launch {
             linkPaging.load()
-        }
-    }
-
-    fun refreshLinks() {
-        viewModelScope.launch {
-            linkPaging.refresh()
         }
     }
 }

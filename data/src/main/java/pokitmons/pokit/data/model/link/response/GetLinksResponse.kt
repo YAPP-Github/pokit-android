@@ -13,8 +13,7 @@ data class GetLinksResponse(
     @Serializable
     data class Data(
         val contentId: Int,
-        val categoryId: Int,
-        val categoryName: String,
+        val category: Category,
         val data: String,
         val domain: String,
         val title: String,
@@ -23,6 +22,12 @@ data class GetLinksResponse(
         val createdAt: String,
         val isRead: Boolean,
         val thumbNail: String,
+    )
+
+    @Serializable
+    data class Category(
+        val categoryId: Int,
+        val categoryName: String
     )
 
     @Serializable
