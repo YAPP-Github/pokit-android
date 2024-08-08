@@ -46,6 +46,6 @@ data class PokitCardDummy(
 
 @Preview
 @Composable
-fun test() {
+fun PokitCardPreview() {
     PokitScreen()
 }
