@@ -191,7 +191,7 @@ fun AddPokitScreen(
             hintText = stringResource(id = R.string.placeholder_pokit_name),
             onChangeText = inputPokitName,
             isError = state.pokitInputErrorMessage != null,
-            sub = state.pokitInputErrorMessage?.let { stringResource(id = it.resourceId) } ?: "",
+            sub = state.pokitInputErrorMessage ?: "",
             enable = (state.step != AddPokitScreenStep.POKIT_SAVE_LOADING),
             maxLength = 10
         )

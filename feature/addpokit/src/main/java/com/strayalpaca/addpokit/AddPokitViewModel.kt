@@ -9,11 +9,10 @@ import com.strayalpaca.addpokit.model.AddPokitScreenStep
 import com.strayalpaca.addpokit.model.AddPokitSideEffect
 import com.strayalpaca.addpokit.model.Pokit
 import com.strayalpaca.addpokit.model.PokitImage
-import com.strayalpaca.addpokit.model.PokitInputErrorMessage
 import com.strayalpaca.addpokit.paging.PokitPaging
 import com.strayalpaca.addpokit.paging.SimplePagingState
+import com.strayalpaca.addpokit.utils.ErrorMessageProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -26,9 +25,11 @@ import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import pokitmons.pokit.domain.commom.PokitResult
+import pokitmons.pokit.domain.usecase.pokit.CreatePokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitImagesUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
+import pokitmons.pokit.domain.usecase.pokit.ModifyPokitUseCase
 import pokitmons.pokit.domain.model.pokit.Pokit as DomainPokit
 import javax.inject.Inject
 
@@ -37,9 +38,14 @@ class AddPokitViewModel @Inject constructor(
     private val getPokitImagesUseCase: GetPokitImagesUseCase,
     private val getPokitsUseCase: GetPokitsUseCase,
     private val getPokitUseCase: GetPokitUseCase,
+    private val createPokitUseCase: CreatePokitUseCase,
+    private val modifyPokitUseCase: ModifyPokitUseCase,
+    private val errorMessageProvider: ErrorMessageProvider,
     savedStateHandle: SavedStateHandle
 ) : ContainerHost<AddPokitScreenState, AddPokitSideEffect>, ViewModel() {
     override val container: Container<AddPokitScreenState, AddPokitSideEffect> = container(AddPokitScreenState())
+
+    private val pokitId = savedStateHandle.get<String>("pokit_id")?.toIntOrNull()
 
     private val pokitPaging = PokitPaging(
         getPokits = ::getPokits,
@@ -61,7 +67,6 @@ class AddPokitViewModel @Inject constructor(
         loadPokitList()
         loadPokitImages()
 
-        val pokitId = savedStateHandle.get<String>("pokit_id")?.toIntOrNull()
         setAddModifyMode(pokitId)
     }
 
@@ -110,16 +115,11 @@ class AddPokitViewModel @Inject constructor(
 
         intent {
             val isInAvailableLength = pokitName.length > POKIT_NAME_MAX_LENGTH
-            val isDuplicatePokitName = false // api로 대체 필요
 
-            val errorMessage = if (isInAvailableLength) {
-                PokitInputErrorMessage.TEXT_LENGTH_LIMIT
-            } else if (isDuplicatePokitName) {
-                PokitInputErrorMessage.ALREADY_USED_POKIT_NAME
-            } else {
-                null
+            if (isInAvailableLength) {
+                val errorMessage = errorMessageProvider.getTextLengthErrorMessage()
+                reduce { state.copy(pokitInputErrorMessage = errorMessage) }
             }
-            reduce { state.copy(pokitInputErrorMessage = errorMessage) }
         }
     }
 
@@ -127,12 +127,24 @@ class AddPokitViewModel @Inject constructor(
         reduce {
             state.copy(step = AddPokitScreenStep.POKIT_SAVE_LOADING)
         }
-        // todo 포킷 저장 api 연동
-        delay(1000L)
-        reduce {
-            state.copy(step = AddPokitScreenStep.IDLE)
+
+        val currentPokitId = pokitId
+        val currentPokitName = pokitName.value
+        val pokitImageId = state.pokitImage?.id ?: 0
+        val response = if (currentPokitId != null) {
+            modifyPokitUseCase.modifyPokit(currentPokitId, currentPokitName, pokitImageId)
+        } else {
+            createPokitUseCase.createPokit(currentPokitName, pokitImageId)
         }
-        postSideEffect(AddPokitSideEffect.AddPokitSuccess)
+
+        if (response is PokitResult.Success) {
+            reduce { state.copy(step = AddPokitScreenStep.IDLE) }
+            postSideEffect(AddPokitSideEffect.AddPokitSuccess)
+        } else {
+            response as PokitResult.Error
+            val errorMessage = errorMessageProvider.errorCodeToMessage(response.error.code)
+            reduce { state.copy(pokitInputErrorMessage = errorMessage) }
+        }
     }
 
     fun onBackPressed() = intent {
