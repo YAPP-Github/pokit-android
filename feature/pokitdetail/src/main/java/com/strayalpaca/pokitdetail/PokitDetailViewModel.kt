@@ -20,6 +20,7 @@ import kotlinx.coroutines.launch
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.link.LinksSort
 import pokitmons.pokit.domain.usecase.link.GetLinksUseCase
+import pokitmons.pokit.domain.usecase.pokit.DeletePokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
 import pokitmons.pokit.domain.model.pokit.Pokit as DomainPokit
@@ -31,6 +32,7 @@ class PokitDetailViewModel @Inject constructor(
     private val getPokitsUseCase: GetPokitsUseCase,
     private val getLinksUseCase: GetLinksUseCase,
     private val getPokitUseCase: GetPokitUseCase,
+    private val deletePokitUseCase: DeletePokitUseCase,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
     private val pokitPaging = PokitPaging(
@@ -112,6 +114,7 @@ class PokitDetailViewModel @Inject constructor(
     }
 
     fun showPokitModifyBottomSheet() {
+        state.value.currentPokit ?: return
         _state.update { it.copy(pokitBottomSheetType = BottomSheetType.MODIFY) }
     }
 
@@ -174,6 +177,17 @@ class PokitDetailViewModel @Inject constructor(
     fun loadNextLinks() {
         viewModelScope.launch {
             linkPaging.load()
+        }
+    }
+
+    fun deletePokit() {
+        val currentPokit = state.value.currentPokit ?: return
+        val pokitId = currentPokit.id.toInt()
+        viewModelScope.launch {
+            val response = deletePokitUseCase.deletePokit(pokitId)
+            if (response is PokitResult.Success) {
+                // 뒤로가기?
+            }
         }
     }
 }

@@ -74,6 +74,7 @@ fun PokitDetailScreenContainer(
         pokitListState = pokitListState,
         onClickLink = viewModel::showLinkDetailBottomSheet,
         onClickPokitModify = onNavigateToPokitModify,
+        onClickPokitRemove = viewModel::deletePokit,
         onClickLinkModify = onNavigateToLinkModify,
         loadNextPokits = viewModel::loadNextPokits,
         refreshPokits = viewModel::refreshPokits,
@@ -104,6 +105,7 @@ fun PokitDetailScreen(
     pokitListState: SimplePagingState = SimplePagingState.IDLE,
     onClickLink: (Link) -> Unit = {},
     onClickPokitModify: (String) -> Unit = {},
+    onClickPokitRemove: () -> Unit = {},
     onClickLinkModify: (String) -> Unit = {},
     loadNextPokits: () -> Unit = {},
     refreshPokits: () -> Unit = {},
@@ -120,8 +122,8 @@ fun PokitDetailScreen(
         Spacer(modifier = Modifier.height(12.dp))
 
         TitleArea(
-            title = state.currentPokit.title,
-            sub = stringResource(id = pokitmons.pokit.core.ui.R.string.pokit_count_format, state.currentPokit.count),
+            title = state.currentPokit?.title ?: "",
+            sub = stringResource(id = pokitmons.pokit.core.ui.R.string.pokit_count_format, state.currentPokit?.count ?: 0),
             onClickSelectPokit = showPokitSelectBottomSheet,
             onClickSelectFilter = onClickFilter
         )
@@ -265,7 +267,7 @@ fun PokitDetailScreen(
                         onClickModify = remember {
                             {
                                 hidePokitModifyBottomSheet()
-                                onClickPokitModify(state.currentPokit.id)
+                                onClickPokitModify(state.currentPokit!!.id)
                             }
                         },
                         onClickRemove = showPokitRemoveBottomSheet
@@ -277,7 +279,12 @@ fun PokitDetailScreen(
                         title = stringResource(id = R.string.title_remove_pokit),
                         subText = stringResource(id = R.string.sub_remove_pokit),
                         onClickLeftButton = hidePokitModifyBottomSheet,
-                        onClickRightButton = {}
+                        onClickRightButton = remember{
+                            {
+                                hidePokitModifyBottomSheet()
+                                onClickPokitRemove()
+                            }
+                        }
                     )
                 }
 
