@@ -64,8 +64,8 @@ class PokitDetailViewModel @Inject constructor(
             linkPaging.changeOptions(categoryId = pokitId, sort = LinksSort.RECENT)
             viewModelScope.launch {
                 linkPaging.refresh()
-                getPokit(pokitId)
             }
+            getPokit(pokitId)
         }
     }
 
@@ -85,10 +85,12 @@ class PokitDetailViewModel @Inject constructor(
         )
     }
 
-    private suspend fun getPokit(pokitId: Int) {
-        val response = getPokitUseCase.getPokit(pokitId)
-        if (response is PokitResult.Success) {
-            _state.update { it.copy(currentPokit = Pokit.fromDomainPokit(response.result)) }
+    fun getPokit(pokitId: Int) {
+        viewModelScope.launch {
+            val response = getPokitUseCase.getPokit(pokitId)
+            if (response is PokitResult.Success) {
+                _state.update { it.copy(currentPokit = Pokit.fromDomainPokit(response.result)) }
+            }
         }
     }
 

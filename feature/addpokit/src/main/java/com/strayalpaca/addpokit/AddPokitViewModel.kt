@@ -128,18 +128,24 @@ class AddPokitViewModel @Inject constructor(
             state.copy(step = AddPokitScreenStep.POKIT_SAVE_LOADING)
         }
 
-        val currentPokitId = pokitId
         val currentPokitName = pokitName.value
         val pokitImageId = state.pokitImage?.id ?: 0
-        val response = if (currentPokitId != null) {
-            modifyPokitUseCase.modifyPokit(currentPokitId, currentPokitName, pokitImageId)
+        val response = if (pokitId != null) {
+            modifyPokitUseCase.modifyPokit(pokitId, currentPokitName, pokitImageId)
         } else {
             createPokitUseCase.createPokit(currentPokitName, pokitImageId)
         }
 
         if (response is PokitResult.Success) {
             reduce { state.copy(step = AddPokitScreenStep.IDLE) }
-            postSideEffect(AddPokitSideEffect.AddPokitSuccess)
+
+            val sideEffect = if (pokitId == null) {
+                AddPokitSideEffect.AddPokitSuccess
+            } else {
+                AddPokitSideEffect.ModifyPokitSuccess(pokitId)
+            }
+
+            postSideEffect(sideEffect)
         } else {
             response as PokitResult.Error
             val errorMessage = errorMessageProvider.errorCodeToMessage(response.error.code)
