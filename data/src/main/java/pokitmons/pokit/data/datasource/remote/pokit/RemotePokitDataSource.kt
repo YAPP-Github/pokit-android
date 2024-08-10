@@ -5,6 +5,7 @@ import pokitmons.pokit.data.model.pokit.request.CreatePokitRequest
 import pokitmons.pokit.data.model.pokit.request.GetPokitsRequest
 import pokitmons.pokit.data.model.pokit.request.ModifyPokitRequest
 import pokitmons.pokit.data.model.pokit.response.CreatePokitResponse
+import pokitmons.pokit.data.model.pokit.response.GetPokitCountResponse
 import pokitmons.pokit.data.model.pokit.response.GetPokitImagesResponseItem
 import pokitmons.pokit.data.model.pokit.response.GetPokitResponse
 import pokitmons.pokit.data.model.pokit.response.GetPokitsResponse
@@ -37,5 +38,13 @@ class RemotePokitDataSource @Inject constructor(
 
     override suspend fun getPokit(pokitId: Int): GetPokitResponse {
         return pokitApi.getPokit(pokitId)
+    }
+
+    override suspend fun deletePokit(pokitId: Int) {
+        return pokitApi.deletePokit(pokitId)
+    }
+
+    override suspend fun getPokitCount(): GetPokitCountResponse {
+        return pokitApi.getPokitCount()
     }
 }

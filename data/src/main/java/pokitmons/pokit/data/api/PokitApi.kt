@@ -3,6 +3,7 @@ package pokitmons.pokit.data.api
 import pokitmons.pokit.data.model.pokit.request.CreatePokitRequest
 import pokitmons.pokit.data.model.pokit.request.ModifyPokitRequest
 import pokitmons.pokit.data.model.pokit.response.CreatePokitResponse
+import pokitmons.pokit.data.model.pokit.response.GetPokitCountResponse
 import pokitmons.pokit.data.model.pokit.response.GetPokitImagesResponseItem
 import pokitmons.pokit.data.model.pokit.response.GetPokitResponse
 import pokitmons.pokit.data.model.pokit.response.GetPokitsResponse
@@ -12,6 +13,7 @@ import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -42,4 +44,12 @@ interface PokitApi {
     suspend fun getPokit(
         @Path("categoryId") categoryId: Int
     ): GetPokitResponse
+
+    @PUT("category/{categoryId}")
+    suspend fun deletePokit(
+        @Path("categoryId") categoryId: Int
+    )
+
+    @GET("category/count")
+    suspend fun getPokitCount() : GetPokitCountResponse
 }

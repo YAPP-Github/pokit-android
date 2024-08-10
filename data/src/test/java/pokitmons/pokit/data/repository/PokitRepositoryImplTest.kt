@@ -9,6 +9,7 @@ import pokitmons.pokit.data.model.pokit.request.CreatePokitRequest
 import pokitmons.pokit.data.model.pokit.request.GetPokitsRequest
 import pokitmons.pokit.data.model.pokit.request.ModifyPokitRequest
 import pokitmons.pokit.data.model.pokit.response.CreatePokitResponse
+import pokitmons.pokit.data.model.pokit.response.GetPokitCountResponse
 import pokitmons.pokit.data.model.pokit.response.GetPokitResponse
 import pokitmons.pokit.data.model.pokit.response.GetPokitsResponse
 import pokitmons.pokit.data.model.pokit.response.ModifyPokitResponse
@@ -89,6 +90,60 @@ class PokitRepositoryImplTest : DescribeSpec({
             coEvery { pokitDataSource.getPokit(pokitId = 0) } throws IllegalArgumentException()
             it("에러 코드, 메세지가 반환된다.") {
                 val response = pokitRepository.getPokit(pokitId = 0)
+                response.shouldBeInstanceOf<PokitResult.Error>()
+            }
+        }
+    }
+
+    describe("포킷 이미지 목록 조회시") {
+        context("목록 조회가 성공적으로 수행되면") {
+            coEvery { pokitDataSource.getPokitImages() } returns emptyList()
+            it("해당 리스트가 반환된다.") {
+                val response = pokitRepository.getPokitImages()
+                response.shouldBeInstanceOf<PokitResult.Success<List<Pokit.Image>>>()
+            }
+        }
+
+        context("조회 도중 에러가 발생한다면") {
+            coEvery { pokitDataSource.getPokitImages() } throws IllegalArgumentException()
+            it("에러 코드, 메세지가 반환된다.") {
+                val response = pokitRepository.getPokitImages()
+                response.shouldBeInstanceOf<PokitResult.Error>()
+            }
+        }
+    }
+
+    describe("포킷 삭제시") {
+        context("삭제가 성공적으로 수행되면") {
+            coEvery { pokitDataSource.deletePokit(pokitId = 0) } returns Unit
+            it("해당 포킷의 정보가 반환된다.") {
+                val response = pokitRepository.deletePokit(pokitId = 0)
+                response.shouldBeInstanceOf<PokitResult.Success<Unit>>()
+            }
+        }
+
+        context("삭제 도중 에러가 발생했다면") {
+            coEvery { pokitDataSource.deletePokit(pokitId = 0) } throws IllegalArgumentException()
+            it("에러 코드, 메세지가 반환된다.") {
+                val response = pokitRepository.deletePokit(pokitId = 0)
+                response.shouldBeInstanceOf<PokitResult.Error>()
+            }
+        }
+    }
+
+    describe("포킷 개수 조회시") {
+        context("개수 조회가 성공적으로 수행되면") {
+            coEvery { pokitDataSource.getPokitCount() } returns GetPokitCountResponse()
+            it("개수가 반환된다.") {
+                val response = pokitRepository.getPokitCount()
+                response.shouldBeInstanceOf<PokitResult.Success<Int>>()
+            }
+        }
+
+        context("개수 조회 도중 에러가 발생한다면") {
+            coEvery { pokitDataSource.getPokitCount() } throws IllegalArgumentException()
+            it("에러 코드, 메세지가 반환된다.") {
+                val response = pokitRepository.getPokitCount()
                 response.shouldBeInstanceOf<PokitResult.Error>()
             }
         }

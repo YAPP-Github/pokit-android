@@ -12,6 +12,8 @@ import pokitmons.pokit.data.model.pokit.request.CreatePokitRequest
 import pokitmons.pokit.data.model.pokit.request.GetPokitsRequest
 import pokitmons.pokit.data.model.pokit.request.ModifyPokitRequest
 import pokitmons.pokit.data.model.pokit.response.CreatePokitResponse
+import pokitmons.pokit.data.model.pokit.response.GetPokitCountResponse
+import pokitmons.pokit.data.model.pokit.response.GetPokitImagesResponseItem
 import pokitmons.pokit.data.model.pokit.response.GetPokitResponse
 import pokitmons.pokit.data.model.pokit.response.GetPokitsResponse
 import pokitmons.pokit.data.model.pokit.response.ModifyPokitResponse
@@ -94,6 +96,58 @@ class RemotePokitDataSourceTest : DescribeSpec({
             it("동일한 에러가 발생한다.") {
                 val exception = shouldThrow<Exception> {
                     remotePokitDataSource.getPokit(0)
+                }
+                exception.message shouldBe "error"
+            }
+        }
+    }
+
+    describe("포킷 이미지 목록 조회시") {
+        context("목록 조회가 성공적으로 수행되면") {
+            coEvery { pokitApi.getPokitImages() } returns emptyList()
+            it("해당 리스트가 반환된다.") {
+                val response = remotePokitDataSource.getPokitImages()
+                response.shouldBeInstanceOf<List<GetPokitImagesResponseItem>>()
+            }
+        }
+
+        context("조회 도중 에러가 발생했다면") {
+            coEvery { pokitApi.getPokitImages() } throws IllegalArgumentException("error")
+            it("동일한 에러가 발생한다.") {
+                val exception = shouldThrow<Exception> {
+                    remotePokitDataSource.getPokitImages()
+                }
+                exception.message shouldBe "error"
+            }
+        }
+    }
+
+    describe("포킷 삭제시") {
+        context("삭제가 실패한다면") {
+            coEvery { pokitApi.deletePokit(0) } throws IllegalArgumentException("error")
+            it("동일한 에러가 발생한다.") {
+                val exception = shouldThrow<Exception> {
+                    remotePokitDataSource.deletePokit(0)
+                }
+                exception.message shouldBe "error"
+            }
+        }
+    }
+
+    describe("포킷 개수 조회시") {
+        context("개수 조회가 성공적으로 수행되면") {
+            coEvery { pokitApi.getPokitCount() } returns GetPokitCountResponse()
+            it("해당 리스트가 반환된다.") {
+                val response = remotePokitDataSource.getPokitCount()
+                response.shouldBeInstanceOf<GetPokitCountResponse>()
+            }
+        }
+
+        context("개수 조회 도중 실패한다면") {
+            coEvery { pokitApi.getPokitCount() } throws IllegalArgumentException("error")
+            it("동일한 에러가 발생한다.") {
+                val exception = shouldThrow<Exception> {
+                    remotePokitDataSource.getPokitCount()
                 }
                 exception.message shouldBe "error"
             }

@@ -4,6 +4,7 @@ import pokitmons.pokit.data.model.pokit.request.CreatePokitRequest
 import pokitmons.pokit.data.model.pokit.request.GetPokitsRequest
 import pokitmons.pokit.data.model.pokit.request.ModifyPokitRequest
 import pokitmons.pokit.data.model.pokit.response.CreatePokitResponse
+import pokitmons.pokit.data.model.pokit.response.GetPokitCountResponse
 import pokitmons.pokit.data.model.pokit.response.GetPokitImagesResponseItem
 import pokitmons.pokit.data.model.pokit.response.GetPokitResponse
 import pokitmons.pokit.data.model.pokit.response.GetPokitsResponse
@@ -15,4 +16,6 @@ interface PokitDataSource {
     suspend fun modifyPokit(pokitId : Int, modifyPokitRequest: ModifyPokitRequest): ModifyPokitResponse
     suspend fun getPokitImages(): List<GetPokitImagesResponseItem>
     suspend fun getPokit(pokitId: Int): GetPokitResponse
+    suspend fun deletePokit(pokitId: Int)
+    suspend fun getPokitCount(): GetPokitCountResponse
 }

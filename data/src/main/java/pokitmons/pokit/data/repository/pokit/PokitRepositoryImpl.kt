@@ -68,10 +68,28 @@ class PokitRepositoryImpl @Inject constructor(
     }
 
     override suspend fun getPokit(pokitId: Int): PokitResult<Pokit> {
-        return kotlin.runCatching {
+        return runCatching {
             val response = pokitDataSource.getPokit(pokitId)
             val mappedResponse = PokitMapper.mapperToPokit(response)
             PokitResult.Success(mappedResponse)
+        }.getOrElse { throwable ->
+            parseErrorResult(throwable)
+        }
+    }
+
+    override suspend fun deletePokit(pokitId: Int): PokitResult<Unit> {
+        return runCatching {
+            pokitDataSource.deletePokit(pokitId)
+            PokitResult.Success(result = Unit)
+        }.getOrElse { throwable ->
+            parseErrorResult(throwable)
+        }
+    }
+
+    override suspend fun getPokitCount(): PokitResult<Int> {
+        return kotlin.runCatching {
+            val response = pokitDataSource.getPokitCount()
+            PokitResult.Success(result = response.categoryTotalCount)
         }.getOrElse { throwable ->
             parseErrorResult(throwable)
         }
