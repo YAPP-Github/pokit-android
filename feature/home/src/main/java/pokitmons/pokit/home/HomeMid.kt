@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import pokitmons.pokit.core.ui.components.atom.button.PokitButton
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonIcon
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonIconPosition
@@ -26,7 +27,7 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.core.ui.R.drawable as DrawableResource
 
 @Composable
-fun HomeMid() {
+fun HomeMid(viewModel: HomeViewModel = hiltViewModel()) {
     Spacer(modifier = Modifier.height(24.dp))
     Column(
         modifier = Modifier
@@ -37,27 +38,41 @@ fun HomeMid() {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             PokitButton(
+                style = when (viewModel.selectedCategory.value) {
+                    is Category.Pokit -> PokitButtonStyle.FILLED
+                    is Category.Unclassified -> PokitButtonStyle.STROKE
+                },
                 text = "포킷",
                 shape = PokitButtonShape.ROUND,
                 icon = PokitButtonIcon(
                     DrawableResource.icon_24_folderline,
                     PokitButtonIconPosition.LEFT
                 ),
-                onClick = { /*TODO*/ }
+                type = when (viewModel.selectedCategory.value) {
+                    is Category.Pokit -> PokitButtonType.PRIMARY
+                    is Category.Unclassified -> PokitButtonType.SECONDARY
+                },
+                onClick = { viewModel.updateCategory(Category.Pokit) }
             )
 
             Spacer(modifier = Modifier.padding(start = 12.dp))
 
             PokitButton(
+                style = when (viewModel.selectedCategory.value) {
+                    is Category.Pokit -> PokitButtonStyle.STROKE
+                    is Category.Unclassified -> PokitButtonStyle.FILLED
+                },
                 text = "미분류",
                 shape = PokitButtonShape.ROUND,
                 icon = PokitButtonIcon(
                     DrawableResource.icon_24_info,
                     PokitButtonIconPosition.LEFT
                 ),
-                type = PokitButtonType.SECONDARY,
-                style = PokitButtonStyle.STROKE,
-                onClick = { /*TODO*/ }
+                type = when (viewModel.selectedCategory.value) {
+                    is Category.Pokit -> PokitButtonType.SECONDARY
+                    is Category.Unclassified -> PokitButtonType.PRIMARY
+                },
+                onClick = { viewModel.updateCategory(Category.Unclassified) }
             )
 
             Row(

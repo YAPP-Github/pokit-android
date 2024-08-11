@@ -2,7 +2,6 @@ package pokitmons.pokit.home.pokit
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
@@ -10,10 +9,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
+import pokitmons.pokit.home.HomeViewModel
 
 @Composable
-fun UnclassifiedScreen() {
+fun UnclassifiedScreen(viewModel: HomeViewModel = hiltViewModel()) {
     val dummy = arrayListOf<LinkCardDummy>().apply {
         add(LinkCardDummy())
         add(LinkCardDummy())
@@ -23,9 +24,8 @@ fun UnclassifiedScreen() {
     }.toList()
 
     LazyColumn(
-        modifier = Modifier
-            .padding(horizontal = 20.dp),
-        contentPadding = PaddingValues(vertical = 20.dp),
+        modifier = Modifier,
+        contentPadding = PaddingValues(bottom = 20.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
         items(items = dummy) { linkCardInfo ->
