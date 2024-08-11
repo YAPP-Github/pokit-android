@@ -8,9 +8,12 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -26,6 +29,7 @@ import com.strayalpaca.pokitdetail.model.Filter
 import com.strayalpaca.pokitdetail.model.Link
 import com.strayalpaca.pokitdetail.model.Pokit
 import com.strayalpaca.pokitdetail.model.PokitDetailScreenState
+import com.strayalpaca.pokitdetail.paging.SimplePagingState
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
 import pokitmons.pokit.core.ui.components.block.pokitlist.PokitList
 import pokitmons.pokit.core.ui.components.block.pokitlist.attributes.PokitListState
@@ -44,7 +48,9 @@ fun PokitDetailScreenContainer(
 ) {
     val state by viewModel.state.collectAsState()
     val linkList by viewModel.linkList.collectAsState()
+    val linkListState by viewModel.linkListState.collectAsState()
     val pokitList by viewModel.pokitList.collectAsState()
+    val pokitListState by viewModel.pokitListState.collectAsState()
 
     PokitDetailScreen(
         onBackPressed = onBackPressed,
@@ -63,10 +69,16 @@ fun PokitDetailScreenContainer(
         hideLinkDetailBottomSheet = viewModel::hideLinkDetailBottomSheet,
         state = state,
         linkList = linkList,
+        linkListState = linkListState,
         pokitList = pokitList,
+        pokitListState = pokitListState,
         onClickLink = viewModel::showLinkDetailBottomSheet,
-        onClickPokitModify = onNavigateToLinkModify,
-        onClickLinkModify = onNavigateToPokitModify
+        onClickPokitModify = onNavigateToPokitModify,
+        onClickPokitRemove = viewModel::deletePokit,
+        onClickLinkModify = onNavigateToLinkModify,
+        loadNextPokits = viewModel::loadNextPokits,
+        refreshPokits = viewModel::refreshPokits,
+        loadNextLinks = viewModel::loadNextLinks
     )
 }
 
@@ -88,10 +100,16 @@ fun PokitDetailScreen(
     hideLinkDetailBottomSheet: () -> Unit = {},
     state: PokitDetailScreenState = PokitDetailScreenState(),
     linkList: List<Link> = emptyList(),
+    linkListState: SimplePagingState = SimplePagingState.IDLE,
     pokitList: List<Pokit> = emptyList(),
+    pokitListState: SimplePagingState = SimplePagingState.IDLE,
     onClickLink: (Link) -> Unit = {},
     onClickPokitModify: (String) -> Unit = {},
+    onClickPokitRemove: () -> Unit = {},
     onClickLinkModify: (String) -> Unit = {},
+    loadNextPokits: () -> Unit = {},
+    refreshPokits: () -> Unit = {},
+    loadNextLinks: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -104,16 +122,32 @@ fun PokitDetailScreen(
         Spacer(modifier = Modifier.height(12.dp))
 
         TitleArea(
-            title = state.currentPokit.title,
-            sub = stringResource(id = pokitmons.pokit.core.ui.R.string.pokit_count_format, state.currentPokit.count),
+            title = state.currentPokit?.title ?: "",
+            sub = stringResource(id = pokitmons.pokit.core.ui.R.string.pokit_count_format, state.currentPokit?.count ?: 0),
             onClickSelectPokit = showPokitSelectBottomSheet,
             onClickSelectFilter = onClickFilter
         )
 
+        val linkLazyColumnListState = rememberLazyListState()
+        val startLinkPaging = remember {
+            derivedStateOf {
+                linkLazyColumnListState.layoutInfo.visibleItemsInfo.lastOrNull()?.let { last ->
+                    last.index >= linkLazyColumnListState.layoutInfo.totalItemsCount - 3
+                } ?: false
+            }
+        }
+
+        LaunchedEffect(startLinkPaging.value) {
+            if (startLinkPaging.value && linkListState == SimplePagingState.IDLE) {
+                loadNextLinks()
+            }
+        }
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .weight(1f)
+                .weight(1f),
+            state = linkLazyColumnListState
         ) {
             items(linkList) { link ->
                 LinkCard(
@@ -153,7 +187,28 @@ fun PokitDetailScreen(
             onHideBottomSheet = hidePokitSelectBottomSheet,
             show = state.pokitSelectBottomSheetVisible
         ) {
-            LazyColumn {
+            val lazyColumnListState = rememberLazyListState()
+            val startPaging = remember {
+                derivedStateOf {
+                    lazyColumnListState.layoutInfo.visibleItemsInfo.lastOrNull()?.let { last ->
+                        last.index >= lazyColumnListState.layoutInfo.totalItemsCount - 3
+                    } ?: false
+                }
+            }
+
+            LaunchedEffect(Unit) {
+                refreshPokits()
+            }
+
+            LaunchedEffect(startPaging.value) {
+                if (startPaging.value && pokitListState == SimplePagingState.IDLE) {
+                    loadNextPokits()
+                }
+            }
+
+            LazyColumn(
+                state = lazyColumnListState
+            ) {
                 items(
                     items = pokitList
                 ) { pokit ->
@@ -212,7 +267,7 @@ fun PokitDetailScreen(
                         onClickModify = remember {
                             {
                                 hidePokitModifyBottomSheet()
-                                onClickPokitModify(state.currentPokit.id)
+                                onClickPokitModify(state.currentPokit!!.id)
                             }
                         },
                         onClickRemove = showPokitRemoveBottomSheet
@@ -224,7 +279,12 @@ fun PokitDetailScreen(
                         title = stringResource(id = R.string.title_remove_pokit),
                         subText = stringResource(id = R.string.sub_remove_pokit),
                         onClickLeftButton = hidePokitModifyBottomSheet,
-                        onClickRightButton = {}
+                        onClickRightButton = remember {
+                            {
+                                hidePokitModifyBottomSheet()
+                                onClickPokitRemove()
+                            }
+                        }
                     )
                 }
 

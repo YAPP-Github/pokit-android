@@ -107,7 +107,9 @@ fun<T> LinkCard(
 
                     Text(
                         text = sub,
-                        style = PokitTheme.typography.detail2.copy(color = PokitTheme.colors.textTertiary)
+                        style = PokitTheme.typography.detail2.copy(color = PokitTheme.colors.textTertiary),
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis
                     )
                 }
 
