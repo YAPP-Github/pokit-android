@@ -26,10 +26,10 @@ import pokitmons.pokit.core.ui.R.drawable as DrawableResource
 
 @Composable
 fun HomeMid() {
-    Spacer(modifier = Modifier.height(8.dp))
+    Spacer(modifier = Modifier.height(24.dp))
     Column(
         modifier = Modifier
-            .padding(horizontal = 20.dp, vertical = 16.dp)
+            .padding(vertical = 16.dp)
             .fillMaxWidth()
     ) {
         Row(
