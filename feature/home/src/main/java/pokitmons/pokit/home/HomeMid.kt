@@ -1,5 +1,6 @@
 package pokitmons.pokit.home
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -88,8 +89,18 @@ fun HomeMid(viewModel: HomeViewModel = hiltViewModel()) {
                 Spacer(modifier = Modifier.padding(start = 2.dp))
 
                 Text(
-                    modifier = Modifier.align(Alignment.CenterVertically),
-                    text = "최신순",
+                    modifier = Modifier
+                        .clickable {
+                            when (viewModel.sortOrder.value) {
+                                is SortOrder.Latest -> viewModel.updateSortOrder(SortOrder.Name)
+                                is SortOrder.Name -> viewModel.updateSortOrder(SortOrder.Latest)
+                            }
+                        }
+                        .align(Alignment.CenterVertically),
+                    text = when (viewModel.sortOrder.value) {
+                        is SortOrder.Latest -> "최신순"
+                        is SortOrder.Name -> "이름순"
+                    },
                     style = PokitTheme.typography.body3Medium,
                 )
             }
