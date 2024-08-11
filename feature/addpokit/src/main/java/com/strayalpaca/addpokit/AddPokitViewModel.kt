@@ -31,7 +31,6 @@ import pokitmons.pokit.domain.usecase.pokit.GetPokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
 import pokitmons.pokit.domain.usecase.pokit.ModifyPokitUseCase
 import javax.inject.Inject
-import pokitmons.pokit.domain.model.pokit.Pokit as DomainPokit
 
 @HiltViewModel
 class AddPokitViewModel @Inject constructor(
@@ -48,7 +47,7 @@ class AddPokitViewModel @Inject constructor(
     private val pokitId = savedStateHandle.get<String>("pokit_id")?.toIntOrNull()
 
     private val pokitPaging = PokitPaging(
-        getPokits = ::getPokits,
+        getPokits = getPokitsUseCase,
         perPage = 10,
         coroutineScope = viewModelScope,
         initPage = 0
@@ -103,10 +102,6 @@ class AddPokitViewModel @Inject constructor(
                 postSideEffect(AddPokitSideEffect.OnNavigationBack)
             }
         }
-    }
-
-    private suspend fun getPokits(size: Int, page: Int): PokitResult<List<DomainPokit>> {
-        return getPokitsUseCase.getPokits(size = size, page = page)
     }
 
     fun inputPokitName(pokitName: String) {

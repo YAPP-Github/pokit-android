@@ -25,7 +25,6 @@ import pokitmons.pokit.domain.usecase.pokit.GetPokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
 import javax.inject.Inject
 import pokitmons.pokit.domain.model.link.Link as DomainLink
-import pokitmons.pokit.domain.model.pokit.Pokit as DomainPokit
 
 @HiltViewModel
 class PokitDetailViewModel @Inject constructor(
@@ -36,7 +35,7 @@ class PokitDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val pokitPaging = PokitPaging(
-        getPokits = ::getPokits,
+        getPokits = getPokitsUseCase,
         perPage = 10,
         coroutineScope = viewModelScope,
         initPage = 0
@@ -67,10 +66,6 @@ class PokitDetailViewModel @Inject constructor(
             }
             getPokit(pokitId)
         }
-    }
-
-    private suspend fun getPokits(size: Int, page: Int): PokitResult<List<DomainPokit>> {
-        return getPokitsUseCase.getPokits(size = size, page = page)
     }
 
     private suspend fun getLinks(categoryId: Int, size: Int, page: Int, sort: LinksSort): PokitResult<List<DomainLink>> {

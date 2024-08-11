@@ -11,11 +11,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pokitmons.pokit.domain.commom.PokitResult
-import kotlin.reflect.KSuspendFunction2
-import pokitmons.pokit.domain.model.pokit.Pokit as DomainPokit
+import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
 
 class PokitPaging(
-    private val getPokits: KSuspendFunction2<Int, Int, PokitResult<List<DomainPokit>>>,
+    private val getPokits: GetPokitsUseCase,
     private val perPage: Int = 10,
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO),
     private val initPage: Int = 0,
@@ -37,7 +36,7 @@ class PokitPaging(
         requestJob = coroutineScope.launch {
             try {
                 currentPageIndex = initPage
-                val response = getPokits(perPage * firstRequestPage, currentPageIndex)
+                val response = getPokits.getPokits(size = perPage * firstRequestPage, page = currentPageIndex)
                 when (response) {
                     is PokitResult.Success -> {
                         val pokitList = response.result.map { domainPokit ->
@@ -66,7 +65,7 @@ class PokitPaging(
 
         requestJob = coroutineScope.launch {
             try {
-                val response = getPokits(perPage, currentPageIndex)
+                val response = getPokits.getPokits(size = perPage, page = currentPageIndex)
                 when (response) {
                     is PokitResult.Success -> {
                         val pokitList = response.result.map { domainPokit ->
