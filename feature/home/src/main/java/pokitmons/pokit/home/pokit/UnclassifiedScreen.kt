@@ -7,7 +7,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,7 +33,7 @@ fun UnclassifiedScreen() {
                 item = linkCardInfo.item,
                 title = linkCardInfo.title,
                 sub = linkCardInfo.sub,
-                painter = linkCardInfo.painter,
+                painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.icon_24_folder),
                 notRead = linkCardInfo.notRead,
                 badgeText = linkCardInfo.badgeText,
                 onClickKebab = { },
