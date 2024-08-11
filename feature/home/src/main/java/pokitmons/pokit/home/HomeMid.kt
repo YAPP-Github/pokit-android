@@ -29,7 +29,6 @@ fun HomeMid() {
     Spacer(modifier = Modifier.height(24.dp))
     Column(
         modifier = Modifier
-            .padding(vertical = 16.dp)
             .fillMaxWidth()
     ) {
         Row(
@@ -78,6 +77,7 @@ fun HomeMid() {
                 )
             }
         }
+        Spacer(modifier = Modifier.height(20.dp))
     }
 }
 
