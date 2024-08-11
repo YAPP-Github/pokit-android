@@ -16,11 +16,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
-fun HomeHeader() {
+fun HomeHeader(viewModel: HomeViewModel = hiltViewModel()) {
     Spacer(modifier = Modifier.height(8.dp))
     Row(
         modifier = Modifier
@@ -31,7 +32,10 @@ fun HomeHeader() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
-            painterResource(id = R.drawable.icon_logo),
+            painter = when (viewModel.screenType.value) {
+                is ScreenType.Pokit -> painterResource(id = R.drawable.logo_pokit)
+                is ScreenType.Remind -> painterResource(id = R.drawable.logo_remind)
+            },
             tint = PokitTheme.colors.brand,
             contentDescription = "로고"
         )
@@ -53,11 +57,18 @@ fun HomeHeader() {
                 contentDescription = "알림",
                 modifier = Modifier.size(24.dp)
             )
-            Icon(
-                painterResource(id = R.drawable.icon_24_setup),
-                contentDescription = "설정",
-                modifier = Modifier.size(24.dp)
-            )
+
+            when (viewModel.screenType.value) {
+                is ScreenType.Pokit -> {
+                    Icon(
+                        painterResource(id = R.drawable.icon_24_setup),
+                        contentDescription = "설정",
+                        modifier = Modifier.size(24.dp),
+                    )
+                }
+
+                is ScreenType.Remind -> Unit
+            }
         }
     }
 }

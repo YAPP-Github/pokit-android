@@ -7,8 +7,10 @@ class HomeViewModel : ViewModel() {
     var selectedCategory = mutableStateOf<Category>(Category.Pokit)
         private set
 
-    // 정렬 순서 상태 관리
     var sortOrder = mutableStateOf<SortOrder>(SortOrder.Latest)
+        private set
+
+    var screenType = mutableStateOf<ScreenType>(ScreenType.Pokit)
         private set
 
     fun updateCategory(category: Category) {
@@ -17,6 +19,10 @@ class HomeViewModel : ViewModel() {
 
     fun updateSortOrder(order: SortOrder) {
         sortOrder.value = order
+    }
+
+    fun updateScreenType(type: ScreenType) {
+        screenType.value = type
     }
 }
 
@@ -28,4 +34,9 @@ sealed class Category {
 sealed class SortOrder {
     data object Latest : SortOrder()
     data object Name : SortOrder()
+}
+
+sealed class ScreenType {
+    data object Pokit : ScreenType()
+    data object Remind : ScreenType()
 }

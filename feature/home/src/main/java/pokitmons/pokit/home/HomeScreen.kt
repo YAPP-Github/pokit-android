@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.home.pokit.PokitScreen
+import pokitmons.pokit.home.remind.RemindScreen
 
 @Composable
 fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
@@ -34,7 +35,10 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
             Scaffold(
                 bottomBar = { BottomNavigationBar() },
             ) { padding ->
-                PokitScreen(Modifier.padding(padding))
+                when (viewModel.screenType.value) {
+                    is ScreenType.Pokit -> PokitScreen(Modifier.padding(padding))
+                    is ScreenType.Remind -> RemindScreen(Modifier.padding(padding))
+                }
             }
         }
         Image(
