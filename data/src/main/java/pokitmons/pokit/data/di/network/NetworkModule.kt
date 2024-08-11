@@ -12,6 +12,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import pokitmons.pokit.data.api.AuthApi
 import pokitmons.pokit.data.api.LinkApi
 import pokitmons.pokit.data.api.PokitApi
+import pokitmons.pokit.data.api.SettingApi
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -78,5 +79,9 @@ object NetworkModule {
     @Provides
     fun provideLinkService(retrofit: Retrofit): LinkApi {
         return retrofit.create(LinkApi::class.java)
+
+    @Provides
+    fun provideSettingService(retrofit: Retrofit): SettingApi {
+        return retrofit.create(SettingApi::class.java)
     }
 }
