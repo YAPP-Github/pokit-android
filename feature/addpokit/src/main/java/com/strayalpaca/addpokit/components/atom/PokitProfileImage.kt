@@ -1,6 +1,5 @@
 package com.strayalpaca.addpokit.components.atom
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.size
@@ -10,16 +9,16 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import com.strayalpaca.addpokit.model.PokitProfile
+import coil.compose.AsyncImage
+import com.strayalpaca.addpokit.model.PokitImage
 import pokitmons.pokit.core.ui.theme.PokitTheme
-import pokitmons.pokit.core.ui.R.drawable as coreDrawable
 
 @Composable
 fun PokitProfileImage(
-    pokitProfile: PokitProfile,
-    onClick: (PokitProfile) -> Unit,
+    pokitImage: PokitImage,
+    onClick: (PokitImage) -> Unit,
     focused: Boolean = false,
 ) {
     val activeStrokeColor = PokitTheme.colors.brand
@@ -31,14 +30,15 @@ fun PokitProfileImage(
         }
     }
 
-    Image(
-        painter = painterResource(id = coreDrawable.icon_24_plus_r),
+    AsyncImage(
+        model = pokitImage.url,
         contentDescription = "pokit profile image",
+        contentScale = ContentScale.Crop,
         modifier = Modifier
             .size(66.dp)
             .clip(shape = RoundedCornerShape(12.dp))
             .clickable {
-                onClick(pokitProfile)
+                onClick(pokitImage)
             }
             .border(
                 color = strokeColor,

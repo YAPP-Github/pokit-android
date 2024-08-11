@@ -91,7 +91,7 @@ internal fun FilterSelectBottomSheet(
             )
             RadioText(
                 selected = !currentFilter.recentSortUsed,
-                title = stringResource(id = R.string.sort_recent),
+                title = stringResource(id = R.string.sort_old),
                 onClick = remember { { currentFilter = currentFilter.copy(recentSortUsed = false) } },
                 modifier = Modifier.height(40.dp)
             )

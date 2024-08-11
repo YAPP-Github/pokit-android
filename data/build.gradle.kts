@@ -67,4 +67,8 @@ dependencies {
     implementation(libs.logging.interceptor)
 
     implementation(project(":domain"))
+
+    // mockk
+    testImplementation(libs.mockk)
+    androidTestImplementation(libs.mockk.android)
 }
