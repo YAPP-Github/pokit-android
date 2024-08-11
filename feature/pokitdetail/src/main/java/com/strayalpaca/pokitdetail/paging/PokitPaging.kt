@@ -19,7 +19,7 @@ class PokitPaging(
     private val perPage: Int = 10,
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO),
     private val initPage: Int = 0,
-    private val firstRequestPage: Int = 3
+    private val firstRequestPage: Int = 3,
 ) : SimplePaging<Pokit> {
     private val _pagingState = MutableStateFlow(SimplePagingState.IDLE)
     override val pagingState: StateFlow<SimplePagingState> = _pagingState.asStateFlow()
@@ -51,13 +51,12 @@ class PokitPaging(
                     }
                 }
             } catch (exception: Exception) {
-                if (exception !is CancellationException)
+                if (exception !is CancellationException) {
                     _pagingState.update { SimplePagingState.FAILURE_INIT }
-
+                }
             }
         }
     }
-
 
     override suspend fun load() {
         if (pagingState.value != SimplePagingState.IDLE) return
@@ -81,9 +80,9 @@ class PokitPaging(
                     }
                 }
             } catch (exception: Exception) {
-                if (exception !is CancellationException)
+                if (exception !is CancellationException) {
                     _pagingState.update { SimplePagingState.FAILURE_NEXT }
-
+                }
             }
         }
     }
@@ -115,8 +114,11 @@ class PokitPaging(
 
         _pagingData.update {
             capturedDataList.map { pokit ->
-                if (targetPokit.id == pokit.id) targetPokit
-                else pokit
+                if (targetPokit.id == pokit.id) {
+                    targetPokit
+                } else {
+                    pokit
+                }
             }
         }
     }

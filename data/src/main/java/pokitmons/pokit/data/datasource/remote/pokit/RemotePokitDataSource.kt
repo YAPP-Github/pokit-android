@@ -28,7 +28,7 @@ class RemotePokitDataSource @Inject constructor(
         return pokitApi.createPokit(createPokitRequest = createPokitRequest)
     }
 
-    override suspend fun modifyPokit(pokitId : Int, modifyPokitRequest: ModifyPokitRequest): ModifyPokitResponse {
+    override suspend fun modifyPokit(pokitId: Int, modifyPokitRequest: ModifyPokitRequest): ModifyPokitResponse {
         return pokitApi.modifyPokit(categoryId = pokitId, modifyPokitRequest = modifyPokitRequest)
     }
 

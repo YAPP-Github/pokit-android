@@ -65,7 +65,7 @@ fun AddPokitScreenContainer(
     viewModel: AddPokitViewModel,
     onBackPressed: () -> Unit,
     onBackWithModifySuccess: (Int) -> Unit = {},
-    onBackWithCreateSuccess: () -> Unit = {}
+    onBackWithCreateSuccess: () -> Unit = {},
 ) {
     val state by viewModel.container.stateFlow.collectAsState()
     val pokitName by viewModel.pokitName.collectAsState()
@@ -131,7 +131,7 @@ fun AddPokitScreen(
     pokitsState: SimplePagingState = SimplePagingState.IDLE,
     loadPokits: () -> Unit = {},
     pokitImages: List<PokitImage> = emptyList(),
-    pokitImagesState: SimplePagingState = SimplePagingState.IDLE
+    pokitImagesState: SimplePagingState = SimplePagingState.IDLE,
 ) {
     Column(
         modifier = Modifier

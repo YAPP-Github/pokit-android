@@ -11,5 +11,5 @@ data class Link(
     val alertYn: String,
     val createdAt: String,
     val isRead: Boolean,
-    val thumbnail: String
+    val thumbnail: String,
 )

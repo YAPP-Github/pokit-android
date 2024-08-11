@@ -78,7 +78,7 @@ fun PokitDetailScreenContainer(
         onClickLinkModify = onNavigateToLinkModify,
         loadNextPokits = viewModel::loadNextPokits,
         refreshPokits = viewModel::refreshPokits,
-        loadNextLinks = viewModel::loadNextLinks,
+        loadNextLinks = viewModel::loadNextLinks
     )
 }
 
@@ -100,7 +100,7 @@ fun PokitDetailScreen(
     hideLinkDetailBottomSheet: () -> Unit = {},
     state: PokitDetailScreenState = PokitDetailScreenState(),
     linkList: List<Link> = emptyList(),
-    linkListState : SimplePagingState = SimplePagingState.IDLE,
+    linkListState: SimplePagingState = SimplePagingState.IDLE,
     pokitList: List<Pokit> = emptyList(),
     pokitListState: SimplePagingState = SimplePagingState.IDLE,
     onClickLink: (Link) -> Unit = {},
@@ -279,7 +279,7 @@ fun PokitDetailScreen(
                         title = stringResource(id = R.string.title_remove_pokit),
                         subText = stringResource(id = R.string.sub_remove_pokit),
                         onClickLeftButton = hidePokitModifyBottomSheet,
-                        onClickRightButton = remember{
+                        onClickRightButton = remember {
                             {
                                 hidePokitModifyBottomSheet()
                                 onClickPokitRemove()

@@ -10,9 +10,9 @@ import pokitmons.pokit.data.repository.link.LinkRepositoryImpl
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.link.Link
 
-val linkDataSource : LinkDataSource = mockk()
+val linkDataSource: LinkDataSource = mockk()
 
-class LinkRepositoryImplTest: DescribeSpec({
+class LinkRepositoryImplTest : DescribeSpec({
     val linkRepository = LinkRepositoryImpl(linkDataSource)
     describe("링크 목록 조회") {
         context("링크 목록이 정상적으로 수신되면") {

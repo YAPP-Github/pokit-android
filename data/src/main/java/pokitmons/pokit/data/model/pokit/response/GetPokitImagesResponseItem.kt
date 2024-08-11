@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class GetPokitImagesResponseItem(
     val imageId: Int,
-    val imageUrl: String
+    val imageUrl: String,
 )

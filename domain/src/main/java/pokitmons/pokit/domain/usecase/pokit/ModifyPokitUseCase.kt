@@ -8,9 +8,9 @@ class ModifyPokitUseCase @Inject constructor(
     private val repository: PokitRepository,
 ) {
     suspend fun modifyPokit(
-        pokitId : Int,
-        name : String,
-        imageId : Int
+        pokitId: Int,
+        name: String,
+        imageId: Int,
     ): PokitResult<Int> {
         return repository.modifyPokit(pokitId = pokitId, name = name, imageId = imageId)
     }

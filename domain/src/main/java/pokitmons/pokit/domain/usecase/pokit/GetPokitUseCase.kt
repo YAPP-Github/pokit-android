@@ -6,7 +6,7 @@ import pokitmons.pokit.domain.repository.pokit.PokitRepository
 import javax.inject.Inject
 
 class GetPokitUseCase @Inject constructor(
-    private val repository: PokitRepository
+    private val repository: PokitRepository,
 ) {
     suspend fun getPokit(pokitId: Int): PokitResult<Pokit> {
         return repository.getPokit(pokitId)

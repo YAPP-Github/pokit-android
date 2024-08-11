@@ -5,9 +5,9 @@ import pokitmons.pokit.domain.repository.pokit.PokitRepository
 import javax.inject.Inject
 
 class DeletePokitUseCase @Inject constructor(
-    private val repository: PokitRepository
+    private val repository: PokitRepository,
 ) {
-    suspend fun deletePokit(pokitId: Int) : PokitResult<Unit> {
+    suspend fun deletePokit(pokitId: Int): PokitResult<Unit> {
         return repository.deletePokit(pokitId)
     }
 }

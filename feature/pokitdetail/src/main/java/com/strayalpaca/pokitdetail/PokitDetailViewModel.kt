@@ -23,9 +23,9 @@ import pokitmons.pokit.domain.usecase.link.GetLinksUseCase
 import pokitmons.pokit.domain.usecase.pokit.DeletePokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
-import pokitmons.pokit.domain.model.pokit.Pokit as DomainPokit
-import pokitmons.pokit.domain.model.link.Link as DomainLink
 import javax.inject.Inject
+import pokitmons.pokit.domain.model.link.Link as DomainLink
+import pokitmons.pokit.domain.model.pokit.Pokit as DomainPokit
 
 @HiltViewModel
 class PokitDetailViewModel @Inject constructor(
@@ -33,7 +33,7 @@ class PokitDetailViewModel @Inject constructor(
     private val getLinksUseCase: GetLinksUseCase,
     private val getPokitUseCase: GetPokitUseCase,
     private val deletePokitUseCase: DeletePokitUseCase,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val pokitPaging = PokitPaging(
         getPokits = ::getPokits,
@@ -54,10 +54,10 @@ class PokitDetailViewModel @Inject constructor(
     val state: StateFlow<PokitDetailScreenState> = _state.asStateFlow()
 
     val pokitList: StateFlow<List<Pokit>> = pokitPaging.pagingData
-    val pokitListState : StateFlow<SimplePagingState> = pokitPaging.pagingState
+    val pokitListState: StateFlow<SimplePagingState> = pokitPaging.pagingState
 
     val linkList: StateFlow<List<Link>> = linkPaging.pagingData
-    val linkListState : StateFlow<SimplePagingState> = linkPaging.pagingState
+    val linkListState: StateFlow<SimplePagingState> = linkPaging.pagingState
 
     init {
         savedStateHandle.get<String>("pokit_id")?.toIntOrNull()?.let { pokitId ->
@@ -69,11 +69,11 @@ class PokitDetailViewModel @Inject constructor(
         }
     }
 
-    private suspend fun getPokits(size : Int, page : Int) : PokitResult<List<DomainPokit>> {
+    private suspend fun getPokits(size: Int, page: Int): PokitResult<List<DomainPokit>> {
         return getPokitsUseCase.getPokits(size = size, page = page)
     }
 
-    private suspend fun getLinks(categoryId : Int, size: Int, page : Int, sort: LinksSort) : PokitResult<List<DomainLink>>{
+    private suspend fun getLinks(categoryId: Int, size: Int, page: Int, sort: LinksSort): PokitResult<List<DomainLink>> {
         val currentFilter = state.value.currentFilter
         return getLinksUseCase.getLinks(
             categoryId = categoryId,
@@ -81,7 +81,7 @@ class PokitDetailViewModel @Inject constructor(
             page = page,
             sort = sort,
             isRead = !currentFilter.notReadChecked,
-            favorite = currentFilter.bookmarkChecked,
+            favorite = currentFilter.bookmarkChecked
         )
     }
 

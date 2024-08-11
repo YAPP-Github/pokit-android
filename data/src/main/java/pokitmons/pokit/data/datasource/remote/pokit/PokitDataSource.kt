@@ -13,7 +13,7 @@ import pokitmons.pokit.data.model.pokit.response.ModifyPokitResponse
 interface PokitDataSource {
     suspend fun getPokits(getPokitsRequest: GetPokitsRequest): GetPokitsResponse
     suspend fun createPokit(createPokitRequest: CreatePokitRequest): CreatePokitResponse
-    suspend fun modifyPokit(pokitId : Int, modifyPokitRequest: ModifyPokitRequest): ModifyPokitResponse
+    suspend fun modifyPokit(pokitId: Int, modifyPokitRequest: ModifyPokitRequest): ModifyPokitResponse
     suspend fun getPokitImages(): List<GetPokitImagesResponseItem>
     suspend fun getPokit(pokitId: Int): GetPokitResponse
     suspend fun deletePokit(pokitId: Int)

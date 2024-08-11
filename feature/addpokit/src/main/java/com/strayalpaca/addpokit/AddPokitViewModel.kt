@@ -30,8 +30,8 @@ import pokitmons.pokit.domain.usecase.pokit.GetPokitImagesUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
 import pokitmons.pokit.domain.usecase.pokit.ModifyPokitUseCase
-import pokitmons.pokit.domain.model.pokit.Pokit as DomainPokit
 import javax.inject.Inject
+import pokitmons.pokit.domain.model.pokit.Pokit as DomainPokit
 
 @HiltViewModel
 class AddPokitViewModel @Inject constructor(
@@ -41,7 +41,7 @@ class AddPokitViewModel @Inject constructor(
     private val createPokitUseCase: CreatePokitUseCase,
     private val modifyPokitUseCase: ModifyPokitUseCase,
     private val errorMessageProvider: ErrorMessageProvider,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
 ) : ContainerHost<AddPokitScreenState, AddPokitSideEffect>, ViewModel() {
     override val container: Container<AddPokitScreenState, AddPokitSideEffect> = container(AddPokitScreenState())
 
@@ -58,10 +58,10 @@ class AddPokitViewModel @Inject constructor(
     val pokitName: StateFlow<String> = _pokitName.asStateFlow()
 
     val pokitList: StateFlow<List<Pokit>> = pokitPaging.pagingData
-    val pokitListState : StateFlow<SimplePagingState> = pokitPaging.pagingState
+    val pokitListState: StateFlow<SimplePagingState> = pokitPaging.pagingState
 
     private val _pokitIamges = MutableStateFlow<List<PokitImage>>(emptyList())
-    val pokitImages : StateFlow<List<PokitImage>> = _pokitIamges.asStateFlow()
+    val pokitImages: StateFlow<List<PokitImage>> = _pokitIamges.asStateFlow()
 
     init {
         loadPokitList()
@@ -103,10 +103,9 @@ class AddPokitViewModel @Inject constructor(
                 postSideEffect(AddPokitSideEffect.OnNavigationBack)
             }
         }
-
     }
 
-    private suspend fun getPokits(size: Int, page: Int) : PokitResult<List<DomainPokit>> {
+    private suspend fun getPokits(size: Int, page: Int): PokitResult<List<DomainPokit>> {
         return getPokitsUseCase.getPokits(size = size, page = page)
     }
 

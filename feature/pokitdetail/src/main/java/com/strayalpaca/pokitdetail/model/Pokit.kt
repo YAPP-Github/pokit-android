@@ -8,7 +8,7 @@ data class Pokit(
     val count: Int = 0,
 ) {
     companion object {
-        fun fromDomainPokit(pokit: DomainPokit) : Pokit {
+        fun fromDomainPokit(pokit: DomainPokit): Pokit {
             return Pokit(
                 title = pokit.name,
                 id = pokit.categoryId.toString(),

@@ -7,7 +7,7 @@ data class AddPokitScreenState(
     val pokitInputErrorMessage: String? = null,
     val step: AddPokitScreenStep = AddPokitScreenStep.IDLE,
     val pokitImage: PokitImage? = null,
-    val isModify: Boolean = false
+    val isModify: Boolean = false,
 )
 
 sealed class AddPokitScreenStep {
@@ -21,4 +21,3 @@ sealed class AddPokitSideEffect {
     data class ModifyPokitSuccess(val id: Int) : AddPokitSideEffect()
     data object OnNavigationBack : AddPokitSideEffect()
 }
-

@@ -4,6 +4,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CreatePokitRequest(
-    val categoryName : String = "",
-    val categoryImageId : Int = 0
+    val categoryName: String = "",
+    val categoryImageId: Int = 0,
 )

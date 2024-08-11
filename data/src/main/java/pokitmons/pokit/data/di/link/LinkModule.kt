@@ -15,9 +15,9 @@ import javax.inject.Singleton
 abstract class LinkModule {
     @Binds
     @Singleton
-    abstract fun bindLinkRepository(linkRepositoryImpl: LinkRepositoryImpl) : LinkRepository
+    abstract fun bindLinkRepository(linkRepositoryImpl: LinkRepositoryImpl): LinkRepository
 
     @Binds
     @Singleton
-    abstract fun bindLinkDataSource(linkDataSourceImpl: RemoteLinkDataSource) : LinkDataSource
+    abstract fun bindLinkDataSource(linkDataSourceImpl: RemoteLinkDataSource): LinkDataSource
 }

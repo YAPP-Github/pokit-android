@@ -6,5 +6,5 @@ data class GetPokitsRequest(
     val filterUncategoriezd: Boolean = true,
     val size: Int = 10,
     val page: Int = 0,
-    val sort: PokitsSort = PokitsSort.RECENT
+    val sort: PokitsSort = PokitsSort.RECENT,
 )

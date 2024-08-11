@@ -4,25 +4,25 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetPokitsResponse(
-    val data : List<Data> = emptyList(),
-    val page : Int = 10,
-    val size : Int = 0,
-    val sort : List<Sort> = emptyList(),
-    val hasNext : Boolean = false
+    val data: List<Data> = emptyList(),
+    val page: Int = 10,
+    val size: Int = 0,
+    val sort: List<Sort> = emptyList(),
+    val hasNext: Boolean = false,
 ) {
     @Serializable
     data class Data(
-        val categoryId : Int,
-        val userId : Int,
-        val categoryName : String,
-        val categoryImage : PokitImage,
-        val contentCount : Int,
+        val categoryId: Int,
+        val userId: Int,
+        val categoryName: String,
+        val categoryImage: PokitImage,
+        val contentCount: Int,
     )
 
     @Serializable
     data class PokitImage(
-        val imageId : Int,
-        val imageUrl : String
+        val imageId: Int,
+        val imageUrl: String,
     )
 
     @Serializable
@@ -31,6 +31,6 @@ data class GetPokitsResponse(
         val nullHandling: String,
         val ascending: Boolean,
         val property: String,
-        val ignoreCase: Boolean
+        val ignoreCase: Boolean,
     )
 }

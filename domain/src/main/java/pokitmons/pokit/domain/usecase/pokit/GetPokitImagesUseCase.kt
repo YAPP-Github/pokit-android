@@ -6,9 +6,9 @@ import pokitmons.pokit.domain.repository.pokit.PokitRepository
 import javax.inject.Inject
 
 class GetPokitImagesUseCase @Inject constructor(
-    private val repository: PokitRepository
+    private val repository: PokitRepository,
 ) {
-    suspend fun getImages():PokitResult<List<Pokit.Image>> {
+    suspend fun getImages(): PokitResult<List<Pokit.Image>> {
         return repository.getPokitImages()
     }
 }

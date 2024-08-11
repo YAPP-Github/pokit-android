@@ -17,7 +17,7 @@ import pokitmons.pokit.data.repository.pokit.PokitRepositoryImpl
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.pokit.Pokit
 
-val pokitDataSource : PokitDataSource = mockk()
+val pokitDataSource: PokitDataSource = mockk()
 
 class PokitRepositoryImplTest : DescribeSpec({
     val pokitRepository = PokitRepositoryImpl(pokitDataSource)

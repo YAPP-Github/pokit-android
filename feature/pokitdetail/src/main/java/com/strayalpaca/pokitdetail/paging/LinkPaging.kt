@@ -21,7 +21,7 @@ class LinkPaging(
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO),
     private val initPage: Int = 0,
     private val firstRequestPage: Int = 3,
-    initCategoryId : Int = 0
+    initCategoryId: Int = 0,
 ) : SimplePaging<Link> {
     private val _pagingState = MutableStateFlow(SimplePagingState.IDLE)
     override val pagingState: StateFlow<SimplePagingState> = _pagingState.asStateFlow()
@@ -31,7 +31,7 @@ class LinkPaging(
     private var currentPageIndex = initPage
     private var requestJob: Job? = null
 
-    private var currentCategoryId : Int = initCategoryId
+    private var currentCategoryId: Int = initCategoryId
     private var currentSort = LinksSort.RECENT
 
     fun changeOptions(categoryId: Int, sort: LinksSort) {
@@ -61,9 +61,9 @@ class LinkPaging(
                     }
                 }
             } catch (exception: Exception) {
-                if (exception !is CancellationException)
+                if (exception !is CancellationException) {
                     _pagingState.update { SimplePagingState.FAILURE_INIT }
-
+                }
             }
         }
     }
@@ -90,9 +90,9 @@ class LinkPaging(
                     }
                 }
             } catch (exception: Exception) {
-                if (exception !is CancellationException)
+                if (exception !is CancellationException) {
                     _pagingState.update { SimplePagingState.FAILURE_NEXT }
-
+                }
             }
         }
     }
@@ -124,10 +124,12 @@ class LinkPaging(
 
         _pagingData.update {
             capturedDataList.map { pokit ->
-                if (targetPokit.id == pokit.id) targetPokit
-                else pokit
+                if (targetPokit.id == pokit.id) {
+                    targetPokit
+                } else {
+                    pokit
+                }
             }
         }
     }
-
 }

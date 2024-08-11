@@ -79,6 +79,7 @@ object NetworkModule {
     @Provides
     fun provideLinkService(retrofit: Retrofit): LinkApi {
         return retrofit.create(LinkApi::class.java)
+    }
 
     @Provides
     fun provideSettingService(retrofit: Retrofit): SettingApi {

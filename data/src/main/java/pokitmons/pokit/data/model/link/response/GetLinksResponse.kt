@@ -27,7 +27,7 @@ data class GetLinksResponse(
     @Serializable
     data class Category(
         val categoryId: Int,
-        val categoryName: String
+        val categoryName: String,
     )
 
     @Serializable

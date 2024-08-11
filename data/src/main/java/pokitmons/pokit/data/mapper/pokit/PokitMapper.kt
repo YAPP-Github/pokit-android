@@ -8,7 +8,7 @@ import pokitmons.pokit.domain.model.pokit.Pokit
 object PokitMapper {
     private const val NOT_USE = 0
 
-    fun mapperToPokits(pokitsResponse: GetPokitsResponse) : List<Pokit> {
+    fun mapperToPokits(pokitsResponse: GetPokitsResponse): List<Pokit> {
         return pokitsResponse.data.map { data ->
             Pokit(
                 categoryId = data.categoryId,
@@ -23,7 +23,7 @@ object PokitMapper {
         }
     }
 
-    fun mapperToPokitImages(getPokitImagesResponse: List<GetPokitImagesResponseItem>) : List<Pokit.Image> {
+    fun mapperToPokitImages(getPokitImagesResponse: List<GetPokitImagesResponseItem>): List<Pokit.Image> {
         return getPokitImagesResponse.map { image ->
             Pokit.Image(id = image.imageId, url = image.imageUrl)
         }

@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetPokitCountResponse(
-    val categoryTotalCount: Int = 0
+    val categoryTotalCount: Int = 0,
 )

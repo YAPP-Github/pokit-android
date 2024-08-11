@@ -4,10 +4,10 @@ import pokitmons.pokit.domain.model.pokit.Pokit.Image as DomainPokitImage
 
 data class PokitImage(
     val id: Int,
-    val url: String
+    val url: String,
 ) {
     companion object {
-        fun fromDomainPokitImage(domainPokitImage: DomainPokitImage) : PokitImage {
+        fun fromDomainPokitImage(domainPokitImage: DomainPokitImage): PokitImage {
             return PokitImage(id = domainPokitImage.id, url = domainPokitImage.url)
         }
     }

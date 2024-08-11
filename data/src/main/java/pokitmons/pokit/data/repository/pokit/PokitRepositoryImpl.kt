@@ -19,7 +19,7 @@ class PokitRepositoryImpl @Inject constructor(
         filterUncategorized: Boolean,
         size: Int,
         page: Int,
-        sort: PokitsSort
+        sort: PokitsSort,
     ): PokitResult<List<Pokit>> {
         return runCatching {
             val request = GetPokitsRequest(

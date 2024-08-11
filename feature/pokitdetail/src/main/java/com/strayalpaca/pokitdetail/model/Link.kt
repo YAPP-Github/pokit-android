@@ -16,7 +16,7 @@ data class Link(
     val imageUrl: String? = null,
 ) {
     companion object {
-        fun fromDomainLink(domainLink : DomainLink) : Link {
+        fun fromDomainLink(domainLink: DomainLink): Link {
             return Link(
                 id = domainLink.id.toString(),
                 title = domainLink.title,

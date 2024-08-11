@@ -24,32 +24,32 @@ interface PokitApi {
         @Query("size") size: Int = 10,
         @Query("page") page: Int = 0,
         @Query("sort") sort: String = PokitsSort.RECENT.value,
-    ) : GetPokitsResponse
+    ): GetPokitsResponse
 
     @POST("category")
     suspend fun createPokit(
-        @Body createPokitRequest: CreatePokitRequest
-    ) : CreatePokitResponse
+        @Body createPokitRequest: CreatePokitRequest,
+    ): CreatePokitResponse
 
     @PATCH("category/{categoryId}")
     suspend fun modifyPokit(
-        @Path("categoryId") categoryId : Int,
-        @Body modifyPokitRequest: ModifyPokitRequest
-    ) : ModifyPokitResponse
+        @Path("categoryId") categoryId: Int,
+        @Body modifyPokitRequest: ModifyPokitRequest,
+    ): ModifyPokitResponse
 
     @GET("category/images")
     suspend fun getPokitImages(): List<GetPokitImagesResponseItem>
 
     @GET("category/{categoryId}")
     suspend fun getPokit(
-        @Path("categoryId") categoryId: Int
+        @Path("categoryId") categoryId: Int,
     ): GetPokitResponse
 
     @PUT("category/{categoryId}")
     suspend fun deletePokit(
-        @Path("categoryId") categoryId: Int
+        @Path("categoryId") categoryId: Int,
     )
 
     @GET("category/count")
-    suspend fun getPokitCount() : GetPokitCountResponse
+    suspend fun getPokitCount(): GetPokitCountResponse
 }

@@ -4,7 +4,7 @@ import pokitmons.pokit.data.model.link.response.GetLinksResponse
 import pokitmons.pokit.domain.model.link.Link
 
 object LinkMapper {
-    fun mapperToLinks(linksResponse: GetLinksResponse) : List<Link> {
+    fun mapperToLinks(linksResponse: GetLinksResponse): List<Link> {
         return linksResponse.data.map { data ->
             Link(
                 id = data.contentId,

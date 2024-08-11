@@ -8,9 +8,9 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class ErrorMessageProvider @Inject constructor(@ApplicationContext private val context : Context) {
-    fun errorCodeToMessage(errorCode: String) : String {
-        return when(errorCode) {
+class ErrorMessageProvider @Inject constructor(@ApplicationContext private val context: Context) {
+    fun errorCodeToMessage(errorCode: String): String {
+        return when (errorCode) {
             PokitErrorCode.ALREADY_USED_POKIT_NAME -> {
                 context.getString(R.string.already_used_pokit_name)
             }
