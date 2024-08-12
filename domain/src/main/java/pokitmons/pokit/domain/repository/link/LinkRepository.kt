@@ -16,4 +16,30 @@ interface LinkRepository {
         endDate: String? = null,
         categoryIds: List<Int>? = null,
     ): PokitResult<List<Link>>
+
+    suspend fun searchLinks(
+        page: Int,
+        size: Int,
+        sort: List<String>,
+        isRead: Boolean,
+        favorites: Boolean,
+        startDate: String?,
+        endDate: String?,
+        categoryIds: List<Int>?,
+        searchWord: String,
+    ): PokitResult<List<Link>>
+
+    suspend fun deleteLink(linkId : Int) : PokitResult<Int>
+
+    suspend fun getLink(linkId: Int): PokitResult<Link>
+
+    suspend fun modifyLink(
+        linkId: Int,
+        data: String,
+        title: String,
+        categoryId: Int,
+        memo: String,
+        alertYn: String,
+        thumbNail: String,
+    ): PokitResult<Int>
 }

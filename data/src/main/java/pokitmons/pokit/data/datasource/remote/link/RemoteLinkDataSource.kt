@@ -1,7 +1,10 @@
 package pokitmons.pokit.data.datasource.remote.link
 
 import pokitmons.pokit.data.api.LinkApi
+import pokitmons.pokit.data.model.link.request.ModifyLinkRequest
+import pokitmons.pokit.data.model.link.response.GetLinkResponse
 import pokitmons.pokit.data.model.link.response.GetLinksResponse
+import pokitmons.pokit.data.model.link.response.ModifyLinkResponse
 import javax.inject.Inject
 
 class RemoteLinkDataSource @Inject constructor(
@@ -28,6 +31,48 @@ class RemoteLinkDataSource @Inject constructor(
             startDate = startDate,
             endDate = endDate,
             categoryIds = categoryIds
+        )
+    }
+
+    override suspend fun searchLinks(
+        page: Int,
+        size: Int,
+        sort: List<String>,
+        isRead: Boolean,
+        favorites: Boolean,
+        startDate: String?,
+        endDate: String?,
+        categoryIds: List<Int>?,
+        searchWord: String,
+    ): GetLinksResponse {
+        return linkApi.searchLinks(
+            page = page,
+            size = size,
+            sort = sort,
+            isRead = isRead,
+            favorites = favorites,
+            startDate = startDate,
+            endDate = endDate,
+            categoryIds = categoryIds,
+            searchWord = searchWord
+        )
+    }
+
+    override suspend fun deleteLink(contentId: Int) {
+        return linkApi.deleteLink(contentId = contentId)
+    }
+
+    override suspend fun getLink(contentId: Int): GetLinkResponse {
+        return linkApi.getLink(contentId)
+    }
+
+    override suspend fun modifyLink(
+        contentId: Int,
+        modifyLinkRequest: ModifyLinkRequest
+    ): ModifyLinkResponse {
+        return linkApi.modifyLink(
+            contentId = contentId,
+            modifyLinkRequest = modifyLinkRequest
         )
     }
 }

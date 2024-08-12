@@ -3,6 +3,7 @@ package pokitmons.pokit.data.repository.link
 import pokitmons.pokit.data.datasource.remote.link.LinkDataSource
 import pokitmons.pokit.data.mapper.link.LinkMapper
 import pokitmons.pokit.data.model.common.parseErrorResult
+import pokitmons.pokit.data.model.link.request.ModifyLinkRequest
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.link.Link
 import pokitmons.pokit.domain.model.link.LinksSort
@@ -23,7 +24,7 @@ class LinkRepositoryImpl @Inject constructor(
         endDate: String?,
         categoryIds: List<Int>?,
     ): PokitResult<List<Link>> {
-        return kotlin.runCatching {
+        return runCatching {
             val response = dataSource.getLinks(
                 categoryId = categoryId,
                 size = size,
@@ -37,6 +38,80 @@ class LinkRepositoryImpl @Inject constructor(
             )
             val mappedResponse = LinkMapper.mapperToLinks(response)
             PokitResult.Success(mappedResponse)
+        }.getOrElse { throwable ->
+            parseErrorResult(throwable)
+        }
+    }
+
+    override suspend fun searchLinks(
+        page: Int,
+        size: Int,
+        sort: List<String>,
+        isRead: Boolean,
+        favorites: Boolean,
+        startDate: String?,
+        endDate: String?,
+        categoryIds: List<Int>?,
+        searchWord: String,
+    ): PokitResult<List<Link>> {
+        return runCatching {
+            val response = dataSource.searchLinks(
+                page = page,
+                size = size,
+                sort = sort,
+                isRead = isRead,
+                favorites = favorites,
+                startDate = startDate,
+                endDate = endDate,
+                categoryIds = categoryIds,
+                searchWord = searchWord
+            )
+            val mappedResponse = LinkMapper.mapperToLinks(response)
+            PokitResult.Success(mappedResponse)
+        }.getOrElse { throwable ->
+            parseErrorResult(throwable)
+        }
+    }
+
+    override suspend fun deleteLink(linkId: Int): PokitResult<Int> {
+        return runCatching {
+            dataSource.deleteLink(linkId)
+            PokitResult.Success(linkId)
+        }.getOrElse { throwable ->
+            parseErrorResult(throwable)
+        }
+    }
+
+    override suspend fun getLink(linkId: Int): PokitResult<Link> {
+        return runCatching {
+            val response = dataSource.getLink(linkId)
+            val mappedResponse = LinkMapper.mapperToLink(response)
+            PokitResult.Success(mappedResponse)
+        }.getOrElse { throwable ->
+            parseErrorResult(throwable)
+        }
+    }
+
+    override suspend fun modifyLink(
+        linkId: Int,
+        data: String,
+        title: String,
+        categoryId: Int,
+        memo: String,
+        alertYn: String,
+        thumbNail: String,
+    ): PokitResult<Int> {
+        return runCatching {
+            val modifyLinkRequest = ModifyLinkRequest(
+                data = data,
+                title = title,
+                categoryId = categoryId,
+                memo = memo,
+                alertYn = alertYn,
+                thumbNail = thumbNail
+            )
+            val response = dataSource.modifyLink(contentId = linkId, modifyLinkRequest = modifyLinkRequest)
+            PokitResult.Success(response.contentId)
         }.getOrElse { throwable ->
             parseErrorResult(throwable)
         }
