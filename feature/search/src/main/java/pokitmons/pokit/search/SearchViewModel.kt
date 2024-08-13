@@ -1,20 +1,35 @@
 package pokitmons.pokit.search
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import pokitmons.pokit.domain.usecase.link.SearchLinksUseCase
 import pokitmons.pokit.search.model.Filter
 import pokitmons.pokit.search.model.FilterType
 import pokitmons.pokit.search.model.Link
 import pokitmons.pokit.search.model.SearchScreenState
 import pokitmons.pokit.search.model.SearchScreenStep
-import pokitmons.pokit.search.model.sampleLinks
+import pokitmons.pokit.search.paging.LinkPaging
+import pokitmons.pokit.search.paging.SimplePagingState
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor() : ViewModel() {
+class SearchViewModel @Inject constructor(
+    searchLinksUseCase: SearchLinksUseCase
+) : ViewModel() {
+    private val linkPaging = LinkPaging(
+        searchLinksUseCase = searchLinksUseCase,
+        filter = Filter()
+    )
+
+    val linkList : StateFlow<List<Link>> = linkPaging.pagingData
+    val linkPagingState : StateFlow<SimplePagingState> = linkPaging.pagingState
+
     private val _searchWord = MutableStateFlow("")
     val searchWord = _searchWord.asStateFlow()
 
@@ -22,13 +37,6 @@ class SearchViewModel @Inject constructor() : ViewModel() {
     val state = _state.asStateFlow()
 
     private var appliedSearchWord = ""
-
-    private val _linkList = MutableStateFlow<List<Link>>(emptyList())
-    val linkList = _linkList.asStateFlow()
-
-    init {
-        _linkList.update { sampleLinks }
-    }
 
     fun inputSearchWord(newSearchWord: String) {
         _searchWord.update { newSearchWord }
@@ -48,6 +56,10 @@ class SearchViewModel @Inject constructor() : ViewModel() {
             _state.update { state ->
                 state.copy(step = SearchScreenStep.RESULT)
             }
+            viewModelScope.launch {
+                linkPaging.changeSearchWord(appliedSearchWord)
+                linkPaging.refresh()
+            }
         }
     }
 
@@ -58,6 +70,10 @@ class SearchViewModel @Inject constructor() : ViewModel() {
         if (appliedSearchWord.isNotEmpty()) {
             _state.update { state ->
                 state.copy(step = SearchScreenStep.RESULT)
+            }
+            viewModelScope.launch {
+                linkPaging.changeSearchWord(appliedSearchWord)
+                linkPaging.refresh()
             }
         }
     }
@@ -135,7 +151,10 @@ class SearchViewModel @Inject constructor() : ViewModel() {
             )
         }
 
-        // todo refresh 기능 구현
+        viewModelScope.launch {
+            linkPaging.changeFilter(filter)
+            linkPaging.refresh()
+        }
     }
 
     fun toggleSortOrder() {
@@ -143,6 +162,9 @@ class SearchViewModel @Inject constructor() : ViewModel() {
             state.copy(sortRecent = !state.sortRecent)
         }
 
-        // todo refresh 기능 구현
+        viewModelScope.launch {
+            linkPaging.changeRecentSort(state.value.sortRecent)
+            linkPaging.refresh()
+        }
     }
 }

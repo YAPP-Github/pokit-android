@@ -23,6 +23,7 @@ import pokitmons.pokit.search.model.FilterType
 import pokitmons.pokit.search.model.Link
 import pokitmons.pokit.search.model.SearchScreenState
 import pokitmons.pokit.search.model.SearchScreenStep
+import pokitmons.pokit.search.paging.SimplePagingState
 
 @Composable
 fun SearchScreenContainer(
@@ -33,11 +34,13 @@ fun SearchScreenContainer(
     val state by viewModel.state.collectAsState()
     val searchWord by viewModel.searchWord.collectAsState()
     val linkList by viewModel.linkList.collectAsState()
+    val linkPagingState by viewModel.linkPagingState.collectAsState()
 
     SearchScreen(
         state = state,
         currentSearchWord = searchWord,
         linkList = linkList,
+        linkPagingState = linkPagingState,
         onClickBack = onBackPressed,
         inputSearchWord = viewModel::inputSearchWord,
         onClickSearch = viewModel::applyCurrentSearchWord,
@@ -61,6 +64,7 @@ fun SearchScreen(
     state: SearchScreenState = SearchScreenState(),
     currentSearchWord: String = "",
     linkList: List<Link> = emptyList(),
+    linkPagingState: SimplePagingState = SimplePagingState.IDLE,
     onClickBack: () -> Unit = {},
     inputSearchWord: (String) -> Unit = {},
     onClickSearch: () -> Unit = {},
@@ -76,6 +80,7 @@ fun SearchScreen(
     showLinkModifyBottomSheet: (Link) -> Unit = {},
     hideLinkModifyBottomSheet: () -> Unit = {},
     onClickLinkModify: (String) -> Unit = {},
+    loadNextLinks: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -122,7 +127,9 @@ fun SearchScreen(
                 onToggleSort = toggleSortOrder,
                 useRecentOrder = state.sortRecent,
                 onClickLinkKebab = showLinkModifyBottomSheet,
-                links = linkList
+                links = linkList,
+                linkPagingState = linkPagingState,
+                loadNextLinks = loadNextLinks
             )
         }
 
