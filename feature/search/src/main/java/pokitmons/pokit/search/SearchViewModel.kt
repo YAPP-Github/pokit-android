@@ -9,26 +9,43 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pokitmons.pokit.domain.usecase.link.SearchLinksUseCase
+import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
 import pokitmons.pokit.search.model.Filter
 import pokitmons.pokit.search.model.FilterType
 import pokitmons.pokit.search.model.Link
+import pokitmons.pokit.search.model.Pokit
 import pokitmons.pokit.search.model.SearchScreenState
 import pokitmons.pokit.search.model.SearchScreenStep
 import pokitmons.pokit.search.paging.LinkPaging
+import pokitmons.pokit.search.paging.PokitPaging
 import pokitmons.pokit.search.paging.SimplePagingState
 import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    searchLinksUseCase: SearchLinksUseCase
+    searchLinksUseCase: SearchLinksUseCase,
+    getPokitsUseCase: GetPokitsUseCase,
 ) : ViewModel() {
     private val linkPaging = LinkPaging(
         searchLinksUseCase = searchLinksUseCase,
-        filter = Filter()
+        filter = Filter(),
+        perPage = 10,
+        coroutineScope = viewModelScope,
+        initPage = 0
+    )
+
+    private val pokitPaging = PokitPaging(
+        getPokits = getPokitsUseCase,
+        perPage = 10,
+        coroutineScope = viewModelScope,
+        initPage = 0
     )
 
     val linkList : StateFlow<List<Link>> = linkPaging.pagingData
     val linkPagingState : StateFlow<SimplePagingState> = linkPaging.pagingState
+
+    val pokitList : StateFlow<List<Pokit>> = pokitPaging.pagingData
+    val pokitPagingState : StateFlow<SimplePagingState> = pokitPaging.pagingState
 
     private val _searchWord = MutableStateFlow("")
     val searchWord = _searchWord.asStateFlow()
@@ -165,6 +182,24 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             linkPaging.changeRecentSort(state.value.sortRecent)
             linkPaging.refresh()
+        }
+    }
+
+    fun loadNextLinks() {
+        viewModelScope.launch {
+            linkPaging.load()
+        }
+    }
+
+    fun loadNextPokits() {
+        viewModelScope.launch {
+            pokitPaging.load()
+        }
+    }
+
+    fun refreshPokits() {
+        viewModelScope.launch {
+            pokitPaging.refresh()
         }
     }
 }

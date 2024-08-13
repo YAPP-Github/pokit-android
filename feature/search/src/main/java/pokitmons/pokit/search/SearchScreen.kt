@@ -21,6 +21,7 @@ import pokitmons.pokit.search.components.toolbar.Toolbar
 import pokitmons.pokit.search.model.Filter
 import pokitmons.pokit.search.model.FilterType
 import pokitmons.pokit.search.model.Link
+import pokitmons.pokit.search.model.Pokit
 import pokitmons.pokit.search.model.SearchScreenState
 import pokitmons.pokit.search.model.SearchScreenStep
 import pokitmons.pokit.search.paging.SimplePagingState
@@ -35,6 +36,8 @@ fun SearchScreenContainer(
     val searchWord by viewModel.searchWord.collectAsState()
     val linkList by viewModel.linkList.collectAsState()
     val linkPagingState by viewModel.linkPagingState.collectAsState()
+    val pokitList by viewModel.pokitList.collectAsState()
+    val pokitPagingState by viewModel.pokitPagingState.collectAsState()
 
     SearchScreen(
         state = state,
@@ -55,7 +58,12 @@ fun SearchScreenContainer(
         toggleSortOrder = viewModel::toggleSortOrder,
         showLinkModifyBottomSheet = viewModel::showLinkModifyBottomSheet,
         hideLinkModifyBottomSheet = viewModel::hideLinkModifyBottomSheet,
-        onClickLinkModify = onNavigateToLinkModify
+        onClickLinkModify = onNavigateToLinkModify,
+        pokitList = pokitList,
+        pokitPagingState = pokitPagingState,
+        loadNextLinks = viewModel::loadNextLinks,
+        loadNextPokits = viewModel::loadNextPokits,
+        refreshPokits = viewModel::refreshPokits
     )
 }
 
@@ -81,6 +89,10 @@ fun SearchScreen(
     hideLinkModifyBottomSheet: () -> Unit = {},
     onClickLinkModify: (String) -> Unit = {},
     loadNextLinks: () -> Unit = {},
+    pokitList: List<Pokit> = emptyList(),
+    pokitPagingState: SimplePagingState = SimplePagingState.IDLE,
+    loadNextPokits: () -> Unit = {},
+    refreshPokits: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -138,7 +150,11 @@ fun SearchScreen(
             firstShowType = state.firstBottomSheetFilterType,
             show = state.showFilterBottomSheet,
             onDismissRequest = hideBottomSheet,
-            onSaveClilck = onClickFilterSave
+            onSaveClilck = onClickFilterSave,
+            pokits = pokitList,
+            pokitPagingState = pokitPagingState,
+            loadNextPokits = loadNextPokits,
+            refreshPokits = refreshPokits
         )
 
         PokitBottomSheet(

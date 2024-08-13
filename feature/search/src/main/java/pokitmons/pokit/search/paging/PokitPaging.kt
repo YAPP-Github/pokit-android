@@ -9,42 +9,24 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pokitmons.pokit.domain.commom.PokitResult
-import pokitmons.pokit.domain.usecase.link.SearchLinksUseCase
-import pokitmons.pokit.search.model.Filter
-import pokitmons.pokit.search.model.Link
+import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
+import pokitmons.pokit.search.model.Pokit
 import kotlin.coroutines.cancellation.CancellationException
 
-class LinkPaging(
-    private val searchLinksUseCase: SearchLinksUseCase,
+class PokitPaging(
+    private val getPokits: GetPokitsUseCase,
     private val perPage: Int = 10,
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO),
     private val initPage: Int = 0,
     private val firstRequestPage: Int = 3,
-    private var filter: Filter,
-    private var searchWord: String = "",
-    private var recentSort: Boolean = true
-) : SimplePaging<Link> {
-
-    private val _pagingState : MutableStateFlow<SimplePagingState> = MutableStateFlow(SimplePagingState.IDLE)
+) : SimplePaging<Pokit> {
+    private val _pagingState = MutableStateFlow(SimplePagingState.IDLE)
     override val pagingState: StateFlow<SimplePagingState> = _pagingState.asStateFlow()
 
-    private val _pagingData : MutableStateFlow<List<Link>> = MutableStateFlow(emptyList())
-    override val pagingData: StateFlow<List<Link>> = _pagingData.asStateFlow()
-
+    private val _pagingData: MutableStateFlow<List<Pokit>> = MutableStateFlow(emptyList())
+    override val pagingData: StateFlow<List<Pokit>> = _pagingData.asStateFlow()
     private var currentPageIndex = initPage
     private var requestJob: Job? = null
-
-    fun changeFilter(filter: Filter) {
-        this.filter = filter
-    }
-
-    fun changeSearchWord(searchWord: String) {
-        this.searchWord = searchWord
-    }
-
-    fun changeRecentSort(recentSort: Boolean) {
-        this.recentSort = recentSort
-    }
 
     override suspend fun refresh() {
         requestJob?.cancel()
@@ -54,24 +36,15 @@ class LinkPaging(
         requestJob = coroutineScope.launch {
             try {
                 currentPageIndex = initPage
-                val response = searchLinksUseCase.searchLinks(
-                    page = currentPageIndex,
-                    size = perPage * firstRequestPage,
-                    sort = listOf(),
-                    isRead = !filter.notRead,
-                    favorites = filter.bookmark,
-                    startDate = filter.startDate?.toDateString(),
-                    endDate = filter.endDate?.toDateString(),
-                    categoryIds = filter.selectedPokits.mapNotNull { it.id.toIntOrNull() },
-                    searchWord = searchWord
-                )
+                val response = getPokits.getPokits(size = perPage * firstRequestPage, page = currentPageIndex)
                 when (response) {
                     is PokitResult.Success -> {
-                        val links = response.result.map { domainLink ->
-                            Link.fromDomainLink(domainLink)
+                        val pokitList = response.result.map { domainPokit ->
+                            Pokit.fromDomainPokit(domainPokit)
                         }
-                        applyResponse(links, firstRequestPage)
+                        applyResponse(pokitList, firstRequestPage)
                     }
+
                     is PokitResult.Error -> {
                         _pagingState.update { SimplePagingState.FAILURE_INIT }
                     }
@@ -92,26 +65,17 @@ class LinkPaging(
 
         requestJob = coroutineScope.launch {
             try {
-                val response = searchLinksUseCase.searchLinks(
-                    page = currentPageIndex,
-                    size = perPage,
-                    sort = listOf(),
-                    isRead = !filter.notRead,
-                    favorites = filter.bookmark,
-                    startDate = filter.startDate?.toDateString(),
-                    endDate = filter.endDate?.toDateString(),
-                    categoryIds = filter.selectedPokits.mapNotNull { it.id.toIntOrNull() },
-                    searchWord = searchWord
-                )
+                val response = getPokits.getPokits(size = perPage, page = currentPageIndex)
                 when (response) {
                     is PokitResult.Success -> {
-                        val links = response.result.map { domainLink ->
-                            Link.fromDomainLink(domainLink)
+                        val pokitList = response.result.map { domainPokit ->
+                            Pokit.fromDomainPokit(domainPokit)
                         }
-                        applyResponse(links)
+                        applyResponse(pokitList)
                     }
+
                     is PokitResult.Error -> {
-                        _pagingState.update { SimplePagingState.FAILURE_INIT }
+                        _pagingState.update { SimplePagingState.FAILURE_NEXT }
                     }
                 }
             } catch (exception: Exception) {
@@ -122,7 +86,7 @@ class LinkPaging(
         }
     }
 
-    private fun applyResponse(dataInResponse: List<Link>, multiple: Int = 1) {
+    private fun applyResponse(dataInResponse: List<Pokit>, multiple: Int = 1) {
         if (dataInResponse.size < perPage * multiple) {
             _pagingState.update { SimplePagingState.LAST }
         } else {
@@ -138,12 +102,12 @@ class LinkPaging(
         _pagingState.update { SimplePagingState.IDLE }
     }
 
-    override suspend fun deleteItem(item: Link) {
+    override suspend fun deleteItem(item: Pokit) {
         val capturedDataList = _pagingData.value
         _pagingData.update { capturedDataList.filter { it.id != item.id } }
     }
 
-    override suspend fun modifyItem(item: Link) {
+    override suspend fun modifyItem(item: Pokit) {
         val capturedDataList = _pagingData.value
         val targetPokit = capturedDataList.find { it.id == item.id } ?: return
 
