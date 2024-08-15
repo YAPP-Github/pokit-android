@@ -11,7 +11,9 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.usecase.link.SearchLinksUseCase
+import pokitmons.pokit.domain.usecase.link.SetBookmarkUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
 import pokitmons.pokit.domain.usecase.search.AddRecentSearchWordUseCase
 import pokitmons.pokit.domain.usecase.search.GetRecentSearchWordsUseCase
@@ -38,7 +40,8 @@ class SearchViewModel @Inject constructor(
     getUseRecentSearchWordsUseCase: GetUseRecentSearchWordsUseCase,
     private val setUseRecentSearchWordsUseCase: SetUseRecentSearchWordsUseCase,
     private val addRecentSearchWordUseCase: AddRecentSearchWordUseCase,
-    private val removeRecentSearchWordUseCase: RemoveRecentSearchWordUseCase
+    private val removeRecentSearchWordUseCase: RemoveRecentSearchWordUseCase,
+    private val setBookmarkUseCase: SetBookmarkUseCase
 ) : ViewModel() {
     private val linkPaging = LinkPaging(
         searchLinksUseCase = searchLinksUseCase,
@@ -256,6 +259,25 @@ class SearchViewModel @Inject constructor(
     fun refreshPokits() {
         viewModelScope.launch {
             pokitPaging.refresh()
+        }
+    }
+
+    fun toggleBookmark() {
+        val currentLink = state.value.currentLink ?: return
+        val currentLinkId = currentLink.id.toIntOrNull() ?: return
+        val applyBookmarked = !currentLink.bookmark
+
+        viewModelScope.launch {
+            val response = setBookmarkUseCase.setBookMarked(currentLinkId, applyBookmarked)
+            if (response is PokitResult.Success) {
+                val bookmarkChangedLink = currentLink.copy(bookmark = applyBookmarked)
+                _state.update { state ->
+                    state.copy(
+                        currentLink = bookmarkChangedLink
+                    )
+                }
+                linkPaging.modifyItem(bookmarkChangedLink)
+            }
         }
     }
 }

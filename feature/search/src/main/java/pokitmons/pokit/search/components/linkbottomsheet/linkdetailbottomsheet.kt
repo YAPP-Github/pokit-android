@@ -40,6 +40,7 @@ fun LinkDetailBottomSheet(
     show: Boolean = false,
     onClickRemoveLink: (Link) -> Unit,
     onClickModifyLink: (Link) -> Unit,
+    onClickBookmark: () -> Unit,
 ) {
     PokitBottomSheet(
         onHideBottomSheet = onHideBottomSheet,
@@ -150,6 +151,11 @@ fun LinkDetailBottomSheet(
             Image(
                 modifier = Modifier
                     .size(36.dp)
+                    .clickable(
+                        indication = null,
+                        interactionSource = remember { MutableInteractionSource() },
+                        onClick = onClickBookmark
+                    )
                     .padding(6.dp),
                 painter = painterResource(id = R.drawable.icon_24_star),
                 contentDescription = "bookmark",

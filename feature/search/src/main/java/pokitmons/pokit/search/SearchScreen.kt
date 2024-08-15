@@ -52,7 +52,8 @@ fun SearchScreenContainer(
                 onNavigateToLinkModify(link.id)
             }
         },
-        onClickRemoveLink = viewModel::showLinkRemoveBottomSheet
+        onClickRemoveLink = viewModel::showLinkRemoveBottomSheet,
+        onClickBookmark = viewModel::toggleBookmark
     )
 
     FilterBottomSheet(
@@ -90,7 +91,7 @@ fun SearchScreenContainer(
                 },
                 onClickShare = remember {
                     {
-                        
+
                     }
                 }
             )
