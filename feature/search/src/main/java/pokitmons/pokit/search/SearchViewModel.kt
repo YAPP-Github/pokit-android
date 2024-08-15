@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pokitmons.pokit.domain.usecase.link.SearchLinksUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
+import pokitmons.pokit.search.model.BottomSheetType
 import pokitmons.pokit.search.model.Filter
 import pokitmons.pokit.search.model.FilterType
 import pokitmons.pokit.search.model.Link
@@ -143,6 +144,17 @@ class SearchViewModel @Inject constructor(
     fun showLinkModifyBottomSheet(link: Link) {
         _state.update { state ->
             state.copy(
+                linkBottomSheetType = BottomSheetType.MODIFY,
+                currentLink = link
+            )
+        }
+    }
+
+    fun showLinkRemoveBottomSheet(link: Link) {
+        _state.update { state ->
+            state.copy(
+                linkBottomSheetType = BottomSheetType.REMOVE,
+                showLinkDetailBottomSheet = false,
                 currentLink = link
             )
         }
@@ -151,7 +163,27 @@ class SearchViewModel @Inject constructor(
     fun hideLinkModifyBottomSheet() {
         _state.update { state ->
             state.copy(
+                linkBottomSheetType = null,
                 currentLink = null
+            )
+        }
+    }
+
+    fun showLinkDetailBottomSheet(link: Link) {
+        _state.update { state ->
+            state.copy(
+                currentLink = link,
+                showLinkDetailBottomSheet = true,
+                linkBottomSheetType = null
+            )
+        }
+    }
+
+    fun hideLinkDetailBottomSheet() {
+        _state.update { state ->
+            state.copy(
+                currentLink = null,
+                showLinkDetailBottomSheet = false
             )
         }
     }
