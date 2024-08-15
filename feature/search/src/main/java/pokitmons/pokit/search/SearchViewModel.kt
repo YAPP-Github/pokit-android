@@ -4,12 +4,20 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pokitmons.pokit.domain.usecase.link.SearchLinksUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
+import pokitmons.pokit.domain.usecase.search.AddRecentSearchWordUseCase
+import pokitmons.pokit.domain.usecase.search.GetRecentSearchWordsUseCase
+import pokitmons.pokit.domain.usecase.search.GetUseRecentSearchWordsUseCase
+import pokitmons.pokit.domain.usecase.search.RemoveRecentSearchWordUseCase
+import pokitmons.pokit.domain.usecase.search.SetUseRecentSearchWordsUseCase
 import pokitmons.pokit.search.model.BottomSheetType
 import pokitmons.pokit.search.model.Filter
 import pokitmons.pokit.search.model.FilterType
@@ -26,6 +34,11 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     searchLinksUseCase: SearchLinksUseCase,
     getPokitsUseCase: GetPokitsUseCase,
+    getRecentSearchWordsUseCase: GetRecentSearchWordsUseCase,
+    getUseRecentSearchWordsUseCase: GetUseRecentSearchWordsUseCase,
+    private val setUseRecentSearchWordsUseCase: SetUseRecentSearchWordsUseCase,
+    private val addRecentSearchWordUseCase: AddRecentSearchWordUseCase,
+    private val removeRecentSearchWordUseCase: RemoveRecentSearchWordUseCase
 ) : ViewModel() {
     private val linkPaging = LinkPaging(
         searchLinksUseCase = searchLinksUseCase,
@@ -52,7 +65,17 @@ class SearchViewModel @Inject constructor(
     val searchWord = _searchWord.asStateFlow()
 
     private val _state = MutableStateFlow(SearchScreenState())
-    val state = _state.asStateFlow()
+    val state = combine(
+        _state,
+        getRecentSearchWordsUseCase.getWords(),
+        getUseRecentSearchWordsUseCase.getUse()
+    ) { state, searchWords, useRecentSearchWord ->
+        state.copy(recentSearchWords = searchWords, useRecentSearchWord = useRecentSearchWord)
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = SearchScreenState()
+    )
 
     private var appliedSearchWord = ""
 
@@ -75,6 +98,7 @@ class SearchViewModel @Inject constructor(
                 state.copy(step = SearchScreenStep.RESULT)
             }
             viewModelScope.launch {
+                addRecentSearchWordUseCase.addRecentSearchWord(appliedSearchWord)
                 linkPaging.changeSearchWord(appliedSearchWord)
                 linkPaging.refresh()
             }
@@ -90,6 +114,7 @@ class SearchViewModel @Inject constructor(
                 state.copy(step = SearchScreenStep.RESULT)
             }
             viewModelScope.launch {
+                addRecentSearchWordUseCase.addRecentSearchWord(appliedSearchWord)
                 linkPaging.changeSearchWord(appliedSearchWord)
                 linkPaging.refresh()
             }
@@ -97,22 +122,21 @@ class SearchViewModel @Inject constructor(
     }
 
     fun toggleUseRecentSearchWord() {
-        _state.update { state ->
-            state.copy(useRecentSearchWord = !state.useRecentSearchWord)
+        val currentUseRecentSearchWord = state.value.useRecentSearchWord
+        viewModelScope.launch {
+            setUseRecentSearchWordsUseCase.setUse(!currentUseRecentSearchWord)
         }
     }
 
     fun removeRecentSearchWord(word: String) {
-        _state.update { state ->
-            state.copy(recentSearchWords = state.recentSearchWords.filter { name -> name != word })
+        viewModelScope.launch {
+            removeRecentSearchWordUseCase.removeWord(word)
         }
     }
 
     fun removeAllRecentSearchWord() {
-        _state.update { state ->
-            state.copy(
-                recentSearchWords = emptyList()
-            )
+        viewModelScope.launch {
+            removeRecentSearchWordUseCase.removeAll()
         }
     }
 
