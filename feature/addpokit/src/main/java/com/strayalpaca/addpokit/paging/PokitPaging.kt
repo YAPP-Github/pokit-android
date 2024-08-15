@@ -114,7 +114,7 @@ class PokitPaging(
         _pagingData.update {
             capturedDataList.map { pokit ->
                 if (targetPokit.id == pokit.id) {
-                    targetPokit
+                    item
                 } else {
                     pokit
                 }
