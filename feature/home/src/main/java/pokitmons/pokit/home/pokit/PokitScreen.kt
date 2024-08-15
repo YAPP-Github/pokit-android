@@ -1,19 +1,30 @@
 package pokitmons.pokit.home.pokit
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter
+import coil.compose.rememberAsyncImagePainter
 import pokitmons.pokit.core.ui.components.block.pokitcard.PokitCard
 import pokitmons.pokit.home.Category
 import pokitmons.pokit.home.HomeMid
@@ -25,13 +36,8 @@ fun PokitScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
-    val dummy = arrayListOf<PokitCardDummy>().apply {
-        add(PokitCardDummy())
-        add(PokitCardDummy())
-        add(PokitCardDummy())
-        add(PokitCardDummy())
-        add(PokitCardDummy())
-    }.toList()
+    viewModel.loadPokits()
+    val pokits = viewModel.pokits.collectAsState()
 
     Column(
         modifier = Modifier
@@ -49,11 +55,11 @@ fun PokitScreen(
                     verticalArrangement = Arrangement.spacedBy(12.dp),
                     horizontalArrangement = Arrangement.spacedBy(12.dp),
                 ) {
-                    items(dummy) { pokitInfo ->
+                    items(pokits.value) { pokitDetail ->
                         PokitCard(
-                            text = pokitInfo.text,
-                            linkCount = pokitInfo.linkCount,
-                            painter = null,
+                            text = pokitDetail.title,
+                            linkCount = pokitDetail.count,
+                            painter = rememberAsyncImagePainter(model = pokitDetail.image.url),
                             onClick = { /*TODO*/ },
                             onClickKebab = { /*TODO*/ }
                         )
@@ -68,10 +74,6 @@ fun PokitScreen(
     }
 }
 
-data class PokitCardDummy(
-    val text: String = "요리/레시피",
-    val linkCount: Int = 10,
-)
 
 @Preview
 @Composable
