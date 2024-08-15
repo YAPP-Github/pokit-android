@@ -39,4 +39,6 @@ interface LinkDataSource {
         contentId: Int,
         modifyLinkRequest: ModifyLinkRequest
     ): ModifyLinkResponse
+
+    suspend fun setBookmark(contentId : Int, bookmarked : Boolean)
 }

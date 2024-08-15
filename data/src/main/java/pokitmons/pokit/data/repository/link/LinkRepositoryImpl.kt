@@ -116,4 +116,13 @@ class LinkRepositoryImpl @Inject constructor(
             parseErrorResult(throwable)
         }
     }
+
+    override suspend fun setBookmark(linkId: Int, bookmarked: Boolean): PokitResult<Unit> {
+        return runCatching {
+            dataSource.setBookmark(contentId = linkId, bookmarked = bookmarked)
+            PokitResult.Success(Unit)
+        }.getOrElse { throwable ->
+            parseErrorResult(throwable)
+        }
+    }
 }

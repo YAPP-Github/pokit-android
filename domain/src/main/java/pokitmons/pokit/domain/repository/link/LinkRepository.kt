@@ -42,4 +42,6 @@ interface LinkRepository {
         alertYn: String,
         thumbNail: String,
     ): PokitResult<Int>
+
+    suspend fun setBookmark(linkId : Int, bookmarked: Boolean): PokitResult<Unit>
 }

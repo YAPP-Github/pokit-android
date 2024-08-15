@@ -4,10 +4,12 @@ import pokitmons.pokit.data.model.link.request.ModifyLinkRequest
 import pokitmons.pokit.data.model.link.response.GetLinkResponse
 import pokitmons.pokit.data.model.link.response.GetLinksResponse
 import pokitmons.pokit.data.model.link.response.ModifyLinkResponse
+import pokitmons.pokit.data.model.link.response.ApplyBookmarkResponse
 import pokitmons.pokit.domain.model.link.LinksSort
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
+import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -54,4 +56,10 @@ interface LinkApi {
         @Path("contentId") contentId: Int,
         @Body modifyLinkRequest: ModifyLinkRequest,
     ): ModifyLinkResponse
+
+    @PUT("content/{contentId}/bookmark")
+    suspend fun cancelBookmark(@Path("contentId") contentId : Int)
+
+    @POST("content/{contentId}/bookmark")
+    suspend fun applyBookmark(@Path("contentId") contentId : Int) : ApplyBookmarkResponse
 }

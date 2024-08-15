@@ -75,4 +75,12 @@ class RemoteLinkDataSource @Inject constructor(
             modifyLinkRequest = modifyLinkRequest
         )
     }
+
+    override suspend fun setBookmark(contentId: Int, bookmarked: Boolean) {
+        if (bookmarked) {
+            linkApi.applyBookmark(contentId)
+        } else {
+            linkApi.cancelBookmark(contentId)
+        }
+    }
 }

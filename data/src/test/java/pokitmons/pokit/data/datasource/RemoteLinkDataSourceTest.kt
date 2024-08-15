@@ -33,4 +33,26 @@ class RemoteLinkDataSourceTest : DescribeSpec({
             }
         }
     }
+
+    describe("북마크 변경") {
+        context("북마크 취소 도중 예외가 발생했다면") {
+            coEvery { linkApi.cancelBookmark(0) } throws IllegalArgumentException("error")
+            it("동일한 에러가 발생한다.") {
+                val exception = shouldThrow<Exception> {
+                    remoteLinkDataSource.setBookmark(contentId = 0, bookmarked = false)
+                }
+                exception.message shouldBe "error"
+            }
+        }
+
+        context("북마크 등록 도중 예외가 발생했다면") {
+            coEvery { linkApi.applyBookmark(0) } throws IllegalArgumentException("error")
+            it("동일한 에러가 발생한다.") {
+                val exception = shouldThrow<Exception> {
+                    remoteLinkDataSource.setBookmark(contentId = 0, bookmarked = true)
+                }
+                exception.message shouldBe "error"
+            }
+        }
+    }
 })
