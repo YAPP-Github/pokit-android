@@ -2,17 +2,20 @@ package pokitmons.pokit.home.remind
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Badge
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -28,6 +31,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.home.R
 
 @Composable
@@ -58,34 +62,50 @@ fun ToadyLinkCard() {
                 .padding(12.dp)
         ) {
             Text(
+                style = PokitTheme.typography.label4,
                 text = "텍스트",
-                color = Color.White,
+                color = PokitTheme.colors.textTertiary,
                 modifier = Modifier
-                    .background(Color.Gray.copy(alpha = 0.7f))
+                    .height(16.dp)
+                    .width(34.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(PokitTheme.colors.backgroundPrimary)
                     .padding(horizontal = 4.dp, vertical = 2.dp)
             )
 
             Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "바이오 연구의 첨단, 인공 유전자...",
-                color = Color.White,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis
-            )
-            Spacer(modifier = Modifier.height(4.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top
+            ) {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    style = PokitTheme.typography.body2Bold,
+                    text = "바이오 연구의 첨단, 인공 유전자 인간 피 재생 가능할까요?",
+                    color = Color.White,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+
+                Spacer(modifier = Modifier.padding(4.dp))
+
+                Icon(
+                    painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.icon_24_kebab),
+                    contentDescription = null,
+                    tint = Color.White,
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
             Text(
                 text = "2024.04.12 · youtu.be",
-                color = Color.White
+                style = PokitTheme.typography.detail2,
+                color = PokitTheme.colors.textTertiary
             )
         }
-        Icon(
-            painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.icon_24_kebab),
-            contentDescription = null,
-            tint = Color.White,
-            modifier = Modifier
-                .align(Alignment.TopEnd)
-                .padding(8.dp)
-        )
     }
 }
 
