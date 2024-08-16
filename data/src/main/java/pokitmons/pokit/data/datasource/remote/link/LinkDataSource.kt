@@ -3,6 +3,7 @@ package pokitmons.pokit.data.datasource.remote.link
 import pokitmons.pokit.data.model.link.request.ModifyLinkRequest
 import pokitmons.pokit.data.model.link.response.GetLinkResponse
 import pokitmons.pokit.data.model.link.response.GetLinksResponse
+import pokitmons.pokit.data.model.link.response.LinkCardResponse
 import pokitmons.pokit.data.model.link.response.ModifyLinkResponse
 import pokitmons.pokit.domain.model.link.LinksSort
 
@@ -40,5 +41,11 @@ interface LinkDataSource {
         modifyLinkRequest: ModifyLinkRequest
     ): ModifyLinkResponse
 
+    suspend fun createLink(
+        createLinkRequest: ModifyLinkRequest
+    ): ModifyLinkResponse
+
     suspend fun setBookmark(contentId : Int, bookmarked : Boolean)
+
+    suspend fun getLinkCard(url: String): LinkCardResponse
 }

@@ -73,6 +73,9 @@ dependencies {
 
     implementation(project(":domain"))
 
+    // jsoup
+    implementation(libs.jsoup)
+
     // mockk
     testImplementation(libs.mockk)
     androidTestImplementation(libs.mockk.android)

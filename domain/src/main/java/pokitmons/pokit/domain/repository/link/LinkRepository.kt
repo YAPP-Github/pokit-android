@@ -2,6 +2,7 @@ package pokitmons.pokit.domain.repository.link
 
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.link.Link
+import pokitmons.pokit.domain.model.link.LinkCard
 import pokitmons.pokit.domain.model.link.LinksSort
 
 interface LinkRepository {
@@ -43,5 +44,16 @@ interface LinkRepository {
         thumbNail: String,
     ): PokitResult<Int>
 
+    suspend fun createLink(
+        data: String,
+        title: String,
+        categoryId: Int,
+        memo: String,
+        alertYn: String,
+        thumbNail: String,
+    ): PokitResult<Int>
+
     suspend fun setBookmark(linkId : Int, bookmarked: Boolean): PokitResult<Unit>
+
+    suspend fun getLinkCard(url: String) : PokitResult<LinkCard>
 }

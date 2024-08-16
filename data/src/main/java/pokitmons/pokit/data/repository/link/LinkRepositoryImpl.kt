@@ -6,6 +6,7 @@ import pokitmons.pokit.data.model.common.parseErrorResult
 import pokitmons.pokit.data.model.link.request.ModifyLinkRequest
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.link.Link
+import pokitmons.pokit.domain.model.link.LinkCard
 import pokitmons.pokit.domain.model.link.LinksSort
 import pokitmons.pokit.domain.repository.link.LinkRepository
 import javax.inject.Inject
@@ -117,10 +118,41 @@ class LinkRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun createLink(data: String, title: String, categoryId: Int, memo: String, alertYn: String, thumbNail: String): PokitResult<Int> {
+        return runCatching {
+            val createLinkRequest = ModifyLinkRequest(
+                data = data,
+                title = title,
+                categoryId = categoryId,
+                memo = memo,
+                alertYn = alertYn,
+                thumbNail = thumbNail
+            )
+            val response = dataSource.createLink(createLinkRequest = createLinkRequest)
+            PokitResult.Success(response.contentId)
+        }.getOrElse { throwable ->
+            parseErrorResult(throwable)
+        }
+    }
+
     override suspend fun setBookmark(linkId: Int, bookmarked: Boolean): PokitResult<Unit> {
         return runCatching {
             dataSource.setBookmark(contentId = linkId, bookmarked = bookmarked)
             PokitResult.Success(Unit)
+        }.getOrElse { throwable ->
+            parseErrorResult(throwable)
+        }
+    }
+
+    override suspend fun getLinkCard(url: String): PokitResult<LinkCard> {
+        return runCatching {
+            val response = dataSource.getLinkCard(url)
+            val mappedResponse = LinkCard(
+                url = response.url,
+                title = response.title,
+                thumbnailUrl = response.image
+            )
+            PokitResult.Success(result = mappedResponse)
         }.getOrElse { throwable ->
             parseErrorResult(throwable)
         }

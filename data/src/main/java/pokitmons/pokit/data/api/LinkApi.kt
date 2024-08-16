@@ -46,7 +46,7 @@ interface LinkApi {
         @Path("contentId") contentId: Int = 0,
     )
 
-    @GET("content/{contentId}")
+    @POST("content/{contentId}")
     suspend fun getLink(
         @Path("contentId") contentId: Int = 0,
     ): GetLinkResponse
@@ -55,6 +55,11 @@ interface LinkApi {
     suspend fun modifyLink(
         @Path("contentId") contentId: Int,
         @Body modifyLinkRequest: ModifyLinkRequest,
+    ): ModifyLinkResponse
+
+    @POST("content")
+    suspend fun createLink(
+        @Body createLinkRequest: ModifyLinkRequest
     ): ModifyLinkResponse
 
     @PUT("content/{contentId}/bookmark")

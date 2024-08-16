@@ -1,5 +1,8 @@
 package pokitmons.pokit.data.model.link.request
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 class ModifyLinkRequest(
     val data: String = "",
     val title: String = "",
