@@ -1,4 +1,4 @@
-package pokitmons.pokit.search.components.linkbottomsheet
+package pokitmons.pokit.search.components.linkdetailbottomsheet
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -20,6 +20,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.search.model.Link
+import pokitmons.pokit.core.ui.R.drawable as coreDrawable
 
 @Composable
 internal fun Link(
@@ -38,7 +39,7 @@ internal fun Link(
             )
     ) {
         Image(
-            painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.icon_24_google),
+            painter = painterResource(id = coreDrawable.icon_24_google),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.width(124.dp)

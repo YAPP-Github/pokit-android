@@ -41,7 +41,7 @@ class SearchViewModel @Inject constructor(
     private val setUseRecentSearchWordsUseCase: SetUseRecentSearchWordsUseCase,
     private val addRecentSearchWordUseCase: AddRecentSearchWordUseCase,
     private val removeRecentSearchWordUseCase: RemoveRecentSearchWordUseCase,
-    private val setBookmarkUseCase: SetBookmarkUseCase
+    private val setBookmarkUseCase: SetBookmarkUseCase,
 ) : ViewModel() {
     private val linkPaging = LinkPaging(
         searchLinksUseCase = searchLinksUseCase,
@@ -58,11 +58,11 @@ class SearchViewModel @Inject constructor(
         initPage = 0
     )
 
-    val linkList : StateFlow<List<Link>> = linkPaging.pagingData
-    val linkPagingState : StateFlow<SimplePagingState> = linkPaging.pagingState
+    val linkList: StateFlow<List<Link>> = linkPaging.pagingData
+    val linkPagingState: StateFlow<SimplePagingState> = linkPaging.pagingState
 
-    val pokitList : StateFlow<List<Pokit>> = pokitPaging.pagingData
-    val pokitPagingState : StateFlow<SimplePagingState> = pokitPaging.pagingState
+    val pokitList: StateFlow<List<Pokit>> = pokitPaging.pagingData
+    val pokitPagingState: StateFlow<SimplePagingState> = pokitPaging.pagingState
 
     private val _searchWord = MutableStateFlow("")
     val searchWord = _searchWord.asStateFlow()

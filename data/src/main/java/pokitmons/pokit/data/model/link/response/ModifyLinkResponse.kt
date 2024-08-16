@@ -13,4 +13,3 @@ data class ModifyLinkResponse(
     val createdAt: String = "",
     val favorites: Boolean = true,
 )
-

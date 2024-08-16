@@ -15,7 +15,7 @@ import javax.inject.Singleton
 object RoomModule {
     @Provides
     @Singleton
-    fun provideDatabase(@ApplicationContext context: Context) : AppDatabase {
+    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
         return Room.databaseBuilder(context, AppDatabase::class.java, "pokitDatabase.db").build()
     }
 

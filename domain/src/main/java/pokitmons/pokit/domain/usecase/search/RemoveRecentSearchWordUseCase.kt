@@ -4,7 +4,7 @@ import pokitmons.pokit.domain.repository.search.SearchRepository
 import javax.inject.Inject
 
 class RemoveRecentSearchWordUseCase @Inject constructor(
-    private val repository: SearchRepository
+    private val repository: SearchRepository,
 ) {
     suspend fun removeWord(word: String) {
         repository.removeSearchWord(word)

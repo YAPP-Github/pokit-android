@@ -17,7 +17,7 @@ import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButt
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.search.components.filter.FilterArea
 import pokitmons.pokit.search.components.filterbottomsheet.FilterBottomSheet
-import pokitmons.pokit.search.components.linkbottomsheet.LinkDetailBottomSheet
+import pokitmons.pokit.search.components.linkdetailbottomsheet.LinkDetailBottomSheet
 import pokitmons.pokit.search.components.recentsearchword.RecentSearchWord
 import pokitmons.pokit.search.components.searchitemlist.SearchItemList
 import pokitmons.pokit.search.components.toolbar.Toolbar
@@ -72,7 +72,7 @@ fun SearchScreenContainer(
         onHideBottomSheet = viewModel::hideLinkModifyBottomSheet,
         show = state.linkBottomSheetType != null
     ) {
-        if (state.linkBottomSheetType == BottomSheetType.MODIFY){
+        if (state.linkBottomSheetType == BottomSheetType.MODIFY) {
             ModifyBottomSheetContent(
                 onClickModify = remember {
                     {
@@ -91,7 +91,6 @@ fun SearchScreenContainer(
                 },
                 onClickShare = remember {
                     {
-
                     }
                 }
             )
@@ -124,7 +123,7 @@ fun SearchScreenContainer(
         toggleSortOrder = viewModel::toggleSortOrder,
         showLinkModifyBottomSheet = viewModel::showLinkModifyBottomSheet,
         showLinkDetailBottomSheet = viewModel::showLinkDetailBottomSheet,
-        loadNextLinks = viewModel::loadNextLinks,
+        loadNextLinks = viewModel::loadNextLinks
     )
 }
 

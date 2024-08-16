@@ -11,10 +11,10 @@ import javax.inject.Inject
 
 class LocalSearchWordDataSource @Inject constructor(
     private val searchWordDao: SearchWordDao,
-    private val sharedPreferences: SharedPreferences
-): SearchDataSource {
+    private val sharedPreferences: SharedPreferences,
+) : SearchDataSource {
     companion object {
-         const val USE_RECENT_WORD_SP_KEY = "use_recent_word"
+        const val USE_RECENT_WORD_SP_KEY = "use_recent_word"
     }
 
     private val useRecentSearchWords = MutableStateFlow(
@@ -42,7 +42,7 @@ class LocalSearchWordDataSource @Inject constructor(
         searchWordDao.removeAllSearchWords()
     }
 
-    override suspend fun setUseRecentSearchWord(use : Boolean): Boolean {
+    override suspend fun setUseRecentSearchWord(use: Boolean): Boolean {
         sharedPreferences.edit().putBoolean(USE_RECENT_WORD_SP_KEY, use).apply()
         useRecentSearchWords.update { use }
         return use

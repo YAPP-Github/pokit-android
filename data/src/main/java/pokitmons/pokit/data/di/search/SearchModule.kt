@@ -15,7 +15,7 @@ import javax.inject.Singleton
 abstract class SearchModule {
     @Binds
     @Singleton
-    abstract fun bindSearchRepository(searchRepositoryImpl: SearchRepositoryImpl) : SearchRepository
+    abstract fun bindSearchRepository(searchRepositoryImpl: SearchRepositoryImpl): SearchRepository
 
     @Binds
     @Singleton

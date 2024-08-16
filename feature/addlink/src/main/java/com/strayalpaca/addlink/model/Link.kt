@@ -9,7 +9,7 @@ data class Link(
     val imageUrl: String?,
 ) {
     companion object {
-        fun fromDomainLink(domainLink : DomainLink) : Link {
+        fun fromDomainLink(domainLink: DomainLink): Link {
             return Link(
                 url = domainLink.data,
                 title = domainLink.title,
@@ -17,7 +17,7 @@ data class Link(
             )
         }
 
-        fun fromDomainLinkCard(domainLinkCard : DomainLinkCard): Link {
+        fun fromDomainLinkCard(domainLinkCard: DomainLinkCard): Link {
             return Link(
                 url = domainLinkCard.url,
                 title = domainLinkCard.title,

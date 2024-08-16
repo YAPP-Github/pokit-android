@@ -1,4 +1,4 @@
-package pokitmons.pokit.search.components.linkbottomsheet
+package pokitmons.pokit.search.components.linkdetailbottomsheet
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background

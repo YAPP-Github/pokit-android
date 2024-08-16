@@ -6,7 +6,7 @@ import pokitmons.pokit.domain.repository.search.SearchRepository
 import javax.inject.Inject
 
 class SearchRepositoryImpl @Inject constructor(
-    private val dataSource: SearchDataSource
+    private val dataSource: SearchDataSource,
 ) : SearchRepository {
     override fun getRecentSearchWords(): Flow<List<String>> {
         return dataSource.getSearchWord()
@@ -20,7 +20,7 @@ class SearchRepositoryImpl @Inject constructor(
         dataSource.removeAllSearchWords()
     }
 
-    override suspend fun setUseRecentSearchWord(use : Boolean): Boolean {
+    override suspend fun setUseRecentSearchWord(use: Boolean): Boolean {
         return dataSource.setUseRecentSearchWord(use = use)
     }
 

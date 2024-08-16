@@ -5,8 +5,8 @@ import pokitmons.pokit.domain.repository.search.SearchRepository
 import javax.inject.Inject
 
 class GetRecentSearchWordsUseCase @Inject constructor(
-    private val repository: SearchRepository
-){
+    private val repository: SearchRepository,
+) {
     fun getWords(): Flow<List<String>> {
         return repository.getRecentSearchWords()
     }

@@ -8,9 +8,9 @@ import kotlinx.coroutines.flow.Flow
 import pokitmons.pokit.data.room.entity.SearchWord
 
 @Dao
-interface SearchWordDao{
+interface SearchWordDao {
     @Query("SELECT word from SearchWord order by searchedAt desc limit 10")
-    fun getRecentSearchWords() : Flow<List<String>>
+    fun getRecentSearchWords(): Flow<List<String>>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun addSearchWord(searchWord: SearchWord)

@@ -6,9 +6,9 @@ import pokitmons.pokit.domain.repository.link.LinkRepository
 import javax.inject.Inject
 
 class GetLinkCardUseCase @Inject constructor(
-    private val repository: LinkRepository
+    private val repository: LinkRepository,
 ) {
-    suspend fun getLinkCard(url: String) : PokitResult<LinkCard> {
+    suspend fun getLinkCard(url: String): PokitResult<LinkCard> {
         return repository.getLinkCard(url = url)
     }
 }

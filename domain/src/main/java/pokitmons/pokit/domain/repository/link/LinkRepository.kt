@@ -30,7 +30,7 @@ interface LinkRepository {
         searchWord: String,
     ): PokitResult<List<Link>>
 
-    suspend fun deleteLink(linkId : Int) : PokitResult<Int>
+    suspend fun deleteLink(linkId: Int): PokitResult<Int>
 
     suspend fun getLink(linkId: Int): PokitResult<Link>
 
@@ -53,7 +53,7 @@ interface LinkRepository {
         thumbNail: String,
     ): PokitResult<Int>
 
-    suspend fun setBookmark(linkId : Int, bookmarked: Boolean): PokitResult<Unit>
+    suspend fun setBookmark(linkId: Int, bookmarked: Boolean): PokitResult<Unit>
 
-    suspend fun getLinkCard(url: String) : PokitResult<LinkCard>
+    suspend fun getLinkCard(url: String): PokitResult<LinkCard>
 }

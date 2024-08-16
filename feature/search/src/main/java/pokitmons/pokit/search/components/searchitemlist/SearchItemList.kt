@@ -37,7 +37,7 @@ internal fun SearchItemList(
     linkPagingState: SimplePagingState = SimplePagingState.IDLE,
     onClickLinkKebab: (Link) -> Unit = {},
     onClickLink: (Link) -> Unit = {},
-    loadNextLinks: () -> Unit = {}
+    loadNextLinks: () -> Unit = {},
 ) {
     val linkLazyColumnListState = rememberLazyListState()
     val startLinkPaging = remember {

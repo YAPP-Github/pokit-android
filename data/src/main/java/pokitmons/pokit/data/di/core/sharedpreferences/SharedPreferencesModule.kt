@@ -16,8 +16,8 @@ object SharedPreferencesModule {
     @Provides
     @Singleton
     fun provideSharedPreferences(
-        @ApplicationContext context : Context
-    ) : SharedPreferences {
+        @ApplicationContext context: Context,
+    ): SharedPreferences {
         return context.getSharedPreferences("pokit_shared_preferences", MODE_PRIVATE)
     }
 }

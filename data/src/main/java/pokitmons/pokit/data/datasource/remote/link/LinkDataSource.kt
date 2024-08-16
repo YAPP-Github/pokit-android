@@ -38,14 +38,14 @@ interface LinkDataSource {
 
     suspend fun modifyLink(
         contentId: Int,
-        modifyLinkRequest: ModifyLinkRequest
+        modifyLinkRequest: ModifyLinkRequest,
     ): ModifyLinkResponse
 
     suspend fun createLink(
-        createLinkRequest: ModifyLinkRequest
+        createLinkRequest: ModifyLinkRequest,
     ): ModifyLinkResponse
 
-    suspend fun setBookmark(contentId : Int, bookmarked : Boolean)
+    suspend fun setBookmark(contentId: Int, bookmarked: Boolean)
 
     suspend fun getLinkCard(url: String): LinkCardResponse
 }

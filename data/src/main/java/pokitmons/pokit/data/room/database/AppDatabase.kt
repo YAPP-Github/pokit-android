@@ -6,6 +6,6 @@ import pokitmons.pokit.data.room.dao.SearchWordDao
 import pokitmons.pokit.data.room.entity.SearchWord
 
 @Database(entities = [SearchWord::class], version = 1)
-abstract class AppDatabase: RoomDatabase() {
-    abstract fun searchWordDao() : SearchWordDao
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun searchWordDao(): SearchWordDao
 }

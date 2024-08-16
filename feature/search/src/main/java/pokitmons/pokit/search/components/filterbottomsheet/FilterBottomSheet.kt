@@ -35,7 +35,7 @@ fun FilterBottomSheet(
             onSaveClilck = onSaveClilck,
             pokits = pokits,
             pokitPagingState = pokitPagingState,
-            loadNextPokits = loadNextPokits,
+            loadNextPokits = loadNextPokits
         )
     }
 }

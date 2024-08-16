@@ -41,7 +41,7 @@ class AddLinkViewModel @Inject constructor(
     private val createLinkUseCase: CreateLinkUseCase,
     private val modifyLinkUseCase: ModifyLinkUseCase,
     getPokitsUseCase: GetPokitsUseCase,
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
 ) : ContainerHost<AddLinkScreenState, AddLinkScreenSideEffect>, ViewModel() {
     override val container: Container<AddLinkScreenState, AddLinkScreenSideEffect> = container(AddLinkScreenState())
 
@@ -163,21 +163,21 @@ class AddLinkViewModel @Inject constructor(
             val response = if (isModify) {
                 modifyLinkUseCase.modifyLink(
                     linkId = currentLinkId!!,
-                    data= currentState.link!!.url,
-                    title= currentState.link.title,
-                    categoryId= currentState.currentPokit!!.id.toInt(),
-                    memo= memo.value,
-                    alertYn= if (currentState.useRemind) "Y" else "n",
-                    thumbNail= currentState.link.imageUrl ?: ""
+                    data = currentState.link!!.url,
+                    title = currentState.link.title,
+                    categoryId = currentState.currentPokit!!.id.toInt(),
+                    memo = memo.value,
+                    alertYn = if (currentState.useRemind) "Y" else "n",
+                    thumbNail = currentState.link.imageUrl ?: ""
                 )
             } else {
                 createLinkUseCase.createLink(
-                    data= currentState.link!!.url,
-                    title= title.value,
-                    categoryId= currentState.currentPokit!!.id.toInt(),
-                    memo= memo.value,
-                    alertYn= if (currentState.useRemind) "Y" else "n",
-                    thumbNail= currentState.link.imageUrl ?: ""
+                    data = currentState.link!!.url,
+                    title = title.value,
+                    categoryId = currentState.currentPokit!!.id.toInt(),
+                    memo = memo.value,
+                    alertYn = if (currentState.useRemind) "Y" else "n",
+                    thumbNail = currentState.link.imageUrl ?: ""
                 )
             }
             if (response is PokitResult.Success) {
@@ -190,7 +190,7 @@ class AddLinkViewModel @Inject constructor(
         }
     }
 
-    private fun canSave(state: AddLinkScreenState) : Boolean {
+    private fun canSave(state: AddLinkScreenState): Boolean {
         return (state.currentPokit != null && state.link != null)
     }
 

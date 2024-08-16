@@ -22,13 +22,13 @@ class LinkPaging(
     private val firstRequestPage: Int = 3,
     private var filter: Filter,
     private var searchWord: String = "",
-    private var recentSort: Boolean = true
+    private var recentSort: Boolean = true,
 ) : SimplePaging<Link> {
 
-    private val _pagingState : MutableStateFlow<SimplePagingState> = MutableStateFlow(SimplePagingState.IDLE)
+    private val _pagingState: MutableStateFlow<SimplePagingState> = MutableStateFlow(SimplePagingState.IDLE)
     override val pagingState: StateFlow<SimplePagingState> = _pagingState.asStateFlow()
 
-    private val _pagingData : MutableStateFlow<List<Link>> = MutableStateFlow(emptyList())
+    private val _pagingData: MutableStateFlow<List<Link>> = MutableStateFlow(emptyList())
     override val pagingData: StateFlow<List<Link>> = _pagingData.asStateFlow()
 
     private var currentPageIndex = initPage

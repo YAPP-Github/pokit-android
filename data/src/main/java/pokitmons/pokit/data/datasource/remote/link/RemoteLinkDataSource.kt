@@ -70,7 +70,7 @@ class RemoteLinkDataSource @Inject constructor(
 
     override suspend fun modifyLink(
         contentId: Int,
-        modifyLinkRequest: ModifyLinkRequest
+        modifyLinkRequest: ModifyLinkRequest,
     ): ModifyLinkResponse {
         return linkApi.modifyLink(
             contentId = contentId,

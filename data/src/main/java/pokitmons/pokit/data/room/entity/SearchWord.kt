@@ -8,4 +8,3 @@ data class SearchWord(
     @ColumnInfo("word") val word: String,
     @ColumnInfo("searchedAt") val searchedAt: String,
 )
-
