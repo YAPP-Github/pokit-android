@@ -48,4 +48,10 @@ interface LinkDataSource {
     suspend fun setBookmark(contentId: Int, bookmarked: Boolean)
 
     suspend fun getLinkCard(url: String): LinkCardResponse
+
+    suspend fun getUncategorizedLinks(
+        page: Int = 0,
+        size: Int = 10,
+        sort: List<String> = listOf(LinksSort.RECENT.value),
+    ): GetLinksResponse
 }

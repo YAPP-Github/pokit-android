@@ -56,4 +56,10 @@ interface LinkRepository {
     suspend fun setBookmark(linkId: Int, bookmarked: Boolean): PokitResult<Unit>
 
     suspend fun getLinkCard(url: String): PokitResult<LinkCard>
+
+    suspend fun getUncategorizedLinks(
+        size: Int = 10,
+        page: Int = 0,
+        sort: LinksSort = LinksSort.RECENT,
+    ): PokitResult<List<Link>>
 }

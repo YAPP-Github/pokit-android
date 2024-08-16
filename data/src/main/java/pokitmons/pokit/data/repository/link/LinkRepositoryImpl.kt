@@ -157,4 +157,14 @@ class LinkRepositoryImpl @Inject constructor(
             parseErrorResult(throwable)
         }
     }
+
+    override suspend fun getUncategorizedLinks(size: Int, page: Int, sort: LinksSort): PokitResult<List<Link>> {
+        return runCatching {
+            val response = dataSource.getUncategorizedLinks(size = size, page = page, sort = listOf(sort.value))
+            val mappedResponse = LinkMapper.mapperToLinks(response)
+            PokitResult.Success(mappedResponse)
+        }.getOrElse { throwable ->
+            parseErrorResult(throwable)
+        }
+    }
 }

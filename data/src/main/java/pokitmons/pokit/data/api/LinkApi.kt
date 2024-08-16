@@ -67,4 +67,11 @@ interface LinkApi {
 
     @POST("content/{contentId}/bookmark")
     suspend fun applyBookmark(@Path("contentId") contentId: Int): ApplyBookmarkResponse
+
+    @GET("content/uncategorized")
+    suspend fun getUncategorizedLinks(
+        @Query("page") page: Int = 0,
+        @Query("size") size: Int = 10,
+        @Query("sort") sort: List<String> = listOf(LinksSort.RECENT.value),
+    ): GetLinksResponse
 }

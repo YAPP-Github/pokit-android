@@ -102,4 +102,8 @@ class RemoteLinkDataSource @Inject constructor(
             title = title
         )
     }
+
+    override suspend fun getUncategorizedLinks(page: Int, size: Int, sort: List<String>): GetLinksResponse {
+        return linkApi.getUncategorizedLinks(page = page, size = size, sort = sort)
+    }
 }
