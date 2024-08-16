@@ -19,18 +19,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
 import pokitmons.pokit.home.HomeViewModel
-import pokitmons.pokit.home.pokit.LinkCardDummy
 
 @Composable
 fun RemindScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
-    val dummy = arrayListOf<LinkCardDummy>().apply {
-        add(LinkCardDummy())
-        add(LinkCardDummy())
-        add(LinkCardDummy())
-    }.toList()
+//    val dummy = arrayListOf<LinkCardDummy>().apply {
+//        add(LinkCardDummy())
+//        add(LinkCardDummy())
+//        add(LinkCardDummy())
+//    }.toList()
 
 
     Column(
@@ -53,18 +52,18 @@ fun RemindScreen(
                 modifier = Modifier,
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                dummy.forEach { linkCardInfo ->
-                    LinkCard(
-                        item = linkCardInfo.item,
-                        title = linkCardInfo.title,
-                        sub = linkCardInfo.sub,
-                        painter = painterResource(id = R.drawable.icon_24_folder),
-                        notRead = linkCardInfo.notRead,
-                        badgeText = linkCardInfo.badgeText,
-                        onClickKebab = { },
-                        onClickItem = { }
-                    )
-                }
+//                dummy.forEach { linkCardInfo ->
+//                    LinkCard(
+//                        item = linkCardInfo.item,
+//                        title = linkCardInfo.title,
+//                        sub = linkCardInfo.sub,
+//                        painter = painterResource(id = R.drawable.icon_24_folder),
+//                        notRead = linkCardInfo.notRead,
+//                        badgeText = linkCardInfo.badgeText,
+//                        onClickKebab = { },
+//                        onClickItem = { }
+//                    )
+//                }
             }
         }
 
@@ -76,18 +75,18 @@ fun RemindScreen(
                 modifier = Modifier,
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-                dummy.forEach { linkCardInfo ->
-                    LinkCard(
-                        item = linkCardInfo.item,
-                        title = linkCardInfo.title,
-                        sub = linkCardInfo.sub,
-                        painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.icon_24_folder),
-                        notRead = linkCardInfo.notRead,
-                        badgeText = linkCardInfo.badgeText,
-                        onClickKebab = { },
-                        onClickItem = { }
-                    )
-                }
+//                dummy.forEach { linkCardInfo ->
+//                    LinkCard(
+//                        item = linkCardInfo.item,
+//                        title = linkCardInfo.title,
+//                        sub = linkCardInfo.sub,
+//                        painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.icon_24_folder),
+//                        notRead = linkCardInfo.notRead,
+//                        badgeText = linkCardInfo.badgeText,
+//                        onClickKebab = { },
+//                        onClickItem = { }
+//                    )
+//                }
             }
         }
     }
