@@ -105,7 +105,7 @@ class AddLinkViewModel @Inject constructor(
             inputLinkJob?.cancel()
             inputLinkJob = viewModelScope.launch(Dispatchers.IO) {
                 delay(1000L)
-                reduce { state.copy(step = ScreenStep.LINK_LOADING) }
+                reduce { state.copy(step = ScreenStep.LINK_LOADING, link = null) }
 
                 val response = getLinkCardUseCase.getLinkCard(linkUrl)
                 if (response is PokitResult.Success) {
