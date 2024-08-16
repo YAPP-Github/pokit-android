@@ -6,6 +6,7 @@ data class Pokit(
     val name: String,
     val image: Image,
     val linkCount: Int,
+    val createdAt: String
 ) {
     data class Image(
         val id: Int,

@@ -7,6 +7,7 @@ data class Pokit(
     val id: String = "",
     val count: Int = 0,
     val image: pokitmons.pokit.domain.model.pokit.Pokit.Image,
+    val createdAt: String,
 ) {
     companion object {
         fun fromDomainPokit(pokit: DomainPokit): Pokit {
@@ -14,7 +15,8 @@ data class Pokit(
                 title = pokit.name,
                 id = pokit.categoryId.toString(),
                 count = pokit.linkCount,
-                image = pokit.image
+                image = pokit.image,
+                createdAt = pokit.createdAt
             )
         }
     }
