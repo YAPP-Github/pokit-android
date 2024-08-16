@@ -18,7 +18,8 @@ object PokitMapper {
                     id = data.categoryImage.imageId,
                     url = data.categoryImage.imageUrl
                 ),
-                linkCount = data.contentCount
+                linkCount = data.contentCount,
+                createdAt = data.createdAt
             )
         }
     }
@@ -38,7 +39,8 @@ object PokitMapper {
                 id = pokitResponse.categoryImage.imageId,
                 url = pokitResponse.categoryImage.imageUrl
             ),
-            linkCount = NOT_USE
+            linkCount = NOT_USE,
+            createdAt = pokitResponse.createdAt
         )
     }
 }

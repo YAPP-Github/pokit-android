@@ -4,16 +4,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.strayalpaca.pokitdetail.paging.PokitPaging
-import com.strayalpaca.pokitdetail.paging.SimplePagingState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import pokitmons.pokit.domain.commom.PokitResult
-import pokitmons.pokit.domain.usecase.pokit.GetPokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
 import com.strayalpaca.pokitdetail.model.Pokit
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.update
 import javax.inject.Inject
 
 @HiltViewModel
@@ -37,7 +35,9 @@ class HomeViewModel @Inject constructor(
         initPage = 0
     )
 
-    val pokits: StateFlow<List<Pokit>> = pokitPaging.pagingData
+    private var _pokits: MutableStateFlow<List<Pokit>> = pokitPaging._pagingData
+    val pokits: StateFlow<List<Pokit>>
+        get() = _pokits.asStateFlow()
 
     fun updateCategory(category: Category) {
         selectedCategory.value = category
@@ -45,6 +45,26 @@ class HomeViewModel @Inject constructor(
 
     fun updateSortOrder(order: SortOrder) {
         sortOrder.value = order
+        sortPokits()
+    }
+
+    private fun sortPokits() {
+        when (sortOrder.value) {
+            is SortOrder.Name -> {
+                _pokits.update { pokit ->
+                    pokit.sortedBy { pokitDetail ->
+                        pokitDetail.title
+                    }
+                }
+            }
+            is SortOrder.Latest -> {
+                _pokits.update { pokit ->
+                    pokit.sortedByDescending { pokitDetail ->
+                        pokitDetail.createdAt
+                    }
+                }
+            }
+        }
     }
 
     fun updateScreenType(type: ScreenType) {
