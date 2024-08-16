@@ -67,7 +67,11 @@ dependencies {
     implementation(libs.androidx.navigation.compose)
     implementation(libs.hilt.navigation.compose)
 
+    // coil
+    implementation(libs.coil.compose)
+
     // module
     implementation(project(":core:ui"))
     implementation(project(":domain"))
+    implementation(project(":feature:pokitdetail"))
 }
