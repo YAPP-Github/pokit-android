@@ -4,7 +4,17 @@ data class Pokit(
     val title: String = "",
     val id: String = "",
     val count: Int = 0,
-)
+) {
+    companion object {
+        fun fromDomainPokit(pokit: pokitmons.pokit.domain.model.pokit.Pokit): Pokit {
+            return Pokit(
+                title = pokit.name,
+                id = pokit.categoryId.toString(),
+                count = pokit.linkCount
+            )
+        }
+    }
+}
 
 internal val samplePokits = listOf(
     Pokit(title = "안드로이드", id = "1", count = 2),

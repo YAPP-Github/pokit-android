@@ -1,34 +1,86 @@
 package pokitmons.pokit.search
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import pokitmons.pokit.domain.commom.PokitResult
+import pokitmons.pokit.domain.usecase.link.SearchLinksUseCase
+import pokitmons.pokit.domain.usecase.link.SetBookmarkUseCase
+import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
+import pokitmons.pokit.domain.usecase.search.AddRecentSearchWordUseCase
+import pokitmons.pokit.domain.usecase.search.GetRecentSearchWordsUseCase
+import pokitmons.pokit.domain.usecase.search.GetUseRecentSearchWordsUseCase
+import pokitmons.pokit.domain.usecase.search.RemoveRecentSearchWordUseCase
+import pokitmons.pokit.domain.usecase.search.SetUseRecentSearchWordsUseCase
+import pokitmons.pokit.search.model.BottomSheetType
 import pokitmons.pokit.search.model.Filter
 import pokitmons.pokit.search.model.FilterType
 import pokitmons.pokit.search.model.Link
+import pokitmons.pokit.search.model.Pokit
 import pokitmons.pokit.search.model.SearchScreenState
 import pokitmons.pokit.search.model.SearchScreenStep
-import pokitmons.pokit.search.model.sampleLinks
+import pokitmons.pokit.search.paging.LinkPaging
+import pokitmons.pokit.search.paging.PokitPaging
+import pokitmons.pokit.search.paging.SimplePagingState
 import javax.inject.Inject
 
 @HiltViewModel
-class SearchViewModel @Inject constructor() : ViewModel() {
+class SearchViewModel @Inject constructor(
+    searchLinksUseCase: SearchLinksUseCase,
+    getPokitsUseCase: GetPokitsUseCase,
+    getRecentSearchWordsUseCase: GetRecentSearchWordsUseCase,
+    getUseRecentSearchWordsUseCase: GetUseRecentSearchWordsUseCase,
+    private val setUseRecentSearchWordsUseCase: SetUseRecentSearchWordsUseCase,
+    private val addRecentSearchWordUseCase: AddRecentSearchWordUseCase,
+    private val removeRecentSearchWordUseCase: RemoveRecentSearchWordUseCase,
+    private val setBookmarkUseCase: SetBookmarkUseCase,
+) : ViewModel() {
+    private val linkPaging = LinkPaging(
+        searchLinksUseCase = searchLinksUseCase,
+        filter = Filter(),
+        perPage = 10,
+        coroutineScope = viewModelScope,
+        initPage = 0
+    )
+
+    private val pokitPaging = PokitPaging(
+        getPokits = getPokitsUseCase,
+        perPage = 10,
+        coroutineScope = viewModelScope,
+        initPage = 0
+    )
+
+    val linkList: StateFlow<List<Link>> = linkPaging.pagingData
+    val linkPagingState: StateFlow<SimplePagingState> = linkPaging.pagingState
+
+    val pokitList: StateFlow<List<Pokit>> = pokitPaging.pagingData
+    val pokitPagingState: StateFlow<SimplePagingState> = pokitPaging.pagingState
+
     private val _searchWord = MutableStateFlow("")
     val searchWord = _searchWord.asStateFlow()
 
     private val _state = MutableStateFlow(SearchScreenState())
-    val state = _state.asStateFlow()
+    val state = combine(
+        _state,
+        getRecentSearchWordsUseCase.getWords(),
+        getUseRecentSearchWordsUseCase.getUse()
+    ) { state, searchWords, useRecentSearchWord ->
+        state.copy(recentSearchWords = searchWords, useRecentSearchWord = useRecentSearchWord)
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.Eagerly,
+        initialValue = SearchScreenState()
+    )
 
     private var appliedSearchWord = ""
-
-    private val _linkList = MutableStateFlow<List<Link>>(emptyList())
-    val linkList = _linkList.asStateFlow()
-
-    init {
-        _linkList.update { sampleLinks }
-    }
 
     fun inputSearchWord(newSearchWord: String) {
         _searchWord.update { newSearchWord }
@@ -48,6 +100,11 @@ class SearchViewModel @Inject constructor() : ViewModel() {
             _state.update { state ->
                 state.copy(step = SearchScreenStep.RESULT)
             }
+            viewModelScope.launch {
+                addRecentSearchWordUseCase.addRecentSearchWord(appliedSearchWord)
+                linkPaging.changeSearchWord(appliedSearchWord)
+                linkPaging.refresh()
+            }
         }
     }
 
@@ -59,26 +116,30 @@ class SearchViewModel @Inject constructor() : ViewModel() {
             _state.update { state ->
                 state.copy(step = SearchScreenStep.RESULT)
             }
+            viewModelScope.launch {
+                addRecentSearchWordUseCase.addRecentSearchWord(appliedSearchWord)
+                linkPaging.changeSearchWord(appliedSearchWord)
+                linkPaging.refresh()
+            }
         }
     }
 
     fun toggleUseRecentSearchWord() {
-        _state.update { state ->
-            state.copy(useRecentSearchWord = !state.useRecentSearchWord)
+        val currentUseRecentSearchWord = state.value.useRecentSearchWord
+        viewModelScope.launch {
+            setUseRecentSearchWordsUseCase.setUse(!currentUseRecentSearchWord)
         }
     }
 
     fun removeRecentSearchWord(word: String) {
-        _state.update { state ->
-            state.copy(recentSearchWords = state.recentSearchWords.filter { name -> name != word })
+        viewModelScope.launch {
+            removeRecentSearchWordUseCase.removeWord(word)
         }
     }
 
     fun removeAllRecentSearchWord() {
-        _state.update { state ->
-            state.copy(
-                recentSearchWords = emptyList()
-            )
+        viewModelScope.launch {
+            removeRecentSearchWordUseCase.removeAll()
         }
     }
 
@@ -110,6 +171,17 @@ class SearchViewModel @Inject constructor() : ViewModel() {
     fun showLinkModifyBottomSheet(link: Link) {
         _state.update { state ->
             state.copy(
+                linkBottomSheetType = BottomSheetType.MODIFY,
+                currentLink = link
+            )
+        }
+    }
+
+    fun showLinkRemoveBottomSheet(link: Link) {
+        _state.update { state ->
+            state.copy(
+                linkBottomSheetType = BottomSheetType.REMOVE,
+                showLinkDetailBottomSheet = false,
                 currentLink = link
             )
         }
@@ -118,7 +190,27 @@ class SearchViewModel @Inject constructor() : ViewModel() {
     fun hideLinkModifyBottomSheet() {
         _state.update { state ->
             state.copy(
+                linkBottomSheetType = null,
                 currentLink = null
+            )
+        }
+    }
+
+    fun showLinkDetailBottomSheet(link: Link) {
+        _state.update { state ->
+            state.copy(
+                currentLink = link,
+                showLinkDetailBottomSheet = true,
+                linkBottomSheetType = null
+            )
+        }
+    }
+
+    fun hideLinkDetailBottomSheet() {
+        _state.update { state ->
+            state.copy(
+                currentLink = null,
+                showLinkDetailBottomSheet = false
             )
         }
     }
@@ -135,7 +227,10 @@ class SearchViewModel @Inject constructor() : ViewModel() {
             )
         }
 
-        // todo refresh 기능 구현
+        viewModelScope.launch {
+            linkPaging.changeFilter(filter)
+            linkPaging.refresh()
+        }
     }
 
     fun toggleSortOrder() {
@@ -143,6 +238,46 @@ class SearchViewModel @Inject constructor() : ViewModel() {
             state.copy(sortRecent = !state.sortRecent)
         }
 
-        // todo refresh 기능 구현
+        viewModelScope.launch {
+            linkPaging.changeRecentSort(state.value.sortRecent)
+            linkPaging.refresh()
+        }
+    }
+
+    fun loadNextLinks() {
+        viewModelScope.launch {
+            linkPaging.load()
+        }
+    }
+
+    fun loadNextPokits() {
+        viewModelScope.launch {
+            pokitPaging.load()
+        }
+    }
+
+    fun refreshPokits() {
+        viewModelScope.launch {
+            pokitPaging.refresh()
+        }
+    }
+
+    fun toggleBookmark() {
+        val currentLink = state.value.currentLink ?: return
+        val currentLinkId = currentLink.id.toIntOrNull() ?: return
+        val applyBookmarked = !currentLink.bookmark
+
+        viewModelScope.launch {
+            val response = setBookmarkUseCase.setBookMarked(currentLinkId, applyBookmarked)
+            if (response is PokitResult.Success) {
+                val bookmarkChangedLink = currentLink.copy(bookmark = applyBookmarked)
+                _state.update { state ->
+                    state.copy(
+                        currentLink = bookmarkChangedLink
+                    )
+                }
+                linkPaging.modifyItem(bookmarkChangedLink)
+            }
+        }
     }
 }

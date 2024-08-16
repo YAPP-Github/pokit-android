@@ -88,6 +88,8 @@ annotation = { group = "androidx.annotation", name = "annotation", version.ref =
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
 
+jsoup = { group = "org.jsoup", name = "jsoup", version = "1.18.1" }
+
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }

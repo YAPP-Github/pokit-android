@@ -9,8 +9,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -21,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.search.model.Link
+import pokitmons.pokit.search.paging.SimplePagingState
 import pokitmons.pokit.core.ui.R.drawable as coreDrawable
 import pokitmons.pokit.search.R.string as SearchString
 
@@ -30,9 +34,26 @@ internal fun SearchItemList(
     onToggleSort: () -> Unit = {},
     useRecentOrder: Boolean = true,
     links: List<Link> = emptyList(),
+    linkPagingState: SimplePagingState = SimplePagingState.IDLE,
     onClickLinkKebab: (Link) -> Unit = {},
     onClickLink: (Link) -> Unit = {},
+    loadNextLinks: () -> Unit = {},
 ) {
+    val linkLazyColumnListState = rememberLazyListState()
+    val startLinkPaging = remember {
+        derivedStateOf {
+            linkLazyColumnListState.layoutInfo.visibleItemsInfo.lastOrNull()?.let { last ->
+                last.index >= linkLazyColumnListState.layoutInfo.totalItemsCount - 3
+            } ?: false
+        }
+    }
+
+    LaunchedEffect(startLinkPaging.value) {
+        if (startLinkPaging.value && linkPagingState == SimplePagingState.IDLE) {
+            loadNextLinks()
+        }
+    }
+
     Column(
         modifier = modifier
     ) {
@@ -60,7 +81,9 @@ internal fun SearchItemList(
             )
         }
 
-        LazyColumn {
+        LazyColumn(
+            state = linkLazyColumnListState
+        ) {
             items(links) { link ->
                 LinkCard(
                     item = link,
