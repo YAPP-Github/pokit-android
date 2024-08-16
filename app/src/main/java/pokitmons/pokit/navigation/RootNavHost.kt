@@ -43,11 +43,9 @@ fun RootNavHost(
         composable(
             route = AddLink.routeWithArgs,
             arguments = AddLink.arguments
-        ) { navBackStackEntry ->
+        ) {
             val viewModel: AddLinkViewModel = hiltViewModel()
-            val linkId = navBackStackEntry.arguments?.getString(AddLink.linkIdArg)
             AddLinkScreenContainer(
-                linkId = linkId,
                 viewModel = viewModel,
                 onBackPressed = navHostController::popBackStack,
                 onNavigateToAddPokit = {
