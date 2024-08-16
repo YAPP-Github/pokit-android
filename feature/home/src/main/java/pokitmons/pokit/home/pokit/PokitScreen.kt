@@ -18,7 +18,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import pokitmons.pokit.core.ui.components.block.pokitcard.PokitCard
-import pokitmons.pokit.home.HomeMid
 
 @Composable
 fun PokitScreen(
