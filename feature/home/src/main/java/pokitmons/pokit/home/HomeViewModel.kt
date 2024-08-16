@@ -10,13 +10,20 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
 import com.strayalpaca.pokitdetail.model.Pokit
+import com.strayalpaca.pokitdetail.paging.LinkPaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
+import pokitmons.pokit.domain.commom.PokitResult
+import pokitmons.pokit.domain.model.link.Link
+import pokitmons.pokit.domain.model.link.LinksSort
+import pokitmons.pokit.domain.usecase.link.GetLinksUseCase
+import com.strayalpaca.pokitdetail.model.Link as DetailLink
 import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getPokitsUseCase: GetPokitsUseCase
+    private val getPokitsUseCase: GetPokitsUseCase,
+    private val getLinksUseCase: GetLinksUseCase,
 ) : ViewModel() {
 
     var selectedCategory = mutableStateOf<Category>(Category.Pokit)
@@ -35,9 +42,21 @@ class HomeViewModel @Inject constructor(
         initPage = 0
     )
 
+    private val linkPaging = LinkPaging(
+        getLinks = ::getUncategorizedLinks,
+        perPage = 10,
+        coroutineScope = viewModelScope,
+        initPage = 0,
+        initCategoryId = 1
+    )
+
     private var _pokits: MutableStateFlow<List<Pokit>> = pokitPaging._pagingData
     val pokits: StateFlow<List<Pokit>>
         get() = _pokits.asStateFlow()
+
+    private var _unCategoryLinks: MutableStateFlow<List<DetailLink>> = linkPaging._pagingData
+    val unCategoryLinks: StateFlow<List<DetailLink>>
+        get() = _unCategoryLinks.asStateFlow()
 
     fun updateCategory(category: Category) {
         selectedCategory.value = category
@@ -67,6 +86,14 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    private suspend fun getUncategorizedLinks(categoryId: Int, size: Int, page: Int, sort: LinksSort): PokitResult<List<Link>> {
+        return getLinksUseCase.getUncategorizedLinks(
+            size = size,
+            page = page,
+            sort = sort,
+        )
+    }
+
     fun updateScreenType(type: ScreenType) {
         screenType.value = type
     }
@@ -74,6 +101,12 @@ class HomeViewModel @Inject constructor(
     fun loadPokits() {
         viewModelScope.launch {
             pokitPaging.load()
+        }
+    }
+
+    fun loadUnCategoryLinks() {
+        viewModelScope.launch {
+            linkPaging.load()
         }
     }
 }
