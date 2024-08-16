@@ -32,4 +32,16 @@ class GetLinksUseCase @Inject constructor(
             categoryIds = categoryIds
         )
     }
+
+    suspend fun getUncategorizedLinks(
+        size: Int = 10,
+        page: Int = 0,
+        sort: LinksSort = LinksSort.RECENT,
+    ): PokitResult<List<Link>> {
+        return repository.getUncategorizedLinks(
+            size = size,
+            page = page,
+            sort = sort
+        )
+    }
 }

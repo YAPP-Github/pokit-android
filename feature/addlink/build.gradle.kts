@@ -62,9 +62,13 @@ dependencies {
     implementation(libs.orbit.core)
     implementation(libs.orbit.viewmodel)
 
+    // coil
+    implementation(libs.coil.compose)
+
     // hilt
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
 
     implementation(project(":core:ui"))
+    implementation(project(":domain"))
 }

@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Text
@@ -20,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -32,8 +34,8 @@ import com.strayalpaca.addlink.components.block.Link
 import com.strayalpaca.addlink.components.block.Toolbar
 import com.strayalpaca.addlink.model.AddLinkScreenSideEffect
 import com.strayalpaca.addlink.model.AddLinkScreenState
-import com.strayalpaca.addlink.model.Pokit
 import com.strayalpaca.addlink.model.ScreenStep
+import com.strayalpaca.addlink.paging.SimplePagingState
 import com.strayalpaca.addlink.utils.BackPressHandler
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
@@ -53,7 +55,6 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
 fun AddLinkScreenContainer(
-    linkId: String?,
     viewModel: AddLinkViewModel,
     onBackPressed: () -> Unit,
     onNavigateToAddPokit: () -> Unit,
@@ -62,12 +63,6 @@ fun AddLinkScreenContainer(
     val context = LocalContext.current
 
     BackPressHandler(onBackPressed = viewModel::onBackPressed)
-
-    LaunchedEffect(Unit) {
-        linkId?.let {
-            viewModel.loadPokitLink(it)
-        }
-    }
 
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
@@ -88,25 +83,60 @@ fun AddLinkScreenContainer(
     val url by viewModel.linkUrl.collectAsState()
     val title by viewModel.title.collectAsState()
     val memo by viewModel.memo.collectAsState()
-    val pokitName by viewModel.pokitName.collectAsState()
+    val pokitList by viewModel.pokitList.collectAsState()
+    val pokitListState by viewModel.pokitListState.collectAsState()
+
+    PokitBottomSheet(
+        onHideBottomSheet = viewModel::hideSelectPokitBottomSheet,
+        show = state.step == ScreenStep.POKIT_SELECT
+    ) {
+        val lazyColumnListState = rememberLazyListState()
+        val startPaging = remember {
+            derivedStateOf {
+                lazyColumnListState.layoutInfo.visibleItemsInfo.lastOrNull()?.let { last ->
+                    last.index >= lazyColumnListState.layoutInfo.totalItemsCount - 3
+                } ?: false
+            }
+        }
+
+        LaunchedEffect(Unit) {
+            viewModel.refreshPokits()
+        }
+
+        LaunchedEffect(startPaging.value) {
+            if (startPaging.value && pokitListState == SimplePagingState.IDLE) {
+                viewModel.loadNextPokits()
+            }
+        }
+
+        LazyColumn(
+            state = lazyColumnListState
+        ) {
+            items(
+                items = pokitList
+            ) { pokit ->
+                PokitList(
+                    item = pokit,
+                    title = pokit.title,
+                    sub = stringResource(id = R.string.count_format, pokit.count),
+                    onClickItem = viewModel::selectPokit,
+                    state = PokitListState.ACTIVE
+                )
+            }
+        }
+    }
 
     AddLinkScreen(
-        isModifyLink = (linkId != null),
+        isModifyLink = (viewModel.currentLinkId != null),
         url = url,
         title = title,
         memo = memo,
         state = state,
-        pokitName = pokitName,
         inputUrl = viewModel::inputLinkUrl,
         inputTitle = viewModel::inputTitle,
         inputMemo = viewModel::inputMemo,
-        inputNewPokitName = viewModel::inputNewPokitName,
         onClickAddPokit = onNavigateToAddPokit,
-        onClickSavePokit = viewModel::savePokit,
-        dismissPokitAddBottomSheet = viewModel::hideAddPokitBottomSheet,
         onClickSelectPokit = viewModel::showSelectPokitBottomSheet,
-        onClickSelectPokitItem = viewModel::selectPokit,
-        dismissPokitSelectBottomSheet = viewModel::hideSelectPokitBottomSheet,
         toggleRemindRadio = viewModel::setRemind,
         onBackPressed = viewModel::onBackPressed,
         onClickSaveButton = viewModel::saveLink
@@ -120,18 +150,12 @@ fun AddLinkScreen(
     url: String,
     title: String,
     memo: String,
-    pokitName: String,
     state: AddLinkScreenState,
     inputUrl: (String) -> Unit,
     inputTitle: (String) -> Unit,
     inputMemo: (String) -> Unit,
-    inputNewPokitName: (String) -> Unit,
     onClickAddPokit: () -> Unit,
-    onClickSavePokit: () -> Unit,
-    dismissPokitAddBottomSheet: () -> Unit,
     onClickSelectPokit: () -> Unit,
-    onClickSelectPokitItem: (Pokit) -> Unit,
-    dismissPokitSelectBottomSheet: () -> Unit,
     toggleRemindRadio: (Boolean) -> Unit,
     onBackPressed: () -> Unit,
     onClickSaveButton: () -> Unit,
@@ -141,8 +165,7 @@ fun AddLinkScreen(
         !(
             state.step == ScreenStep.SAVE_LOADING ||
                 state.step == ScreenStep.LOADING ||
-                state.step == ScreenStep.POKIT_ADD_LOADING ||
-                state.step == ScreenStep.LINK_LOADING
+                state.step == ScreenStep.POKIT_ADD_LOADING
             )
     }
 
@@ -291,53 +314,6 @@ fun AddLinkScreen(
                     onClick = onClickSaveButton,
                     modifier = Modifier.fillMaxWidth(),
                     size = PokitButtonSize.LARGE
-                )
-            }
-        }
-
-        PokitBottomSheet(
-            onHideBottomSheet = dismissPokitSelectBottomSheet,
-            show = state.step == ScreenStep.POKIT_SELECT
-        ) {
-            LazyColumn {
-                items(
-                    items = state.pokitList
-                ) { pokit ->
-                    PokitList(
-                        item = pokit,
-                        title = pokit.title,
-                        sub = stringResource(id = R.string.count_format, pokit.count),
-                        onClickItem = onClickSelectPokitItem,
-                        state = PokitListState.ACTIVE
-                    )
-                }
-            }
-        }
-
-        PokitBottomSheet(
-            onHideBottomSheet = dismissPokitAddBottomSheet,
-            show = state.step == ScreenStep.POKIT_ADD
-        ) {
-            Column(
-                modifier = Modifier.padding(horizontal = 20.dp)
-            ) {
-                LabeledInput(
-                    label = "",
-                    inputText = pokitName,
-                    hintText = stringResource(id = R.string.placeholder_input_pokit_name),
-                    onChangeText = inputNewPokitName,
-                    maxLength = 10
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                PokitButton(
-                    text = stringResource(id = R.string.add),
-                    icon = null,
-                    onClick = onClickSavePokit,
-                    modifier = Modifier.fillMaxWidth(),
-                    size = PokitButtonSize.LARGE,
-                    enable = pokitName.isNotEmpty()
                 )
             }
         }
