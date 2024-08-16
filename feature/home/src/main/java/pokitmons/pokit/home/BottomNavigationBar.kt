@@ -22,12 +22,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.home.pokit.PokitViewModel
+import pokitmons.pokit.home.pokit.ScreenType
 import pokitmons.pokit.core.ui.R.drawable as DrawableResource
 
 @Composable
 // TODO : 바텀시트 아이템 컴포저블로 만들기
 
-fun BottomNavigationBar(viewModel: HomeViewModel = hiltViewModel()) {
+fun BottomNavigationBar(viewModel: PokitViewModel = hiltViewModel()) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),

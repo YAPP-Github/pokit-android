@@ -19,9 +19,11 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.home.pokit.PokitViewModel
+import pokitmons.pokit.home.pokit.ScreenType
 
 @Composable
-fun HomeHeader(viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeHeader(viewModel: PokitViewModel = hiltViewModel()) {
     Spacer(modifier = Modifier.height(8.dp))
     Row(
         modifier = Modifier

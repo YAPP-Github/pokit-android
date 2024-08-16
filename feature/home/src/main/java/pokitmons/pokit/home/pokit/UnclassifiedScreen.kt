@@ -13,10 +13,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
-import pokitmons.pokit.home.HomeViewModel
 
 @Composable
-fun UnclassifiedScreen(viewModel: HomeViewModel = hiltViewModel()) {
+fun UnclassifiedScreen(viewModel: PokitViewModel = hiltViewModel()) {
     viewModel.loadUnCategoryLinks()
     val unCategoryLinks = viewModel.unCategoryLinks.collectAsState()
 
@@ -28,11 +27,11 @@ fun UnclassifiedScreen(viewModel: HomeViewModel = hiltViewModel()) {
         items(items = unCategoryLinks.value) { unCategoryDetail ->
             LinkCard(
                 item = unCategoryDetail.linkType,
-                title = unCategoryDetail.title,
-                sub = unCategoryDetail.memo,
+                title = "자연 친화적인 라이프스타일을 위한 환경 보호 방법",
+                sub = unCategoryDetail.createdAt,
                 painter = rememberAsyncImagePainter(model = unCategoryDetail.imageUrl),
-                notRead = unCategoryDetail.isRead,
-                badgeText = unCategoryDetail.memo,
+                notRead = !unCategoryDetail.isRead,
+                badgeText = "미분류",
                 onClickKebab = { },
                 onClickItem = { }
             )

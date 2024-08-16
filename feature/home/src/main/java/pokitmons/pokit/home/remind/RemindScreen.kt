@@ -1,47 +1,68 @@
 package pokitmons.pokit.home.remind
 
+import android.util.Log
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.ScrollableState
 import androidx.compose.foundation.gestures.scrollable
+import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import coil.compose.rememberAsyncImagePainter
+import kotlinx.coroutines.flow.take
 import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
-import pokitmons.pokit.home.HomeViewModel
 
 @Composable
 fun RemindScreen(
     modifier: Modifier = Modifier,
-    viewModel: HomeViewModel = hiltViewModel(),
+    viewModel: RemindViewModel = hiltViewModel(),
 ) {
-//    val dummy = arrayListOf<LinkCardDummy>().apply {
-//        add(LinkCardDummy())
-//        add(LinkCardDummy())
-//        add(LinkCardDummy())
-//    }.toList()
 
+    viewModel.loadContents()
+
+    val unreadContents = viewModel.unReadContents.collectAsState()
+    val todayContents = viewModel.todayContents.collectAsState()
+    val bookmarkContents = viewModel.bookmarkContents.collectAsState()
 
     Column(
         modifier = modifier
             .padding(20.dp)
+            .fillMaxHeight()
             .verticalScroll(rememberScrollState()),
     ) {
         Spacer(modifier = Modifier.height(4.dp))
 
         RemindSection(title = "오늘 이 링크는 어때요?") {
             Spacer(modifier = Modifier.height(12.dp))
-            ToadyLinkCard()
+            Row(
+                modifier = Modifier.horizontalScroll(rememberScrollState()),
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+            ) {
+                todayContents.value.forEach { todayContent ->
+                    ToadyLinkCard(
+                        title = todayContent.title,
+                        sub = todayContent.createdAt,
+                        painter = rememberAsyncImagePainter(todayContent.thumbNail),
+                        badgeText = todayContent.data,
+                        domain = todayContent.domain
+                    )
+                }
+            }
         }
 
         Spacer(modifier = Modifier.height(32.dp))
@@ -52,18 +73,18 @@ fun RemindScreen(
                 modifier = Modifier,
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-//                dummy.forEach { linkCardInfo ->
-//                    LinkCard(
-//                        item = linkCardInfo.item,
-//                        title = linkCardInfo.title,
-//                        sub = linkCardInfo.sub,
-//                        painter = painterResource(id = R.drawable.icon_24_folder),
-//                        notRead = linkCardInfo.notRead,
-//                        badgeText = linkCardInfo.badgeText,
-//                        onClickKebab = { },
-//                        onClickItem = { }
-//                    )
-//                }
+                unreadContents.value.forEach { unReadContent ->
+                    LinkCard(
+                        item = unReadContent.title,
+                        title = unReadContent.title,
+                        sub = "${unReadContent.createdAt} • ${unReadContent.domain}",
+                        painter = rememberAsyncImagePainter(unReadContent.thumbNail),
+                        notRead = unReadContent.isRead,
+                        badgeText = unReadContent.data,
+                        onClickKebab = { },
+                        onClickItem = { }
+                    )
+                }
             }
         }
 
@@ -75,18 +96,18 @@ fun RemindScreen(
                 modifier = Modifier,
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
-//                dummy.forEach { linkCardInfo ->
-//                    LinkCard(
-//                        item = linkCardInfo.item,
-//                        title = linkCardInfo.title,
-//                        sub = linkCardInfo.sub,
-//                        painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.icon_24_folder),
-//                        notRead = linkCardInfo.notRead,
-//                        badgeText = linkCardInfo.badgeText,
-//                        onClickKebab = { },
-//                        onClickItem = { }
-//                    )
-//                }
+                bookmarkContents.value.forEach { unReadContent ->
+                    LinkCard(
+                        item = unReadContent.title,
+                        title = unReadContent.title,
+                        sub = "${unReadContent.createdAt} • ${unReadContent.domain}",
+                        painter = rememberAsyncImagePainter(unReadContent.thumbNail),
+                        notRead = unReadContent.isRead,
+                        badgeText = unReadContent.data,
+                        onClickKebab = { },
+                        onClickItem = { }
+                    )
+                }
             }
         }
     }

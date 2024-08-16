@@ -25,10 +25,13 @@ import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonShap
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonStyle
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonType
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.home.pokit.Category
+import pokitmons.pokit.home.pokit.PokitViewModel
+import pokitmons.pokit.home.pokit.SortOrder
 import pokitmons.pokit.core.ui.R.drawable as DrawableResource
 
 @Composable
-fun HomeMid(viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeMid(viewModel: PokitViewModel = hiltViewModel()) {
     Spacer(modifier = Modifier.height(24.dp))
     Column(
         modifier = Modifier

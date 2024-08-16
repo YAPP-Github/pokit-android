@@ -1,4 +1,4 @@
-package pokitmons.pokit.home
+package pokitmons.pokit.home.pokit
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -21,7 +21,7 @@ import com.strayalpaca.pokitdetail.model.Link as DetailLink
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class PokitViewModel @Inject constructor(
     private val getPokitsUseCase: GetPokitsUseCase,
     private val getLinksUseCase: GetLinksUseCase,
 ) : ViewModel() {

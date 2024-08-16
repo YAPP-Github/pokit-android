@@ -17,10 +17,12 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.home.pokit.PokitScreen
+import pokitmons.pokit.home.pokit.PokitViewModel
+import pokitmons.pokit.home.pokit.ScreenType
 import pokitmons.pokit.home.remind.RemindScreen
 
 @Composable
-fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreen(viewModel: PokitViewModel = hiltViewModel()) {
     Box(
         modifier = Modifier
             .background(color = Color.White)
@@ -53,6 +55,6 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 
 @Preview
 @Composable
-fun HomeScreenPreview(viewModel: HomeViewModel = hiltViewModel()) {
+fun HomeScreenPreview(viewModel: PokitViewModel = hiltViewModel()) {
     HomeScreen()
 }

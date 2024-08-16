@@ -26,16 +26,26 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.home.R
 
+
 @Composable
-fun ToadyLinkCard() {
+fun ToadyLinkCard(
+    viewModel: RemindViewModel = hiltViewModel(),
+    title: String,
+    sub: String,
+    painter: Painter,
+    badgeText: String,
+    domain: String
+) {
     Box(
         modifier = Modifier
             .width(216.dp)
@@ -43,7 +53,7 @@ fun ToadyLinkCard() {
             .clip(RoundedCornerShape(8.dp))
     ) {
         Image(
-            painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.icon_24_reminder),
+            painter = painter,
             contentDescription = null,
             modifier = Modifier.fillMaxSize()
         )
@@ -63,7 +73,7 @@ fun ToadyLinkCard() {
         ) {
             Text(
                 style = PokitTheme.typography.label4,
-                text = "텍스트",
+                text = badgeText,
                 color = PokitTheme.colors.textTertiary,
                 modifier = Modifier
                     .height(16.dp)
@@ -83,7 +93,7 @@ fun ToadyLinkCard() {
                 Text(
                     modifier = Modifier.weight(1f),
                     style = PokitTheme.typography.body2Bold,
-                    text = "바이오 연구의 첨단, 인공 유전자 인간 피 재생 가능할까요?",
+                    text = title,
                     color = Color.White,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
@@ -101,18 +111,10 @@ fun ToadyLinkCard() {
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                text = "2024.04.12 · youtu.be",
+                text = "${sub} · ${domain}",
                 style = PokitTheme.typography.detail2,
                 color = PokitTheme.colors.textTertiary
             )
         }
     }
-}
-
-
-
-@Preview
-@Composable
-fun TodayLinkCardPreview() {
-    ToadyLinkCard()
 }
