@@ -24,6 +24,7 @@ class PokitPaging(
     override val pagingState: StateFlow<SimplePagingState> = _pagingState.asStateFlow()
 
     val _pagingData: MutableStateFlow<List<Pokit>> = MutableStateFlow(emptyList())
+
     override val pagingData: StateFlow<List<Pokit>> = _pagingData.asStateFlow()
     private var currentPageIndex = initPage
     private var requestJob: Job? = null
