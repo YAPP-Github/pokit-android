@@ -74,6 +74,7 @@ dependencies {
     implementation(project(":domain"))
     implementation(project(":feature:addlink"))
     implementation(project(":feature:addpokit"))
+    implementation(project(":feature:alarm"))
     implementation(project(":feature:login"))
     implementation(project(":feature:pokitdetail"))
     implementation(project(":feature:search"))

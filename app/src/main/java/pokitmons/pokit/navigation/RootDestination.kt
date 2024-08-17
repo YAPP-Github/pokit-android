@@ -53,3 +53,7 @@ object Setting {
 object EditNickname {
     val route: String = "editNickname"
 }
+
+object Alarm {
+    val route: String = "alarm"
+}

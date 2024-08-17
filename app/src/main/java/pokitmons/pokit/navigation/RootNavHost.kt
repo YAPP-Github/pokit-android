@@ -16,10 +16,11 @@ import com.strayalpaca.addpokit.AddPokitViewModel
 import com.strayalpaca.pokitdetail.PokitDetailScreenContainer
 import com.strayalpaca.pokitdetail.PokitDetailViewModel
 import pokitmons.pokit.LoginViewModel
+import pokitmons.pokit.alarm.AlarmScreenContainer
+import pokitmons.pokit.alarm.AlarmViewModel
 import pokitmons.pokit.home.HomeScreen
 import pokitmons.pokit.home.pokit.PokitViewModel
 import pokitmons.pokit.login.LoginScreen
-import pokitmons.pokit.navigation.PokitDetail.pokitIdArg
 import pokitmons.pokit.search.SearchScreenContainer
 import pokitmons.pokit.search.SearchViewModel
 import pokitmons.pokit.settings.SettingViewModel
@@ -134,6 +135,17 @@ fun RootNavHost(
                 onNavigateToPokitDetail = { navHostController.navigate("${PokitDetail.route}/$it") },
                 onNavigateAddLink = { navHostController.navigate(AddLink.route) },
                 onNavigateAddPokit = { navHostController.navigate(AddPokit.route) }
+            )
+        }
+
+        composable(route = Alarm.route) {
+            val viewModel: AlarmViewModel = hiltViewModel()
+            AlarmScreenContainer(
+                viewModel = viewModel,
+                onBackPressed = navHostController::popBackStack,
+                onNavigateToLinkModify = { linkId ->
+                    navHostController.navigate("${AddLink.route}?${AddLink.linkIdArg}=$linkId")
+                }
             )
         }
     }

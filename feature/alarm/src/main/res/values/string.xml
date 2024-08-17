@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="alarm_box">알림함</string>
+    <string name="remove">삭제</string>
+    
+    <string name="just_now">지금 막</string>
+    <string name="minute_before">%d분 전</string>
+    <string name="hour_before">%시간 전</string>
+    <string name="day_before">%d일 전</string>
+    <string name="month_before">%d달 전</string>
+    <string name="year_before">%d년 전</string>
+</resources>
