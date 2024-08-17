@@ -6,5 +6,5 @@ data class RemindResult(
     val createdAt: String,
     val isRead: Boolean,
     val thumbNail: String,
-    val data: String
+    val data: String,
 )

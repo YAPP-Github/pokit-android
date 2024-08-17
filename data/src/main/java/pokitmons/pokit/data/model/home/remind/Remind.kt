@@ -11,5 +11,5 @@ data class Remind(
     val domain: String,
     val isRead: Boolean,
     val thumbNail: String,
-    val title: String
+    val title: String,
 )

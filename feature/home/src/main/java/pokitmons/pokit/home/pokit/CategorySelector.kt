@@ -25,9 +25,6 @@ import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonShap
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonStyle
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonType
 import pokitmons.pokit.core.ui.theme.PokitTheme
-import pokitmons.pokit.home.pokit.Category
-import pokitmons.pokit.home.pokit.PokitViewModel
-import pokitmons.pokit.home.pokit.SortOrder
 import pokitmons.pokit.core.ui.R.drawable as DrawableResource
 
 @Composable
@@ -39,7 +36,7 @@ fun HomeMid(viewModel: PokitViewModel = hiltViewModel()) {
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             PokitButton(
                 style = when (viewModel.selectedCategory.value) {
@@ -81,7 +78,7 @@ fun HomeMid(viewModel: PokitViewModel = hiltViewModel()) {
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End,
+                horizontalArrangement = Arrangement.End
             ) {
                 Icon(
                     modifier = Modifier.size(18.dp),
@@ -104,7 +101,7 @@ fun HomeMid(viewModel: PokitViewModel = hiltViewModel()) {
                         is SortOrder.Latest -> "최신순"
                         is SortOrder.Name -> "이름순"
                     },
-                    style = PokitTheme.typography.body3Medium,
+                    style = PokitTheme.typography.body3Medium
                 )
             }
         }

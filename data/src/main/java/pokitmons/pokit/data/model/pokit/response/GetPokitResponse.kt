@@ -7,7 +7,7 @@ data class GetPokitResponse(
     val categoryId: Int = 0,
     val categoryName: String = "",
     val categoryImage: Image = Image(),
-    val createdAt: String = ""
+    val createdAt: String = "",
 ) {
     @Serializable
     data class Image(

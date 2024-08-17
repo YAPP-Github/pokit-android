@@ -59,7 +59,7 @@ fun PokitCard(
             )
 
             IconButton(
-                onClick = onClickKebab,
+                onClick = { onClickKebab() },
                 modifier = Modifier
                     .size(24.dp)
                     .align(Alignment.Top)

@@ -3,22 +3,22 @@ package pokitmons.pokit.home.pokit
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.strayalpaca.pokitdetail.model.Pokit
+import com.strayalpaca.pokitdetail.paging.LinkPaging
 import com.strayalpaca.pokitdetail.paging.PokitPaging
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
-import com.strayalpaca.pokitdetail.model.Pokit
-import com.strayalpaca.pokitdetail.paging.LinkPaging
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.link.Link
 import pokitmons.pokit.domain.model.link.LinksSort
 import pokitmons.pokit.domain.usecase.link.GetLinksUseCase
-import com.strayalpaca.pokitdetail.model.Link as DetailLink
+import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
 import javax.inject.Inject
+import com.strayalpaca.pokitdetail.model.Link as DetailLink
 
 @HiltViewModel
 class PokitViewModel @Inject constructor(
@@ -90,7 +90,7 @@ class PokitViewModel @Inject constructor(
         return getLinksUseCase.getUncategorizedLinks(
             size = size,
             page = page,
-            sort = sort,
+            sort = sort
         )
     }
 

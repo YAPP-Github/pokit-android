@@ -8,5 +8,5 @@ data class Sort(
     val direction: String,
     val ignoreCase: Boolean,
     val nullHandling: String,
-    val property: String
+    val property: String,
 )

@@ -1,13 +1,8 @@
 package pokitmons.pokit.home.remind
 
-import android.util.Log
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.ScrollableState
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -16,15 +11,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
-import kotlinx.coroutines.flow.take
-import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
 
 @Composable
@@ -32,9 +23,6 @@ fun RemindScreen(
     modifier: Modifier = Modifier,
     viewModel: RemindViewModel = hiltViewModel(),
 ) {
-
-    viewModel.loadContents()
-
     val unreadContents = viewModel.unReadContents.collectAsState()
     val todayContents = viewModel.todayContents.collectAsState()
     val bookmarkContents = viewModel.bookmarkContents.collectAsState()
@@ -43,7 +31,7 @@ fun RemindScreen(
         modifier = modifier
             .padding(20.dp)
             .fillMaxHeight()
-            .verticalScroll(rememberScrollState()),
+            .verticalScroll(rememberScrollState())
     ) {
         Spacer(modifier = Modifier.height(4.dp))
 
@@ -51,7 +39,7 @@ fun RemindScreen(
             Spacer(modifier = Modifier.height(12.dp))
             Row(
                 modifier = Modifier.horizontalScroll(rememberScrollState()),
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 todayContents.value.forEach { todayContent ->
                     ToadyLinkCard(

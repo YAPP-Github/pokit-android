@@ -17,7 +17,7 @@ data class GetPokitsResponse(
         val categoryName: String,
         val categoryImage: PokitImage,
         val contentCount: Int,
-        val createdAt: String
+        val createdAt: String,
     )
 
     @Serializable

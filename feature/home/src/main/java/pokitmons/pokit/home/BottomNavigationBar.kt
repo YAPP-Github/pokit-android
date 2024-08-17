@@ -26,9 +26,9 @@ import pokitmons.pokit.home.pokit.PokitViewModel
 import pokitmons.pokit.home.pokit.ScreenType
 import pokitmons.pokit.core.ui.R.drawable as DrawableResource
 
-@Composable
 // TODO : 바텀시트 아이템 컴포저블로 만들기
 
+@Composable
 fun BottomNavigationBar(viewModel: PokitViewModel = hiltViewModel()) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -58,7 +58,7 @@ fun BottomNavigationBar(viewModel: PokitViewModel = hiltViewModel()) {
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Text(
-                    color  = when (viewModel.screenType.value) {
+                    color = when (viewModel.screenType.value) {
                         is ScreenType.Pokit -> Color.Black
                         is ScreenType.Remind -> PokitTheme.colors.textTertiary
                     },
@@ -98,7 +98,6 @@ fun BottomNavigationBar(viewModel: PokitViewModel = hiltViewModel()) {
         }
     }
 }
-
 
 @Preview
 @Composable

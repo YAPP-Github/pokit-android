@@ -1,14 +1,11 @@
 package pokitmons.pokit.home.remind
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.strayalpaca.pokitdetail.model.Pokit
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.home.remind.RemindResult
@@ -21,8 +18,13 @@ import javax.inject.Inject
 class RemindViewModel @Inject constructor(
     private val unReadContentsUseCase: UnReadContentsUseCase,
     private val todayContentsUseCase: TodayContentsUseCase,
-    private val bookMarkContentsUseCase: BookMarkContentsUseCase
+    private val bookMarkContentsUseCase: BookMarkContentsUseCase,
 ) : ViewModel() {
+
+    init {
+        loadContents()
+    }
+
     private var _unReadContents: MutableStateFlow<List<RemindResult>> = MutableStateFlow(emptyList())
     val unReadContents: StateFlow<List<RemindResult>>
         get() = _unReadContents.asStateFlow()
@@ -37,22 +39,20 @@ class RemindViewModel @Inject constructor(
 
     fun loadContents() {
         viewModelScope.launch {
-            when(val response = unReadContentsUseCase.getUnreadContents()) {
+            when (val response = unReadContentsUseCase.getUnreadContents()) {
                 is PokitResult.Success -> _unReadContents.value = response.result.take(3)
                 is PokitResult.Error -> {}
             }
 
-            when(val response = todayContentsUseCase.getTodayContents()) {
+            when (val response = todayContentsUseCase.getTodayContents()) {
                 is PokitResult.Success -> {
                     _todayContents.value = response.result
-                    Log.d("!! :", _todayContents.value.toString())
                 }
                 is PokitResult.Error -> {
-                    Log.d("!! error :", response.error.toString())
                 }
             }
 
-            when(val response = bookMarkContentsUseCase.getBookmarkContents()) {
+            when (val response = bookMarkContentsUseCase.getBookmarkContents()) {
                 is PokitResult.Success -> _bookmarkContents.value = response.result.take(3)
                 is PokitResult.Error -> {}
             }

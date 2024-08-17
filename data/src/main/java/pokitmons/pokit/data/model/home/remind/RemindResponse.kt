@@ -8,5 +8,5 @@ data class RemindResponse(
     val hasNext: Boolean = false,
     val page: Int = 0,
     val size: Int = 10,
-    val sort: List<Sort> = emptyList()
+    val sort: List<Sort> = emptyList(),
 )
