@@ -14,6 +14,7 @@ data class Link(
     val memo: String = "",
     val bookmark: Boolean = false,
     val imageUrl: String? = null,
+    val createdAt: String = "",
 ) {
     companion object {
         fun fromDomainLink(domainLink: DomainLink): Link {
@@ -25,7 +26,8 @@ data class Link(
                 isRead = domainLink.isRead,
                 url = domainLink.data,
                 memo = domainLink.memo,
-                imageUrl = domainLink.thumbnail
+                imageUrl = domainLink.thumbnail,
+                createdAt = domainLink.createdAt
             )
         }
     }

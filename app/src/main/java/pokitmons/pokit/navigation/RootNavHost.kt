@@ -16,7 +16,10 @@ import com.strayalpaca.addpokit.AddPokitViewModel
 import com.strayalpaca.pokitdetail.PokitDetailScreenContainer
 import com.strayalpaca.pokitdetail.PokitDetailViewModel
 import pokitmons.pokit.LoginViewModel
+import pokitmons.pokit.home.HomeScreen
+import pokitmons.pokit.home.pokit.PokitViewModel
 import pokitmons.pokit.login.LoginScreen
+import pokitmons.pokit.navigation.PokitDetail.pokitIdArg
 import pokitmons.pokit.search.SearchScreenContainer
 import pokitmons.pokit.search.SearchViewModel
 import pokitmons.pokit.settings.SettingViewModel
@@ -27,7 +30,7 @@ import pokitmons.pokit.settings.setting.SettingsScreen
 fun RootNavHost(
     navHostController: NavHostController,
 ) {
-    NavHost(navController = navHostController, startDestination = Login.route) {
+    NavHost(navController = navHostController, startDestination = Home.route) {
         composable(Login.route) {
             val viewModel: LoginViewModel = hiltViewModel()
             LoginScreen(
@@ -119,6 +122,18 @@ fun RootNavHost(
             EditNicknameScreen(
                 settingViewModel = viewModel,
                 onBackPressed = navHostController::popBackStack
+            )
+        }
+
+        composable(route = Home.route) {
+            val viewModel: PokitViewModel = hiltViewModel()
+            HomeScreen(
+                viewModel = viewModel,
+                onNavigateToSearch = { navHostController.navigate(Search.route) },
+                onNavigateToSetting = { navHostController.navigate(Setting.route) },
+                onNavigateToPokitDetail = { navHostController.navigate("${PokitDetail.route}/$it") },
+                onNavigateAddLink = { navHostController.navigate(AddLink.route) },
+                onNavigateAddPokit = { navHostController.navigate(AddPokit.route) }
             )
         }
     }

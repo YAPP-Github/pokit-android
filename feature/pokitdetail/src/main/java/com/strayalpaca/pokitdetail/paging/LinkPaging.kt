@@ -26,7 +26,8 @@ class LinkPaging(
     private val _pagingState = MutableStateFlow(SimplePagingState.IDLE)
     override val pagingState: StateFlow<SimplePagingState> = _pagingState.asStateFlow()
 
-    private val _pagingData: MutableStateFlow<List<Link>> = MutableStateFlow(emptyList())
+    val _pagingData: MutableStateFlow<List<Link>> = MutableStateFlow(emptyList())
+
     override val pagingData: StateFlow<List<Link>> = _pagingData.asStateFlow()
     private var currentPageIndex = initPage
     private var requestJob: Job? = null

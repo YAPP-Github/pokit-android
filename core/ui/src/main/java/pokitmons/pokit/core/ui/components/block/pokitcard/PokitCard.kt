@@ -42,7 +42,7 @@ fun PokitCard(
                 shape = RoundedCornerShape(8.dp)
             )
             .background(
-                color = PokitTheme.colors.backgroundBase,
+                color = PokitTheme.colors.backgroundPrimary,
                 shape = RoundedCornerShape(8.dp)
             )
             .clickable(onClick = onClick)
@@ -59,7 +59,7 @@ fun PokitCard(
             )
 
             IconButton(
-                onClick = onClickKebab,
+                onClick = { onClickKebab() },
                 modifier = Modifier
                     .size(24.dp)
                     .align(Alignment.Top)

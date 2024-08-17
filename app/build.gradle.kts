@@ -78,6 +78,7 @@ dependencies {
     implementation(project(":feature:pokitdetail"))
     implementation(project(":feature:search"))
     implementation(project(":feature:settings"))
+    implementation(project(":feature:home"))
 
     // hilt
     implementation(libs.hilt)
