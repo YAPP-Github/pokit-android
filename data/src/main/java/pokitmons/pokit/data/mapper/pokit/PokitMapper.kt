@@ -18,7 +18,7 @@ object PokitMapper {
                     id = data.categoryImage.imageId,
                     url = data.categoryImage.imageUrl
                 ),
-                createdAt = data.createdAt
+                createdAt = data.createdAt,
                 linkCount = data.contentCount
             )
         }
