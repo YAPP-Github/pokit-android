@@ -24,6 +24,8 @@ object PokitMapper {
         }
     }
 
+    // test
+
     fun mapperToPokitImages(getPokitImagesResponse: List<GetPokitImagesResponseItem>): List<Pokit.Image> {
         return getPokitImagesResponse.map { image ->
             Pokit.Image(id = image.imageId, url = image.imageUrl)
