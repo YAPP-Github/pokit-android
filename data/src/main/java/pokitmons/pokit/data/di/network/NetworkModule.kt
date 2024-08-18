@@ -9,6 +9,7 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import pokitmons.pokit.data.api.AlertApi
 import pokitmons.pokit.data.api.AuthApi
 import pokitmons.pokit.data.api.LinkApi
 import pokitmons.pokit.data.api.PokitApi
@@ -90,5 +91,10 @@ object NetworkModule {
     @Provides
     fun provideRemindService(retrofit: Retrofit): RemindApi {
         return retrofit.create(RemindApi::class.java)
+    }
+
+    @Provides
+    fun provideAlertService(retrofit: Retrofit): AlertApi {
+        return retrofit.create(AlertApi::class.java)
     }
 }
