@@ -12,7 +12,7 @@ internal fun Preview() {
     PokitTheme {
         Column {
             AlarmScreen(
-                alarms = listOf(Alarm(title = "title1", thumbnail = ""), Alarm(title = "title2", thumbnail = ""))
+                alarms = listOf(Alarm(id = "1", title = "title1", thumbnail = ""), Alarm(id = "2", title = "title2", thumbnail = ""))
             )
         }
     }
