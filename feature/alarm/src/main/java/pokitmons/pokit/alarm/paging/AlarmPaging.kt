@@ -37,7 +37,7 @@ class AlarmPaging(
         requestJob = coroutineScope.launch {
             try {
                 currentPageIndex = initPage
-                val response = getAlertsUseCase.getAlerts(perPage * firstRequestPage, currentPageIndex)
+                val response = getAlertsUseCase.getAlerts(size = perPage * firstRequestPage, page = currentPageIndex)
                 when (response) {
                     is PokitResult.Success -> {
                         val alarms = response.result.map { domainAlarm ->
@@ -66,7 +66,7 @@ class AlarmPaging(
 
         requestJob = coroutineScope.launch {
             try {
-                val response = getAlertsUseCase.getAlerts(perPage, currentPageIndex)
+                val response = getAlertsUseCase.getAlerts(size = perPage, page = currentPageIndex)
                 when (response) {
                     is PokitResult.Success -> {
                         val alarms = response.result.map { domainAlarm ->

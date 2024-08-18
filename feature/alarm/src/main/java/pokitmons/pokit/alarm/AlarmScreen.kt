@@ -1,5 +1,6 @@
 package pokitmons.pokit.alarm
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -43,6 +44,7 @@ fun AlarmScreenContainer(
     )
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AlarmScreen(
     onClickBack: () -> Unit = {},
@@ -81,8 +83,16 @@ fun AlarmScreen(
                 .weight(1f),
             state = alarmLazyColumnListState
         ) {
-            items(alarms) { alarm ->
-                AlarmItem(alarm = alarm, onClickAlarm = onClickAlarm, onClickRemove = onClickAlarmRemove)
+            items(
+                items = alarms,
+                key = { alarm -> alarm.id }
+            ) { alarm ->
+                AlarmItem(
+                    modifier = Modifier.animateItemPlacement(),
+                    alarm = alarm,
+                    onClickAlarm = onClickAlarm,
+                    onClickRemove = onClickAlarmRemove
+                )
             }
         }
     }

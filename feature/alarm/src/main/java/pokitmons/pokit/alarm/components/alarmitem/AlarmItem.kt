@@ -47,6 +47,7 @@ enum class DragValue { Expanded, Center }
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AlarmItem(
+    modifier: Modifier = Modifier,
     alarm: Alarm,
     onClickAlarm: (String) -> Unit,
     onClickRemove: (String) -> Unit,
@@ -70,7 +71,7 @@ fun AlarmItem(
     val timeDiffString = diffString(createdAtCalendar = alarm.createdAt.getCalendar())
 
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
         Box(
             modifier = Modifier
