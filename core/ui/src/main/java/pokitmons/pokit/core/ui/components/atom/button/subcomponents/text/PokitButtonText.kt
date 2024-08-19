@@ -45,7 +45,7 @@ private fun getStyle(
                 type == PokitButtonType.PRIMARY &&
                 style == PokitButtonStyle.FILLED
             ) -> {
-            PokitTheme.typography.label1Regular
+            PokitTheme.typography.label1SemiBold
         }
 
         else -> {
