@@ -80,6 +80,13 @@ class AddPokitViewModel @Inject constructor(
             val response = getPokitImagesUseCase.getImages()
             if (response is PokitResult.Success) {
                 _pokitIamges.update { response.result.map { PokitImage.fromDomainPokitImage(it) } }
+
+                if (pokitId == null) {
+                    val defaultPokitImage = PokitImage.fromDomainPokitImage(response.result[0])
+                    intent {
+                        reduce { state.copy(pokitImage = defaultPokitImage) }
+                    }
+                }
             } else {
                 // 만약 이미지 로딩이 실패한다면....?
             }

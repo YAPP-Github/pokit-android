@@ -2,7 +2,7 @@ package com.strayalpaca.addpokit.components.atom
 
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -35,14 +35,14 @@ fun PokitProfileImage(
         contentDescription = "pokit profile image",
         contentScale = ContentScale.Crop,
         modifier = Modifier
-            .size(66.dp)
+            .aspectRatio(1f)
             .clip(shape = RoundedCornerShape(12.dp))
             .clickable {
                 onClick(pokitImage)
             }
             .border(
                 color = strokeColor,
-                width = 1.dp,
+                width = 2.dp,
                 shape = RoundedCornerShape(12.dp)
             )
     )
