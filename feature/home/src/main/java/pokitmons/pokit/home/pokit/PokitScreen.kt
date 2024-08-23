@@ -35,8 +35,8 @@ fun PokitScreen(
 
     Column(
         modifier = modifier
-            .padding(horizontal = 20.dp)
             .background(color = Color.White)
+            .padding(horizontal = 20.dp)
             .fillMaxSize()
     ) {
         HomeMid()
