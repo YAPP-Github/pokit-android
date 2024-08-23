@@ -36,6 +36,13 @@ data class PokitTypography(
         lineHeight = 24,
         letterSpacing = (-0.54f)
     ),
+    private val _body1SemiBold: PokitTypo = PokitTypo(
+        fontFamily = pretendard,
+        fontSize = 18,
+        fontWeight = FontWeight.SemiBold,
+        lineHeight = 24,
+        letterSpacing = (-0.54f)
+    ),
     private val _body1Medium: PokitTypo = PokitTypo(
         fontFamily = pretendard,
         fontSize = 18,
@@ -139,6 +146,7 @@ data class PokitTypography(
     val title2: TextStyle @Composable get() = _title2.toDpTextStyle
     val title3: TextStyle @Composable get() = _title3.toDpTextStyle
     val body1Bold: TextStyle @Composable get() = _body1Bold.toDpTextStyle
+    val body1SemiBold: TextStyle @Composable get() = _body1SemiBold.toDpTextStyle
     val body1Medium: TextStyle @Composable get() = _body1Medium.toDpTextStyle
     val body2Bold: TextStyle @Composable get() = _body2Bold.toDpTextStyle
     val body2Medium: TextStyle @Composable get() = _body2Medium.toDpTextStyle

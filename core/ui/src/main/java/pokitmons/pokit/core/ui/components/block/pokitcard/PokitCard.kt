@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.theme.PokitTheme
@@ -46,7 +47,7 @@ fun PokitCard(
                 shape = RoundedCornerShape(8.dp)
             )
             .clickable(onClick = onClick)
-            .padding(all = 12.dp)
+            .padding(top = 12.dp, start = 12.dp, bottom = 8.dp, end = 8.dp)
     ) {
         Row(
             modifier = Modifier.fillMaxWidth()
@@ -54,8 +55,9 @@ fun PokitCard(
             Text(
                 modifier = Modifier.weight(1f),
                 text = text,
-                style = PokitTheme.typography.body1Bold.copy(color = PokitTheme.colors.textPrimary),
-                maxLines = 2
+                style = PokitTheme.typography.body1SemiBold.copy(color = PokitTheme.colors.textPrimary),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
             )
 
             IconButton(
@@ -83,13 +85,13 @@ fun PokitCard(
 
         Row(
             modifier = Modifier
-                .height(68.dp)
+                .height(84.dp)
                 .fillMaxWidth(1f),
             horizontalArrangement = Arrangement.End
         ) {
             if (painter != null) {
                 Image(
-                    modifier = Modifier.size(68.dp),
+                    modifier = Modifier.size(84.dp),
                     contentScale = ContentScale.Crop,
                     painter = painter,
                     contentDescription = null

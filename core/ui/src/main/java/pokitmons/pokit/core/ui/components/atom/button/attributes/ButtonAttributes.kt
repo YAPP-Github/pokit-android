@@ -11,7 +11,7 @@ internal enum class PokitButtonState {
 }
 
 enum class PokitButtonStyle {
-    FILLED, STROKE,
+    FILLED, STROKE, DEFAULT
 }
 
 enum class PokitButtonSize {
