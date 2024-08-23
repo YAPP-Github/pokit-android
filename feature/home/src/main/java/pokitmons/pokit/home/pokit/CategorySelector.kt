@@ -22,6 +22,7 @@ import pokitmons.pokit.core.ui.components.atom.button.PokitButton
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonIcon
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonIconPosition
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonShape
+import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonStyle
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonType
 import pokitmons.pokit.core.ui.theme.PokitTheme
@@ -39,9 +40,10 @@ fun HomeMid(viewModel: PokitViewModel = hiltViewModel()) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             PokitButton(
+                size = PokitButtonSize.SMALL,
                 style = when (viewModel.selectedCategory.value) {
                     is Category.Pokit -> PokitButtonStyle.FILLED
-                    is Category.Unclassified -> PokitButtonStyle.STROKE
+                    is Category.Unclassified -> PokitButtonStyle.DEFAULT
                 },
                 text = "포킷",
                 shape = PokitButtonShape.ROUND,
@@ -56,11 +58,12 @@ fun HomeMid(viewModel: PokitViewModel = hiltViewModel()) {
                 onClick = { viewModel.updateCategory(Category.Pokit) }
             )
 
-            Spacer(modifier = Modifier.padding(start = 12.dp))
+            Spacer(modifier = Modifier.padding(start = 8.dp))
 
             PokitButton(
+                size = PokitButtonSize.SMALL,
                 style = when (viewModel.selectedCategory.value) {
-                    is Category.Pokit -> PokitButtonStyle.STROKE
+                    is Category.Pokit -> PokitButtonStyle.DEFAULT
                     is Category.Unclassified -> PokitButtonStyle.FILLED
                 },
                 text = "미분류",
