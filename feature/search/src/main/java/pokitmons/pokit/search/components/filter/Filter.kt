@@ -57,19 +57,6 @@ fun FilterArea(
             )
 
             PokitButton(
-                text = stringResource(id = R.string.pokit_name),
-                icon = PokitButtonIcon(
-                    resourceId = coreDrawable.icon_24_arrow_down,
-                    position = PokitButtonIconPosition.RIGHT
-                ),
-                onClick = onClickPokitName,
-                size = PokitButtonSize.SMALL,
-                shape = PokitButtonShape.ROUND,
-                style = PokitButtonStyle.STROKE,
-                type = PokitButtonType.SECONDARY
-            )
-
-            PokitButton(
                 text = stringResource(id = R.string.collect_show),
                 icon = PokitButtonIcon(
                     resourceId = coreDrawable.icon_24_arrow_down,
@@ -78,7 +65,7 @@ fun FilterArea(
                 onClick = onClickBookmark,
                 size = PokitButtonSize.SMALL,
                 shape = PokitButtonShape.ROUND,
-                style = PokitButtonStyle.STROKE,
+                style = PokitButtonStyle.DEFAULT,
                 type = PokitButtonType.SECONDARY
             )
 
@@ -91,7 +78,20 @@ fun FilterArea(
                 onClick = onClickPeriod,
                 size = PokitButtonSize.SMALL,
                 shape = PokitButtonShape.ROUND,
-                style = PokitButtonStyle.STROKE,
+                style = PokitButtonStyle.DEFAULT,
+                type = PokitButtonType.SECONDARY
+            )
+
+            PokitButton(
+                text = stringResource(id = R.string.pokit),
+                icon = PokitButtonIcon(
+                    resourceId = coreDrawable.icon_24_arrow_down,
+                    position = PokitButtonIconPosition.RIGHT
+                ),
+                onClick = onClickPokitName,
+                size = PokitButtonSize.SMALL,
+                shape = PokitButtonShape.ROUND,
+                style = PokitButtonStyle.DEFAULT,
                 type = PokitButtonType.SECONDARY
             )
         } else {

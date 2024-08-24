@@ -40,6 +40,10 @@ private fun getColor(
     style: PokitButtonStyle,
 ): Color {
     return when {
+        style == PokitButtonStyle.DEFAULT -> {
+            PokitTheme.colors.borderSecondary
+        }
+
         state == PokitButtonState.DISABLE -> {
             PokitTheme.colors.iconDisable
         }

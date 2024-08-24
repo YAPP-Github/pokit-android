@@ -34,9 +34,9 @@ fun PokitScreen(
     val pokits = viewModel.pokits.collectAsState()
 
     Column(
-        modifier = Modifier
-            .padding(horizontal = 20.dp)
+        modifier = modifier
             .background(color = Color.White)
+            .padding(horizontal = 20.dp)
             .fillMaxSize()
     ) {
         HomeMid()

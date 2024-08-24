@@ -3,6 +3,8 @@ package com.strayalpaca.addlink
 import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -170,8 +172,12 @@ fun AddLinkScreen(
     }
 
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(PokitTheme.colors.backgroundBase)
     ) {
+        Spacer(modifier = Modifier.height(8.dp))
+
         Toolbar(
             modifier = Modifier.fillMaxWidth(),
             onClickBack = onBackPressed,
@@ -183,17 +189,19 @@ fun AddLinkScreen(
         ) {
             Column(
                 modifier = Modifier
-                    .padding(vertical = 16.dp, horizontal = 20.dp)
+                    .padding(horizontal = 20.dp)
+                    .weight(1f)
                     .verticalScroll(
                         state = scrollState,
                         flingBehavior = null
                     )
             ) {
+                Spacer(modifier = Modifier.height(16.dp))
+
                 if (state.link != null) {
                     Link(state.link)
+                    Spacer(modifier = Modifier.height(16.dp))
                 }
-
-                Spacer(modifier = Modifier.height(16.dp))
 
                 LabeledInput(
                     label = stringResource(id = R.string.link),
@@ -307,15 +315,17 @@ fun AddLinkScreen(
                 )
 
                 Spacer(modifier = Modifier.height(32.dp))
-
-                PokitButton(
-                    text = stringResource(id = R.string.save),
-                    icon = null,
-                    onClick = onClickSaveButton,
-                    modifier = Modifier.fillMaxWidth(),
-                    size = PokitButtonSize.LARGE
-                )
             }
+        }
+
+        Box(modifier = Modifier.padding(start = 20.dp, end = 20.dp, bottom = 20.dp)) {
+            PokitButton(
+                text = stringResource(id = R.string.save),
+                icon = null,
+                onClick = onClickSaveButton,
+                modifier = Modifier.fillMaxWidth(),
+                size = PokitButtonSize.LARGE
+            )
         }
     }
 }

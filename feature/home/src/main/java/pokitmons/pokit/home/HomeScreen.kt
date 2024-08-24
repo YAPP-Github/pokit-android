@@ -172,10 +172,10 @@ fun HomeScreen(
         Image(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
+                .padding(bottom = 60.dp)
                 .clickable {
                     showBottomSheet = true
-                }
-                .padding(bottom = 60.dp),
+                },
             painter = painterResource(id = R.drawable.image_floating),
             contentDescription = null
         )

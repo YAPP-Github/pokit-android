@@ -43,8 +43,8 @@ fun BottomNavigationBar(viewModel: PokitViewModel = hiltViewModel()) {
             Column(
                 modifier = Modifier
                     .weight(2f)
-                    .padding(bottom = 24.dp)
-                    .clickable { viewModel.updateScreenType(ScreenType.Pokit) },
+                    .clickable { viewModel.updateScreenType(ScreenType.Pokit) }
+                    .padding(bottom = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon(
@@ -71,8 +71,8 @@ fun BottomNavigationBar(viewModel: PokitViewModel = hiltViewModel()) {
             Column(
                 modifier = Modifier
                     .weight(2f)
-                    .padding(bottom = 24.dp)
-                    .clickable { viewModel.updateScreenType(ScreenType.Remind) },
+                    .clickable { viewModel.updateScreenType(ScreenType.Remind) }
+                    .padding(bottom = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Icon(

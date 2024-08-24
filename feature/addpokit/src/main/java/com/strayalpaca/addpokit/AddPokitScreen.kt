@@ -135,13 +135,18 @@ fun AddPokitScreen(
 ) {
     Column(
         modifier = Modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .background(color = PokitTheme.colors.backgroundBase),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        Spacer(modifier = Modifier.height(8.dp))
+
         Toolbar(
             onClickBack = onBackPressed,
             title = stringResource(id = if (state.isModify) R.string.title_modify_pokit else R.string.title_add_pokit)
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
 
         Box(modifier = Modifier.size(80.dp)) {
             AsyncImage(
@@ -151,7 +156,6 @@ fun AddPokitScreen(
                 modifier = Modifier
                     .size(80.dp)
                     .clip(shape = RoundedCornerShape(12.dp))
-                    .background(color = PokitTheme.colors.backgroundSecondary)
             )
 
             Box(
@@ -245,7 +249,7 @@ fun AddPokitScreen(
                         title = item.title,
                         sub = stringResource(id = coreString.pokit_count_format, item.count),
                         onClickItem = {},
-                        state = PokitListState.DEFAULT
+                        state = PokitListState.DISABLE
                     )
                 }
             }
@@ -279,7 +283,7 @@ fun AddPokitScreen(
             show = state.step == AddPokitScreenStep.SELECT_PROFILE
         ) {
             LazyVerticalGrid(
-                modifier = Modifier.padding(vertical = 12.dp, horizontal = 40.dp),
+                modifier = Modifier.padding(vertical = 12.dp, horizontal = 52.dp),
                 columns = GridCells.Adaptive(66.dp),
                 horizontalArrangement = Arrangement.spacedBy(20.dp),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
