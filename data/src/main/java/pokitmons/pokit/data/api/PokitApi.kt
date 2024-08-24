@@ -9,6 +9,7 @@ import pokitmons.pokit.data.model.pokit.response.GetPokitResponse
 import pokitmons.pokit.data.model.pokit.response.GetPokitsResponse
 import pokitmons.pokit.data.model.pokit.response.ModifyPokitResponse
 import pokitmons.pokit.domain.model.pokit.PokitsSort
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
@@ -48,7 +49,7 @@ interface PokitApi {
     @PUT("category/{categoryId}")
     suspend fun deletePokit(
         @Path("categoryId") categoryId: Int,
-    )
+    ): Response<Unit>
 
     @GET("category/count")
     suspend fun getPokitCount(): GetPokitCountResponse

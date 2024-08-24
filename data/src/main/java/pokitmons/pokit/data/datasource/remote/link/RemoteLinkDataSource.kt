@@ -61,7 +61,7 @@ class RemoteLinkDataSource @Inject constructor(
     }
 
     override suspend fun deleteLink(contentId: Int) {
-        return linkApi.deleteLink(contentId = contentId)
+        linkApi.deleteLink(contentId = contentId)
     }
 
     override suspend fun getLink(contentId: Int): GetLinkResponse {

@@ -2,6 +2,7 @@ package pokitmons.pokit.data.api
 
 import pokitmons.pokit.data.model.alert.GetAlertsResponse
 import pokitmons.pokit.domain.model.link.LinksSort
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.PUT
 import retrofit2.http.Path
@@ -18,5 +19,5 @@ interface AlertApi {
     @PUT("alert/{alertId}")
     suspend fun deleteAlert(
         @Path("alertId") alertId: Int,
-    )
+    ): Response<Unit>
 }
