@@ -64,8 +64,6 @@ import pokitmons.pokit.core.ui.R.string as coreString
 fun AddPokitScreenContainer(
     viewModel: AddPokitViewModel,
     onBackPressed: () -> Unit,
-    onBackWithModifySuccess: (Int) -> Unit = {},
-    onBackWithCreateSuccess: () -> Unit = {},
 ) {
     val state by viewModel.container.stateFlow.collectAsState()
     val pokitName by viewModel.pokitName.collectAsState()
@@ -83,16 +81,8 @@ fun AddPokitScreenContainer(
 
     viewModel.collectSideEffect { sideEffect ->
         when (sideEffect) {
-            AddPokitSideEffect.AddPokitSuccess -> {
-                onBackWithCreateSuccess()
-            }
-
             AddPokitSideEffect.OnNavigationBack -> {
                 onBackPressed()
-            }
-
-            is AddPokitSideEffect.ModifyPokitSuccess -> {
-                onBackWithModifySuccess(sideEffect.id)
             }
         }
     }

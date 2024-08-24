@@ -72,6 +72,7 @@ dependencies {
 
     // module
     implementation(project(":core:ui"))
+    implementation(project(":core:feature"))
     implementation(project(":domain"))
     implementation(project(":feature:pokitdetail"))
 }

@@ -7,10 +7,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import pokitmons.pokit.core.feature.navigation.args.LinkUpdateEvent
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.usecase.link.SearchLinksUseCase
 import pokitmons.pokit.domain.usecase.link.SetBookmarkUseCase
@@ -43,6 +45,11 @@ class SearchViewModel @Inject constructor(
     private val removeRecentSearchWordUseCase: RemoveRecentSearchWordUseCase,
     private val setBookmarkUseCase: SetBookmarkUseCase,
 ) : ViewModel() {
+
+    init {
+        initLinkUpdateEventDetector()
+    }
+
     private val linkPaging = LinkPaging(
         searchLinksUseCase = searchLinksUseCase,
         filter = Filter(),
@@ -81,6 +88,16 @@ class SearchViewModel @Inject constructor(
     )
 
     private var appliedSearchWord = ""
+
+    private fun initLinkUpdateEventDetector() {
+        viewModelScope.launch {
+            LinkUpdateEvent.updatedLink.collectLatest { updatedLink ->
+                val targetLink = linkPaging.pagingData.value.find { it.id == updatedLink.id.toString() } ?: return@collectLatest
+                val modifiedLink = targetLink.copy(title = updatedLink.title, imageUrl = updatedLink.thumbnail, domainUrl = updatedLink.domain)
+                linkPaging.modifyItem(modifiedLink)
+            }
+        }
+    }
 
     fun inputSearchWord(newSearchWord: String) {
         _searchWord.update { newSearchWord }

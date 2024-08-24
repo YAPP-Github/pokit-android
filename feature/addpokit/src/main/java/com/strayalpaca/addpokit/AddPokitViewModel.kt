@@ -24,6 +24,8 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import pokitmons.pokit.core.feature.navigation.args.PokitArg
+import pokitmons.pokit.core.feature.navigation.args.PokitUpdateEvent
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.usecase.pokit.CreatePokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitImagesUseCase
@@ -120,6 +122,8 @@ class AddPokitViewModel @Inject constructor(
             if (isInAvailableLength) {
                 val errorMessage = errorMessageProvider.getTextLengthErrorMessage()
                 reduce { state.copy(pokitInputErrorMessage = errorMessage) }
+            } else {
+                reduce { state.copy(pokitInputErrorMessage = null) }
             }
         }
     }
@@ -140,13 +144,8 @@ class AddPokitViewModel @Inject constructor(
         if (response is PokitResult.Success) {
             reduce { state.copy(step = AddPokitScreenStep.IDLE) }
 
-            val sideEffect = if (pokitId == null) {
-                AddPokitSideEffect.AddPokitSuccess
-            } else {
-                AddPokitSideEffect.ModifyPokitSuccess(pokitId)
-            }
-
-            postSideEffect(sideEffect)
+            PokitUpdateEvent.updatePokit(PokitArg(id = pokitId ?: 0, title = currentPokitName, imageUrl = state.pokitImage?.url ?: "", imageId = pokitImageId))
+            postSideEffect(AddPokitSideEffect.OnNavigationBack)
         } else {
             response as PokitResult.Error
             val errorMessage = errorMessageProvider.errorCodeToMessage(response.error.code)

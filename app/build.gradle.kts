@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.org.jetbrains.kotlin.android)
     alias(libs.plugins.hilt)
     alias(libs.plugins.googleServices)
+    alias(libs.plugins.kotlin.parcelize)
     id("kotlin-kapt")
 }
 
@@ -70,6 +71,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(project(":core:ui"))
+    implementation(project(":core:feature"))
     implementation(project(":data"))
     implementation(project(":domain"))
     implementation(project(":feature:addlink"))

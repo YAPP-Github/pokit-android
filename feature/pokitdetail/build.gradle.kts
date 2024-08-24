@@ -6,6 +6,10 @@ plugins {
 }
 
 android {
+    tasks.withType<Test>().configureEach {
+        useJUnitPlatform()
+    }
+
     namespace = "com.strayalpaca.pokitdetail"
     compileSdk = 34
 
@@ -62,10 +66,19 @@ dependencies {
     implementation(libs.orbit.core)
     implementation(libs.orbit.viewmodel)
 
+    // kotest
+    testImplementation(libs.kotest.runner.junit5)
+    testImplementation(libs.kotlin.reflect)
+
+    // mockk
+    testImplementation(libs.mockk)
+    androidTestImplementation(libs.mockk.android)
+
     // hilt
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
 
     implementation(project(":core:ui"))
+    implementation(project(":core:feature"))
     implementation(project(":domain"))
 }

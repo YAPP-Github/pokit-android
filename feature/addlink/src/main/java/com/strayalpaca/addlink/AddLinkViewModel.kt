@@ -26,6 +26,8 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import pokitmons.pokit.core.feature.navigation.args.LinkArg
+import pokitmons.pokit.core.feature.navigation.args.LinkUpdateEvent
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.usecase.link.CreateLinkUseCase
 import pokitmons.pokit.domain.usecase.link.GetLinkCardUseCase
@@ -182,6 +184,15 @@ class AddLinkViewModel @Inject constructor(
             }
             if (response is PokitResult.Success) {
                 reduce { state.copy(step = ScreenStep.IDLE) }
+                val responseLink = response.result
+                val linkArg = LinkArg(
+                    id = responseLink.id,
+                    title = responseLink.title,
+                    thumbnail = responseLink.thumbnail,
+                    domain = responseLink.domain,
+                    createdAt = responseLink.createdAt
+                )
+                LinkUpdateEvent.modifySuccess(linkArg)
                 postSideEffect(AddLinkScreenSideEffect.AddLinkSuccess)
             } else {
                 reduce { state.copy(step = ScreenStep.IDLE) }

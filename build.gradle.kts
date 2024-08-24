@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.hilt) apply false
     alias(libs.plugins.com.android.library) apply false
     alias(libs.plugins.googleServices) apply false
+    alias(libs.plugins.kotlin.parcelize) apply false
 }
 
 subprojects {

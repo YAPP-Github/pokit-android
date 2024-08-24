@@ -66,12 +66,6 @@ fun RootNavHost(
             AddPokitScreenContainer(
                 viewModel = viewModel,
                 onBackPressed = navHostController::popBackStack,
-                onBackWithModifySuccess = { modifiedPokitId ->
-                    navHostController.popBackStack()
-                    navHostController.currentBackStackEntry
-                        ?.savedStateHandle
-                        ?.set("modified_pokit_id", modifiedPokitId)
-                }
             )
         }
 
@@ -80,11 +74,6 @@ fun RootNavHost(
             arguments = PokitDetail.arguments
         ) {
             val viewModel: PokitDetailViewModel = hiltViewModel()
-            LaunchedEffect(it) {
-                val pokitId = navHostController.currentBackStackEntry?.savedStateHandle?.get<Int>("modified_pokit_id") ?: return@LaunchedEffect
-                viewModel.getPokit(pokitId)
-            }
-
             PokitDetailScreenContainer(
                 viewModel = viewModel,
                 onBackPressed = navHostController::popBackStack,

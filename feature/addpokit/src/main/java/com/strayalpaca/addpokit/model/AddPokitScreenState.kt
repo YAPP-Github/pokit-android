@@ -17,7 +17,5 @@ sealed class AddPokitScreenStep {
 }
 
 sealed class AddPokitSideEffect {
-    data object AddPokitSuccess : AddPokitSideEffect()
-    data class ModifyPokitSuccess(val id: Int) : AddPokitSideEffect()
     data object OnNavigationBack : AddPokitSideEffect()
 }

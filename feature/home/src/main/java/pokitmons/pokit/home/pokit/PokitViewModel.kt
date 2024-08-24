@@ -10,8 +10,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import pokitmons.pokit.core.feature.navigation.args.LinkUpdateEvent
+import pokitmons.pokit.core.feature.navigation.args.PokitUpdateEvent
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.link.Link
 import pokitmons.pokit.domain.model.link.LinksSort
@@ -19,12 +22,39 @@ import pokitmons.pokit.domain.usecase.link.GetLinksUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
 import javax.inject.Inject
 import com.strayalpaca.pokitdetail.model.Link as DetailLink
+import pokitmons.pokit.domain.model.pokit.Pokit as DomainPokit
 
 @HiltViewModel
 class PokitViewModel @Inject constructor(
     private val getPokitsUseCase: GetPokitsUseCase,
     private val getLinksUseCase: GetLinksUseCase,
 ) : ViewModel() {
+
+    init {
+        initLinkUpdateEventDetector()
+        initPokitUpdateEventDetector()
+    }
+
+    private fun initLinkUpdateEventDetector() {
+        viewModelScope.launch {
+            LinkUpdateEvent.updatedLink.collectLatest { updatedLink ->
+                val targetLink = linkPaging.pagingData.value.find { it.id == updatedLink.id.toString() } ?: return@collectLatest
+                val modifiedLink = targetLink.copy(title = updatedLink.title, imageUrl = updatedLink.thumbnail, domainUrl = updatedLink.domain, createdAt = updatedLink.createdAt)
+                linkPaging.modifyItem(modifiedLink)
+            }
+        }
+    }
+
+    private fun initPokitUpdateEventDetector() {
+        viewModelScope.launch {
+            PokitUpdateEvent.updatedPokit.collectLatest { updatedPokit ->
+                val targetPokit = pokitPaging.pagingData.value.find { it.id == updatedPokit.id.toString() } ?: return@collectLatest
+                val pokitImage = DomainPokit.Image(id = updatedPokit.imageId, url = updatedPokit.imageUrl)
+                val modifiedPokit = targetPokit.copy(title = updatedPokit.title, image = pokitImage)
+                pokitPaging.modifyItem(modifiedPokit)
+            }
+        }
+    }
 
     var selectedCategory = mutableStateOf<Category>(Category.Pokit)
         private set
