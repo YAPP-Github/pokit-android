@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pokitmons.pokit.core.feature.model.NetworkState
 import pokitmons.pokit.core.feature.navigation.args.LinkUpdateEvent
+import pokitmons.pokit.core.feature.navigation.args.PokitUpdateEvent
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.home.remind.RemindResult
 import pokitmons.pokit.domain.usecase.home.remind.BookMarkContentsUseCase
@@ -63,6 +64,7 @@ class RemindViewModel @Inject constructor(
         initLinkUpdateEventDetector()
         initLinkRemoveEventDetector()
         initLinkAddEventDetector()
+        initPokitRemoveEventDetector()
         loadContents()
     }
 
@@ -150,6 +152,14 @@ class RemindViewModel @Inject constructor(
     private fun initLinkAddEventDetector() {
         viewModelScope.launch {
             LinkUpdateEvent.addedLink.collectLatest {
+                loadContents()
+            }
+        }
+    }
+
+    private fun initPokitRemoveEventDetector() {
+        viewModelScope.launch {
+            PokitUpdateEvent.removedPokitId.collectLatest {
                 loadContents()
             }
         }

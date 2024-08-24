@@ -1,6 +1,5 @@
 package pokitmons.pokit.home.remind
 
-import androidx.annotation.StringRes
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -84,8 +83,8 @@ fun RemindScreen(
             }
             BottomSheetType.REMOVE -> {
                 TwoButtonBottomSheetContent(
-                    title = stringResource(id = R.string.title_remove_pokit),
-                    subText = stringResource(id = R.string.sub_remove_pokit),
+                    title = stringResource(id = R.string.title_remove_link),
+                    subText = stringResource(id = R.string.sub_remove_link),
                     onClickLeftButton = viewModel::hideLinkOptionBottomSheet,
                     onClickRightButton = remember {
                         {

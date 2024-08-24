@@ -3,6 +3,7 @@ package pokitmons.pokit.home.pokit
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.strayalpaca.pokitdetail.model.BottomSheetType
 import com.strayalpaca.pokitdetail.model.Pokit
 import com.strayalpaca.pokitdetail.paging.LinkPaging
 import com.strayalpaca.pokitdetail.paging.PokitPaging
@@ -19,6 +20,7 @@ import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.link.Link
 import pokitmons.pokit.domain.model.link.LinksSort
 import pokitmons.pokit.domain.usecase.link.GetLinksUseCase
+import pokitmons.pokit.domain.usecase.pokit.DeletePokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
 import javax.inject.Inject
 import com.strayalpaca.pokitdetail.model.Link as DetailLink
@@ -28,15 +30,8 @@ import pokitmons.pokit.domain.model.pokit.Pokit as DomainPokit
 class PokitViewModel @Inject constructor(
     private val getPokitsUseCase: GetPokitsUseCase,
     private val getLinksUseCase: GetLinksUseCase,
+    private val deletePokitUseCase: DeletePokitUseCase
 ) : ViewModel() {
-
-    init {
-        initLinkUpdateEventDetector()
-        initPokitUpdateEventDetector()
-        initPokitRemoveEventDetector()
-        initLinkAddEventDetector()
-        initPokitAddEventDetector()
-    }
 
     private fun initLinkUpdateEventDetector() {
         viewModelScope.launch {
@@ -127,6 +122,20 @@ class PokitViewModel @Inject constructor(
 
     val linksState = linkPaging.pagingState
 
+    private val _currentDetailSelectedCategory = MutableStateFlow<Pokit?>(null)
+    val currentDetailSelectedCategory = _currentDetailSelectedCategory.asStateFlow()
+
+    private val _pokitOptionBottomSheetType = MutableStateFlow<BottomSheetType?>(null)
+    val pokitOptionBottomSheetType = _pokitOptionBottomSheetType.asStateFlow()
+
+    init {
+        initLinkUpdateEventDetector()
+        initPokitUpdateEventDetector()
+        initPokitRemoveEventDetector()
+        initLinkAddEventDetector()
+        initPokitAddEventDetector()
+    }
+
     fun updateCategory(category: Category) {
         selectedCategory.value = category
     }
@@ -176,6 +185,33 @@ class PokitViewModel @Inject constructor(
     fun loadUnCategoryLinks() {
         viewModelScope.launch {
             linkPaging.load()
+        }
+    }
+
+    fun showPokitDetailOptionBottomSheet(pokit: Pokit) {
+        _currentDetailSelectedCategory.update { pokit }
+        _pokitOptionBottomSheetType.update { BottomSheetType.MODIFY }
+    }
+
+    fun showPokitDetailRemoveBottomSheet() {
+        _pokitOptionBottomSheetType.update {
+            BottomSheetType.REMOVE
+        }
+    }
+
+    fun hidePokitDetailRemoveBottomSheet() {
+        _currentDetailSelectedCategory.update { null }
+        _pokitOptionBottomSheetType.update { null }
+    }
+
+    fun removeCurrentDetailSelectedCategory() {
+        viewModelScope.launch {
+            val currentDetailSelectedPokit = currentDetailSelectedCategory.value ?: return@launch
+            val pokitId = currentDetailSelectedPokit.id.toInt()
+            val response = deletePokitUseCase.deletePokit(pokitId)
+            if (response is PokitResult.Success) {
+                PokitUpdateEvent.removePokit(pokitId)
+            }
         }
     }
 }
