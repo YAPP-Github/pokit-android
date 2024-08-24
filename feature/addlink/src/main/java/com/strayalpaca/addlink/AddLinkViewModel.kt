@@ -94,6 +94,9 @@ class AddLinkViewModel @Inject constructor(
                         step = ScreenStep.IDLE
                     )
                 }
+                _title.update { response.result.title }
+                _linkUrl.update { response.result.data }
+                _memo.update { response.result.memo }
             } else {
                 postSideEffect(AddLinkScreenSideEffect.OnNavigationBack)
             }
@@ -166,7 +169,7 @@ class AddLinkViewModel @Inject constructor(
                 modifyLinkUseCase.modifyLink(
                     linkId = currentLinkId!!,
                     data = currentState.link!!.url,
-                    title = currentState.link.title,
+                    title = title.value,
                     categoryId = currentState.currentPokit!!.id.toInt(),
                     memo = memo.value,
                     alertYn = if (currentState.useRemind) "Y" else "n",
