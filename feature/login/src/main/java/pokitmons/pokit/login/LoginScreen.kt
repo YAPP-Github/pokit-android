@@ -67,7 +67,7 @@ fun LoginScreen(
         ) {
             Image(
                 painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.logo_brand),
-                contentDescription = null,
+                contentDescription = null
             )
 
             Spacer(modifier = Modifier.height(24.dp))

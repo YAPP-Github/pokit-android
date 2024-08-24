@@ -51,6 +51,7 @@ fun SplashScreen() {
     ) {
         Image(
             painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.logo_white),
-            contentDescription = null)
+            contentDescription = null
+        )
     }
 }
