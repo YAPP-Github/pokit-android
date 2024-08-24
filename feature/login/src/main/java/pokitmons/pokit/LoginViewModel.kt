@@ -1,6 +1,7 @@
 package pokitmons.pokit
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.mutableStateListOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -80,6 +81,7 @@ class LoginViewModel @Inject constructor(
                                 setAccessToken(loginResult.result.accessToken)
                                 setRefreshToken(loginResult.result.refreshToken)
                                 setAuthType(authType)
+                                Log.d("!! : ", getAuthType().first().toString())
                             }
                             _loginState.emit(LoginState.Registered)
                         }
