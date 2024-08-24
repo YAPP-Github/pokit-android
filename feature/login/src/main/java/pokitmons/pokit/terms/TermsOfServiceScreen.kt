@@ -33,7 +33,7 @@ import pokitmons.pokit.login.R as Login
 @Composable
 fun TermsOfServiceScreen(
     onNavigateToInputNicknameScreen: () -> Unit,
-    popBackStack: () -> Unit,
+    onBackPressed: () -> Unit,
 ) {
     val termsViewModel: TermsViewModel = viewModel() // TODO hiltViewModel 마이그레이션 예정
     val termsState by termsViewModel.termsState.collectAsState()
@@ -47,12 +47,13 @@ fun TermsOfServiceScreen(
             Icon(
                 painter = painterResource(id = UI.drawable.icon_24_arrow_left),
                 contentDescription = "뒤로가기",
-                modifier = Modifier.clickable { popBackStack() }
+                modifier = Modifier.clickable { onBackPressed() }
             )
 
             Spacer(modifier = Modifier.height(32.dp))
 
             Text(
+                modifier = Modifier.clickable { },
                 text = stringResource(id = Login.string.service_privacy_title),
                 style = PokitTheme.typography.title1
             )
@@ -92,6 +93,7 @@ fun TermsOfServiceScreen(
                     .fillMaxWidth()
             ) {
                 TermsCheckBoxItem(
+                    url = "https://www.notion.so/de3468b3be1744538c22a333ae1d0ec8",
                     text = stringResource(id = Login.string.personal_data_agree),
                     isChecked = termsState.isPersonalDataChecked,
                     click = { termsViewModel.checkPersonalData() }
@@ -99,6 +101,7 @@ fun TermsOfServiceScreen(
                 Spacer(modifier = Modifier.padding(top = 16.dp))
 
                 TermsCheckBoxItem(
+                    url = "https://www.notion.so/3bddcd6fd00043abae6b92a50c39b132?pvs=4",
                     text = stringResource(id = Login.string.service_agree),
                     isChecked = termsState.isServiceChecked,
                     click = { termsViewModel.checkServiceTerm() }
@@ -106,6 +109,7 @@ fun TermsOfServiceScreen(
                 Spacer(modifier = Modifier.padding(top = 16.dp))
 
                 TermsCheckBoxItem(
+                    url = "https://www.notion.so/bb6d0d6569204d5e9a7b67e5825f9d10",
                     text = stringResource(id = Login.string.marketing_agree),
                     isChecked = termsState.isMarketingChecked,
                     click = { termsViewModel.checkMarketing() }

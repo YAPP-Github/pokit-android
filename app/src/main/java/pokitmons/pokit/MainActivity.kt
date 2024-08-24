@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
@@ -59,7 +60,9 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun SplashScreen() {
     Box(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .background(color = PokitTheme.colors.brandBold)
+            .fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Image(

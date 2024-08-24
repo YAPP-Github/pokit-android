@@ -32,11 +32,11 @@ private const val NICKNAME_MIN_LENGTH = 1 // TODO 매직넘버를 포함하는 �
 
 @Composable
 fun InputNicknameScreen(
-    loginViewModel: LoginViewModel,
+    viewModel: LoginViewModel,
     onNavigateToKeywordScreen: () -> Unit,
-    popBackStack: () -> Unit,
+    onBackPressed: () -> Unit,
 ) {
-    val inputNicknameState by loginViewModel.inputNicknameState.collectAsState()
+    val inputNicknameState by viewModel.inputNicknameState.collectAsState()
 
     Box(
         modifier = Modifier
@@ -45,7 +45,7 @@ fun InputNicknameScreen(
     ) {
         Column {
             Icon(
-                modifier = Modifier.clickable { popBackStack() },
+                modifier = Modifier.clickable { onBackPressed() },
                 painter = painterResource(id = UI.drawable.icon_24_arrow_left),
                 contentDescription = "뒤로가기"
             )
@@ -73,7 +73,7 @@ fun InputNicknameScreen(
                 hintText = stringResource(id = Login.string.input_nickname_hint),
                 onChangeText = { text ->
                     if (text.length <= NICKNAME_MAX_LENGTH) {
-                        loginViewModel.apply {
+                        viewModel.apply {
                             inputText(text)
                             checkDuplicateNickname(text)
                         }

@@ -17,6 +17,7 @@ import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.usecase.auth.InputNicknameUseCase
 import pokitmons.pokit.domain.usecase.auth.SNSLoginUseCase
 import pokitmons.pokit.domain.usecase.auth.SignUpUseCase
+import pokitmons.pokit.domain.usecase.auth.TokenUseCase
 import pokitmons.pokit.login.R
 import pokitmons.pokit.model.CategoryState
 import pokitmons.pokit.model.DuplicateNicknameState
@@ -28,12 +29,17 @@ class LoginViewModel @Inject constructor(
     private val loginUseCase: SNSLoginUseCase,
     private val nicknameUseCase: InputNicknameUseCase,
     private val signUpUseCase: SignUpUseCase,
+    private val tokenUseCase: TokenUseCase,
 ) : ViewModel() {
     private var duplicateNicknameJob: Job? = null
 
     private val _loginState: MutableStateFlow<LoginState> = MutableStateFlow(LoginState.Init)
     val loginState: StateFlow<LoginState>
         get() = _loginState.asStateFlow()
+
+    private val _signUpState: MutableStateFlow<SignUpState> = MutableStateFlow(SignUpState.Init)
+    val signUpState: StateFlow<SignUpState>
+        get() = _signUpState.asStateFlow()
 
     private val _inputNicknameState = MutableStateFlow(DuplicateNicknameState())
     val inputNicknameState: StateFlow<DuplicateNicknameState>
@@ -57,8 +63,10 @@ class LoginViewModel @Inject constructor(
 
             when (loginResult) {
                 is PokitResult.Success -> {
-                    accessToken = loginResult.result.accessToken
-                    refreshToken = loginResult.result.refreshToken
+                    tokenUseCase.apply {
+                        setAccessToken(loginResult.result.accessToken)
+                        setRefreshToken(loginResult.result.refreshToken)
+                    }
                     _loginState.emit(LoginState.Login)
                 }
                 is PokitResult.Error -> _loginState.emit(LoginState.Failed(loginResult.error))
@@ -76,8 +84,8 @@ class LoginViewModel @Inject constructor(
                         .map { categoryState -> categoryState.name }
                 )
             ) {
-                is PokitResult.Success -> { }
-                is PokitResult.Error -> { }
+                is PokitResult.Success -> { _signUpState.emit(SignUpState.SignUp) }
+                is PokitResult.Error -> { _signUpState.emit(SignUpState.Failed(signUpResult.error)) }
             }
         }
     }
@@ -129,11 +137,11 @@ class LoginViewModel @Inject constructor(
         return _categories.count { it.isSelected.value } < LIMIT_SELECTED_COUNT
     }
 
-    var accessToken: String = ""
-        private set
-
-    var refreshToken: String = ""
-        private set
+    fun changeState() {
+        viewModelScope.launch {
+            _loginState.emit(LoginState.Init)
+        }
+    }
 
     // TODO 확장함수 모듈 생성하기
     companion object {
