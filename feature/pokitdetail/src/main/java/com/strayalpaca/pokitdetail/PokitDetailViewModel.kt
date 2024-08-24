@@ -109,8 +109,8 @@ class PokitDetailViewModel @Inject constructor(
             size = size,
             page = page,
             sort = sort,
-            isRead = !currentFilter.notReadChecked,
-            favorite = currentFilter.bookmarkChecked
+            isRead = if (currentFilter.notReadChecked) false else null,
+            favorite = if (currentFilter.bookmarkChecked) true else null
         )
     }
 
