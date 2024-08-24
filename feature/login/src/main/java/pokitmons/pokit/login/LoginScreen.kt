@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -32,24 +31,19 @@ import com.google.firebase.auth.AuthResult
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.OAuthProvider
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import pokitmons.pokit.LoginState
 import pokitmons.pokit.LoginViewModel
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitLoginButtonType
 import pokitmons.pokit.core.ui.components.atom.loginbutton.PokitLoginButton
 import pokitmons.pokit.core.ui.theme.PokitTheme
-import kotlin.coroutines.CoroutineContext
-import kotlin.coroutines.EmptyCoroutineContext
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
 fun LoginScreen(
     loginViewModel: LoginViewModel,
     onNavigateToTermsOfServiceScreen: () -> Unit,
+    onNavigateToHomeScreen: () -> Unit,
 ) {
     val loginState by loginViewModel.loginState.collectAsState()
     val context: Context = LocalContext.current
@@ -61,9 +55,16 @@ fun LoginScreen(
             loginViewModel.changeState()
             onNavigateToTermsOfServiceScreen()
         }
+        is LoginState.Registered -> {
+            loginViewModel.changeState()
+            onNavigateToHomeScreen()
+        }
         is LoginState.Failed -> {
             // TODO 로그인 실패 바텀시트 렌더링
             Toast.makeText(context, (loginState as LoginState.Failed).error.toString(), Toast.LENGTH_SHORT).show()
+        }
+        is LoginState.AutoLogin -> {
+            onNavigateToHomeScreen()
         }
     }
 
@@ -199,16 +200,5 @@ private fun handleAuthResult(
         } else {
             // TODO 로그인 실패 바텀시트 렌더링
         }
-    }
-}
-
-@SuppressLint("ComposableNaming")
-@Composable
-fun <T> Flow<T>.collectAsEffect(
-    context: CoroutineContext = EmptyCoroutineContext,
-    block: (T) -> Unit,
-) {
-    LaunchedEffect(Unit) {
-        onEach(block).flowOn(context).launchIn(this)
     }
 }

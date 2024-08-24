@@ -13,11 +13,24 @@ class TokenManager @Inject constructor(
     companion object {
         val ACCESS_TOKEN = stringPreferencesKey("access_token")
         val REFRESH_TOKEN = stringPreferencesKey("refresh_token")
+        val AUTH_TYPE = stringPreferencesKey("auth_type")
     }
 
     fun getAccessToken(): Flow<String?> {
         return dataStore.data.map { prefs ->
             prefs[ACCESS_TOKEN]
+        }
+    }
+
+    suspend fun setAuthType(type: String) {
+        dataStore.edit { prefs ->
+            prefs[AUTH_TYPE] = type
+        }
+    }
+
+    fun getAuthType(): Flow<String> {
+        return dataStore.data.map { prefs ->
+            prefs[ACCESS_TOKEN] ?: ""
         }
     }
 

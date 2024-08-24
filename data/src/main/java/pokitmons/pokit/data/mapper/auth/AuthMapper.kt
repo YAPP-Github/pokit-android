@@ -11,7 +11,8 @@ object AuthMapper {
     fun mapperToSNSLogin(snsLoginResponse: SNSLoginResponse): SNSLoginResult {
         return SNSLoginResult(
             accessToken = snsLoginResponse.accessToken,
-            refreshToken = snsLoginResponse.refreshToken
+            refreshToken = snsLoginResponse.refreshToken,
+            isRegistered = snsLoginResponse.isRegistered
         )
     }
 
