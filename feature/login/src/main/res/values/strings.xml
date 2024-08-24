@@ -26,8 +26,9 @@
     <string name="humor">유머</string>
     <string name="music">음악</string>
     <string name="job_info">취업정보</string>
-    <string name="sign_up_success">회원가입이 완료되었습니다!</string>
-    <string name="manage_links">POKIT을 통해 많은 링크를\n간편하게 관리하세요</string>
+    <string name="sign_up_success">회원가입 완료!</string>
+    <string name="manage_links">다양한 링크를 포킷에 저장해보세요</string>
     <string name="login_sub_text">다양한 링크들을 한 곳에</string>
     <string name="next">다음</string>
+    <string name="start">시작하기</string>
 </resources>
