@@ -11,6 +11,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pokitmons.pokit.domain.commom.PokitResult
@@ -31,6 +32,13 @@ class LoginViewModel @Inject constructor(
     private val signUpUseCase: SignUpUseCase,
     private val tokenUseCase: TokenUseCase,
 ) : ViewModel() {
+    init {
+        viewModelScope.launch {
+            if (tokenUseCase.getAuthType().first() == "구글") {
+                _loginState.emit(LoginState.AutoLogin)
+            }
+        }
+    }
     private var duplicateNicknameJob: Job? = null
 
     private val _loginState: MutableStateFlow<LoginState> = MutableStateFlow(LoginState.Init)
@@ -48,6 +56,8 @@ class LoginViewModel @Inject constructor(
     private val _categories = mutableStateListOf<CategoryState>()
     val categories: List<CategoryState> get() = _categories
 
+    private var authType = ""
+
     fun inputText(inputNickname: String) {
         _inputNicknameState.update { duplicateNicknameState ->
             duplicateNicknameState.copy(nickname = inputNickname)
@@ -63,12 +73,27 @@ class LoginViewModel @Inject constructor(
 
             when (loginResult) {
                 is PokitResult.Success -> {
-                    tokenUseCase.apply {
-                        setAccessToken(loginResult.result.accessToken)
-                        setRefreshToken(loginResult.result.refreshToken)
+                    authType = authPlatform
+                    when (loginResult.result.isRegistered) {
+                        true -> {
+                            tokenUseCase.apply {
+                                setAccessToken(loginResult.result.accessToken)
+                                setRefreshToken(loginResult.result.refreshToken)
+                                setAuthType(authType)
+                            }
+                            _loginState.emit(LoginState.Registered)
+                        }
+
+                        false -> {
+                            tokenUseCase.apply {
+                                setAccessToken(loginResult.result.accessToken)
+                                setRefreshToken(loginResult.result.refreshToken)
+                            }
+                            _loginState.emit(LoginState.Login)
+                        }
                     }
-                    _loginState.emit(LoginState.Login)
                 }
+
                 is PokitResult.Error -> _loginState.emit(LoginState.Failed(loginResult.error))
             }
         }
@@ -84,8 +109,14 @@ class LoginViewModel @Inject constructor(
                         .map { categoryState -> categoryState.name }
                 )
             ) {
-                is PokitResult.Success -> { _signUpState.emit(SignUpState.SignUp) }
-                is PokitResult.Error -> { _signUpState.emit(SignUpState.Failed(signUpResult.error)) }
+                is PokitResult.Success -> {
+                    tokenUseCase.setAuthType(authType)
+                    _signUpState.emit(SignUpState.SignUp)
+                }
+
+                is PokitResult.Error -> {
+                    _signUpState.emit(SignUpState.Failed(signUpResult.error))
+                }
             }
         }
     }
@@ -100,6 +131,7 @@ class LoginViewModel @Inject constructor(
                         duplicateNicknameState.copy(isDuplicate = duplicateNicknameResult.result.isDuplicate)
                     }
                 }
+
                 is PokitResult.Error -> {}
             }
         }

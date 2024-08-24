@@ -5,6 +5,8 @@ import pokitmons.pokit.domain.commom.PokitError
 sealed class LoginState {
     data object Init : LoginState()
     data object Login : LoginState()
+    data object Registered : LoginState()
+    data object AutoLogin : LoginState()
     data class Failed(val error: PokitError) : LoginState()
 }
 
