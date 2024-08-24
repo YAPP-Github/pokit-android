@@ -18,7 +18,7 @@ fun LoadingProgress(modifier: Modifier = Modifier) {
         CircularProgressIndicator(
             modifier = Modifier.width(64.dp),
             color = PokitTheme.colors.brand,
-            trackColor = PokitTheme.colors.borderTertiary,
+            trackColor = PokitTheme.colors.borderTertiary
         )
     }
 }

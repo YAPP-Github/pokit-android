@@ -194,9 +194,11 @@ fun SearchScreen(
         if (state.step == SearchScreenStep.RESULT) {
             when {
                 (linkPagingState == SimplePagingState.LOADING_INIT) -> {
-                    LoadingProgress(modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f))
+                    LoadingProgress(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    )
                 }
                 (linkPagingState == SimplePagingState.FAILURE_INIT) -> {
                     ErrorPokki(

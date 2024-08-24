@@ -15,7 +15,6 @@ private fun Preview() {
             modifier = Modifier.fillMaxSize()
         ) {
             SignUpSuccessScreen {
-
             }
         }
     }

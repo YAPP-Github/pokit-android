@@ -19,7 +19,7 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 fun EmptyPokki(
     modifier: Modifier = Modifier,
     title: String,
-    sub: String
+    sub: String,
 ) {
     Box(
         modifier = modifier,

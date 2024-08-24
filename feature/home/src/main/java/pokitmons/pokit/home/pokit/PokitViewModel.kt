@@ -30,7 +30,7 @@ import pokitmons.pokit.domain.model.pokit.Pokit as DomainPokit
 class PokitViewModel @Inject constructor(
     private val getPokitsUseCase: GetPokitsUseCase,
     private val getLinksUseCase: GetLinksUseCase,
-    private val deletePokitUseCase: DeletePokitUseCase
+    private val deletePokitUseCase: DeletePokitUseCase,
 ) : ViewModel() {
 
     private fun initLinkUpdateEventDetector() {

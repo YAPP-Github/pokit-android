@@ -57,10 +57,10 @@ fun RemindScreen(
 
     val showTotalEmpty by remember {
         derivedStateOf {
-            todayContentsState == NetworkState.IDLE
-                && todayContents.value.size < 5
-                && unreadContentsState == NetworkState.IDLE
-                && unreadContents.value.isEmpty()
+            todayContentsState == NetworkState.IDLE &&
+                todayContents.value.size < 5 &&
+                unreadContentsState == NetworkState.IDLE &&
+                unreadContents.value.isEmpty()
         }
     }
 
@@ -125,7 +125,7 @@ fun RemindScreen(
             RemindSection(title = "오늘 이 링크는 어때요?") {
                 Spacer(modifier = Modifier.height(12.dp))
 
-                when(todayContentsState) {
+                when (todayContentsState) {
                     NetworkState.IDLE -> {
                         if (todayContents.value.isEmpty()) {
                             ErrorPokki(
@@ -212,7 +212,7 @@ fun RemindScreen(
             RemindSection(title = "즐겨찾기 링크만 모았어요") {
                 Spacer(modifier = Modifier.height(12.dp))
 
-                when(bookmarkContentState) {
+                when (bookmarkContentState) {
                     NetworkState.IDLE -> {
                         if (bookmarkContents.value.isEmpty()) {
                             EmptyPokki(

@@ -34,21 +34,21 @@ class RemindViewModel @Inject constructor(
     val unReadContents: StateFlow<List<RemindResult>>
         get() = _unReadContents.asStateFlow()
 
-    private val _unReadContentNetworkState : MutableStateFlow<NetworkState> = MutableStateFlow(NetworkState.IDLE)
+    private val _unReadContentNetworkState: MutableStateFlow<NetworkState> = MutableStateFlow(NetworkState.IDLE)
     val unreadContentNetworkState = _unReadContentNetworkState.asStateFlow()
 
     private var _todayContents: MutableStateFlow<List<RemindResult>> = MutableStateFlow(emptyList())
     val todayContents: StateFlow<List<RemindResult>>
         get() = _todayContents.asStateFlow()
 
-    private val _todayContentsNetworkState : MutableStateFlow<NetworkState> = MutableStateFlow(NetworkState.IDLE)
+    private val _todayContentsNetworkState: MutableStateFlow<NetworkState> = MutableStateFlow(NetworkState.IDLE)
     val todayContentsNetworkState = _todayContentsNetworkState.asStateFlow()
 
     private var _bookmarkContents: MutableStateFlow<List<RemindResult>> = MutableStateFlow(emptyList())
     val bookmarkContents: StateFlow<List<RemindResult>>
         get() = _bookmarkContents.asStateFlow()
 
-    private val _bookmarkContentsNetworkState : MutableStateFlow<NetworkState> = MutableStateFlow(NetworkState.IDLE)
+    private val _bookmarkContentsNetworkState: MutableStateFlow<NetworkState> = MutableStateFlow(NetworkState.IDLE)
     val bookmarkContentsNetworkState = _bookmarkContentsNetworkState.asStateFlow()
 
     private val _currentSelectedLink = MutableStateFlow<Link?>(null)

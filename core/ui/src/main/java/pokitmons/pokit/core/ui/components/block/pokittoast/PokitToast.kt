@@ -22,8 +22,8 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
 fun PokitToast(
-    modifier : Modifier = Modifier,
-    text : String,
+    modifier: Modifier = Modifier,
+    text: String,
     onClick: (() -> Unit)? = null,
     onClickClose: () -> Unit = {},
 ) {

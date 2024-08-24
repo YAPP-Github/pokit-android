@@ -209,7 +209,6 @@ fun PokitDetailScreen(
                         )
                     }
                 }
-
             }
         }
 

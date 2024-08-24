@@ -7,7 +7,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
-
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {

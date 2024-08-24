@@ -24,10 +24,10 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 @Composable
 fun ErrorPokki(
     modifier: Modifier = Modifier,
-    pokkiSize : Dp = 180.dp,
+    pokkiSize: Dp = 180.dp,
     title: String,
     sub: String,
-    onClickRetry: (() -> Unit)? = null
+    onClickRetry: (() -> Unit)? = null,
 ) {
     Box(
         modifier = modifier,
