@@ -144,7 +144,13 @@ class AddPokitViewModel @Inject constructor(
         if (response is PokitResult.Success) {
             reduce { state.copy(step = AddPokitScreenStep.IDLE) }
 
-            PokitUpdateEvent.updatePokit(PokitArg(id = pokitId ?: 0, title = currentPokitName, imageUrl = state.pokitImage?.url ?: "", imageId = pokitImageId))
+            val isCreate = (pokitId == null)
+            if (isCreate) {
+                PokitUpdateEvent.createPokit(PokitArg(id = response.result, title = currentPokitName, imageUrl = state.pokitImage?.url ?: "", imageId = pokitImageId))
+            } else {
+                PokitUpdateEvent.updatePokit(PokitArg(id = pokitId ?: 0, title = currentPokitName, imageUrl = state.pokitImage?.url ?: "", imageId = pokitImageId))
+            }
+
             postSideEffect(AddPokitSideEffect.OnNavigationBack)
         } else {
             response as PokitResult.Error

@@ -193,9 +193,17 @@ class AddLinkViewModel @Inject constructor(
                     title = responseLink.title,
                     thumbnail = responseLink.thumbnail,
                     domain = responseLink.domain,
-                    createdAt = responseLink.createdAt
+                    createdAt = responseLink.createdAt,
+                    pokitId = responseLink.categoryId
                 )
-                LinkUpdateEvent.modifySuccess(linkArg)
+
+                val isCreate = (currentLinkId == null)
+                if (isCreate) {
+                    LinkUpdateEvent.createSuccess(linkArg)
+                } else {
+                    LinkUpdateEvent.modifySuccess(linkArg)
+                }
+
                 postSideEffect(AddLinkScreenSideEffect.AddLinkSuccess)
             } else {
                 reduce { state.copy(step = ScreenStep.IDLE) }

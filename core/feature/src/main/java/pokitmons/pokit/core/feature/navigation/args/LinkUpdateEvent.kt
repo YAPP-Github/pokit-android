@@ -13,6 +13,9 @@ object LinkUpdateEvent {
     private val _removedLink = MutableSharedFlow<Int>()
     val removedLink = _removedLink.asSharedFlow()
 
+    private val _addedLink = MutableSharedFlow<LinkArg>()
+    val addedLink = _addedLink.asSharedFlow()
+
     fun modifySuccess(link: LinkArg) {
         CoroutineScope(Dispatchers.Default).launch {
             _updatedLink.emit(link)
@@ -22,6 +25,12 @@ object LinkUpdateEvent {
     fun removeSuccess(linkId: Int) {
         CoroutineScope(Dispatchers.Default).launch {
             _removedLink.emit(linkId)
+        }
+    }
+
+    fun createSuccess(link: LinkArg) {
+        CoroutineScope(Dispatchers.Default).launch {
+            _addedLink.emit(link)
         }
     }
 }

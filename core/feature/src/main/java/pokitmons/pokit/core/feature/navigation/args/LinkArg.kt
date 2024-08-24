@@ -10,4 +10,5 @@ data class LinkArg(
     val thumbnail: String,
     val createdAt: String,
     val domain: String,
+    val pokitId: Int,
 ) : Parcelable

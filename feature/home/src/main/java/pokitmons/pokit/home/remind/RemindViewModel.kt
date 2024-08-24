@@ -32,6 +32,7 @@ class RemindViewModel @Inject constructor(
         loadContents()
         initLinkUpdateEventDetector()
         initLinkRemoveEventDetector()
+        initLinkAddEventDetector()
     }
 
     private var _unReadContents: MutableStateFlow<List<RemindResult>> = MutableStateFlow(emptyList())
@@ -132,6 +133,14 @@ class RemindViewModel @Inject constructor(
                 todayContents.value.filter { it.id != removedLinkId }
 
                 bookmarkContents.value.filter { it.id != removedLinkId }
+            }
+        }
+    }
+
+    private fun initLinkAddEventDetector() {
+        viewModelScope.launch {
+            LinkUpdateEvent.addedLink.collectLatest {
+                loadContents()
             }
         }
     }
