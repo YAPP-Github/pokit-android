@@ -3,12 +3,15 @@ package pokitmons.pokit.login
 import android.app.Activity
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -16,6 +19,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.credentials.CredentialManager
@@ -31,6 +35,7 @@ import pokitmons.pokit.LoginState
 import pokitmons.pokit.LoginViewModel
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitLoginButtonType
 import pokitmons.pokit.core.ui.components.atom.loginbutton.PokitLoginButton
+import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
 fun LoginScreen(
@@ -50,14 +55,35 @@ fun LoginScreen(
         }
     }
 
+    // Column 자체가 가운데로 오게 하려면?
     Box(
         modifier = Modifier
+            .background(color = PokitTheme.colors.backgroundBase)
             .fillMaxSize()
     ) {
         Column(
             modifier = Modifier
+                .align(Alignment.Center)
+        ) {
+            Image(
+                painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.logo_brand),
+                contentDescription = null
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Text(
+                modifier = Modifier.align(Alignment.CenterHorizontally),
+                text = stringResource(id = R.string.login_sub_text),
+                style = PokitTheme.typography.body1Bold
+            )
+        }
+
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 20.dp)
+                .padding(bottom = 32.dp)
                 .align(Alignment.BottomCenter)
-                .padding(start = 20.dp, end = 20.dp, bottom = 32.dp)
         ) {
             PokitLoginButton(
                 loginType = PokitLoginButtonType.APPLE,
