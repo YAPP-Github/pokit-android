@@ -1,6 +1,5 @@
 package com.strayalpaca.addlink.components.block
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -16,8 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.strayalpaca.addlink.model.Link
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
@@ -37,8 +36,8 @@ internal fun Link(
                 shape = RoundedCornerShape(12.dp)
             )
     ) {
-        Image(
-            painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.icon_24_google),
+        AsyncImage(
+            model = link.imageUrl,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.width(124.dp)

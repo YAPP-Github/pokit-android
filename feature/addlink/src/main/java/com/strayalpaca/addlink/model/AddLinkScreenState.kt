@@ -5,7 +5,6 @@ import com.strayalpaca.addlink.R
 data class AddLinkScreenState(
     val link: Link? = null,
     val currentPokit: Pokit? = null,
-    val pokitList: List<Pokit> = emptyList(),
     val useRemind: Boolean = false,
     val step: ScreenStep = ScreenStep.IDLE,
 )

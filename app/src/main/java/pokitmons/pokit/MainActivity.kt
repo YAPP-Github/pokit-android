@@ -15,10 +15,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import pokitmons.pokit.core.ui.theme.PokitTheme
-import pokitmons.pokit.navigation.LoginNavHost
+import pokitmons.pokit.navigation.RootNavHost
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -33,11 +39,25 @@ class MainActivity : ComponentActivity() {
             }
 
             PokitTheme {
+
                 if (showSplash) {
                     SplashScreen()
                 } else {
                     LoginNavHost()
                 }
+
+                val navHostController = rememberNavController()
+                val navBackStackEntry by navHostController.currentBackStackEntryAsState()
+                val currentDestination by remember(navBackStackEntry) { derivedStateOf { navBackStackEntry?.destination } }
+
+                LaunchedEffect(currentDestination) {
+                    currentDestination?.route?.let { route ->
+                        // 믹스패널/파베 애널리틱스 화면 이동 로깅용
+                    }
+                }
+
+                RootNavHost(navHostController = navHostController)
+
             }
         }
     }

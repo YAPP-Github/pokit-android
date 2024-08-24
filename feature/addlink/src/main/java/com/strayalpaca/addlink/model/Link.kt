@@ -1,9 +1,28 @@
 package com.strayalpaca.addlink.model
 
+import pokitmons.pokit.domain.model.link.Link as DomainLink
+import pokitmons.pokit.domain.model.link.LinkCard as DomainLinkCard
+
 data class Link(
     val url: String,
     val title: String,
     val imageUrl: String?,
-)
+) {
+    companion object {
+        fun fromDomainLink(domainLink: DomainLink): Link {
+            return Link(
+                url = domainLink.data,
+                title = domainLink.title,
+                imageUrl = domainLink.thumbnail
+            )
+        }
 
-internal val sampleLink = Link(url = "https://pokit.com/watch?v=xSTwqkUyM8k", title = "자연 친화적인 라이프스타일을 위한 환경 보호 방법", imageUrl = null)
+        fun fromDomainLinkCard(domainLinkCard: DomainLinkCard): Link {
+            return Link(
+                url = domainLinkCard.url,
+                title = domainLinkCard.title,
+                imageUrl = domainLinkCard.thumbnailUrl
+            )
+        }
+    }
+}

@@ -32,6 +32,7 @@ firebase-auth = "23.0.0"
 google-services = "4.4.2"
 datastore-core-android = "1.1.1"
 datastore-preferences-core-jvm = "1.1.1"
+mockk = "1.13.12"
 
 [libraries]
 androidx-lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-service", version.ref = "lifecycle-runtime-ktx"}
@@ -87,6 +88,11 @@ room-paging = { group = "androidx.room", name = "room-paging", version.ref = "ro
 annotation = { group = "androidx.annotation", name = "annotation", version.ref = "annotation" }
 androidx-datastore-core-android = { group = "androidx.datastore", name = "datastore-core-android", version.ref = "datastore-core-android" }
 androidx-datastore-preferences-core-jvm = { group = "androidx.datastore", name = "datastore-preferences-core-jvm", version.ref = "datastore-preferences-core-jvm" }
+
+mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
+mockk-android = { group = "io.mockk", name = "mockk-android", version.ref = "mockk" }
+
+jsoup = { group = "org.jsoup", name = "jsoup", version = "1.18.1" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }

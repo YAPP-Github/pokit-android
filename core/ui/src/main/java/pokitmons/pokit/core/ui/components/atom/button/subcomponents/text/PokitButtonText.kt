@@ -61,6 +61,10 @@ private fun getColor(
     style: PokitButtonStyle,
 ): Color {
     return when {
+        style == PokitButtonStyle.DEFAULT -> {
+            PokitTheme.colors.textTertiary
+        }
+
         state == PokitButtonState.DISABLE -> {
             PokitTheme.colors.textDisable
         }

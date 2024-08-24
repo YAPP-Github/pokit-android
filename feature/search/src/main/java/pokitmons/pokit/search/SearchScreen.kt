@@ -1,5 +1,6 @@
 package pokitmons.pokit.search
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,32 +10,108 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
+import pokitmons.pokit.core.ui.components.template.modifybottomsheet.ModifyBottomSheetContent
+import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButtonBottomSheetContent
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.search.components.filter.FilterArea
 import pokitmons.pokit.search.components.filterbottomsheet.FilterBottomSheet
+import pokitmons.pokit.search.components.linkdetailbottomsheet.LinkDetailBottomSheet
 import pokitmons.pokit.search.components.recentsearchword.RecentSearchWord
 import pokitmons.pokit.search.components.searchitemlist.SearchItemList
 import pokitmons.pokit.search.components.toolbar.Toolbar
+import pokitmons.pokit.search.model.BottomSheetType
 import pokitmons.pokit.search.model.Filter
 import pokitmons.pokit.search.model.FilterType
 import pokitmons.pokit.search.model.Link
 import pokitmons.pokit.search.model.SearchScreenState
 import pokitmons.pokit.search.model.SearchScreenStep
+import pokitmons.pokit.search.paging.SimplePagingState
 
 @Composable
 fun SearchScreenContainer(
     viewModel: SearchViewModel,
     onBackPressed: () -> Unit,
+    onNavigateToLinkModify: (String) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
     val searchWord by viewModel.searchWord.collectAsState()
     val linkList by viewModel.linkList.collectAsState()
+    val linkPagingState by viewModel.linkPagingState.collectAsState()
+    val pokitList by viewModel.pokitList.collectAsState()
+    val pokitPagingState by viewModel.pokitPagingState.collectAsState()
+
+    LinkDetailBottomSheet(
+        link = state.currentLink ?: Link(),
+        onHideBottomSheet = viewModel::hideLinkDetailBottomSheet,
+        show = state.showLinkDetailBottomSheet,
+        onClickModifyLink = remember {
+            { link ->
+                viewModel.hideLinkDetailBottomSheet()
+                onNavigateToLinkModify(link.id)
+            }
+        },
+        onClickRemoveLink = viewModel::showLinkRemoveBottomSheet,
+        onClickBookmark = viewModel::toggleBookmark
+    )
+
+    FilterBottomSheet(
+        filter = state.filter ?: Filter(),
+        firstShowType = state.firstBottomSheetFilterType,
+        show = state.showFilterBottomSheet,
+        onDismissRequest = viewModel::hideFilterBottomSheet,
+        onSaveClilck = viewModel::setFilter,
+        pokits = pokitList,
+        pokitPagingState = pokitPagingState,
+        loadNextPokits = viewModel::loadNextPokits,
+        refreshPokits = viewModel::refreshPokits
+    )
+
+    PokitBottomSheet(
+        onHideBottomSheet = viewModel::hideLinkModifyBottomSheet,
+        show = state.linkBottomSheetType != null
+    ) {
+        if (state.linkBottomSheetType == BottomSheetType.MODIFY) {
+            ModifyBottomSheetContent(
+                onClickModify = remember {
+                    {
+                        state.currentLink?.let { link ->
+                            viewModel.hideLinkModifyBottomSheet()
+                            onNavigateToLinkModify(link.id)
+                        }
+                    }
+                },
+                onClickRemove = remember {
+                    {
+                        state.currentLink?.let { link ->
+                            viewModel.showLinkRemoveBottomSheet(link)
+                        }
+                    }
+                },
+                onClickShare = remember {
+                    {
+                    }
+                }
+            )
+        }
+
+        if (state.linkBottomSheetType == BottomSheetType.REMOVE) {
+            TwoButtonBottomSheetContent(
+                title = stringResource(id = R.string.title_remove_link),
+                subText = stringResource(id = R.string.sub_remove_link),
+                onClickLeftButton = viewModel::hideLinkModifyBottomSheet,
+                onClickRightButton = {}
+            )
+        }
+    }
 
     SearchScreen(
         state = state,
         currentSearchWord = searchWord,
         linkList = linkList,
+        linkPagingState = linkPagingState,
         onClickBack = onBackPressed,
         inputSearchWord = viewModel::inputSearchWord,
         onClickSearch = viewModel::applyCurrentSearchWord,
@@ -44,9 +121,10 @@ fun SearchScreenContainer(
         onClickRemoveRecentSearchWord = viewModel::removeRecentSearchWord,
         onClickFilterSelect = viewModel::showFilterBottomSheet,
         onClickFilterItem = viewModel::showFilterBottomSheetWithType,
-        hideBottomSheet = viewModel::hideFilterBottomSheet,
-        onClickFilterSave = viewModel::setFilter,
-        toggleSortOrder = viewModel::toggleSortOrder
+        toggleSortOrder = viewModel::toggleSortOrder,
+        showLinkModifyBottomSheet = viewModel::showLinkModifyBottomSheet,
+        showLinkDetailBottomSheet = viewModel::showLinkDetailBottomSheet,
+        loadNextLinks = viewModel::loadNextLinks
     )
 }
 
@@ -55,6 +133,7 @@ fun SearchScreen(
     state: SearchScreenState = SearchScreenState(),
     currentSearchWord: String = "",
     linkList: List<Link> = emptyList(),
+    linkPagingState: SimplePagingState = SimplePagingState.IDLE,
     onClickBack: () -> Unit = {},
     inputSearchWord: (String) -> Unit = {},
     onClickSearch: () -> Unit = {},
@@ -64,12 +143,15 @@ fun SearchScreen(
     onClickRemoveRecentSearchWord: (String) -> Unit = {},
     onClickFilterSelect: () -> Unit = {},
     onClickFilterItem: (FilterType) -> Unit = {},
-    hideBottomSheet: () -> Unit = {},
-    onClickFilterSave: (Filter) -> Unit = {},
     toggleSortOrder: () -> Unit = {},
+    showLinkModifyBottomSheet: (Link) -> Unit = {},
+    showLinkDetailBottomSheet: (Link) -> Unit = {},
+    loadNextLinks: () -> Unit = {},
 ) {
     Column(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(PokitTheme.colors.backgroundBase)
     ) {
         Toolbar(
             onClickBack = onClickBack,
@@ -112,16 +194,12 @@ fun SearchScreen(
                     .weight(1f),
                 onToggleSort = toggleSortOrder,
                 useRecentOrder = state.sortRecent,
-                links = linkList
+                onClickLinkKebab = showLinkModifyBottomSheet,
+                onClickLink = showLinkDetailBottomSheet,
+                links = linkList,
+                linkPagingState = linkPagingState,
+                loadNextLinks = loadNextLinks
             )
         }
-
-        FilterBottomSheet(
-            filter = state.filter ?: Filter(),
-            firstShowType = state.firstBottomSheetFilterType,
-            show = state.showFilterBottomSheet,
-            onDismissRequest = hideBottomSheet,
-            onSaveClilck = onClickFilterSave
-        )
     }
 }

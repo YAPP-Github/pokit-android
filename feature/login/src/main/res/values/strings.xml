@@ -9,6 +9,7 @@
     <string name="input_nickname_title">Pokit에 사용할 닉네임을\n입력해주세요</string>
     <string name="input_nickname_hint">내용을 입력해주세요.</string>
     <string name="input_restriction_message">한글, 영어, 숫자로만 입력이 가능합니다.</string>
+    <string name="nickname_already_in_use">사용 중인 닉네임입니다.</string>
     <string name="input_max_length">최대 20자까지 입력 가능합니다.</string>
     <string name="keyword_title">어떤 분야에 관심이 있으세요?</string>
     <string name="select_keyword">최대 3개를 골라주시면,\n관련 콘텐츠를 추천해드릴게요!</string>
