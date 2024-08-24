@@ -35,23 +35,22 @@ class MainActivity : ComponentActivity() {
                 showSplash = false
             }
 
+            val navHostController = rememberNavController()
+            val navBackStackEntry by navHostController.currentBackStackEntryAsState()
+            val currentDestination by remember(navBackStackEntry) { derivedStateOf { navBackStackEntry?.destination } }
+
             PokitTheme {
                 if (showSplash) {
                     SplashScreen()
                 } else {
-                    LoginNavHost()
+                    RootNavHost(navHostController = navHostController)
                 }
-
-                val navHostController = rememberNavController()
-                val navBackStackEntry by navHostController.currentBackStackEntryAsState()
-                val currentDestination by remember(navBackStackEntry) { derivedStateOf { navBackStackEntry?.destination } }
 
                 LaunchedEffect(currentDestination) {
                     currentDestination?.route?.let { route ->
                         // 믹스패널/파베 애널리틱스 화면 이동 로깅용
                     }
                 }
-                RootNavHost(navHostController = navHostController)
             }
         }
     }
