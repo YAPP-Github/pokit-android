@@ -1,5 +1,6 @@
 package pokitmons.pokit.data.repository.auth
 
+import kotlinx.coroutines.flow.Flow
 import pokitmons.pokit.data.datasource.local.TokenManager
 import pokitmons.pokit.data.datasource.remote.auth.AuthDataSource
 import pokitmons.pokit.data.mapper.auth.AuthMapper
@@ -59,5 +60,13 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun setRefreshToken(token: String) {
         tokenManager.saveRefreshToken(token)
+    }
+
+    override suspend fun setAuthType(type: String) {
+        tokenManager.setAuthType(type)
+    }
+
+    override suspend fun getAuthType(): Flow<String> {
+        return tokenManager.getAuthType()
     }
 }

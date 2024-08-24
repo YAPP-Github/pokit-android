@@ -45,7 +45,8 @@ fun RootNavHost(
             val viewModel: LoginViewModel = hiltViewModel()
             LoginScreen(
                 loginViewModel = viewModel,
-                onNavigateToTermsOfServiceScreen = { navHostController.navigate(TermOfService.route) }
+                onNavigateToTermsOfServiceScreen = { navHostController.navigate(TermOfService.route) },
+                onNavigateToHomeScreen = { navHostController.navigate(Home.route) }
             )
         }
 
