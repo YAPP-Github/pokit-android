@@ -3,7 +3,6 @@ package pokitmons.pokit.navigation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -123,7 +122,8 @@ fun RootNavHost(
                 onNavigateToSetting = { navHostController.navigate(Setting.route) },
                 onNavigateToPokitDetail = { navHostController.navigate("${PokitDetail.route}/$it") },
                 onNavigateAddLink = { navHostController.navigate(AddLink.route) },
-                onNavigateAddPokit = { navHostController.navigate(AddPokit.route) }
+                onNavigateAddPokit = { navHostController.navigate(AddPokit.route) },
+                onNavigateToLinkModify = { navHostController.navigate("${AddLink.route}?${AddLink.linkIdArg}=$it") }
             )
         }
 
