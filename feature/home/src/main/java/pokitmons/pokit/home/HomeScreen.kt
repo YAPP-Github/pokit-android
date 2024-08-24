@@ -166,7 +166,7 @@ fun HomeScreen(
                     is ScreenType.Remind -> {
                         RemindScreen(
                             modifier = Modifier.padding(padding),
-                            onNavigateToLinkModify = onNavigateToLinkModify,
+                            onNavigateToLinkModify = onNavigateToLinkModify
                         )
                     }
                 }

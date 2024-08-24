@@ -25,7 +25,7 @@ class RemindViewModel @Inject constructor(
     private val unReadContentsUseCase: UnReadContentsUseCase,
     private val todayContentsUseCase: TodayContentsUseCase,
     private val bookMarkContentsUseCase: BookMarkContentsUseCase,
-    private val deleteLinkUseCase: DeleteLinkUseCase
+    private val deleteLinkUseCase: DeleteLinkUseCase,
 ) : ViewModel() {
 
     init {
@@ -70,8 +70,11 @@ class RemindViewModel @Inject constructor(
                             )
                         _unReadContents.update { contents ->
                             contents.map { content ->
-                                if (content.id == targetLink.id) modifiedLink
-                                else content
+                                if (content.id == targetLink.id) {
+                                    modifiedLink
+                                } else {
+                                    content
+                                }
                             }
                         }
                     }
@@ -88,8 +91,11 @@ class RemindViewModel @Inject constructor(
                             )
                         _todayContents.update { contents ->
                             contents.map { content ->
-                                if (content.id == targetLink.id) modifiedLink
-                                else content
+                                if (content.id == targetLink.id) {
+                                    modifiedLink
+                                } else {
+                                    content
+                                }
                             }
                         }
                     }
@@ -106,8 +112,11 @@ class RemindViewModel @Inject constructor(
                             )
                         _bookmarkContents.update { contents ->
                             contents.map { content ->
-                                if (content.id == targetLink.id) modifiedLink
-                                else content
+                                if (content.id == targetLink.id) {
+                                    modifiedLink
+                                } else {
+                                    content
+                                }
                             }
                         }
                     }

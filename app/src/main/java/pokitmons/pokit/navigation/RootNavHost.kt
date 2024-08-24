@@ -64,7 +64,7 @@ fun RootNavHost(
             val viewModel: AddPokitViewModel = hiltViewModel()
             AddPokitScreenContainer(
                 viewModel = viewModel,
-                onBackPressed = navHostController::popBackStack,
+                onBackPressed = navHostController::popBackStack
             )
         }
 

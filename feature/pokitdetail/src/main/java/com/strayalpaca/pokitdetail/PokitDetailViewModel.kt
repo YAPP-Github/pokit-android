@@ -78,7 +78,12 @@ class PokitDetailViewModel @Inject constructor(
         viewModelScope.launch {
             LinkUpdateEvent.updatedLink.collectLatest { updatedLink ->
                 val targetLink = linkPaging.pagingData.value.find { it.id == updatedLink.id.toString() } ?: return@collectLatest
-                val modifiedLink = targetLink.copy(title = updatedLink.title, imageUrl = updatedLink.thumbnail, domainUrl = updatedLink.domain, createdAt = updatedLink.createdAt)
+                val modifiedLink = targetLink.copy(
+                    title = updatedLink.title,
+                    imageUrl = updatedLink.thumbnail,
+                    domainUrl = updatedLink.domain,
+                    createdAt = updatedLink.createdAt
+                )
                 linkPaging.modifyItem(modifiedLink)
             }
         }
