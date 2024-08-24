@@ -2,6 +2,7 @@ package pokitmons.pokit.data.mapper.link
 
 import pokitmons.pokit.data.model.link.response.GetLinkResponse
 import pokitmons.pokit.data.model.link.response.GetLinksResponse
+import pokitmons.pokit.data.model.link.response.ModifyLinkResponse
 import pokitmons.pokit.domain.model.link.Link
 
 object LinkMapper {
@@ -26,8 +27,8 @@ object LinkMapper {
     fun mapperToLink(linkResponse: GetLinkResponse): Link {
         return Link(
             id = linkResponse.contentId,
-            categoryId = linkResponse.categoryId,
-            categoryName = "",
+            categoryId = linkResponse.category.categoryId,
+            categoryName = linkResponse.category.categoryName,
             data = linkResponse.data,
             domain = "",
             title = linkResponse.title,
@@ -35,6 +36,21 @@ object LinkMapper {
             alertYn = linkResponse.alertYn,
             createdAt = linkResponse.createdAt,
             favorites = linkResponse.favorites
+        )
+    }
+
+    fun mapperToLink(modifyLinkResponse: ModifyLinkResponse): Link {
+        return Link(
+            id = modifyLinkResponse.contentId,
+            categoryId = modifyLinkResponse.categoryId,
+            categoryName = "",
+            data = modifyLinkResponse.data,
+            domain = "",
+            title = modifyLinkResponse.title,
+            memo = modifyLinkResponse.memo,
+            alertYn = modifyLinkResponse.alertYn,
+            createdAt = modifyLinkResponse.createdAt,
+            favorites = modifyLinkResponse.favorites
         )
     }
 }

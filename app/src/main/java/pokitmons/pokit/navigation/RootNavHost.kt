@@ -3,7 +3,6 @@ package pokitmons.pokit.navigation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
@@ -65,13 +64,7 @@ fun RootNavHost(
             val viewModel: AddPokitViewModel = hiltViewModel()
             AddPokitScreenContainer(
                 viewModel = viewModel,
-                onBackPressed = navHostController::popBackStack,
-                onBackWithModifySuccess = { modifiedPokitId ->
-                    navHostController.popBackStack()
-                    navHostController.currentBackStackEntry
-                        ?.savedStateHandle
-                        ?.set("modified_pokit_id", modifiedPokitId)
-                }
+                onBackPressed = navHostController::popBackStack
             )
         }
 
@@ -80,11 +73,6 @@ fun RootNavHost(
             arguments = PokitDetail.arguments
         ) {
             val viewModel: PokitDetailViewModel = hiltViewModel()
-            LaunchedEffect(it) {
-                val pokitId = navHostController.currentBackStackEntry?.savedStateHandle?.get<Int>("modified_pokit_id") ?: return@LaunchedEffect
-                viewModel.getPokit(pokitId)
-            }
-
             PokitDetailScreenContainer(
                 viewModel = viewModel,
                 onBackPressed = navHostController::popBackStack,
@@ -134,7 +122,8 @@ fun RootNavHost(
                 onNavigateToSetting = { navHostController.navigate(Setting.route) },
                 onNavigateToPokitDetail = { navHostController.navigate("${PokitDetail.route}/$it") },
                 onNavigateAddLink = { navHostController.navigate(AddLink.route) },
-                onNavigateAddPokit = { navHostController.navigate(AddPokit.route) }
+                onNavigateAddPokit = { navHostController.navigate(AddPokit.route) },
+                onNavigateToLinkModify = { navHostController.navigate("${AddLink.route}?${AddLink.linkIdArg}=$it") }
             )
         }
 

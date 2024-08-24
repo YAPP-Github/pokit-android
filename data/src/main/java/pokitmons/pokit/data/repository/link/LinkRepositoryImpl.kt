@@ -19,8 +19,8 @@ class LinkRepositoryImpl @Inject constructor(
         size: Int,
         page: Int,
         sort: LinksSort,
-        isRead: Boolean,
-        favorite: Boolean,
+        isRead: Boolean?,
+        favorite: Boolean?,
         startDate: String?,
         endDate: String?,
         categoryIds: List<Int>?,
@@ -101,7 +101,7 @@ class LinkRepositoryImpl @Inject constructor(
         memo: String,
         alertYn: String,
         thumbNail: String,
-    ): PokitResult<Int> {
+    ): PokitResult<Link> {
         return runCatching {
             val modifyLinkRequest = ModifyLinkRequest(
                 data = data,
@@ -112,13 +112,14 @@ class LinkRepositoryImpl @Inject constructor(
                 thumbNail = thumbNail
             )
             val response = dataSource.modifyLink(contentId = linkId, modifyLinkRequest = modifyLinkRequest)
-            PokitResult.Success(response.contentId)
+            val mappedResponse = LinkMapper.mapperToLink(response)
+            PokitResult.Success(mappedResponse)
         }.getOrElse { throwable ->
             parseErrorResult(throwable)
         }
     }
 
-    override suspend fun createLink(data: String, title: String, categoryId: Int, memo: String, alertYn: String, thumbNail: String): PokitResult<Int> {
+    override suspend fun createLink(data: String, title: String, categoryId: Int, memo: String, alertYn: String, thumbNail: String): PokitResult<Link> {
         return runCatching {
             val createLinkRequest = ModifyLinkRequest(
                 data = data,
@@ -129,7 +130,8 @@ class LinkRepositoryImpl @Inject constructor(
                 thumbNail = thumbNail
             )
             val response = dataSource.createLink(createLinkRequest = createLinkRequest)
-            PokitResult.Success(response.contentId)
+            val mappedResponse = LinkMapper.mapperToLink(response)
+            PokitResult.Success(mappedResponse)
         }.getOrElse { throwable ->
             parseErrorResult(throwable)
         }

@@ -15,8 +15,11 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import pokitmons.pokit.core.feature.navigation.args.LinkUpdateEvent
+import pokitmons.pokit.core.feature.navigation.args.PokitUpdateEvent
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.link.LinksSort
 import pokitmons.pokit.domain.usecase.link.GetLinksUseCase
@@ -66,6 +69,37 @@ class PokitDetailViewModel @Inject constructor(
             }
             getPokit(pokitId)
         }
+
+        initLinkUpdateEventDetector()
+        initPokitUpdateEventDetector()
+    }
+
+    private fun initLinkUpdateEventDetector() {
+        viewModelScope.launch {
+            LinkUpdateEvent.updatedLink.collectLatest { updatedLink ->
+                val targetLink = linkPaging.pagingData.value.find { it.id == updatedLink.id.toString() } ?: return@collectLatest
+                val modifiedLink = targetLink.copy(
+                    title = updatedLink.title,
+                    imageUrl = updatedLink.thumbnail,
+                    domainUrl = updatedLink.domain,
+                    createdAt = updatedLink.createdAt
+                )
+                linkPaging.modifyItem(modifiedLink)
+            }
+        }
+    }
+
+    private fun initPokitUpdateEventDetector() {
+        viewModelScope.launch {
+            PokitUpdateEvent.updatedPokit.collectLatest { updatedPokit ->
+                if (state.value.currentPokit?.id != updatedPokit.id.toString()) return@collectLatest
+
+                val pokit = state.value.currentPokit?.copy(
+                    title = updatedPokit.title
+                ) ?: return@collectLatest
+                _state.update { it.copy(currentPokit = pokit) }
+            }
+        }
     }
 
     private suspend fun getLinks(categoryId: Int, size: Int, page: Int, sort: LinksSort): PokitResult<List<DomainLink>> {
@@ -75,12 +109,12 @@ class PokitDetailViewModel @Inject constructor(
             size = size,
             page = page,
             sort = sort,
-            isRead = !currentFilter.notReadChecked,
-            favorite = currentFilter.bookmarkChecked
+            isRead = if (currentFilter.notReadChecked) false else null,
+            favorite = if (currentFilter.bookmarkChecked) true else null
         )
     }
 
-    fun getPokit(pokitId: Int) {
+    private fun getPokit(pokitId: Int) {
         viewModelScope.launch {
             val response = getPokitUseCase.getPokit(pokitId)
             if (response is PokitResult.Success) {
@@ -183,6 +217,7 @@ class PokitDetailViewModel @Inject constructor(
         viewModelScope.launch {
             val response = deletePokitUseCase.deletePokit(pokitId)
             if (response is PokitResult.Success) {
+                PokitUpdateEvent.removePokit(pokitId)
                 // 뒤로가기?
             }
         }

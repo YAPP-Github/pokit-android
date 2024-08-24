@@ -8,6 +8,7 @@ object RemindMapper {
     fun mapperToRemind(remindResponse: RemindResponse): List<RemindResult> {
         return remindResponse.data.map { remind ->
             RemindResult(
+                id = remind.contentId,
                 title = remind.title,
                 domain = remind.domain,
                 createdAt = remind.createdAt,
@@ -21,6 +22,7 @@ object RemindMapper {
     fun mapperToTodayContents(remindResponse: List<Remind>): List<RemindResult> {
         return remindResponse.map { remind ->
             RemindResult(
+                id = remind.contentId,
                 title = remind.title,
                 domain = remind.domain,
                 createdAt = remind.createdAt,
