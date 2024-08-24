@@ -1,6 +1,7 @@
 package pokitmons.pokit.domain.usecase.link
 
 import pokitmons.pokit.domain.commom.PokitResult
+import pokitmons.pokit.domain.model.link.Link
 import pokitmons.pokit.domain.repository.link.LinkRepository
 import javax.inject.Inject
 
@@ -15,7 +16,7 @@ class ModifyLinkUseCase @Inject constructor(
         memo: String,
         alertYn: String,
         thumbNail: String,
-    ): PokitResult<Int> {
+    ): PokitResult<Link> {
         return repository.modifyLink(
             linkId = linkId,
             data = data,

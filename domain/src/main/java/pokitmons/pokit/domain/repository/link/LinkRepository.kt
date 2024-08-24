@@ -42,7 +42,7 @@ interface LinkRepository {
         memo: String,
         alertYn: String,
         thumbNail: String,
-    ): PokitResult<Int>
+    ): PokitResult<Link>
 
     suspend fun createLink(
         data: String,
@@ -51,7 +51,7 @@ interface LinkRepository {
         memo: String,
         alertYn: String,
         thumbNail: String,
-    ): PokitResult<Int>
+    ): PokitResult<Link>
 
     suspend fun setBookmark(linkId: Int, bookmarked: Boolean): PokitResult<Unit>
 
