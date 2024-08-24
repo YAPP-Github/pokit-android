@@ -1,10 +1,12 @@
 package pokitmons.pokit.navigation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -31,7 +33,11 @@ import pokitmons.pokit.settings.setting.SettingsScreen
 fun RootNavHost(
     navHostController: NavHostController,
 ) {
-    NavHost(navController = navHostController, startDestination = Home.route) {
+    NavHost(
+        modifier = Modifier.background(color = Color.White),
+        navController = navHostController,
+        startDestination = Home.route
+    ) {
         composable(Login.route) {
             val viewModel: LoginViewModel = hiltViewModel()
             LoginScreen(
