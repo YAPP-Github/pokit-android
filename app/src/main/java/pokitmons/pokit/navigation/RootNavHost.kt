@@ -144,7 +144,14 @@ fun RootNavHost(
             val viewModel: SettingViewModel = hiltViewModel()
             SettingsScreen(
                 settingViewModel = viewModel,
-                onNavigateToEditNickname = { navHostController.navigate(EditNickname.route) }
+                onNavigateToEditNickname = { navHostController.navigate(EditNickname.route) },
+                onNavigateToLogin = {
+                    navHostController.navigate(Login.route) {
+                        popUpTo(navHostController.graph.startDestinationId) {
+                            inclusive = true
+                        }
+                    }
+                }
             )
         }
 

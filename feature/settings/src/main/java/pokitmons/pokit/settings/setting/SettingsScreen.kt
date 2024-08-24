@@ -8,12 +8,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButtonBottomSheetContent
+import pokitmons.pokit.settings.SettingState
 import pokitmons.pokit.settings.SettingViewModel
 import pokitmons.pokit.settings.R.string as StringResource
 
@@ -21,10 +24,16 @@ import pokitmons.pokit.settings.R.string as StringResource
 fun SettingsScreen(
     settingViewModel: SettingViewModel,
     onNavigateToEditNickname: () -> Unit,
+    onNavigateToLogin: () -> Unit
 ) {
-//    settingViewModel.changeBottomSheetHideState()
-
     val context = LocalContext.current
+
+    val withdrawState by settingViewModel.withdrawState.collectAsState()
+
+    when (withdrawState) {
+        is SettingState.Init -> Unit
+        is SettingState.Withdraw -> onNavigateToLogin()
+    }
 
     Column(modifier = Modifier.fillMaxWidth()) {
         SettingHeader()
@@ -55,10 +64,10 @@ fun SettingsScreen(
             DividerItem()
 
             SettingItem(title = stringResource(StringResource.logout)) {
-                settingViewModel.changeBottomSheetHideState()
+                settingViewModel.changeBottomSheetHideState(true)
             }
             SettingItem(title = stringResource(StringResource.delete_account)) {
-                settingViewModel.changeBottomSheetHideState()
+                settingViewModel.changeBottomSheetHideState(true)
             }
         }
     }
@@ -72,8 +81,8 @@ fun SettingsScreen(
             subText = stringResource(id = StringResource.delete_account_sub),
             title = stringResource(id = StringResource.delete_account_title),
             rightButtonText = stringResource(id = StringResource.start_delete_account),
-            onClickLeftButton = { settingViewModel.changeBottomSheetHideState() },
-            onClickRightButton = {}
+            onClickLeftButton = { settingViewModel.changeBottomSheetHideState(false) },
+            onClickRightButton = { settingViewModel.withdraw() }
         )
     }
 }

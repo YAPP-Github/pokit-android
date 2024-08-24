@@ -15,6 +15,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.usecase.auth.InputNicknameUseCase
 import pokitmons.pokit.domain.usecase.auth.SNSLoginUseCase
@@ -57,7 +58,7 @@ class LoginViewModel @Inject constructor(
     private val _categories = mutableStateListOf<CategoryState>()
     val categories: List<CategoryState> get() = _categories
 
-    private var authType = ""
+    private var authType = "구글"
 
     fun inputText(inputNickname: String) {
         _inputNicknameState.update { duplicateNicknameState ->
@@ -66,6 +67,9 @@ class LoginViewModel @Inject constructor(
     }
 
     fun snsLogin(authPlatform: String, idToken: String) {
+        authType = authPlatform
+        Log.d("!! : ", authType)
+
         viewModelScope.launch {
             val loginResult = loginUseCase.snsLogin(
                 authPlatform = authPlatform,
@@ -74,7 +78,6 @@ class LoginViewModel @Inject constructor(
 
             when (loginResult) {
                 is PokitResult.Success -> {
-                    authType = authPlatform
                     when (loginResult.result.isRegistered) {
                         true -> {
                             tokenUseCase.apply {
@@ -112,6 +115,7 @@ class LoginViewModel @Inject constructor(
                 )
             ) {
                 is PokitResult.Success -> {
+                    Log.d("!!: ", authType)
                     tokenUseCase.setAuthType(authType)
                     _signUpState.emit(SignUpState.SignUp)
                 }

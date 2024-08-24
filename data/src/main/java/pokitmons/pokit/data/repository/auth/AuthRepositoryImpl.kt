@@ -1,11 +1,14 @@
 package pokitmons.pokit.data.repository.auth
 
+import android.util.Log
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import pokitmons.pokit.data.datasource.local.TokenManager
 import pokitmons.pokit.data.datasource.remote.auth.AuthDataSource
 import pokitmons.pokit.data.mapper.auth.AuthMapper
 import pokitmons.pokit.data.model.auth.request.SNSLoginRequest
 import pokitmons.pokit.data.model.auth.request.SignUpRequest
+import pokitmons.pokit.data.model.auth.request.WithdrawRequest
 import pokitmons.pokit.data.model.auth.response.DuplicateNicknameResponse
 import pokitmons.pokit.data.model.auth.response.SNSLoginResponse
 import pokitmons.pokit.data.model.auth.response.SignUpResponse
@@ -50,6 +53,19 @@ class AuthRepositoryImpl @Inject constructor(
             val signUpMapper: SignUpResult = AuthMapper.mapperToSignUp(signUpResponse)
             PokitResult.Success(signUpMapper)
         }.getOrElse { throwable ->
+            parseErrorResult(throwable)
+        }
+    }
+
+    override suspend fun withdraw(): PokitResult<Unit> {
+        return runCatching {
+            remoteAuthDataSource.withdraw(WithdrawRequest(
+                refreshToken = "",
+                authPlatform = tokenManager.getAuthType().first()
+            ))
+            PokitResult.Success(Unit)
+        }.getOrElse { throwable ->
+            Log.d("!! : ", throwable.toString())
             parseErrorResult(throwable)
         }
     }
