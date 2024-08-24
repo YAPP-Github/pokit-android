@@ -1,5 +1,6 @@
 package pokitmons.pokit.data.repository.auth
 
+import pokitmons.pokit.data.datasource.local.TokenManager
 import pokitmons.pokit.data.datasource.remote.auth.AuthDataSource
 import pokitmons.pokit.data.mapper.auth.AuthMapper
 import pokitmons.pokit.data.model.auth.request.SNSLoginRequest
@@ -17,6 +18,7 @@ import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val remoteAuthDataSource: AuthDataSource,
+    private val tokenManager: TokenManager,
 ) : AuthRepository {
     override suspend fun snsLogin(
         authPlatform: String,
@@ -49,5 +51,13 @@ class AuthRepositoryImpl @Inject constructor(
         }.getOrElse { throwable ->
             parseErrorResult(throwable)
         }
+    }
+
+    override suspend fun setAccessToken(token: String) {
+        tokenManager.saveAccessToken(token)
+    }
+
+    override suspend fun setRefreshToken(token: String) {
+        tokenManager.saveRefreshToken(token)
     }
 }

@@ -1,5 +1,7 @@
 package pokitmons.pokit.keyword
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,12 +17,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.LoginViewModel
+import pokitmons.pokit.SignUpState
 import pokitmons.pokit.core.ui.components.atom.button.PokitButton
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.components.atom.chip.PokitChip
@@ -33,12 +39,24 @@ import pokitmons.pokit.login.R as Login
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun KeywordScreen(
-    loginViewModel: LoginViewModel,
+    viewModel: LoginViewModel,
     onNavigateToSignUpScreen: () -> Unit,
-    popBackStack: () -> Unit,
+    onBackPressed: () -> Unit,
 ) {
     LaunchedEffect(Unit) {
-        loginViewModel.setCategories()
+        viewModel.setCategories()
+    }
+
+    val context: Context = LocalContext.current
+
+    val signUpState by viewModel.signUpState.collectAsState()
+
+    when (signUpState) {
+        is SignUpState.Init -> Unit
+        is SignUpState.SignUp -> onNavigateToSignUpScreen()
+        is SignUpState.Failed -> {
+            Toast.makeText(context, (signUpState as SignUpState.Failed).error.toString(), Toast.LENGTH_SHORT).show()
+        }
     }
 
     Box(
@@ -49,7 +67,7 @@ fun KeywordScreen(
     ) {
         Column {
             Icon(
-                modifier = Modifier.clickable { popBackStack() },
+                modifier = Modifier.clickable { onBackPressed() },
                 painter = painterResource(id = Ui.drawable.icon_24_arrow_left),
                 contentDescription = null
             )
@@ -74,7 +92,7 @@ fun KeywordScreen(
                 verticalArrangement = Arrangement.spacedBy(16.dp),
                 maxItemsInEachRow = 3
             ) {
-                loginViewModel.categories.forEachIndexed { index, category ->
+                viewModel.categories.forEachIndexed { index, category ->
                     PokitChip(
                         state = if (category.isSelected.value) PokitChipState.FILLED else PokitChipState.DEFAULT,
                         data = null,
@@ -82,7 +100,7 @@ fun KeywordScreen(
                         text = category.name,
                         removeIconPosition = null,
                         onClickRemove = { },
-                        onClickItem = { loginViewModel.onClickCategoryItem(category) }
+                        onClickItem = { viewModel.onClickCategoryItem(category) }
                     )
                 }
             }
@@ -95,8 +113,8 @@ fun KeywordScreen(
             text = stringResource(id = pokitmons.pokit.login.R.string.next),
             icon = null,
             size = PokitButtonSize.LARGE,
-            onClick = { loginViewModel.signUp() },
-            enable = loginViewModel.categories.count { it.isSelected.value } >= 1
+            onClick = { viewModel.signUp() },
+            enable = viewModel.categories.count { it.isSelected.value } >= 1
         )
     }
 }

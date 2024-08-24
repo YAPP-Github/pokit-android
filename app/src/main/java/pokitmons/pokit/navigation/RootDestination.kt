@@ -7,6 +7,22 @@ object Login {
     val route: String = "login"
 }
 
+object TermOfService {
+    val route: String = "termOfService"
+}
+
+object InputNickname {
+    val route: String = "inputNickname"
+}
+
+object SelectKeyword {
+    val route: String = "selectKeyword"
+}
+
+object SignUpSuccess {
+    val route: String = "signupSuccess"
+}
+
 object Home {
     val route: String = "home"
 }

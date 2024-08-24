@@ -72,8 +72,7 @@ dependencies {
     implementation(libs.logging.interceptor)
 
     // datastore
-    implementation(libs.androidx.datastore.core.android)
-    implementation(libs.androidx.datastore.preferences.core.jvm)
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     implementation(project(":domain"))
 

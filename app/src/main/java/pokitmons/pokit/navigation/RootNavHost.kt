@@ -1,9 +1,11 @@
 package pokitmons.pokit.navigation
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -19,23 +21,62 @@ import pokitmons.pokit.alarm.AlarmScreenContainer
 import pokitmons.pokit.alarm.AlarmViewModel
 import pokitmons.pokit.home.HomeScreen
 import pokitmons.pokit.home.pokit.PokitViewModel
+import pokitmons.pokit.keyword.KeywordScreen
 import pokitmons.pokit.login.LoginScreen
+import pokitmons.pokit.nickname.InputNicknameScreen
 import pokitmons.pokit.search.SearchScreenContainer
 import pokitmons.pokit.search.SearchViewModel
 import pokitmons.pokit.settings.SettingViewModel
 import pokitmons.pokit.settings.nickname.EditNicknameScreen
 import pokitmons.pokit.settings.setting.SettingsScreen
+import pokitmons.pokit.success.SignUpSuccessScreen
+import pokitmons.pokit.terms.TermsOfServiceScreen
 
 @Composable
 fun RootNavHost(
     navHostController: NavHostController,
 ) {
-    NavHost(navController = navHostController, startDestination = Home.route) {
+    NavHost(
+        modifier = Modifier.background(color = Color.White),
+        navController = navHostController,
+        startDestination = Login.route
+    ) {
         composable(Login.route) {
             val viewModel: LoginViewModel = hiltViewModel()
             LoginScreen(
                 loginViewModel = viewModel,
-                onNavigateToTermsOfServiceScreen = {}
+                onNavigateToTermsOfServiceScreen = { navHostController.navigate(TermOfService.route) }
+            )
+        }
+
+        composable(TermOfService.route) {
+            TermsOfServiceScreen(
+                onNavigateToInputNicknameScreen = { navHostController.navigate(InputNickname.route) },
+                onBackPressed = navHostController::popBackStack
+            )
+        }
+
+        composable(InputNickname.route) {
+            val viewModel: LoginViewModel = hiltViewModel()
+            InputNicknameScreen(
+                viewModel = viewModel,
+                onNavigateToKeywordScreen = { navHostController.navigate(SelectKeyword.route) },
+                onBackPressed = navHostController::popBackStack
+            )
+        }
+
+        composable(SelectKeyword.route) {
+            val viewModel: LoginViewModel = hiltViewModel()
+            KeywordScreen(
+                viewModel = viewModel,
+                onNavigateToSignUpScreen = { navHostController.navigate(SignUpSuccess.route) },
+                onBackPressed = navHostController::popBackStack
+            )
+        }
+
+        composable(SignUpSuccess.route) {
+            SignUpSuccessScreen(
+                onNavigateToMainScreen = { navHostController.navigate(Home.route) }
             )
         }
 
