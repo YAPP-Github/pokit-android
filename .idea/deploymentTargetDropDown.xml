@@ -8,7 +8,13 @@
       <entry key="feature">
         <State />
       </entry>
+      <entry key="feature.home">
+        <State />
+      </entry>
       <entry key="feature.login">
+        <State />
+      </entry>
+      <entry key="feature.main">
         <State />
       </entry>
     </value>
