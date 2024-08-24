@@ -59,10 +59,12 @@ class AuthRepositoryImpl @Inject constructor(
 
     override suspend fun withdraw(): PokitResult<Unit> {
         return runCatching {
-            remoteAuthDataSource.withdraw(WithdrawRequest(
-                refreshToken = "",
-                authPlatform = tokenManager.getAuthType().first()
-            ))
+            remoteAuthDataSource.withdraw(
+                WithdrawRequest(
+                    refreshToken = "",
+                    authPlatform = tokenManager.getAuthType().first()
+                )
+            )
             PokitResult.Success(Unit)
         }.getOrElse { throwable ->
             Log.d("!! : ", throwable.toString())

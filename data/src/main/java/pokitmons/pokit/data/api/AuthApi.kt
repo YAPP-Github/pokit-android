@@ -38,6 +38,6 @@ interface AuthApi {
 
     @PUT("auth/withdraw")
     suspend fun withdraw(
-        @Body withdrawRequest: WithdrawRequest
+        @Body withdrawRequest: WithdrawRequest,
     ): Response<Unit>
 }

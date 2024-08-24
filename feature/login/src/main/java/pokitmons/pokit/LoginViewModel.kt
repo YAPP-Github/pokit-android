@@ -15,7 +15,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.usecase.auth.InputNicknameUseCase
 import pokitmons.pokit.domain.usecase.auth.SNSLoginUseCase

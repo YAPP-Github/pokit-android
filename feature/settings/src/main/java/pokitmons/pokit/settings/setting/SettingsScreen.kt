@@ -24,7 +24,7 @@ import pokitmons.pokit.settings.R.string as StringResource
 fun SettingsScreen(
     settingViewModel: SettingViewModel,
     onNavigateToEditNickname: () -> Unit,
-    onNavigateToLogin: () -> Unit
+    onNavigateToLogin: () -> Unit,
 ) {
     val context = LocalContext.current
 

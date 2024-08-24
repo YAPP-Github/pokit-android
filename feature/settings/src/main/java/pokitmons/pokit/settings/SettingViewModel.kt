@@ -26,7 +26,7 @@ class SettingViewModel @Inject constructor(
     private val nicknameUseCase: InputNicknameUseCase,
     private val editNicknameUseCase: EditNicknameUseCase,
     private val withdrawUseCase: WithdrawUseCase,
-    private val tokenUseCase: TokenUseCase
+    private val tokenUseCase: TokenUseCase,
 ) : ViewModel() {
     private var duplicateNicknameJob: Job? = null
 
@@ -72,7 +72,6 @@ class SettingViewModel @Inject constructor(
         viewModelScope.launch {
             when (val editNicknameResult = editNicknameUseCase.editNickname(_inputNicknameState.value.nickname)) {
                 is PokitResult.Success -> {
-
                 }
 
                 is PokitResult.Error -> {
@@ -92,7 +91,6 @@ class SettingViewModel @Inject constructor(
                 }
 
                 is PokitResult.Error -> {
-
                 }
             }
         }
