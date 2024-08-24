@@ -212,6 +212,7 @@ class PokitDetailViewModel @Inject constructor(
         viewModelScope.launch {
             val response = deletePokitUseCase.deletePokit(pokitId)
             if (response is PokitResult.Success) {
+                PokitUpdateEvent.removePokit(pokitId)
                 // 뒤로가기?
             }
         }

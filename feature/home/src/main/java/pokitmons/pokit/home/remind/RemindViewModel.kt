@@ -31,6 +31,7 @@ class RemindViewModel @Inject constructor(
     init {
         loadContents()
         initLinkUpdateEventDetector()
+        initLinkRemoveEventDetector()
     }
 
     private var _unReadContents: MutableStateFlow<List<RemindResult>> = MutableStateFlow(emptyList())
@@ -114,6 +115,18 @@ class RemindViewModel @Inject constructor(
         }
     }
 
+    private fun initLinkRemoveEventDetector() {
+        viewModelScope.launch {
+            LinkUpdateEvent.removedLink.collectLatest { removedLinkId ->
+                unReadContents.value.filter { it.id != removedLinkId }
+
+                todayContents.value.filter { it.id != removedLinkId }
+
+                bookmarkContents.value.filter { it.id != removedLinkId }
+            }
+        }
+    }
+
     fun loadContents() {
         viewModelScope.launch {
             when (val response = unReadContentsUseCase.getUnreadContents()) {
@@ -184,6 +197,9 @@ class RemindViewModel @Inject constructor(
         val currentSelectedLinkId = currentSelectedLink.value?.id?.toIntOrNull() ?: return
         viewModelScope.launch {
             val response = deleteLinkUseCase.deleteLink(currentSelectedLinkId)
+            if (response is PokitResult.Success) {
+                LinkUpdateEvent.removeSuccess(response.result)
+            }
         }
     }
 }

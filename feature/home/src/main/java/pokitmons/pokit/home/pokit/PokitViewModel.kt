@@ -33,6 +33,7 @@ class PokitViewModel @Inject constructor(
     init {
         initLinkUpdateEventDetector()
         initPokitUpdateEventDetector()
+        initPokitRemoveEventDetector()
     }
 
     private fun initLinkUpdateEventDetector() {
@@ -52,6 +53,15 @@ class PokitViewModel @Inject constructor(
                 val pokitImage = DomainPokit.Image(id = updatedPokit.imageId, url = updatedPokit.imageUrl)
                 val modifiedPokit = targetPokit.copy(title = updatedPokit.title, image = pokitImage)
                 pokitPaging.modifyItem(modifiedPokit)
+            }
+        }
+    }
+
+    private fun initPokitRemoveEventDetector() {
+        viewModelScope.launch {
+            PokitUpdateEvent.removedPokitId.collectLatest { removedPokitId ->
+                val targetPokit = pokitPaging.pagingData.value.find { it.id == removedPokitId.toString() } ?: return@collectLatest
+                pokitPaging.deleteItem(targetPokit)
             }
         }
     }

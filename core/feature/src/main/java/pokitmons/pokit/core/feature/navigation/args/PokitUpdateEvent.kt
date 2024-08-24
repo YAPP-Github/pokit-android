@@ -10,9 +10,18 @@ object PokitUpdateEvent {
     private val _updatedPokit = MutableSharedFlow<PokitArg>()
     val updatedPokit = _updatedPokit.asSharedFlow()
 
+    private val _removedPokitId = MutableSharedFlow<Int>()
+    val removedPokitId = _removedPokitId.asSharedFlow()
+
     fun updatePokit(pokitArg: PokitArg) {
         CoroutineScope(Dispatchers.Default).launch {
             _updatedPokit.emit(pokitArg)
+        }
+    }
+
+    fun removePokit(pokitId: Int) {
+        CoroutineScope(Dispatchers.Default).launch {
+            _removedPokitId.emit(pokitId)
         }
     }
 }

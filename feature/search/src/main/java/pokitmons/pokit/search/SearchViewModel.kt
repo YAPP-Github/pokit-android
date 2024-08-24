@@ -48,6 +48,7 @@ class SearchViewModel @Inject constructor(
 
     init {
         initLinkUpdateEventDetector()
+        initLinkRemoveEventDetector()
     }
 
     private val linkPaging = LinkPaging(
@@ -95,6 +96,15 @@ class SearchViewModel @Inject constructor(
                 val targetLink = linkPaging.pagingData.value.find { it.id == updatedLink.id.toString() } ?: return@collectLatest
                 val modifiedLink = targetLink.copy(title = updatedLink.title, imageUrl = updatedLink.thumbnail, domainUrl = updatedLink.domain)
                 linkPaging.modifyItem(modifiedLink)
+            }
+        }
+    }
+
+    private fun initLinkRemoveEventDetector() {
+        viewModelScope.launch {
+            LinkUpdateEvent.removedLink.collectLatest { removedLinkId ->
+                val targetItem = linkPaging.pagingData.value.find { it.id == removedLinkId.toString() } ?: return@collectLatest
+                linkPaging.deleteItem(targetItem)
             }
         }
     }
