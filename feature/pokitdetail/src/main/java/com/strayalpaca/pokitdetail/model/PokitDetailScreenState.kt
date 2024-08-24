@@ -1,7 +1,7 @@
 package com.strayalpaca.pokitdetail.model
 
 data class PokitDetailScreenState(
-    val currentPokit: Pokit = Pokit(),
+    val currentPokit: Pokit? = null,
     val currentFilter: Filter = Filter(),
     val currentLink: Link? = null,
     val linkBottomSheetType: BottomSheetType? = null,

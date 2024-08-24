@@ -102,7 +102,7 @@ fun LoginScreen(
                 loginType = PokitLoginButtonType.GOOGLE,
                 text = stringResource(id = R.string.google_login),
                 onClick = {
-//                    onNavigateToTermsOfServiceScreen()
+                    onNavigateToTermsOfServiceScreen()
                     googleLogin(
                         snsLogin = loginViewModel::snsLogin,
                         coroutineScope = coroutineScope,

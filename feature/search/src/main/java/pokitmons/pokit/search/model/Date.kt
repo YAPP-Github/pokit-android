@@ -12,4 +12,8 @@ data class Date(
     override fun toString(): String {
         return "${year % 1000}.$month.$day"
     }
+
+    fun toDateString(): String {
+        return "%d-%02d-%02d".format(year, month, day)
+    }
 }

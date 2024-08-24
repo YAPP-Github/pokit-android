@@ -1,13 +1,17 @@
 package com.strayalpaca.addlink
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.strayalpaca.addlink.model.AddLinkScreenSideEffect
 import com.strayalpaca.addlink.model.AddLinkScreenState
+import com.strayalpaca.addlink.model.Link
 import com.strayalpaca.addlink.model.Pokit
 import com.strayalpaca.addlink.model.ScreenStep
-import com.strayalpaca.addlink.model.sampleLink
-import com.strayalpaca.addlink.model.samplePokitList
+import com.strayalpaca.addlink.model.ToastMessageEvent
+import com.strayalpaca.addlink.paging.PokitPaging
+import com.strayalpaca.addlink.paging.SimplePagingState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
@@ -22,9 +26,34 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import pokitmons.pokit.domain.commom.PokitResult
+import pokitmons.pokit.domain.usecase.link.CreateLinkUseCase
+import pokitmons.pokit.domain.usecase.link.GetLinkCardUseCase
+import pokitmons.pokit.domain.usecase.link.GetLinkUseCase
+import pokitmons.pokit.domain.usecase.link.ModifyLinkUseCase
+import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
+import javax.inject.Inject
 
-class AddLinkViewModel : ContainerHost<AddLinkScreenState, AddLinkScreenSideEffect>, ViewModel() {
+@HiltViewModel
+class AddLinkViewModel @Inject constructor(
+    private val getLinkUseCase: GetLinkUseCase,
+    private val getLinkCardUseCase: GetLinkCardUseCase,
+    private val createLinkUseCase: CreateLinkUseCase,
+    private val modifyLinkUseCase: ModifyLinkUseCase,
+    getPokitsUseCase: GetPokitsUseCase,
+    savedStateHandle: SavedStateHandle,
+) : ContainerHost<AddLinkScreenState, AddLinkScreenSideEffect>, ViewModel() {
     override val container: Container<AddLinkScreenState, AddLinkScreenSideEffect> = container(AddLinkScreenState())
+
+    private val pokitPaging = PokitPaging(
+        getPokits = getPokitsUseCase,
+        perPage = 10,
+        coroutineScope = viewModelScope,
+        initPage = 0
+    )
+
+    val pokitList: StateFlow<List<Pokit>> = pokitPaging.pagingData
+    val pokitListState: StateFlow<SimplePagingState> = pokitPaging.pagingState
 
     private val _linkUrl = MutableStateFlow("")
     val linkUrl: StateFlow<String> = _linkUrl.asStateFlow()
@@ -35,38 +64,36 @@ class AddLinkViewModel : ContainerHost<AddLinkScreenState, AddLinkScreenSideEffe
     private val _memo = MutableStateFlow("")
     val memo: StateFlow<String> = _memo.asStateFlow()
 
-    private val _pokitName = MutableStateFlow("")
-    val pokitName: StateFlow<String> = _pokitName.asStateFlow()
+    val currentLinkId: Int? = savedStateHandle.get<String>("link_id")?.toIntOrNull()
 
     init {
-        loadPokitList()
+        currentLinkId?.let { linkId ->
+            loadPokitLink(linkId)
+        }
     }
 
     private var inputLinkJob: Job? = null
 
-    private fun loadPokitList() = intent {
+    private fun loadPokitLink(linkId: Int) = intent {
         viewModelScope.launch(Dispatchers.IO) {
             reduce { state.copy(step = ScreenStep.LOADING) }
-            // todo 포킷 목록 가져오기 api 연결
-            delay(1000L)
-            reduce {
-                state.copy(
-                    step = ScreenStep.IDLE,
-                    pokitList = samplePokitList
-                )
-            }
-        }
-    }
-
-    fun loadPokitLink(linkId: String) = intent {
-        viewModelScope.launch(Dispatchers.IO) {
-            reduce { state.copy(step = ScreenStep.LOADING) }
-            // todo 포킷 링크 가져오기 api 연결
-            delay(1000L)
-            reduce {
-                state.copy(
-                    step = ScreenStep.IDLE
-                )
+            val response = getLinkUseCase.getLink(linkId)
+            if (response is PokitResult.Success) {
+                val responseResult = response.result
+                reduce {
+                    state.copy(
+                        link = Link.fromDomainLink(responseResult),
+                        useRemind = responseResult.alertYn == "Y",
+                        currentPokit = Pokit(
+                            title = responseResult.categoryName,
+                            id = responseResult.categoryId.toString(),
+                            count = 0
+                        ),
+                        step = ScreenStep.IDLE
+                    )
+                }
+            } else {
+                postSideEffect(AddLinkScreenSideEffect.OnNavigationBack)
             }
         }
     }
@@ -78,10 +105,14 @@ class AddLinkViewModel : ContainerHost<AddLinkScreenState, AddLinkScreenSideEffe
             inputLinkJob?.cancel()
             inputLinkJob = viewModelScope.launch(Dispatchers.IO) {
                 delay(1000L)
-                reduce { state.copy(step = ScreenStep.LINK_LOADING) }
-                // todo 링크 카드 정보 가져오기 api 연결
-                delay(1000L)
-                reduce { state.copy(step = ScreenStep.IDLE, link = sampleLink.copy(url = linkUrl)) }
+                reduce { state.copy(step = ScreenStep.LINK_LOADING, link = null) }
+
+                val response = getLinkCardUseCase.getLinkCard(linkUrl)
+                if (response is PokitResult.Success) {
+                    reduce { state.copy(step = ScreenStep.IDLE, link = Link.fromDomainLinkCard(response.result)) }
+                } else {
+                    reduce { state.copy(step = ScreenStep.IDLE) }
+                }
             }
         }
     }
@@ -92,14 +123,6 @@ class AddLinkViewModel : ContainerHost<AddLinkScreenState, AddLinkScreenSideEffe
 
     fun inputMemo(memo: String) {
         _memo.update { memo }
-    }
-
-    fun showAddPokitBottomSheet() = intent {
-        reduce { state.copy(step = ScreenStep.POKIT_ADD) }
-    }
-
-    fun hideAddPokitBottomSheet() = intent {
-        reduce { state.copy(step = ScreenStep.IDLE) }
     }
 
     fun showSelectPokitBottomSheet() = intent {
@@ -129,30 +152,61 @@ class AddLinkViewModel : ContainerHost<AddLinkScreenState, AddLinkScreenSideEffe
         }
     }
 
-    fun inputNewPokitName(pokitName: String) {
-        _pokitName.update { pokitName }
-    }
-
-    fun savePokit() = intent {
-        viewModelScope.launch(Dispatchers.IO) {
-            reduce { state.copy(step = ScreenStep.POKIT_ADD_LOADING) }
-            // todo 포킷 저장 useCase 연결
-            delay(1000L)
-            reduce { state.copy(step = ScreenStep.IDLE) }
-        }
-    }
-
     fun saveLink() = intent {
         viewModelScope.launch(Dispatchers.IO) {
+            val currentState = state.copy()
+            if (!canSave(currentState)) return@launch
+
             reduce { state.copy(step = ScreenStep.LINK_LOADING) }
-            // todo 링크 저장 useCase 연결
-            delay(1000L)
-            reduce { state.copy(step = ScreenStep.IDLE) }
-            postSideEffect(AddLinkScreenSideEffect.AddLinkSuccess)
+
+            val isModify = currentLinkId != null
+            val response = if (isModify) {
+                modifyLinkUseCase.modifyLink(
+                    linkId = currentLinkId!!,
+                    data = currentState.link!!.url,
+                    title = currentState.link.title,
+                    categoryId = currentState.currentPokit!!.id.toInt(),
+                    memo = memo.value,
+                    alertYn = if (currentState.useRemind) "Y" else "n",
+                    thumbNail = currentState.link.imageUrl ?: ""
+                )
+            } else {
+                createLinkUseCase.createLink(
+                    data = currentState.link!!.url,
+                    title = title.value,
+                    categoryId = currentState.currentPokit!!.id.toInt(),
+                    memo = memo.value,
+                    alertYn = if (currentState.useRemind) "Y" else "n",
+                    thumbNail = currentState.link.imageUrl ?: ""
+                )
+            }
+            if (response is PokitResult.Success) {
+                reduce { state.copy(step = ScreenStep.IDLE) }
+                postSideEffect(AddLinkScreenSideEffect.AddLinkSuccess)
+            } else {
+                reduce { state.copy(step = ScreenStep.IDLE) }
+                postSideEffect(AddLinkScreenSideEffect.ToastMessage(ToastMessageEvent.NETWORK_ERROR))
+            }
         }
+    }
+
+    private fun canSave(state: AddLinkScreenState): Boolean {
+        return (state.currentPokit != null && state.link != null)
     }
 
     fun setRemind(remind: Boolean) = intent {
         reduce { state.copy(useRemind = remind) }
+    }
+
+    fun loadNextPokits() {
+        viewModelScope.launch {
+            pokitPaging.load()
+        }
+    }
+
+    fun refreshPokits() {
+        viewModelScope.launch {
+            pokitPaging.refresh()
+        }
     }
 }

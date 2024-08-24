@@ -49,6 +49,11 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    // room
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
+    kapt(libs.room.compiler)
+
     // kotest
     testImplementation(libs.kotest.runner.junit5)
     testImplementation(libs.kotlin.reflect)
@@ -71,4 +76,11 @@ dependencies {
     implementation(libs.androidx.datastore.preferences.core.jvm)
 
     implementation(project(":domain"))
+
+    // jsoup
+    implementation(libs.jsoup)
+
+    // mockk
+    testImplementation(libs.mockk)
+    androidTestImplementation(libs.mockk.android)
 }

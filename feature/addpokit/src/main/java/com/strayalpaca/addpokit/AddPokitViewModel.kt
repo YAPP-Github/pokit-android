@@ -1,15 +1,18 @@
 package com.strayalpaca.addpokit
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.strayalpaca.addpokit.const.POKIT_NAME_MAX_LENGTH
 import com.strayalpaca.addpokit.model.AddPokitScreenState
 import com.strayalpaca.addpokit.model.AddPokitScreenStep
 import com.strayalpaca.addpokit.model.AddPokitSideEffect
-import com.strayalpaca.addpokit.model.PokitInputErrorMessage
-import com.strayalpaca.addpokit.model.PokitProfile
-import com.strayalpaca.addpokit.model.samplePokitList
-import kotlinx.coroutines.delay
+import com.strayalpaca.addpokit.model.Pokit
+import com.strayalpaca.addpokit.model.PokitImage
+import com.strayalpaca.addpokit.paging.PokitPaging
+import com.strayalpaca.addpokit.paging.SimplePagingState
+import com.strayalpaca.addpokit.utils.ErrorMessageProvider
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -21,34 +24,89 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import pokitmons.pokit.domain.commom.PokitResult
+import pokitmons.pokit.domain.usecase.pokit.CreatePokitUseCase
+import pokitmons.pokit.domain.usecase.pokit.GetPokitImagesUseCase
+import pokitmons.pokit.domain.usecase.pokit.GetPokitUseCase
+import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
+import pokitmons.pokit.domain.usecase.pokit.ModifyPokitUseCase
+import javax.inject.Inject
 
-class AddPokitViewModel : ContainerHost<AddPokitScreenState, AddPokitSideEffect>, ViewModel() {
+@HiltViewModel
+class AddPokitViewModel @Inject constructor(
+    private val getPokitImagesUseCase: GetPokitImagesUseCase,
+    private val getPokitsUseCase: GetPokitsUseCase,
+    private val getPokitUseCase: GetPokitUseCase,
+    private val createPokitUseCase: CreatePokitUseCase,
+    private val modifyPokitUseCase: ModifyPokitUseCase,
+    private val errorMessageProvider: ErrorMessageProvider,
+    savedStateHandle: SavedStateHandle,
+) : ContainerHost<AddPokitScreenState, AddPokitSideEffect>, ViewModel() {
     override val container: Container<AddPokitScreenState, AddPokitSideEffect> = container(AddPokitScreenState())
+
+    private val pokitId = savedStateHandle.get<String>("pokit_id")?.toIntOrNull()
+
+    private val pokitPaging = PokitPaging(
+        getPokits = getPokitsUseCase,
+        perPage = 10,
+        coroutineScope = viewModelScope,
+        initPage = 0
+    )
 
     private val _pokitName = MutableStateFlow("")
     val pokitName: StateFlow<String> = _pokitName.asStateFlow()
 
+    val pokitList: StateFlow<List<Pokit>> = pokitPaging.pagingData
+    val pokitListState: StateFlow<SimplePagingState> = pokitPaging.pagingState
+
+    private val _pokitIamges = MutableStateFlow<List<PokitImage>>(emptyList())
+    val pokitImages: StateFlow<List<PokitImage>> = _pokitIamges.asStateFlow()
+
     init {
         loadPokitList()
+        loadPokitImages()
+
+        setAddModifyMode(pokitId)
     }
 
-    private fun loadPokitList() = intent {
+    fun loadPokitList() {
         viewModelScope.launch {
-            reduce {
-                state.copy(
-                    step = AddPokitScreenStep.POKIT_LIST_LOADING,
-                    pokitInputErrorMessage = null,
-                    pokitList = emptyList()
-                )
-            }
-            // todo 포킷 리스트 로드 api 연동
-            delay(1000L)
+            pokitPaging.load()
+        }
+    }
 
+    private fun loadPokitImages() {
+        viewModelScope.launch {
+            val response = getPokitImagesUseCase.getImages()
+            if (response is PokitResult.Success) {
+                _pokitIamges.update { response.result.map { PokitImage.fromDomainPokitImage(it) } }
+
+                if (pokitId == null) {
+                    val defaultPokitImage = PokitImage.fromDomainPokitImage(response.result[0])
+                    intent {
+                        reduce { state.copy(pokitImage = defaultPokitImage) }
+                    }
+                }
+            } else {
+                // 만약 이미지 로딩이 실패한다면....?
+            }
+        }
+    }
+
+    private fun setAddModifyMode(pokitId: Int?) = intent {
+        if (pokitId == null) {
             reduce {
-                state.copy(
-                    step = AddPokitScreenStep.IDLE,
-                    pokitList = samplePokitList
-                )
+                state.copy(isModify = false)
+            }
+        } else {
+            val response = getPokitUseCase.getPokit(pokitId)
+            if (response is PokitResult.Success) {
+                reduce {
+                    state.copy(isModify = true, pokitImage = PokitImage.fromDomainPokitImage(response.result.image))
+                }
+                _pokitName.update { response.result.name }
+            } else {
+                postSideEffect(AddPokitSideEffect.OnNavigationBack)
             }
         }
     }
@@ -58,16 +116,11 @@ class AddPokitViewModel : ContainerHost<AddPokitScreenState, AddPokitSideEffect>
 
         intent {
             val isInAvailableLength = pokitName.length > POKIT_NAME_MAX_LENGTH
-            val isDuplicatePokitName = state.pokitList.find { it.title == pokitName } != null
 
-            val errorMessage = if (isInAvailableLength) {
-                PokitInputErrorMessage.TEXT_LENGTH_LIMIT
-            } else if (isDuplicatePokitName) {
-                PokitInputErrorMessage.ALREADY_USED_POKIT_NAME
-            } else {
-                null
+            if (isInAvailableLength) {
+                val errorMessage = errorMessageProvider.getTextLengthErrorMessage()
+                reduce { state.copy(pokitInputErrorMessage = errorMessage) }
             }
-            reduce { state.copy(pokitInputErrorMessage = errorMessage) }
         }
     }
 
@@ -75,12 +128,30 @@ class AddPokitViewModel : ContainerHost<AddPokitScreenState, AddPokitSideEffect>
         reduce {
             state.copy(step = AddPokitScreenStep.POKIT_SAVE_LOADING)
         }
-        // todo 포킷 저장 api 연동
-        delay(1000L)
-        reduce {
-            state.copy(step = AddPokitScreenStep.IDLE)
+
+        val currentPokitName = pokitName.value
+        val pokitImageId = state.pokitImage?.id ?: 0
+        val response = if (pokitId != null) {
+            modifyPokitUseCase.modifyPokit(pokitId, currentPokitName, pokitImageId)
+        } else {
+            createPokitUseCase.createPokit(currentPokitName, pokitImageId)
         }
-        postSideEffect(AddPokitSideEffect.AddPokitSuccess)
+
+        if (response is PokitResult.Success) {
+            reduce { state.copy(step = AddPokitScreenStep.IDLE) }
+
+            val sideEffect = if (pokitId == null) {
+                AddPokitSideEffect.AddPokitSuccess
+            } else {
+                AddPokitSideEffect.ModifyPokitSuccess(pokitId)
+            }
+
+            postSideEffect(sideEffect)
+        } else {
+            response as PokitResult.Error
+            val errorMessage = errorMessageProvider.errorCodeToMessage(response.error.code)
+            reduce { state.copy(pokitInputErrorMessage = errorMessage) }
+        }
     }
 
     fun onBackPressed() = intent {
@@ -108,9 +179,9 @@ class AddPokitViewModel : ContainerHost<AddPokitScreenState, AddPokitSideEffect>
         }
     }
 
-    fun selectPoktiProfile(pokitProfile: PokitProfile) = intent {
+    fun selectPokitProfile(pokitImage: PokitImage) = intent {
         reduce {
-            state.copy(pokitProfile = pokitProfile)
+            state.copy(pokitImage = pokitImage)
         }
     }
 }

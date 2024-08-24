@@ -1,6 +1,7 @@
 package com.strayalpaca.pokitdetail.model
 
 import com.strayalpaca.pokitdetail.R
+import pokitmons.pokit.domain.model.link.Link as DomainLink
 
 data class Link(
     val id: String = "",
@@ -13,7 +14,24 @@ data class Link(
     val memo: String = "",
     val bookmark: Boolean = false,
     val imageUrl: String? = null,
-)
+    val createdAt: String = "",
+) {
+    companion object {
+        fun fromDomainLink(domainLink: DomainLink): Link {
+            return Link(
+                id = domainLink.id.toString(),
+                title = domainLink.title,
+                dateString = domainLink.createdAt,
+                domainUrl = domainLink.domain,
+                isRead = domainLink.isRead,
+                url = domainLink.data,
+                memo = domainLink.memo,
+                imageUrl = domainLink.thumbnail,
+                createdAt = domainLink.createdAt
+            )
+        }
+    }
+}
 
 enum class LinkType(val textResourceId: Int) {
     TEXT(R.string.badge_text),

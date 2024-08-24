@@ -16,12 +16,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -45,6 +48,7 @@ import pokitmons.pokit.search.model.Filter
 import pokitmons.pokit.search.model.FilterType
 import pokitmons.pokit.search.model.Pokit
 import pokitmons.pokit.search.model.samplePokits
+import pokitmons.pokit.search.paging.SimplePagingState
 import pokitmons.pokit.core.ui.R.string as coreString
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -54,6 +58,8 @@ fun FilterBottomSheetContent(
     firstShowType: FilterType = FilterType.Pokit,
     onSaveClilck: (Filter) -> Unit = {},
     pokits: List<Pokit> = samplePokits,
+    pokitPagingState: SimplePagingState = SimplePagingState.IDLE,
+    loadNextPokits: () -> Unit = {},
 ) {
     var currentFilter by remember { mutableStateOf(filter) }
     var currentShowType by remember { mutableStateOf(firstShowType) }
@@ -62,6 +68,21 @@ fun FilterBottomSheetContent(
         initialPage = firstShowType.index
     ) {
         FilterType.entries.size
+    }
+
+    val linkLazyColumnListState = rememberLazyListState()
+    val startLinkPaging = remember {
+        derivedStateOf {
+            linkLazyColumnListState.layoutInfo.visibleItemsInfo.lastOrNull()?.let { last ->
+                last.index >= linkLazyColumnListState.layoutInfo.totalItemsCount - 3
+            } ?: false
+        }
+    }
+
+    LaunchedEffect(startLinkPaging.value) {
+        if (startLinkPaging.value && pokitPagingState == SimplePagingState.IDLE) {
+            loadNextPokits()
+        }
     }
 
     Column(
@@ -98,7 +119,8 @@ fun FilterBottomSheetContent(
             when (currentShowType) {
                 FilterType.Pokit -> {
                     LazyColumn(
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
+                        state = linkLazyColumnListState
                     ) {
                         items(pokits) { pokit ->
                             PokitList(
