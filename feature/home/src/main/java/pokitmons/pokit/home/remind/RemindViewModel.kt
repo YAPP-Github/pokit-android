@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import pokitmons.pokit.core.feature.model.NetworkState
 import pokitmons.pokit.core.feature.navigation.args.LinkUpdateEvent
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.home.remind.RemindResult
@@ -28,24 +29,26 @@ class RemindViewModel @Inject constructor(
     private val deleteLinkUseCase: DeleteLinkUseCase,
 ) : ViewModel() {
 
-    init {
-        loadContents()
-        initLinkUpdateEventDetector()
-        initLinkRemoveEventDetector()
-        initLinkAddEventDetector()
-    }
-
     private var _unReadContents: MutableStateFlow<List<RemindResult>> = MutableStateFlow(emptyList())
     val unReadContents: StateFlow<List<RemindResult>>
         get() = _unReadContents.asStateFlow()
+
+    private val _unReadContentNetworkState : MutableStateFlow<NetworkState> = MutableStateFlow(NetworkState.IDLE)
+    val unreadContentNetworkState = _unReadContentNetworkState.asStateFlow()
 
     private var _todayContents: MutableStateFlow<List<RemindResult>> = MutableStateFlow(emptyList())
     val todayContents: StateFlow<List<RemindResult>>
         get() = _todayContents.asStateFlow()
 
+    private val _todayContentsNetworkState : MutableStateFlow<NetworkState> = MutableStateFlow(NetworkState.IDLE)
+    val todayContentsNetworkState = _todayContentsNetworkState.asStateFlow()
+
     private var _bookmarkContents: MutableStateFlow<List<RemindResult>> = MutableStateFlow(emptyList())
     val bookmarkContents: StateFlow<List<RemindResult>>
         get() = _bookmarkContents.asStateFlow()
+
+    private val _bookmarkContentsNetworkState : MutableStateFlow<NetworkState> = MutableStateFlow(NetworkState.IDLE)
+    val bookmarkContentsNetworkState = _bookmarkContentsNetworkState.asStateFlow()
 
     private val _currentSelectedLink = MutableStateFlow<Link?>(null)
     val currentSelectedLink = _currentSelectedLink.asStateFlow()
@@ -55,6 +58,13 @@ class RemindViewModel @Inject constructor(
 
     private val _currentShowingLink = MutableStateFlow<Link?>(null)
     val currentShowingLink = _currentShowingLink.asStateFlow()
+
+    init {
+        initLinkUpdateEventDetector()
+        initLinkRemoveEventDetector()
+        initLinkAddEventDetector()
+        loadContents()
+    }
 
     private fun initLinkUpdateEventDetector() {
         viewModelScope.launch {
@@ -146,23 +156,52 @@ class RemindViewModel @Inject constructor(
     }
 
     fun loadContents() {
-        viewModelScope.launch {
-            when (val response = unReadContentsUseCase.getUnreadContents()) {
-                is PokitResult.Success -> _unReadContents.value = response.result.take(3)
-                is PokitResult.Error -> {}
-            }
+        loadUnReadContents()
+        loadTodayContents()
+        loadMarkContents()
+    }
 
-            when (val response = todayContentsUseCase.getTodayContents()) {
+    private fun loadUnReadContents() {
+        viewModelScope.launch {
+            _unReadContentNetworkState.update { NetworkState.LOADING }
+            when (val response = unReadContentsUseCase.getUnreadContents()) {
                 is PokitResult.Success -> {
-                    _todayContents.value = response.result
+                    _unReadContentNetworkState.update { NetworkState.IDLE }
+                    _unReadContents.value = response.result.take(3)
                 }
                 is PokitResult.Error -> {
+                    _unReadContentNetworkState.update { NetworkState.ERROR }
                 }
             }
+        }
+    }
 
+    private fun loadTodayContents() {
+        viewModelScope.launch {
+            _todayContentsNetworkState.update { NetworkState.LOADING }
+            when (val response = todayContentsUseCase.getTodayContents()) {
+                is PokitResult.Success -> {
+                    _todayContentsNetworkState.update { NetworkState.IDLE }
+                    _todayContents.value = response.result.take(3)
+                }
+                is PokitResult.Error -> {
+                    _todayContentsNetworkState.update { NetworkState.ERROR }
+                }
+            }
+        }
+    }
+
+    private fun loadMarkContents() {
+        viewModelScope.launch {
+            _bookmarkContentsNetworkState.update { NetworkState.LOADING }
             when (val response = bookMarkContentsUseCase.getBookmarkContents()) {
-                is PokitResult.Success -> _bookmarkContents.value = response.result.take(3)
-                is PokitResult.Error -> {}
+                is PokitResult.Success -> {
+                    _bookmarkContentsNetworkState.update { NetworkState.IDLE }
+                    _bookmarkContents.value = response.result.take(3)
+                }
+                is PokitResult.Error -> {
+                    _bookmarkContentsNetworkState.update { NetworkState.ERROR }
+                }
             }
         }
     }

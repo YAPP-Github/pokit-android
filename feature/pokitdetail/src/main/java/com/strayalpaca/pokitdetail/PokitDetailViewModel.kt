@@ -18,10 +18,13 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import pokitmons.pokit.core.feature.flow.MutableEventFlow
+import pokitmons.pokit.core.feature.flow.asEventFlow
 import pokitmons.pokit.core.feature.navigation.args.LinkUpdateEvent
 import pokitmons.pokit.core.feature.navigation.args.PokitUpdateEvent
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.link.LinksSort
+import pokitmons.pokit.domain.usecase.link.DeleteLinkUseCase
 import pokitmons.pokit.domain.usecase.link.GetLinksUseCase
 import pokitmons.pokit.domain.usecase.pokit.DeletePokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitUseCase
@@ -35,6 +38,7 @@ class PokitDetailViewModel @Inject constructor(
     private val getLinksUseCase: GetLinksUseCase,
     private val getPokitUseCase: GetPokitUseCase,
     private val deletePokitUseCase: DeletePokitUseCase,
+    private val deleteLinkUseCase: DeleteLinkUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val pokitPaging = PokitPaging(
@@ -60,6 +64,9 @@ class PokitDetailViewModel @Inject constructor(
 
     val linkList: StateFlow<List<Link>> = linkPaging.pagingData
     val linkListState: StateFlow<SimplePagingState> = linkPaging.pagingState
+
+    private val _moveToBackEvent = MutableEventFlow<Boolean>()
+    val moveToBackEvent = _moveToBackEvent.asEventFlow()
 
     init {
         savedStateHandle.get<String>("pokit_id")?.toIntOrNull()?.let { pokitId ->
@@ -218,7 +225,18 @@ class PokitDetailViewModel @Inject constructor(
             val response = deletePokitUseCase.deletePokit(pokitId)
             if (response is PokitResult.Success) {
                 PokitUpdateEvent.removePokit(pokitId)
-                // 뒤로가기?
+                _moveToBackEvent.emit(true)
+            }
+        }
+    }
+
+    fun deleteLink() {
+        val currentLink = state.value.currentLink ?: return
+        val linkId = currentLink.id.toInt()
+        viewModelScope.launch {
+            val response = deleteLinkUseCase.deleteLink(linkId)
+            if (response is PokitResult.Success) {
+                _moveToBackEvent.emit(true)
             }
         }
     }

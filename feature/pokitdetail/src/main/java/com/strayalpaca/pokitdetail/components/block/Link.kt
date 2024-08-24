@@ -16,8 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import com.strayalpaca.pokitdetail.model.Link
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
@@ -38,7 +38,9 @@ internal fun Link(
             )
     ) {
         Image(
-            painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.icon_24_google),
+            painter = rememberAsyncImagePainter(
+                model = link.imageUrl
+            ),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.width(124.dp)

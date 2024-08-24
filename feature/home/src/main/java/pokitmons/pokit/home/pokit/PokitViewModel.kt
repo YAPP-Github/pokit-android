@@ -119,9 +119,13 @@ class PokitViewModel @Inject constructor(
     val pokits: StateFlow<List<Pokit>>
         get() = _pokits.asStateFlow()
 
+    val pokitsState = pokitPaging.pagingState
+
     private var _unCategoryLinks: MutableStateFlow<List<DetailLink>> = linkPaging._pagingData
     val unCategoryLinks: StateFlow<List<DetailLink>>
         get() = _unCategoryLinks.asStateFlow()
+
+    val linksState = linkPaging.pagingState
 
     fun updateCategory(category: Category) {
         selectedCategory.value = category

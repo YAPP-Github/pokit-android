@@ -78,6 +78,9 @@ dependencies {
     implementation(libs.hilt)
     kapt(libs.hilt.compiler)
 
+    // coil
+    implementation(libs.coil.compose)
+
     implementation(project(":core:ui"))
     implementation(project(":core:feature"))
     implementation(project(":domain"))

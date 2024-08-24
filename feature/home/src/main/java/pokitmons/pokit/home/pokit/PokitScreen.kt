@@ -17,11 +17,17 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.strayalpaca.pokitdetail.paging.SimplePagingState
+import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
 import pokitmons.pokit.core.ui.components.block.pokitcard.PokitCard
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.components.template.modifybottomsheet.ModifyBottomSheetContent
+import pokitmons.pokit.core.ui.components.template.pokkiempty.EmptyPokki
+import pokitmons.pokit.core.ui.components.template.pokkierror.ErrorPokki
+import pokitmons.pokit.core.ui.R.string as coreString
 
 @Composable
 fun PokitScreen(
@@ -32,6 +38,10 @@ fun PokitScreen(
     viewModel.loadPokits()
     var showBottomSheet by remember { mutableStateOf(false) }
     val pokits = viewModel.pokits.collectAsState()
+    val pokitsState by viewModel.pokitsState.collectAsState()
+    val selectedCategory by viewModel.selectedCategory
+    val unCategoryLinks = viewModel.unCategoryLinks.collectAsState()
+    val unCategoryLinksState by viewModel.linksState.collectAsState()
 
     Column(
         modifier = modifier
@@ -41,31 +51,75 @@ fun PokitScreen(
     ) {
         HomeMid()
 
-        when (viewModel.selectedCategory.value) {
+        when (selectedCategory) {
             is Category.Pokit -> {
-                LazyVerticalGrid(
-                    modifier = Modifier.fillMaxSize(),
-                    columns = GridCells.Fixed(2),
-                    contentPadding = PaddingValues(bottom = 100.dp),
-                    verticalArrangement = Arrangement.spacedBy(12.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
-                ) {
-                    items(pokits.value) { pokitDetail ->
-                        PokitCard(
-                            text = pokitDetail.title,
-                            linkCount = pokitDetail.count,
-                            painter = rememberAsyncImagePainter(model = pokitDetail.image.url),
-                            onClick = { onNavigateToPokitDetail(pokitDetail.id) },
-                            onClickKebab = {
-                                showBottomSheet = true
-                            }
+                when {
+                    (pokitsState == SimplePagingState.LOADING_INIT) -> {
+                        LoadingProgress(modifier = Modifier.fillMaxSize())
+                    }
+                    (pokitsState == SimplePagingState.FAILURE_INIT) -> {
+                        ErrorPokki(
+                            modifier = Modifier.fillMaxSize(),
+                            title = stringResource(id = coreString.title_error),
+                            sub = stringResource(id = coreString.sub_error),
+                            onClickRetry = viewModel::loadPokits
                         )
+                    }
+                    (pokits.value.isEmpty()) -> {
+                        EmptyPokki(
+                            modifier = Modifier.fillMaxSize(),
+                            title = stringResource(id = coreString.title_empty_pokits),
+                            sub = stringResource(id = coreString.sub_empty_pokits)
+                        )
+                    }
+                    else -> {
+                        LazyVerticalGrid(
+                            modifier = Modifier.fillMaxSize(),
+                            columns = GridCells.Fixed(2),
+                            contentPadding = PaddingValues(bottom = 100.dp),
+                            verticalArrangement = Arrangement.spacedBy(12.dp),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp)
+                        ) {
+                            items(pokits.value) { pokitDetail ->
+                                PokitCard(
+                                    text = pokitDetail.title,
+                                    linkCount = pokitDetail.count,
+                                    painter = rememberAsyncImagePainter(model = pokitDetail.image.url),
+                                    onClick = { onNavigateToPokitDetail(pokitDetail.id) },
+                                    onClickKebab = {
+                                        showBottomSheet = true
+                                    }
+                                )
+                            }
+                        }
                     }
                 }
             }
 
             is Category.Unclassified -> {
-                UnclassifiedScreen()
+                when {
+                    (unCategoryLinksState == SimplePagingState.LOADING_INIT) -> {
+                        LoadingProgress(modifier = Modifier.fillMaxSize())
+                    }
+                    (unCategoryLinksState == SimplePagingState.FAILURE_INIT) -> {
+                        ErrorPokki(
+                            modifier = Modifier.fillMaxSize(),
+                            title = stringResource(id = coreString.title_error),
+                            sub = stringResource(id = coreString.sub_error),
+                            onClickRetry = viewModel::loadUnCategoryLinks
+                        )
+                    }
+                    (unCategoryLinks.value.isEmpty()) -> {
+                        EmptyPokki(
+                            modifier = Modifier.fillMaxSize(),
+                            title = stringResource(id = coreString.title_empty_links),
+                            sub = stringResource(id = coreString.sub_empty_links)
+                        )
+                    }
+                    else -> {
+                        UnclassifiedScreen()
+                    }
+                }
             }
         }
 
