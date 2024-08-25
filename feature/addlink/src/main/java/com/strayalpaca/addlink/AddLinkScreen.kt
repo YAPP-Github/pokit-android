@@ -1,6 +1,5 @@
 package com.strayalpaca.addlink
 
-import android.widget.Toast
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.background
@@ -28,7 +27,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -37,6 +35,7 @@ import com.strayalpaca.addlink.components.block.Toolbar
 import com.strayalpaca.addlink.model.AddLinkScreenSideEffect
 import com.strayalpaca.addlink.model.AddLinkScreenState
 import com.strayalpaca.addlink.model.ScreenStep
+import com.strayalpaca.addlink.model.ToastMessageEvent
 import com.strayalpaca.addlink.paging.SimplePagingState
 import com.strayalpaca.addlink.utils.BackPressHandler
 import org.orbitmvi.orbit.compose.collectAsState
@@ -49,6 +48,7 @@ import pokitmons.pokit.core.ui.components.atom.inputarea.PokitInputArea
 import pokitmons.pokit.core.ui.components.block.labeledinput.LabeledInput
 import pokitmons.pokit.core.ui.components.block.pokitlist.PokitList
 import pokitmons.pokit.core.ui.components.block.pokitlist.attributes.PokitListState
+import pokitmons.pokit.core.ui.components.block.pokittoast.PokitToast
 import pokitmons.pokit.core.ui.components.block.select.PokitSelect
 import pokitmons.pokit.core.ui.components.block.switchradio.PokitSwitchRadio
 import pokitmons.pokit.core.ui.components.block.switchradio.attributes.PokitSwitchRadioStyle
@@ -62,7 +62,6 @@ fun AddLinkScreenContainer(
     onNavigateToAddPokit: () -> Unit,
 ) {
     val state by viewModel.collectAsState()
-    val context = LocalContext.current
 
     BackPressHandler(onBackPressed = viewModel::onBackPressed)
 
@@ -76,8 +75,8 @@ fun AddLinkScreenContainer(
                 onBackPressed()
             }
 
-            is AddLinkScreenSideEffect.ToastMessage -> {
-                Toast.makeText(context, context.getString(sideEffect.toastMessageEvent.stringResourceId), Toast.LENGTH_SHORT).show()
+            AddLinkScreenSideEffect.OnNavigateToAddPokit -> {
+                onNavigateToAddPokit()
             }
         }
     }
@@ -137,11 +136,12 @@ fun AddLinkScreenContainer(
         inputUrl = viewModel::inputLinkUrl,
         inputTitle = viewModel::inputTitle,
         inputMemo = viewModel::inputMemo,
-        onClickAddPokit = onNavigateToAddPokit,
+        onClickAddPokit = viewModel::checkPokitCount,
         onClickSelectPokit = viewModel::showSelectPokitBottomSheet,
         toggleRemindRadio = viewModel::setRemind,
         onBackPressed = viewModel::onBackPressed,
-        onClickSaveButton = viewModel::saveLink
+        onClickSaveButton = viewModel::saveLink,
+        closeToast = viewModel::closeToastMessage
     )
 }
 
@@ -161,6 +161,7 @@ fun AddLinkScreen(
     toggleRemindRadio: (Boolean) -> Unit,
     onBackPressed: () -> Unit,
     onClickSaveButton: () -> Unit,
+    closeToast: () -> Unit
 ) {
     val scrollState = rememberScrollState()
     val enable = remember(state.step) {
@@ -184,137 +185,154 @@ fun AddLinkScreen(
             title = if (isModifyLink) stringResource(id = R.string.modify_link) else stringResource(id = R.string.add_link)
         )
 
-        CompositionLocalProvider(
-            LocalOverscrollConfiguration provides null
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f)
         ) {
-            Column(
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-                    .weight(1f)
-                    .verticalScroll(
-                        state = scrollState,
-                        flingBehavior = null
-                    )
+            CompositionLocalProvider(
+                LocalOverscrollConfiguration provides null
             ) {
-                Spacer(modifier = Modifier.height(16.dp))
-
-                if (state.link != null) {
-                    Link(state.link)
-                    Spacer(modifier = Modifier.height(16.dp))
-                }
-
-                LabeledInput(
-                    label = stringResource(id = R.string.link),
-                    sub = "",
-                    maxLength = null,
-                    inputText = url,
-                    hintText = stringResource(id = R.string.placeholder_link),
-                    onChangeText = inputUrl,
-                    enable = enable
-                )
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                LabeledInput(
-                    label = stringResource(id = R.string.title),
-                    sub = "",
-                    maxLength = 20,
-                    inputText = title,
-                    hintText = stringResource(id = R.string.placeholder_title),
-                    onChangeText = inputTitle,
-                    enable = enable
-                )
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    verticalAlignment = Alignment.Bottom
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 20.dp)
+                        .verticalScroll(
+                            state = scrollState,
+                            flingBehavior = null
+                        )
                 ) {
-                    PokitSelect(
-                        text = if (state.currentPokit == null) stringResource(id = R.string.uncategorized) else state.currentPokit.title,
-                        hintText = stringResource(id = R.string.uncategorized),
-                        label = stringResource(id = R.string.pokit),
-                        modifier = Modifier.weight(1f),
-                        onClick = onClickSelectPokit,
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    if (state.link != null) {
+                        Link(state.link)
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+
+                    LabeledInput(
+                        label = stringResource(id = R.string.link),
+                        sub = "",
+                        maxLength = null,
+                        inputText = url,
+                        hintText = stringResource(id = R.string.placeholder_link),
+                        onChangeText = inputUrl,
                         enable = enable
                     )
 
-                    Spacer(modifier = Modifier.width(8.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
 
-                    PokitButton(
-                        text = null,
-                        icon = PokitButtonIcon(
-                            resourceId = pokitmons.pokit.core.ui.R.drawable.icon_24_plus,
-                            position = PokitButtonIconPosition.LEFT
+                    LabeledInput(
+                        label = stringResource(id = R.string.title),
+                        sub = "",
+                        maxLength = 20,
+                        inputText = title,
+                        hintText = stringResource(id = R.string.placeholder_title),
+                        onChangeText = inputTitle,
+                        enable = enable
+                    )
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalAlignment = Alignment.Bottom
+                    ) {
+                        PokitSelect(
+                            text = if (state.currentPokit == null) stringResource(id = R.string.uncategorized) else state.currentPokit.title,
+                            hintText = stringResource(id = R.string.uncategorized),
+                            label = stringResource(id = R.string.pokit),
+                            modifier = Modifier.weight(1f),
+                            onClick = onClickSelectPokit,
+                            enable = enable
+                        )
+
+                        Spacer(modifier = Modifier.width(8.dp))
+
+                        PokitButton(
+                            text = null,
+                            icon = PokitButtonIcon(
+                                resourceId = pokitmons.pokit.core.ui.R.drawable.icon_24_plus,
+                                position = PokitButtonIconPosition.LEFT
+                            ),
+                            size = PokitButtonSize.LARGE,
+                            onClick = onClickAddPokit,
+                            enable = enable
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    Text(
+                        text = stringResource(id = R.string.memo),
+                        style = PokitTheme.typography.body2Medium.copy(color = PokitTheme.colors.textSecondary)
+                    )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    PokitInputArea(
+                        text = memo,
+                        hintText = stringResource(id = R.string.placeholder_memo),
+                        onChangeText = inputMemo,
+                        enable = enable
+                    )
+
+                    Spacer(modifier = Modifier.height(4.dp))
+
+                    Text(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = "${memo.length}/100",
+                        style = PokitTheme.typography.detail1.copy(color = PokitTheme.colors.textTertiary),
+                        textAlign = TextAlign.End
+                    )
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    Text(
+                        text = stringResource(id = R.string.title_remind),
+                        style = PokitTheme.typography.body2Medium.copy(color = PokitTheme.colors.textSecondary)
+                    )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    PokitSwitchRadio(
+                        modifier = Modifier.fillMaxWidth(),
+                        itemList = listOf(
+                            Pair(stringResource(id = R.string.reject_remind), false),
+                            Pair(stringResource(id = R.string.accept_remind), true)
                         ),
-                        size = PokitButtonSize.LARGE,
-                        onClick = onClickAddPokit,
-                        enable = enable
+                        style = PokitSwitchRadioStyle.STROKE,
+                        selectedItem = if (state.useRemind) {
+                            Pair(stringResource(id = R.string.accept_remind), true)
+                        } else {
+                            Pair(stringResource(id = R.string.reject_remind), false)
+                        },
+                        onClickItem = {
+                            toggleRemindRadio(it.second)
+                        },
+                        getTitleFromItem = { it.first },
+                        enabled = enable
                     )
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
+                    Text(
+                        text = stringResource(id = R.string.sub_remind),
+                        style = PokitTheme.typography.detail1.copy(color = PokitTheme.colors.textTertiary)
+                    )
+
+                    Spacer(modifier = Modifier.height(32.dp))
                 }
+            }
 
-                Spacer(modifier = Modifier.height(24.dp))
-
-                Text(
-                    text = stringResource(id = R.string.memo),
-                    style = PokitTheme.typography.body2Medium.copy(color = PokitTheme.colors.textSecondary)
+            state.toastMessage?.let { toastMessageEvent: ToastMessageEvent ->
+                PokitToast(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                        .padding(start = 12.dp, end = 12.dp, bottom = 16.dp),
+                    text = stringResource(id = toastMessageEvent.stringResourceId),
+                    onClickClose = closeToast
                 )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                PokitInputArea(
-                    text = memo,
-                    hintText = stringResource(id = R.string.placeholder_memo),
-                    onChangeText = inputMemo,
-                    enable = enable
-                )
-
-                Spacer(modifier = Modifier.height(4.dp))
-
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = "${memo.length}/100",
-                    style = PokitTheme.typography.detail1.copy(color = PokitTheme.colors.textTertiary),
-                    textAlign = TextAlign.End
-                )
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                Text(
-                    text = stringResource(id = R.string.title_remind),
-                    style = PokitTheme.typography.body2Medium.copy(color = PokitTheme.colors.textSecondary)
-                )
-
-                Spacer(modifier = Modifier.height(12.dp))
-
-                PokitSwitchRadio(
-                    modifier = Modifier.fillMaxWidth(),
-                    itemList = listOf(
-                        Pair(stringResource(id = R.string.reject_remind), false),
-                        Pair(stringResource(id = R.string.accept_remind), true)
-                    ),
-                    style = PokitSwitchRadioStyle.STROKE,
-                    selectedItem = if (state.useRemind) {
-                        Pair(stringResource(id = R.string.accept_remind), true)
-                    } else {
-                        Pair(stringResource(id = R.string.reject_remind), false)
-                    },
-                    onClickItem = {
-                        toggleRemindRadio(it.second)
-                    },
-                    getTitleFromItem = { it.first },
-                    enabled = enable
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(
-                    text = stringResource(id = R.string.sub_remind),
-                    style = PokitTheme.typography.detail1.copy(color = PokitTheme.colors.textTertiary)
-                )
-
-                Spacer(modifier = Modifier.height(32.dp))
             }
         }
 

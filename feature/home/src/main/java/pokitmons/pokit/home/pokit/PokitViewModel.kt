@@ -14,14 +14,20 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import pokitmons.pokit.core.feature.flow.MutableEventFlow
+import pokitmons.pokit.core.feature.flow.asEventFlow
 import pokitmons.pokit.core.feature.navigation.args.LinkUpdateEvent
 import pokitmons.pokit.core.feature.navigation.args.PokitUpdateEvent
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.link.Link
 import pokitmons.pokit.domain.model.link.LinksSort
+import pokitmons.pokit.domain.model.pokit.MAX_POKIT_COUNT
 import pokitmons.pokit.domain.usecase.link.GetLinksUseCase
 import pokitmons.pokit.domain.usecase.pokit.DeletePokitUseCase
+import pokitmons.pokit.domain.usecase.pokit.GetPokitCountUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
+import pokitmons.pokit.home.model.HomeSideEffect
+import pokitmons.pokit.home.model.HomeToastMessage
 import javax.inject.Inject
 import com.strayalpaca.pokitdetail.model.Link as DetailLink
 import pokitmons.pokit.domain.model.pokit.Pokit as DomainPokit
@@ -31,7 +37,14 @@ class PokitViewModel @Inject constructor(
     private val getPokitsUseCase: GetPokitsUseCase,
     private val getLinksUseCase: GetLinksUseCase,
     private val deletePokitUseCase: DeletePokitUseCase,
+    private val getPokitCountUseCase: GetPokitCountUseCase
 ) : ViewModel() {
+
+    private val _sideEffect = MutableEventFlow<HomeSideEffect>()
+    val sideEffect = _sideEffect.asEventFlow()
+
+    private val _toastMessage = MutableStateFlow<HomeToastMessage?>(null)
+    val toastMessage = _toastMessage.asStateFlow()
 
     private fun initLinkUpdateEventDetector() {
         viewModelScope.launch {
@@ -213,6 +226,24 @@ class PokitViewModel @Inject constructor(
                 PokitUpdateEvent.removePokit(pokitId)
             }
         }
+    }
+
+    fun checkPokitCount() {
+        viewModelScope.launch {
+            _toastMessage.update { null }
+            val response = getPokitCountUseCase.getPokitCount()
+            if (response is PokitResult.Success) {
+                if (response.result >= MAX_POKIT_COUNT) {
+                    _toastMessage.update { HomeToastMessage.CANNOT_CREATE_POKIT_MORE }
+                } else {
+                    _sideEffect.emit(HomeSideEffect.NavigateToAddPokit)
+                }
+            }
+        }
+    }
+
+    fun closeToastMessage() {
+        _toastMessage.update { null }
     }
 }
 

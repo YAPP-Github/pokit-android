@@ -40,7 +40,7 @@ fun PokitToast(
     ) {
         Text(
             text = text,
-            style = PokitTheme.typography.body2Bold.copy(color = PokitTheme.colors.inverseWh),
+            style = PokitTheme.typography.body3Medium.copy(color = PokitTheme.colors.inverseWh),
             modifier = Modifier.weight(1f)
         )
 

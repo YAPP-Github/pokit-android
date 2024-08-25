@@ -29,10 +29,12 @@ import org.orbitmvi.orbit.viewmodel.container
 import pokitmons.pokit.core.feature.navigation.args.LinkArg
 import pokitmons.pokit.core.feature.navigation.args.LinkUpdateEvent
 import pokitmons.pokit.domain.commom.PokitResult
+import pokitmons.pokit.domain.model.pokit.MAX_POKIT_COUNT
 import pokitmons.pokit.domain.usecase.link.CreateLinkUseCase
 import pokitmons.pokit.domain.usecase.link.GetLinkCardUseCase
 import pokitmons.pokit.domain.usecase.link.GetLinkUseCase
 import pokitmons.pokit.domain.usecase.link.ModifyLinkUseCase
+import pokitmons.pokit.domain.usecase.pokit.GetPokitCountUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
 import javax.inject.Inject
 
@@ -42,6 +44,7 @@ class AddLinkViewModel @Inject constructor(
     private val getLinkCardUseCase: GetLinkCardUseCase,
     private val createLinkUseCase: CreateLinkUseCase,
     private val modifyLinkUseCase: ModifyLinkUseCase,
+    private val getPokitCountUseCase: GetPokitCountUseCase,
     getPokitsUseCase: GetPokitsUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ContainerHost<AddLinkScreenState, AddLinkScreenSideEffect>, ViewModel() {
@@ -206,8 +209,7 @@ class AddLinkViewModel @Inject constructor(
 
                 postSideEffect(AddLinkScreenSideEffect.AddLinkSuccess)
             } else {
-                reduce { state.copy(step = ScreenStep.IDLE) }
-                postSideEffect(AddLinkScreenSideEffect.ToastMessage(ToastMessageEvent.NETWORK_ERROR))
+                reduce { state.copy(step = ScreenStep.IDLE, toastMessage = ToastMessageEvent.NETWORK_ERROR) }
             }
         }
     }
@@ -230,5 +232,24 @@ class AddLinkViewModel @Inject constructor(
         viewModelScope.launch {
             pokitPaging.refresh()
         }
+    }
+
+    fun checkPokitCount() = intent {
+        viewModelScope.launch {
+            val response = getPokitCountUseCase.getPokitCount()
+            if (response is PokitResult.Success) {
+                if (response.result >= MAX_POKIT_COUNT) {
+                    reduce { state.copy(toastMessage = ToastMessageEvent.CANNOT_CREATE_POKIT_MORE) }
+                } else {
+                    postSideEffect(AddLinkScreenSideEffect.OnNavigateToAddPokit)
+                }
+            } else {
+                reduce { state.copy(toastMessage = ToastMessageEvent.NETWORK_ERROR) }
+            }
+        }
+    }
+
+    fun closeToastMessage() = intent {
+        reduce { state.copy(toastMessage = null) }
     }
 }
