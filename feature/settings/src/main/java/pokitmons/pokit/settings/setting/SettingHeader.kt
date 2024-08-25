@@ -19,7 +19,9 @@ import pokitmons.pokit.core.ui.R.drawable as DrawableResource
 import pokitmons.pokit.settings.R.string as StringResource
 
 @Composable
-fun SettingHeader() {
+fun SettingHeader(
+    onBackPressed: () -> Unit,
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -31,7 +33,7 @@ fun SettingHeader() {
             contentDescription = null,
             modifier = Modifier
                 .align(Alignment.CenterStart)
-                .noRippleClickable { }
+                .noRippleClickable { onBackPressed() }
                 .size(24.dp)
         )
 

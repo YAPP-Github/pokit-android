@@ -156,6 +156,7 @@ fun RootNavHost(
             val viewModel: SettingViewModel = hiltViewModel()
             SettingsScreen(
                 settingViewModel = viewModel,
+                onBackPressed = navHostController::popBackStack,
                 onNavigateToEditNickname = { navHostController.navigate(EditNickname.route) },
                 onNavigateToLogin = {
                     navHostController.navigate(Login.route) {

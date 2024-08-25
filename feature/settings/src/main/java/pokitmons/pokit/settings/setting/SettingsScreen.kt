@@ -25,6 +25,7 @@ fun SettingsScreen(
     settingViewModel: SettingViewModel,
     onNavigateToEditNickname: () -> Unit,
     onNavigateToLogin: () -> Unit,
+    onBackPressed: () -> Unit,
 ) {
     val context = LocalContext.current
 
@@ -38,7 +39,7 @@ fun SettingsScreen(
     }
 
     Column(modifier = Modifier.fillMaxWidth()) {
-        SettingHeader()
+        SettingHeader(onBackPressed)
         Spacer(modifier = Modifier.height(16.dp))
         Column(modifier = Modifier.fillMaxWidth()) {
             SettingItem(title = stringResource(StringResource.nickname_settings)) {
