@@ -78,6 +78,7 @@ class PokitDetailViewModel @Inject constructor(
         }
 
         initLinkUpdateEventDetector()
+        initLinkRemoveEventDetector()
         initPokitUpdateEventDetector()
     }
 
@@ -92,6 +93,15 @@ class PokitDetailViewModel @Inject constructor(
                     createdAt = updatedLink.createdAt
                 )
                 linkPaging.modifyItem(modifiedLink)
+            }
+        }
+    }
+
+    private fun initLinkRemoveEventDetector() {
+        viewModelScope.launch {
+            LinkUpdateEvent.removedLink.collectLatest { removedLinkId ->
+                val targetLink = linkPaging.pagingData.value.find { it.id == removedLinkId.toString() } ?: return@collectLatest
+                linkPaging.deleteItem(targetLink)
             }
         }
     }
@@ -236,7 +246,7 @@ class PokitDetailViewModel @Inject constructor(
         viewModelScope.launch {
             val response = deleteLinkUseCase.deleteLink(linkId)
             if (response is PokitResult.Success) {
-                _moveToBackEvent.emit(true)
+                LinkUpdateEvent.removeSuccess(linkId)
             }
         }
     }
