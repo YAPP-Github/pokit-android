@@ -39,7 +39,7 @@ internal fun Modifier.pokitChipContainerModifier(
             enabled = (onClick != null && state != PokitChipState.DISABLED),
             onClick = onClick ?: {},
             interactionSource = remember { MutableInteractionSource() },
-            indication = null,
+            indication = null
         )
         .background(
             shape = RoundedCornerShape(9999.dp),
