@@ -224,7 +224,8 @@ class RemindViewModel @Inject constructor(
                 dateString = remindResult.createdAt,
                 url = remindResult.data,
                 isRead = remindResult.isRead,
-                domainUrl = remindResult.domain
+                domainUrl = remindResult.domain,
+                imageUrl = remindResult.thumbNail
             )
         }
     }
