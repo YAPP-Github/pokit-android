@@ -7,7 +7,7 @@ import pokitmons.pokit.domain.repository.pokit.PokitRepository
 import javax.inject.Inject
 
 class GetUncategorizedPokitUseCase @Inject constructor(
-    private val repository: PokitRepository
+    private val repository: PokitRepository,
 ) {
     companion object {
         const val UNCATEGORIZED_POKIT_NAME = "미분류"
