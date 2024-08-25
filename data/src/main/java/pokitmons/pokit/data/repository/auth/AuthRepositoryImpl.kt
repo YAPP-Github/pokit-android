@@ -1,6 +1,5 @@
 package pokitmons.pokit.data.repository.auth
 
-import android.util.Log
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import pokitmons.pokit.data.datasource.local.TokenManager
@@ -67,7 +66,6 @@ class AuthRepositoryImpl @Inject constructor(
             )
             PokitResult.Success(Unit)
         }.getOrElse { throwable ->
-            Log.d("!! : ", throwable.toString())
             parseErrorResult(throwable)
         }
     }
