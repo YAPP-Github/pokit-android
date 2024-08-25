@@ -1,9 +1,7 @@
 package pokitmons.pokit.login
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -27,15 +25,14 @@ import androidx.credentials.CredentialManager
 import androidx.credentials.GetCredentialRequest
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
-import com.google.firebase.auth.AuthResult
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.OAuthProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import pokitmons.pokit.LoginState
 import pokitmons.pokit.LoginViewModel
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitLoginButtonType
 import pokitmons.pokit.core.ui.components.atom.loginbutton.PokitLoginButton
+import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
+import pokitmons.pokit.core.ui.components.template.onebuttonbottomsheet.OneButtonBottomSheetContent
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @SuppressLint("CoroutineCreationDuringComposition")
@@ -49,6 +46,7 @@ fun LoginScreen(
     val context: Context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
 
+    // TODO 리팩토링
     when (loginState) {
         is LoginState.Init -> Unit
         is LoginState.Login -> {
@@ -59,16 +57,10 @@ fun LoginScreen(
             loginViewModel.changeState()
             onNavigateToHomeScreen()
         }
-        is LoginState.Failed -> {
-            // TODO 로그인 실패 바텀시트 렌더링
-            Toast.makeText(context, (loginState as LoginState.Failed).error.toString(), Toast.LENGTH_SHORT).show()
-        }
-        is LoginState.AutoLogin -> {
-            onNavigateToHomeScreen()
-        }
+        is LoginState.Failed -> loginViewModel.setVisible(true)
+        is LoginState.AutoLogin -> onNavigateToHomeScreen()
     }
 
-    // Column 자체가 가운데로 오게 하려면?
     Box(
         modifier = Modifier
             .background(color = PokitTheme.colors.backgroundBase)
@@ -98,6 +90,7 @@ fun LoginScreen(
                 .padding(bottom = 32.dp)
                 .align(Alignment.BottomCenter)
         ) {
+            // TODO 배포 후 피처 추가
 //            PokitLoginButton(
 //                loginType = PokitLoginButtonType.APPLE,
 //                text = stringResource(id = R.string.apple_login),
@@ -116,18 +109,29 @@ fun LoginScreen(
                 text = stringResource(id = R.string.google_login),
                 onClick = {
                     googleLogin(
-                        snsLogin = loginViewModel::snsLogin,
+                        loginViewModel = loginViewModel,
                         coroutineScope = coroutineScope,
                         context = context
                     )
                 }
             )
         }
+
+        PokitBottomSheet(
+            onHideBottomSheet = { loginViewModel.setVisible(false) },
+            show = loginViewModel.isBottomSheetVisible
+        ) {
+            OneButtonBottomSheetContent(
+                title = "로그인 오류",
+                subText = "현재 서버 오류로 로그인에 실패했습니다.\n잠시 후에 다시 시도해 주세요.",
+                onClickButton = { loginViewModel.setVisible(false) }
+            )
+        }
     }
 }
 
 private fun googleLogin(
-    snsLogin: (String, String) -> Unit,
+    loginViewModel: LoginViewModel,
     coroutineScope: CoroutineScope,
     context: Context,
 ) {
@@ -151,54 +155,55 @@ private fun googleLogin(
             )
             val googleIdTokenCredential = GoogleIdTokenCredential.createFrom(result.credential.data)
             val googleIdToken = googleIdTokenCredential.idToken
-            snsLogin("구글", googleIdToken)
+            loginViewModel.snsLogin("구글", googleIdToken)
         } catch (e: Exception) {
-            // TODO 로그인 실패 바텀시트 렌더링
+            loginViewModel.setVisible(true)
         }
     }
 }
 
-private fun appleLogin(
-    context: Context,
-    snsLogin: (String, String) -> Unit,
-) {
-    val provider = OAuthProvider.newBuilder("apple.com").apply {
-        addCustomParameter("locale", "ko")
-    }
-
-    // 이미 응답을 수신 했는지 확인
-    val auth = FirebaseAuth.getInstance()
-    val pending = auth.pendingAuthResult
-    if (pending != null) {
-        pending.addOnSuccessListener { authResult ->
-            handleAuthResult(authResult, snsLogin)
-        }.addOnFailureListener { e ->
-            // TODO 로그인 실패 바텀시트 렌더링
-        }
-    } else {
-        auth.startActivityForSignInWithProvider(context as Activity, provider.build()).addOnSuccessListener { authResult ->
-            handleAuthResult(authResult, snsLogin)
-        }.addOnFailureListener {
-            // TODO 로그인 실패 바텀시트 렌더링
-        }
-    }
-}
-
-private fun handleAuthResult(
-    authResult: AuthResult,
-    snsLogin: (String, String) -> Unit,
-) {
-    val user = authResult.user
-    user?.getIdToken(true)?.addOnCompleteListener { task ->
-        if (task.isSuccessful) {
-            val idToken = task.result?.token
-            if (idToken != null) {
-                snsLogin("애플", idToken)
-            } else {
-                // TODO 로그인 실패 바텀시트 렌더링
-            }
-        } else {
-            // TODO 로그인 실패 바텀시트 렌더링
-        }
-    }
-}
+// TODO 배포 후 피처 추가
+// private fun appleLogin(
+//    context: Context,
+//    snsLogin: (String, String) -> Unit,
+// ) {
+//    val provider = OAuthProvider.newBuilder("apple.com").apply {
+//        addCustomParameter("locale", "ko")
+//    }
+//
+//    // 이미 응답을 수신 했는지 확인
+//    val auth = FirebaseAuth.getInstance()
+//    val pending = auth.pendingAuthResult
+//    if (pending != null) {
+//        pending.addOnSuccessListener { authResult ->
+//            handleAuthResult(authResult, snsLogin)
+//        }.addOnFailureListener { e ->
+//            // TODO 로그인 실패 바텀시트 렌더링
+//        }
+//    } else {
+//        auth.startActivityForSignInWithProvider(context as Activity, provider.build()).addOnSuccessListener { authResult ->
+//            handleAuthResult(authResult, snsLogin)
+//        }.addOnFailureListener {
+//            // TODO 로그인 실패 바텀시트 렌더링
+//        }
+//    }
+// }
+//
+// private fun handleAuthResult(
+//    authResult: AuthResult,
+//    snsLogin: (String, String) -> Unit,
+// ) {
+//    val user = authResult.user
+//    user?.getIdToken(true)?.addOnCompleteListener { task ->
+//        if (task.isSuccessful) {
+//            val idToken = task.result?.token
+//            if (idToken != null) {
+//                snsLogin("애플", idToken)
+//            } else {
+//                // TODO 로그인 실패 바텀시트 렌더링
+//            }
+//        } else {
+//            // TODO 로그인 실패 바텀시트 렌더링
+//        }
+//    }
+// }
