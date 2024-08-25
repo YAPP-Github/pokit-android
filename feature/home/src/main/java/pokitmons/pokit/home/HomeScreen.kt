@@ -37,8 +37,8 @@ import pokitmons.pokit.core.feature.flow.collectAsEffect
 import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.components.block.pokittoast.PokitToast
 import pokitmons.pokit.core.ui.theme.PokitTheme
-import pokitmons.pokit.home.model.HomeSideEffect
 import pokitmons.pokit.core.ui.utils.noRippleClickable
+import pokitmons.pokit.home.model.HomeSideEffect
 import pokitmons.pokit.home.pokit.PokitScreen
 import pokitmons.pokit.home.pokit.PokitViewModel
 import pokitmons.pokit.home.pokit.ScreenType
@@ -63,7 +63,7 @@ fun HomeScreen(
     val toastMessage by viewModel.toastMessage.collectAsState()
 
     viewModel.sideEffect.collectAsEffect { homeSideEffect: HomeSideEffect ->
-        when(homeSideEffect) {
+        when (homeSideEffect) {
             HomeSideEffect.NavigateToAddPokit -> {
                 onNavigateAddPokit()
             }

@@ -37,7 +37,7 @@ class PokitViewModel @Inject constructor(
     private val getPokitsUseCase: GetPokitsUseCase,
     private val getLinksUseCase: GetLinksUseCase,
     private val deletePokitUseCase: DeletePokitUseCase,
-    private val getPokitCountUseCase: GetPokitCountUseCase
+    private val getPokitCountUseCase: GetPokitCountUseCase,
 ) : ViewModel() {
 
     private val _sideEffect = MutableEventFlow<HomeSideEffect>()

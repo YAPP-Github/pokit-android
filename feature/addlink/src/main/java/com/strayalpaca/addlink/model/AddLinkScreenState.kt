@@ -7,7 +7,7 @@ data class AddLinkScreenState(
     val currentPokit: Pokit? = null,
     val useRemind: Boolean = false,
     val step: ScreenStep = ScreenStep.IDLE,
-    val toastMessage: ToastMessageEvent? = null
+    val toastMessage: ToastMessageEvent? = null,
 )
 
 sealed class ScreenStep {
@@ -28,5 +28,5 @@ sealed class AddLinkScreenSideEffect {
 
 enum class ToastMessageEvent(val stringResourceId: Int) {
     NETWORK_ERROR(R.string.network_error),
-    CANNOT_CREATE_POKIT_MORE(R.string.toast_cannot_create_pokit)
+    CANNOT_CREATE_POKIT_MORE(R.string.toast_cannot_create_pokit),
 }

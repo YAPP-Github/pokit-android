@@ -161,7 +161,7 @@ fun AddLinkScreen(
     toggleRemindRadio: (Boolean) -> Unit,
     onBackPressed: () -> Unit,
     onClickSaveButton: () -> Unit,
-    closeToast: () -> Unit
+    closeToast: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
     val enable = remember(state.step) {
