@@ -194,8 +194,8 @@ fun RemindScreen(
                                 title = unReadContent.title,
                                 sub = "${unReadContent.createdAt} • ${unReadContent.domain}",
                                 painter = rememberAsyncImagePainter(unReadContent.thumbNail),
-                                notRead = unReadContent.isRead,
-                                badgeText = unReadContent.data,
+                                notRead = !unReadContent.isRead,
+                                badgeText = null,
                                 onClickKebab = {
                                     viewModel.showLinkOptionBottomSheet(remindResult = unReadContent)
                                 },

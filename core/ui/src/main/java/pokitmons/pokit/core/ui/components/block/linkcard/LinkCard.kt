@@ -40,7 +40,7 @@ fun<T> LinkCard(
     sub: String,
     painter: Painter,
     notRead: Boolean,
-    badgeText: String,
+    badgeText: String?,
     onClickKebab: (T) -> Unit,
     onClickItem: (T) -> Unit,
     modifier: Modifier = Modifier,
@@ -119,16 +119,18 @@ fun<T> LinkCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
-                    Text(
-                        text = badgeText,
-                        modifier = Modifier
-                            .background(
-                                color = PokitTheme.colors.backgroundPrimary,
-                                shape = RoundedCornerShape(4.dp)
-                            )
-                            .padding(horizontal = 8.dp, vertical = 4.dp),
-                        style = PokitTheme.typography.label4.copy(color = PokitTheme.colors.textTertiary)
-                    )
+                    badgeText?.let { badge ->
+                        Text(
+                            text = badge,
+                            modifier = Modifier
+                                .background(
+                                    color = PokitTheme.colors.backgroundPrimary,
+                                    shape = RoundedCornerShape(4.dp)
+                                )
+                                .padding(horizontal = 8.dp, vertical = 4.dp),
+                            style = PokitTheme.typography.label4.copy(color = PokitTheme.colors.textTertiary)
+                        )
+                    }
 
                     if (notRead) {
                         Text(
