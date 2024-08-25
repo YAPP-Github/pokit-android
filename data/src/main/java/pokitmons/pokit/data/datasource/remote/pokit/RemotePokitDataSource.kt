@@ -41,7 +41,7 @@ class RemotePokitDataSource @Inject constructor(
     }
 
     override suspend fun deletePokit(pokitId: Int) {
-        return pokitApi.deletePokit(pokitId)
+        pokitApi.deletePokit(pokitId)
     }
 
     override suspend fun getPokitCount(): GetPokitCountResponse {

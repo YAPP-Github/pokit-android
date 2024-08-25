@@ -8,6 +8,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.search.model.Link
 import pokitmons.pokit.search.model.LinkType
+import pokitmons.pokit.search.model.SearchScreenState
+import pokitmons.pokit.search.model.SearchScreenStep
 
 @Preview(showBackground = true)
 @Composable
@@ -17,6 +19,7 @@ private fun Preview() {
             modifier = Modifier.fillMaxSize()
         ) {
             SearchScreen(
+                state = SearchScreenState(step = SearchScreenStep.RESULT),
                 linkList = sampleLinks
             )
         }

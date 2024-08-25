@@ -21,6 +21,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.search.model.Link
@@ -89,8 +90,8 @@ internal fun SearchItemList(
                     item = link,
                     title = link.title,
                     sub = "${link.dateString} · ${link.domainUrl}",
-                    painter = painterResource(id = coreDrawable.icon_24_google),
-                    notRead = link.isRead,
+                    painter = rememberAsyncImagePainter(link.imageUrl),
+                    notRead = !link.isRead,
                     badgeText = stringResource(id = link.linkType.textResourceId),
                     onClickKebab = onClickLinkKebab,
                     onClickItem = onClickLink,

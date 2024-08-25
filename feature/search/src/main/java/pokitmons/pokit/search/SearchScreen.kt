@@ -12,8 +12,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.components.template.modifybottomsheet.ModifyBottomSheetContent
+import pokitmons.pokit.core.ui.components.template.pokkiempty.EmptyPokki
+import pokitmons.pokit.core.ui.components.template.pokkierror.ErrorPokki
 import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButtonBottomSheetContent
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.search.components.filter.FilterArea
@@ -29,6 +32,7 @@ import pokitmons.pokit.search.model.Link
 import pokitmons.pokit.search.model.SearchScreenState
 import pokitmons.pokit.search.model.SearchScreenStep
 import pokitmons.pokit.search.paging.SimplePagingState
+import pokitmons.pokit.core.ui.R.string as coreString
 
 @Composable
 fun SearchScreenContainer(
@@ -188,18 +192,44 @@ fun SearchScreen(
         )
 
         if (state.step == SearchScreenStep.RESULT) {
-            SearchItemList(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .weight(1f),
-                onToggleSort = toggleSortOrder,
-                useRecentOrder = state.sortRecent,
-                onClickLinkKebab = showLinkModifyBottomSheet,
-                onClickLink = showLinkDetailBottomSheet,
-                links = linkList,
-                linkPagingState = linkPagingState,
-                loadNextLinks = loadNextLinks
-            )
+            when {
+                (linkPagingState == SimplePagingState.LOADING_INIT) -> {
+                    LoadingProgress(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    )
+                }
+                (linkPagingState == SimplePagingState.FAILURE_INIT) -> {
+                    ErrorPokki(
+                        modifier = Modifier.fillMaxWidth().weight(1f),
+                        title = stringResource(id = coreString.title_error),
+                        sub = stringResource(id = coreString.sub_error),
+                        onClickRetry = onClickSearch
+                    )
+                }
+                (linkList.isEmpty()) -> {
+                    EmptyPokki(
+                        modifier = Modifier.fillMaxWidth().weight(1f),
+                        title = stringResource(id = coreString.title_empty_search),
+                        sub = stringResource(id = coreString.sub_empty_search)
+                    )
+                }
+                else -> {
+                    SearchItemList(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        onToggleSort = toggleSortOrder,
+                        useRecentOrder = state.sortRecent,
+                        onClickLinkKebab = showLinkModifyBottomSheet,
+                        onClickLink = showLinkDetailBottomSheet,
+                        links = linkList,
+                        linkPagingState = linkPagingState,
+                        loadNextLinks = loadNextLinks
+                    )
+                }
+            }
         }
     }
 }

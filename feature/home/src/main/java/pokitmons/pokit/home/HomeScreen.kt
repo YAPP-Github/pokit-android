@@ -20,6 +20,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -29,11 +30,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
+import pokitmons.pokit.core.feature.flow.collectAsEffect
 import pokitmons.pokit.core.ui.R
+import pokitmons.pokit.core.ui.components.block.pokittoast.PokitToast
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.core.ui.utils.noRippleClickable
+import pokitmons.pokit.home.model.HomeSideEffect
 import pokitmons.pokit.home.pokit.PokitScreen
 import pokitmons.pokit.home.pokit.PokitViewModel
 import pokitmons.pokit.home.pokit.ScreenType
@@ -54,6 +59,16 @@ fun HomeScreen(
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
+
+    val toastMessage by viewModel.toastMessage.collectAsState()
+
+    viewModel.sideEffect.collectAsEffect { homeSideEffect: HomeSideEffect ->
+        when (homeSideEffect) {
+            HomeSideEffect.NavigateToAddPokit -> {
+                onNavigateAddPokit()
+            }
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -117,7 +132,7 @@ fun HomeScreen(
                                 scope.launch {
                                     sheetState.hide()
                                     showBottomSheet = false
-                                    onNavigateAddPokit()
+                                    viewModel.checkPokitCount()
                                 }
                             },
                         verticalArrangement = Arrangement.Center,
@@ -154,19 +169,32 @@ fun HomeScreen(
             Scaffold(
                 bottomBar = { BottomNavigationBar() }
             ) { padding ->
-                when (viewModel.screenType.value) {
-                    is ScreenType.Pokit -> {
-                        PokitScreen(
-                            viewModel = viewModel,
-                            modifier = Modifier.padding(padding),
-                            onNavigateToPokitDetail = onNavigateToPokitDetail
-                        )
+                Box {
+                    when (viewModel.screenType.value) {
+                        is ScreenType.Pokit -> {
+                            PokitScreen(
+                                viewModel = viewModel,
+                                modifier = Modifier.padding(padding),
+                                onNavigateToPokitDetail = onNavigateToPokitDetail
+                            )
+                        }
+
+                        is ScreenType.Remind -> {
+                            RemindScreen(
+                                modifier = Modifier.padding(padding),
+                                onNavigateToLinkModify = onNavigateToLinkModify
+                            )
+                        }
                     }
 
-                    is ScreenType.Remind -> {
-                        RemindScreen(
-                            modifier = Modifier.padding(padding),
-                            onNavigateToLinkModify = onNavigateToLinkModify
+                    toastMessage?.let { toastMessageEvent ->
+                        PokitToast(
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .padding(padding)
+                                .padding(start = 12.dp, end = 12.dp, bottom = 48.dp),
+                            text = stringResource(id = toastMessageEvent.resourceId),
+                            onClickClose = viewModel::closeToastMessage
                         )
                     }
                 }

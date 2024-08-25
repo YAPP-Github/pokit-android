@@ -17,9 +17,9 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import com.strayalpaca.pokitdetail.components.block.TitleArea
 import com.strayalpaca.pokitdetail.components.block.Toolbar
 import com.strayalpaca.pokitdetail.components.template.filterselectbottomsheet.FilterSelectBottomSheet
@@ -30,14 +30,18 @@ import com.strayalpaca.pokitdetail.model.Link
 import com.strayalpaca.pokitdetail.model.Pokit
 import com.strayalpaca.pokitdetail.model.PokitDetailScreenState
 import com.strayalpaca.pokitdetail.paging.SimplePagingState
+import pokitmons.pokit.core.feature.flow.collectAsEffect
+import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
 import pokitmons.pokit.core.ui.components.block.pokitlist.PokitList
 import pokitmons.pokit.core.ui.components.block.pokitlist.attributes.PokitListState
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.components.template.modifybottomsheet.ModifyBottomSheetContent
+import pokitmons.pokit.core.ui.components.template.pokkiempty.EmptyPokki
+import pokitmons.pokit.core.ui.components.template.pokkierror.ErrorPokki
 import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButtonBottomSheetContent
 import pokitmons.pokit.core.ui.theme.PokitTheme
-import pokitmons.pokit.core.ui.R.drawable as coreDrawable
+import pokitmons.pokit.core.ui.R.string as coreString
 
 @Composable
 fun PokitDetailScreenContainer(
@@ -51,6 +55,10 @@ fun PokitDetailScreenContainer(
     val linkListState by viewModel.linkListState.collectAsState()
     val pokitList by viewModel.pokitList.collectAsState()
     val pokitListState by viewModel.pokitListState.collectAsState()
+
+    viewModel.moveToBackEvent.collectAsEffect {
+        onBackPressed()
+    }
 
     PokitDetailScreen(
         onBackPressed = onBackPressed,
@@ -76,6 +84,7 @@ fun PokitDetailScreenContainer(
         onClickPokitModify = onNavigateToPokitModify,
         onClickPokitRemove = viewModel::deletePokit,
         onClickLinkModify = onNavigateToLinkModify,
+        onClickLinkRemove = viewModel::deleteLink,
         loadNextPokits = viewModel::loadNextPokits,
         refreshPokits = viewModel::refreshPokits,
         loadNextLinks = viewModel::loadNextLinks
@@ -107,6 +116,7 @@ fun PokitDetailScreen(
     onClickPokitModify: (String) -> Unit = {},
     onClickPokitRemove: () -> Unit = {},
     onClickLinkModify: (String) -> Unit = {},
+    onClickLinkRemove: () -> Unit = {},
     loadNextPokits: () -> Unit = {},
     refreshPokits: () -> Unit = {},
     loadNextLinks: () -> Unit = {},
@@ -143,30 +153,62 @@ fun PokitDetailScreen(
             }
         }
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            state = linkLazyColumnListState
-        ) {
-            items(linkList) { link ->
-                LinkCard(
-                    item = link,
-                    title = link.title,
-                    sub = "${link.dateString} · ${link.domainUrl}",
-                    painter = painterResource(id = coreDrawable.icon_24_google),
-                    notRead = link.isRead,
-                    badgeText = stringResource(id = link.linkType.textResourceId),
-                    onClickKebab = showLinkModifyBottomSheet,
-                    onClickItem = onClickLink,
-                    modifier = Modifier.padding(20.dp)
+        when {
+            (linkListState == SimplePagingState.LOADING_INIT) -> {
+                LoadingProgress(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
                 )
+            }
+            (linkListState == SimplePagingState.FAILURE_INIT) -> {
+                ErrorPokki(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    title = stringResource(id = coreString.title_error),
+                    sub = stringResource(id = coreString.sub_error)
+                )
+            }
+            (linkList.isEmpty()) -> {
+                EmptyPokki(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    title = stringResource(id = coreString.title_empty_links),
+                    sub = stringResource(id = coreString.sub_empty_links)
+                )
+            }
+            else -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    state = linkLazyColumnListState
+                ) {
+                    items(
+                        items = linkList,
+                        key = { it.id }
+                    ) { link ->
+                        LinkCard(
+                            item = link,
+                            title = link.title,
+                            sub = "${link.dateString} · ${link.domainUrl}",
+                            painter = rememberAsyncImagePainter(link.imageUrl),
+                            notRead = link.isRead,
+                            badgeText = stringResource(id = link.linkType.textResourceId),
+                            onClickKebab = showLinkModifyBottomSheet,
+                            onClickItem = onClickLink,
+                            modifier = Modifier.padding(20.dp)
+                        )
 
-                HorizontalDivider(
-                    modifier = Modifier.padding(horizontal = 20.dp),
-                    thickness = 1.dp,
-                    color = PokitTheme.colors.borderTertiary
-                )
+                        HorizontalDivider(
+                            modifier = Modifier.padding(horizontal = 20.dp),
+                            thickness = 1.dp,
+                            color = PokitTheme.colors.borderTertiary
+                        )
+                    }
+                }
             }
         }
 
@@ -248,7 +290,10 @@ fun PokitDetailScreen(
                         title = stringResource(id = R.string.title_remove_link),
                         subText = stringResource(id = R.string.sub_remove_link),
                         onClickLeftButton = hideLinkModifyBottomSheet,
-                        onClickRightButton = {}
+                        onClickRightButton = {
+                            onClickLinkRemove()
+                            hideLinkModifyBottomSheet()
+                        }
                     )
                 }
 
@@ -281,8 +326,8 @@ fun PokitDetailScreen(
                         onClickLeftButton = hidePokitModifyBottomSheet,
                         onClickRightButton = remember {
                             {
-                                hidePokitModifyBottomSheet()
                                 onClickPokitRemove()
+                                hidePokitModifyBottomSheet()
                             }
                         }
                     )

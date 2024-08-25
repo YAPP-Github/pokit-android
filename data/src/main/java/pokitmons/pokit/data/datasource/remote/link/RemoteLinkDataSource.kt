@@ -40,8 +40,8 @@ class RemoteLinkDataSource @Inject constructor(
         page: Int,
         size: Int,
         sort: List<String>,
-        isRead: Boolean,
-        favorites: Boolean,
+        isRead: Boolean?,
+        favorites: Boolean?,
         startDate: String?,
         endDate: String?,
         categoryIds: List<Int>?,
@@ -61,7 +61,7 @@ class RemoteLinkDataSource @Inject constructor(
     }
 
     override suspend fun deleteLink(contentId: Int) {
-        return linkApi.deleteLink(contentId = contentId)
+        linkApi.deleteLink(contentId = contentId)
     }
 
     override suspend fun getLink(contentId: Int): GetLinkResponse {

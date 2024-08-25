@@ -12,6 +12,6 @@ class RemoteAlertDataSource @Inject constructor(
     }
 
     override suspend fun deleteAlert(alertId: Int) {
-        return api.deleteAlert(alertId)
+        api.deleteAlert(alertId)
     }
 }

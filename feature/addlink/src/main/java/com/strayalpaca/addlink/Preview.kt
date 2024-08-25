@@ -29,7 +29,8 @@ fun AddLinkScreenPreview() {
                 onClickSelectPokit = {},
                 toggleRemindRadio = {},
                 onBackPressed = {},
-                onClickSaveButton = {}
+                onClickSaveButton = {},
+                closeToast = {}
             )
         }
     }

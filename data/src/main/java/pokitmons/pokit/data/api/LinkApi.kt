@@ -6,6 +6,7 @@ import pokitmons.pokit.data.model.link.response.GetLinkResponse
 import pokitmons.pokit.data.model.link.response.GetLinksResponse
 import pokitmons.pokit.data.model.link.response.ModifyLinkResponse
 import pokitmons.pokit.domain.model.link.LinksSort
+import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.PATCH
@@ -33,8 +34,8 @@ interface LinkApi {
         @Query("page") page: Int = 0,
         @Query("size") size: Int = 10,
         @Query("sort") sort: List<String> = listOf(LinksSort.RECENT.value),
-        @Query("isRead") isRead: Boolean = false,
-        @Query("favorites") favorites: Boolean = false,
+        @Query("isRead") isRead: Boolean? = null,
+        @Query("favorites") favorites: Boolean? = null,
         @Query("startDate") startDate: String? = null,
         @Query("endDate") endDate: String? = null,
         @Query("categoryIds") categoryIds: List<Int>? = null,
@@ -44,7 +45,7 @@ interface LinkApi {
     @PUT("content/{contentId}")
     suspend fun deleteLink(
         @Path("contentId") contentId: Int = 0,
-    )
+    ): Response<Unit>
 
     @POST("content/{contentId}")
     suspend fun getLink(
