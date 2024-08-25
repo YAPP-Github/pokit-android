@@ -1,6 +1,5 @@
 package pokitmons.pokit.core.ui.components.block.tap
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -12,6 +11,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 
 @Composable
 fun <T> PokitTap(
@@ -25,7 +25,7 @@ fun <T> PokitTap(
 
     Box(
         modifier = modifier
-            .clickable {
+            .noRippleClickable {
                 onClick(data)
             }
     ) {

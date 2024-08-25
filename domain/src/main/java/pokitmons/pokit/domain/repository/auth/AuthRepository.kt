@@ -10,6 +10,8 @@ interface AuthRepository {
     suspend fun snsLogin(authPlatform: String, idToken: String): PokitResult<SNSLoginResult>
     suspend fun checkDuplicateNickname(nickname: String): PokitResult<DuplicateNicknameResult>
     suspend fun signUp(nickname: String, categories: List<String>): PokitResult<SignUpResult>
+    suspend fun withdraw(): PokitResult<Unit>
+
     suspend fun setAccessToken(token: String)
     suspend fun setRefreshToken(token: String)
 

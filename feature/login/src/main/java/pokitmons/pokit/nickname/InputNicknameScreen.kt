@@ -1,6 +1,5 @@
 package pokitmons.pokit.nickname
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -24,6 +23,7 @@ import pokitmons.pokit.core.ui.components.atom.button.PokitButton
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.components.block.labeledinput.LabeledInput
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 import pokitmons.pokit.core.ui.R as UI
 import pokitmons.pokit.login.R as Login
 
@@ -45,7 +45,7 @@ fun InputNicknameScreen(
     ) {
         Column {
             Icon(
-                modifier = Modifier.clickable { onBackPressed() },
+                modifier = Modifier.noRippleClickable { onBackPressed() },
                 painter = painterResource(id = UI.drawable.icon_24_arrow_left),
                 contentDescription = "뒤로가기"
             )

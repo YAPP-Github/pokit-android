@@ -2,7 +2,6 @@ package pokitmons.pokit.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,6 +38,7 @@ import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.components.block.pokittoast.PokitToast
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.home.model.HomeSideEffect
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 import pokitmons.pokit.home.pokit.PokitScreen
 import pokitmons.pokit.home.pokit.PokitViewModel
 import pokitmons.pokit.home.pokit.ScreenType
@@ -95,7 +95,7 @@ fun HomeScreen(
                                 shape = RoundedCornerShape(12.dp)
                             )
                             .size(96.dp)
-                            .clickable {
+                            .noRippleClickable {
                                 scope.launch {
                                     sheetState.hide()
                                     showBottomSheet = false
@@ -128,7 +128,7 @@ fun HomeScreen(
                                 shape = RoundedCornerShape(12.dp)
                             )
                             .size(96.dp)
-                            .clickable {
+                            .noRippleClickable {
                                 scope.launch {
                                     sheetState.hide()
                                     showBottomSheet = false
@@ -204,7 +204,7 @@ fun HomeScreen(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 60.dp)
-                .clickable {
+                .noRippleClickable {
                     showBottomSheet = true
                 },
             painter = painterResource(id = R.drawable.image_floating),

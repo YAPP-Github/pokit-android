@@ -56,7 +56,7 @@ class LoginViewModel @Inject constructor(
     private val _categories = mutableStateListOf<CategoryState>()
     val categories: List<CategoryState> get() = _categories
 
-    private var authType = ""
+    private var authType = "구글"
 
     fun inputText(inputNickname: String) {
         _inputNicknameState.update { duplicateNicknameState ->
@@ -65,6 +65,8 @@ class LoginViewModel @Inject constructor(
     }
 
     fun snsLogin(authPlatform: String, idToken: String) {
+        authType = authPlatform
+
         viewModelScope.launch {
             val loginResult = loginUseCase.snsLogin(
                 authPlatform = authPlatform,

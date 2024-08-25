@@ -2,7 +2,6 @@ package pokitmons.pokit.home.remind
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 
 @Composable
 fun ToadyLinkCard(
@@ -45,7 +45,7 @@ fun ToadyLinkCard(
             .width(216.dp)
             .height(194.dp)
             .clip(RoundedCornerShape(8.dp))
-            .clickable {
+            .noRippleClickable {
                 onClick()
             }
     ) {

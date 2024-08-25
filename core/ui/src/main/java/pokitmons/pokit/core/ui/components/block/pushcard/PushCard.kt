@@ -1,7 +1,6 @@
 package pokitmons.pokit.core.ui.components.block.pushcard
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +20,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 
 @Composable
 fun PushCard(
@@ -36,7 +36,7 @@ fun PushCard(
 
     Row(
         modifier = modifier
-            .clickable(onClick = onClick)
+            .noRippleClickable { onClick() }
             .padding(all = 20.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically

@@ -1,7 +1,6 @@
 package pokitmons.pokit.core.ui.components.template.modifybottomsheet.subcomponents
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 
 @Composable
 internal fun ModifyBottomSheetItem(
@@ -24,7 +24,7 @@ internal fun ModifyBottomSheetItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {
+            .noRippleClickable {
                 onClick()
             }
             .padding(horizontal = 24.dp, vertical = 20.dp),
