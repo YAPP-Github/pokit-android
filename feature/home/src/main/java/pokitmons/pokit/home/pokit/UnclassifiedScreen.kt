@@ -6,33 +6,96 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
+import com.strayalpaca.pokitdetail.R
+import com.strayalpaca.pokitdetail.components.template.linkdetailbottomsheet.LinkDetailBottomSheet
+import com.strayalpaca.pokitdetail.model.BottomSheetType
+import com.strayalpaca.pokitdetail.model.Link
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
+import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
+import pokitmons.pokit.core.ui.components.template.modifybottomsheet.ModifyBottomSheetContent
+import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButtonBottomSheetContent
 
 @Composable
-fun UnclassifiedScreen(viewModel: PokitViewModel = hiltViewModel()) {
-    viewModel.loadUnCategoryLinks()
+fun UnclassifiedScreen(
+    viewModel: PokitViewModel = hiltViewModel(),
+    onNavigateToLinkModify: (String) -> Unit = {},
+) {
     val unCategoryLinks = viewModel.unCategoryLinks.collectAsState()
+
+    val pokitOptionBottomSheetType by viewModel.pokitOptionBottomSheetType.collectAsState()
+    val currentSelectedLink by viewModel.currentSelectedLink.collectAsState()
+    val currentDetailShowLink by viewModel.currentDetailShowLink.collectAsState()
+
+    LinkDetailBottomSheet(
+        show = currentDetailShowLink != null,
+        link = currentDetailShowLink ?: Link(),
+        onHideBottomSheet = viewModel::hideDetailLinkBottomSheet
+    )
+
+    PokitBottomSheet(
+        onHideBottomSheet = viewModel::hideLinkOptionBottomSheet,
+        show = pokitOptionBottomSheetType != null
+    ) {
+        when (pokitOptionBottomSheetType) {
+            BottomSheetType.MODIFY -> {
+                ModifyBottomSheetContent(
+                    onClickShare = {},
+                    onClickModify = remember {
+                        {
+                            viewModel.hideLinkOptionBottomSheet()
+                            onNavigateToLinkModify(currentSelectedLink!!.id)
+                        }
+                    },
+                    onClickRemove = viewModel::showLinkRemoveBottomSheet
+                )
+            }
+            BottomSheetType.REMOVE -> {
+                TwoButtonBottomSheetContent(
+                    title = stringResource(id = R.string.title_remove_link),
+                    subText = stringResource(id = R.string.sub_remove_link),
+                    onClickLeftButton = viewModel::hideLinkOptionBottomSheet,
+                    onClickRightButton = remember {
+                        {
+                            viewModel.removeCurrentSelectedLink()
+                            viewModel.hideLinkOptionBottomSheet()
+                        }
+                    }
+                )
+            }
+            else -> {}
+        }
+    }
 
     LazyColumn(
         modifier = Modifier,
         contentPadding = PaddingValues(bottom = 20.dp),
         verticalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        items(items = unCategoryLinks.value) { unCategoryDetail ->
+        items(
+            items = unCategoryLinks.value,
+            key = { it.id }
+        ) { unCategoryDetail ->
             LinkCard(
                 item = unCategoryDetail.linkType,
-                title = "자연 친화적인 라이프스타일을 위한 환경 보호 방법",
+                title = unCategoryDetail.title,
                 sub = unCategoryDetail.createdAt,
                 painter = rememberAsyncImagePainter(model = unCategoryDetail.imageUrl),
                 notRead = !unCategoryDetail.isRead,
                 badgeText = "미분류",
-                onClickKebab = { },
-                onClickItem = { }
+                onClickKebab = {
+                    viewModel.showLinkOptionBottomSheet(unCategoryDetail)
+                },
+                onClickItem = {
+                    viewModel.showDetailLinkBottomSheet(unCategoryDetail)
+                }
             )
         }
     }

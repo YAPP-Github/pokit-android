@@ -156,38 +156,38 @@ fun LinkDetailBottomSheet(
 
             Spacer(modifier = Modifier.weight(1f))
 
-            Image(
-                modifier = Modifier
-                    .size(36.dp)
-                    .padding(6.dp),
-                painter = painterResource(id = coreDrawable.icon_24_share),
-                contentDescription = "share",
-                colorFilter = ColorFilter.tint(
-                    color = PokitTheme.colors.iconSecondary
-                )
-            )
-
-            Image(
-                modifier = Modifier
-                    .size(36.dp)
-                    .padding(6.dp),
-                painter = painterResource(id = coreDrawable.icon_24_edit),
-                contentDescription = "edit",
-                colorFilter = ColorFilter.tint(
-                    color = PokitTheme.colors.iconSecondary
-                )
-            )
-
-            Image(
-                modifier = Modifier
-                    .size(36.dp)
-                    .padding(6.dp),
-                painter = painterResource(id = coreDrawable.icon_24_trash),
-                contentDescription = "remove",
-                colorFilter = ColorFilter.tint(
-                    color = PokitTheme.colors.iconSecondary
-                )
-            )
+//            Image(
+//                modifier = Modifier
+//                    .size(36.dp)
+//                    .padding(6.dp),
+//                painter = painterResource(id = coreDrawable.icon_24_share),
+//                contentDescription = "share",
+//                colorFilter = ColorFilter.tint(
+//                    color = PokitTheme.colors.iconSecondary
+//                )
+//            )
+//
+//            Image(
+//                modifier = Modifier
+//                    .size(36.dp)
+//                    .padding(6.dp),
+//                painter = painterResource(id = coreDrawable.icon_24_edit),
+//                contentDescription = "edit",
+//                colorFilter = ColorFilter.tint(
+//                    color = PokitTheme.colors.iconSecondary
+//                )
+//            )
+//
+//            Image(
+//                modifier = Modifier
+//                    .size(36.dp)
+//                    .padding(6.dp),
+//                painter = painterResource(id = coreDrawable.icon_24_trash),
+//                contentDescription = "remove",
+//                colorFilter = ColorFilter.tint(
+//                    color = PokitTheme.colors.iconSecondary
+//                )
+//            )
         }
     }
 }

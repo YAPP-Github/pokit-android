@@ -22,6 +22,7 @@ import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.link.Link
 import pokitmons.pokit.domain.model.link.LinksSort
 import pokitmons.pokit.domain.model.pokit.MAX_POKIT_COUNT
+import pokitmons.pokit.domain.usecase.link.DeleteLinkUseCase
 import pokitmons.pokit.domain.usecase.link.GetLinksUseCase
 import pokitmons.pokit.domain.usecase.pokit.DeletePokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitCountUseCase
@@ -38,6 +39,7 @@ class PokitViewModel @Inject constructor(
     private val getLinksUseCase: GetLinksUseCase,
     private val deletePokitUseCase: DeletePokitUseCase,
     private val getPokitCountUseCase: GetPokitCountUseCase,
+    private val deleteLinkUseCase: DeleteLinkUseCase,
 ) : ViewModel() {
 
     private val _sideEffect = MutableEventFlow<HomeSideEffect>()
@@ -50,6 +52,7 @@ class PokitViewModel @Inject constructor(
         viewModelScope.launch {
             LinkUpdateEvent.updatedLink.collectLatest { updatedLink ->
                 val targetLink = linkPaging.pagingData.value.find { it.id == updatedLink.id.toString() } ?: return@collectLatest
+
                 val modifiedLink = targetLink.copy(
                     title = updatedLink.title,
                     imageUrl = updatedLink.thumbnail,
@@ -67,6 +70,16 @@ class PokitViewModel @Inject constructor(
                 val linkAddedPokit = pokitPaging.pagingData.value.find { it.id == addedLink.pokitId.toString() } ?: return@collectLatest
                 val modifiedPokit = linkAddedPokit.copy(count = (linkAddedPokit.count + 1))
                 pokitPaging.modifyItem(modifiedPokit)
+                linkPaging.refresh()
+            }
+        }
+    }
+
+    private fun initLinkRemoveEventDetector() {
+        viewModelScope.launch {
+            LinkUpdateEvent.removedLink.collectLatest { removedLink ->
+                val targetLink = linkPaging.pagingData.value.find { it.id == removedLink.toString() } ?: return@collectLatest
+                linkPaging.deleteItem(targetLink)
             }
         }
     }
@@ -141,12 +154,22 @@ class PokitViewModel @Inject constructor(
     private val _pokitOptionBottomSheetType = MutableStateFlow<BottomSheetType?>(null)
     val pokitOptionBottomSheetType = _pokitOptionBottomSheetType.asStateFlow()
 
+    private val _currentSelectedLink = MutableStateFlow<DetailLink?>(null)
+    val currentSelectedLink = _currentSelectedLink.asStateFlow()
+
+    private val _currentDetailShowLink = MutableStateFlow<DetailLink?>(null)
+    val currentDetailShowLink = _currentDetailShowLink.asStateFlow()
+
     init {
         initLinkUpdateEventDetector()
         initPokitUpdateEventDetector()
         initPokitRemoveEventDetector()
         initLinkAddEventDetector()
         initPokitAddEventDetector()
+        initLinkRemoveEventDetector()
+
+        loadUnCategoryLinks()
+        loadPokits()
     }
 
     fun updateCategory(category: Category) {
@@ -191,13 +214,13 @@ class PokitViewModel @Inject constructor(
 
     fun loadPokits() {
         viewModelScope.launch {
-            pokitPaging.load()
+            pokitPaging.refresh()
         }
     }
 
     fun loadUnCategoryLinks() {
         viewModelScope.launch {
-            linkPaging.load()
+            linkPaging.refresh()
         }
     }
 
@@ -244,6 +267,38 @@ class PokitViewModel @Inject constructor(
 
     fun closeToastMessage() {
         _toastMessage.update { null }
+    }
+
+    fun showLinkOptionBottomSheet(link: DetailLink) {
+        _pokitOptionBottomSheetType.update { BottomSheetType.MODIFY }
+        _currentSelectedLink.update { link }
+    }
+
+    fun hideLinkOptionBottomSheet() {
+        _pokitOptionBottomSheetType.update { null }
+        _currentSelectedLink.update { null }
+    }
+
+    fun showLinkRemoveBottomSheet() {
+        _pokitOptionBottomSheetType.update { BottomSheetType.REMOVE }
+    }
+
+    fun removeCurrentSelectedLink() {
+        val currentSelectedLinkId = currentSelectedLink.value?.id?.toIntOrNull() ?: return
+        viewModelScope.launch {
+            val response = deleteLinkUseCase.deleteLink(currentSelectedLinkId)
+            if (response is PokitResult.Success) {
+                LinkUpdateEvent.removeSuccess(currentSelectedLinkId)
+            }
+        }
+    }
+
+    fun showDetailLinkBottomSheet(link: DetailLink) {
+        _currentDetailShowLink.update { link }
+    }
+
+    fun hideDetailLinkBottomSheet() {
+        _currentDetailShowLink.update { null }
     }
 }
 
