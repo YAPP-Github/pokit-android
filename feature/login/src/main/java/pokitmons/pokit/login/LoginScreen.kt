@@ -163,10 +163,10 @@ private fun googleLogin(
 }
 
 // TODO 배포 후 피처 추가
-//private fun appleLogin(
+// private fun appleLogin(
 //    context: Context,
 //    snsLogin: (String, String) -> Unit,
-//) {
+// ) {
 //    val provider = OAuthProvider.newBuilder("apple.com").apply {
 //        addCustomParameter("locale", "ko")
 //    }
@@ -187,12 +187,12 @@ private fun googleLogin(
 //            // TODO 로그인 실패 바텀시트 렌더링
 //        }
 //    }
-//}
+// }
 //
-//private fun handleAuthResult(
+// private fun handleAuthResult(
 //    authResult: AuthResult,
 //    snsLogin: (String, String) -> Unit,
-//) {
+// ) {
 //    val user = authResult.user
 //    user?.getIdToken(true)?.addOnCompleteListener { task ->
 //        if (task.isSuccessful) {
@@ -206,4 +206,4 @@ private fun googleLogin(
 //            // TODO 로그인 실패 바텀시트 렌더링
 //        }
 //    }
-//}
+// }
