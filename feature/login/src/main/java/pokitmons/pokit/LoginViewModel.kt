@@ -1,7 +1,12 @@
 package pokitmons.pokit
 
 import android.content.Context
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,6 +45,10 @@ class LoginViewModel @Inject constructor(
         }
     }
     private var duplicateNicknameJob: Job? = null
+
+    private val _isBottomSheetVisible: MutableState<Boolean> = mutableStateOf(false)
+    val isBottomSheetVisible: Boolean
+        get() = _isBottomSheetVisible.value
 
     private val _loginState: MutableStateFlow<LoginState> = MutableStateFlow(LoginState.Init)
     val loginState: StateFlow<LoginState>
@@ -175,6 +184,10 @@ class LoginViewModel @Inject constructor(
         viewModelScope.launch {
             _loginState.emit(LoginState.Init)
         }
+    }
+
+    fun setVisible(visible: Boolean) {
+        _isBottomSheetVisible.value = visible
     }
 
     // TODO 확장함수 모듈 생성하기
