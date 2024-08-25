@@ -15,20 +15,30 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.strayalpaca.addlink.model.Link
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 
 @Composable
 internal fun Link(
     link: Link,
     modifier: Modifier = Modifier,
+    openWebBrowserByClick: Boolean = true,
 ) {
+    val uriHandler = LocalUriHandler.current
+
     Row(
         modifier = modifier
             .fillMaxWidth()
             .clip(RoundedCornerShape(12.dp))
+            .noRippleClickable {
+                if (openWebBrowserByClick) {
+                    uriHandler.openUri(link.url)
+                }
+            }
             .height(IntrinsicSize.Min)
             .border(
                 width = 1.dp,
