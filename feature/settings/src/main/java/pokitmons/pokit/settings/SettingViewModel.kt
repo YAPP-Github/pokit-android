@@ -34,9 +34,16 @@ class SettingViewModel @Inject constructor(
     val isBottomSheetVisible: Boolean
         get() = _isBottomSheetVisible.value
 
+    var type: MutableState<String> = mutableStateOf("")
+        private set
+
     private val _withdrawState: MutableStateFlow<SettingState> = MutableStateFlow(SettingState.Init)
     val withdrawState: StateFlow<SettingState>
         get() = _withdrawState.asStateFlow()
+
+    private val _editNicknameState: MutableStateFlow<EditNicknameState> = MutableStateFlow(EditNicknameState.Init)
+    val editNicknameState: StateFlow<EditNicknameState>
+        get() = _editNicknameState.asStateFlow()
 
     private val _inputNicknameState = MutableStateFlow(DuplicateNicknameState())
     val inputNicknameState: StateFlow<DuplicateNicknameState>
@@ -71,17 +78,13 @@ class SettingViewModel @Inject constructor(
     fun editNickname() {
         viewModelScope.launch {
             when (val editNicknameResult = editNicknameUseCase.editNickname(_inputNicknameState.value.nickname)) {
-                is PokitResult.Success -> {
-                }
-
-                is PokitResult.Error -> {
-                }
+                is PokitResult.Success -> _editNicknameState.emit(EditNicknameState.Success)
+                is PokitResult.Error -> _editNicknameState.emit(EditNicknameState.Error(editNicknameResult.error.message))
             }
         }
     }
 
     fun withdraw() {
-        Log.d("!! : ", "withdraw")
         viewModelScope.launch {
             when (val withdraw = withdrawUseCase.withdraw()) {
                 is PokitResult.Success -> {
@@ -91,9 +94,22 @@ class SettingViewModel @Inject constructor(
                 }
 
                 is PokitResult.Error -> {
+
                 }
             }
         }
+    }
+
+    fun logout() {
+        viewModelScope.launch {
+            tokenUseCase.setAuthType("")
+            tokenUseCase.setAccessToken("")
+            _withdrawState.emit(SettingState.Logout)
+        }
+    }
+
+    fun setType(type: String) {
+        this.type.value = type
     }
 
     // TODO 확장함수 모듈 생성하기
@@ -107,4 +123,12 @@ class SettingViewModel @Inject constructor(
 sealed class SettingState {
     data object Init : SettingState()
     data object Withdraw : SettingState()
+    data object Logout : SettingState()
+    data object Error : SettingState()
+}
+
+sealed class EditNicknameState {
+    data object Init : EditNicknameState()
+    data object Success : EditNicknameState()
+    data class Error(val message: String) : EditNicknameState()
 }

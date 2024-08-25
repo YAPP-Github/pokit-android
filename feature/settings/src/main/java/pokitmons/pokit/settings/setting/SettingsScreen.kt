@@ -33,6 +33,8 @@ fun SettingsScreen(
     when (withdrawState) {
         is SettingState.Init -> Unit
         is SettingState.Withdraw -> onNavigateToLogin()
+        is SettingState.Logout -> onNavigateToLogin()
+        is SettingState.Error -> Unit
     }
 
     Column(modifier = Modifier.fillMaxWidth()) {
@@ -64,25 +66,31 @@ fun SettingsScreen(
             DividerItem()
 
             SettingItem(title = stringResource(StringResource.logout)) {
-                settingViewModel.changeBottomSheetHideState(true)
+                settingViewModel.apply {
+                    setType("로그아웃")
+                    changeBottomSheetHideState(true)
+                }
             }
             SettingItem(title = stringResource(StringResource.delete_account)) {
-                settingViewModel.changeBottomSheetHideState(true)
+                settingViewModel.apply {
+                    setType("회원탈퇴")
+                    changeBottomSheetHideState(true)
+                }
             }
         }
     }
 
-    // TODO 회원탈퇴 분기
+    // TODO 리팩토링
     PokitBottomSheet(
-        onHideBottomSheet = { },
+        onHideBottomSheet = { settingViewModel.changeBottomSheetHideState(false) },
         show = settingViewModel.isBottomSheetVisible
     ) {
         TwoButtonBottomSheetContent(
-            subText = stringResource(id = StringResource.delete_account_sub),
-            title = stringResource(id = StringResource.delete_account_title),
-            rightButtonText = stringResource(id = StringResource.start_delete_account),
+            subText = if (settingViewModel.type.value == "회원탈퇴") stringResource(id = StringResource.delete_account_sub) else null,
+            title = stringResource(id = if (settingViewModel.type.value == "회원탈퇴") StringResource.delete_account_title else StringResource.logout_title),
+            rightButtonText = stringResource(id =  if (settingViewModel.type.value == "회원탈퇴") StringResource.start_delete_account else StringResource.logout),
             onClickLeftButton = { settingViewModel.changeBottomSheetHideState(false) },
-            onClickRightButton = { settingViewModel.withdraw() }
+            onClickRightButton = { if (settingViewModel.type.value == "회원탈퇴") settingViewModel.withdraw() else settingViewModel.logout() }
         )
     }
 }

@@ -1,5 +1,6 @@
 package pokitmons.pokit.settings.nickname
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,11 +12,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.components.atom.button.PokitButton
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.components.block.labeledinput.LabeledInput
+import pokitmons.pokit.settings.EditNicknameState
 import pokitmons.pokit.settings.SettingViewModel
 import pokitmons.pokit.settings.R.string as StringResource
 
@@ -27,6 +30,14 @@ fun EditNicknameScreen(
     onBackPressed: () -> Unit,
 ) {
     val inputNicknameState by settingViewModel.inputNicknameState.collectAsState()
+    val editNicknameState by settingViewModel.editNicknameState.collectAsState()
+    val context = LocalContext.current
+
+    when (editNicknameState) {
+        is EditNicknameState.Init -> Unit
+        is EditNicknameState.Success -> onBackPressed()
+        is EditNicknameState.Error -> Toast.makeText(context, (editNicknameState as EditNicknameState.Error).message, Toast.LENGTH_SHORT).show()
+    }
 
     Box(
         modifier = Modifier
