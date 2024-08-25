@@ -31,11 +31,6 @@ interface AuthApi {
         @Body signUpRequest: SignUpRequest,
     ): SignUpResponse
 
-    @POST("auth/reissue")
-    suspend fun reissue(
-        @Body tokenRequest: TokenRequest,
-    ): TokenResponse
-
     @PUT("auth/withdraw")
     suspend fun withdraw(
         @Body withdrawRequest: WithdrawRequest,
