@@ -1,8 +1,8 @@
 package pokitmons.pokit.data.repository.auth
 
 import android.util.Log
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.Flow
 import pokitmons.pokit.data.datasource.local.TokenManager
 import pokitmons.pokit.data.datasource.remote.auth.AuthDataSource
 import pokitmons.pokit.data.mapper.auth.AuthMapper

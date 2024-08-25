@@ -77,13 +77,13 @@ class LoginViewModel @Inject constructor(
 
             when (loginResult) {
                 is PokitResult.Success -> {
+                    authType = authPlatform
                     when (loginResult.result.isRegistered) {
                         true -> {
                             tokenUseCase.apply {
                                 setAccessToken(loginResult.result.accessToken)
                                 setRefreshToken(loginResult.result.refreshToken)
                                 setAuthType(authType)
-                                Log.d("!! : ", getAuthType().first().toString())
                             }
                             _loginState.emit(LoginState.Registered)
                         }
@@ -114,7 +114,6 @@ class LoginViewModel @Inject constructor(
                 )
             ) {
                 is PokitResult.Success -> {
-                    Log.d("!!: ", authType)
                     tokenUseCase.setAuthType(authType)
                     _signUpState.emit(SignUpState.SignUp)
                 }
