@@ -106,7 +106,10 @@ fun SearchScreenContainer(
                 title = stringResource(id = R.string.title_remove_link),
                 subText = stringResource(id = R.string.sub_remove_link),
                 onClickLeftButton = viewModel::hideLinkModifyBottomSheet,
-                onClickRightButton = {}
+                onClickRightButton = {
+                    viewModel.deleteLink()
+                    viewModel.hideLinkModifyBottomSheet()
+                }
             )
         }
     }

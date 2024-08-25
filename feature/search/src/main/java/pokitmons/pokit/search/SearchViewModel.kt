@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pokitmons.pokit.core.feature.navigation.args.LinkUpdateEvent
 import pokitmons.pokit.domain.commom.PokitResult
+import pokitmons.pokit.domain.usecase.link.DeleteLinkUseCase
 import pokitmons.pokit.domain.usecase.link.SearchLinksUseCase
 import pokitmons.pokit.domain.usecase.link.SetBookmarkUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
@@ -40,6 +41,7 @@ class SearchViewModel @Inject constructor(
     getPokitsUseCase: GetPokitsUseCase,
     getRecentSearchWordsUseCase: GetRecentSearchWordsUseCase,
     getUseRecentSearchWordsUseCase: GetUseRecentSearchWordsUseCase,
+    private val deleteLinkUseCase: DeleteLinkUseCase,
     private val setUseRecentSearchWordsUseCase: SetUseRecentSearchWordsUseCase,
     private val addRecentSearchWordUseCase: AddRecentSearchWordUseCase,
     private val removeRecentSearchWordUseCase: RemoveRecentSearchWordUseCase,
@@ -304,6 +306,18 @@ class SearchViewModel @Inject constructor(
                     )
                 }
                 linkPaging.modifyItem(bookmarkChangedLink)
+            }
+        }
+    }
+
+    fun deleteLink() {
+        val currentLinkId = state.value.currentLink?.id?.toIntOrNull() ?: return
+        viewModelScope.launch {
+            val response = deleteLinkUseCase.deleteLink(currentLinkId)
+            if (response is PokitResult.Success) {
+                LinkUpdateEvent.removeSuccess(currentLinkId)
+                val targetLink = linkPaging.pagingData.value.find { it.id == currentLinkId.toString() } ?: return@launch
+                linkPaging.deleteItem(targetLink)
             }
         }
     }
