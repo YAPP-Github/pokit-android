@@ -91,7 +91,7 @@ internal fun SearchItemList(
                     title = link.title,
                     sub = "${link.dateString} · ${link.domainUrl}",
                     painter = rememberAsyncImagePainter(link.imageUrl),
-                    notRead = link.isRead,
+                    notRead = !link.isRead,
                     badgeText = stringResource(id = link.linkType.textResourceId),
                     onClickKebab = onClickLinkKebab,
                     onClickItem = onClickLink,
