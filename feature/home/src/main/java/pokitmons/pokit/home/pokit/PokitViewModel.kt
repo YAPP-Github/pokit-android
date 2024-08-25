@@ -157,6 +157,9 @@ class PokitViewModel @Inject constructor(
     private val _currentSelectedLink = MutableStateFlow<DetailLink?>(null)
     val currentSelectedLink = _currentSelectedLink.asStateFlow()
 
+    private val _currentDetailShowLink = MutableStateFlow<DetailLink?>(null)
+    val currentDetailShowLink = _currentDetailShowLink.asStateFlow()
+
     init {
         initLinkUpdateEventDetector()
         initPokitUpdateEventDetector()
@@ -288,6 +291,14 @@ class PokitViewModel @Inject constructor(
                 LinkUpdateEvent.removeSuccess(currentSelectedLinkId)
             }
         }
+    }
+
+    fun showDetailLinkBottomSheet(link: DetailLink) {
+        _currentDetailShowLink.update { link }
+    }
+
+    fun hideDetailLinkBottomSheet() {
+        _currentDetailShowLink.update { null }
     }
 }
 

@@ -15,7 +15,9 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.strayalpaca.pokitdetail.R
+import com.strayalpaca.pokitdetail.components.template.linkdetailbottomsheet.LinkDetailBottomSheet
 import com.strayalpaca.pokitdetail.model.BottomSheetType
+import com.strayalpaca.pokitdetail.model.Link
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.components.template.modifybottomsheet.ModifyBottomSheetContent
@@ -30,6 +32,13 @@ fun UnclassifiedScreen(
 
     val pokitOptionBottomSheetType by viewModel.pokitOptionBottomSheetType.collectAsState()
     val currentSelectedLink by viewModel.currentSelectedLink.collectAsState()
+    val currentDetailShowLink by viewModel.currentDetailShowLink.collectAsState()
+
+    LinkDetailBottomSheet(
+        show = currentDetailShowLink != null,
+        link = currentDetailShowLink ?: Link(),
+        onHideBottomSheet = viewModel::hideDetailLinkBottomSheet
+    )
 
     PokitBottomSheet(
         onHideBottomSheet = viewModel::hideLinkOptionBottomSheet,
@@ -84,7 +93,9 @@ fun UnclassifiedScreen(
                 onClickKebab = {
                     viewModel.showLinkOptionBottomSheet(unCategoryDetail)
                 },
-                onClickItem = { }
+                onClickItem = {
+                    viewModel.showDetailLinkBottomSheet(unCategoryDetail)
+                }
             )
         }
     }
