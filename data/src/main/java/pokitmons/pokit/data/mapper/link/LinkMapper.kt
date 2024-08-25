@@ -42,8 +42,8 @@ object LinkMapper {
     fun mapperToLink(modifyLinkResponse: ModifyLinkResponse): Link {
         return Link(
             id = modifyLinkResponse.contentId,
-            categoryId = modifyLinkResponse.categoryId,
-            categoryName = "",
+            categoryId = modifyLinkResponse.category.categoryId,
+            categoryName = modifyLinkResponse.category.categoryName,
             data = modifyLinkResponse.data,
             domain = "",
             title = modifyLinkResponse.title,

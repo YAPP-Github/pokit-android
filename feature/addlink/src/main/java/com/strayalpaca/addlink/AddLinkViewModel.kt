@@ -36,6 +36,7 @@ import pokitmons.pokit.domain.usecase.link.GetLinkUseCase
 import pokitmons.pokit.domain.usecase.link.ModifyLinkUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitCountUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
+import pokitmons.pokit.domain.usecase.pokit.GetUncategorizedPokitUseCase
 import javax.inject.Inject
 
 @HiltViewModel
@@ -45,6 +46,7 @@ class AddLinkViewModel @Inject constructor(
     private val createLinkUseCase: CreateLinkUseCase,
     private val modifyLinkUseCase: ModifyLinkUseCase,
     private val getPokitCountUseCase: GetPokitCountUseCase,
+    private val getUncategorizedPokitUseCase: GetUncategorizedPokitUseCase,
     getPokitsUseCase: GetPokitsUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ContainerHost<AddLinkScreenState, AddLinkScreenSideEffect>, ViewModel() {
@@ -72,8 +74,29 @@ class AddLinkViewModel @Inject constructor(
     val currentLinkId: Int? = savedStateHandle.get<String>("link_id")?.toIntOrNull()
 
     init {
-        currentLinkId?.let { linkId ->
-            loadPokitLink(linkId)
+        if (currentLinkId != null) {
+            loadPokitLink(currentLinkId)
+        } else {
+            loadUncategorizedPokit()
+        }
+    }
+
+    private fun loadUncategorizedPokit() {
+        viewModelScope.launch {
+            val response = getUncategorizedPokitUseCase.getUncategoriezdPokit()
+            if (response is PokitResult.Success) {
+                intent {
+                    reduce {
+                        state.copy(
+                            currentPokit = Pokit(
+                                title = response.result.name,
+                                id = response.result.categoryId.toString(),
+                                count = response.result.linkCount
+                            )
+                        )
+                    }
+                }
+            }
         }
     }
 
@@ -163,6 +186,7 @@ class AddLinkViewModel @Inject constructor(
     fun saveLink() = intent {
         viewModelScope.launch(Dispatchers.IO) {
             val currentState = state.copy()
+            val currentSelectedPokit = currentState.currentPokit ?: return@launch
             if (!canSave(currentState)) return@launch
 
             reduce { state.copy(step = ScreenStep.LINK_LOADING) }
@@ -173,7 +197,7 @@ class AddLinkViewModel @Inject constructor(
                     linkId = currentLinkId!!,
                     data = currentState.link!!.url,
                     title = title.value,
-                    categoryId = currentState.currentPokit!!.id.toInt(),
+                    categoryId = currentSelectedPokit.id.toInt(),
                     memo = memo.value,
                     alertYn = if (currentState.useRemind) "Y" else "n",
                     thumbNail = currentState.link.imageUrl ?: ""
@@ -182,7 +206,7 @@ class AddLinkViewModel @Inject constructor(
                 createLinkUseCase.createLink(
                     data = currentState.link!!.url,
                     title = title.value,
-                    categoryId = currentState.currentPokit!!.id.toInt(),
+                    categoryId = currentSelectedPokit.id.toInt(),
                     memo = memo.value,
                     alertYn = if (currentState.useRemind) "Y" else "n",
                     thumbNail = currentState.link.imageUrl ?: ""
@@ -191,13 +215,14 @@ class AddLinkViewModel @Inject constructor(
             if (response is PokitResult.Success) {
                 reduce { state.copy(step = ScreenStep.IDLE) }
                 val responseLink = response.result
+
                 val linkArg = LinkArg(
                     id = responseLink.id,
                     title = responseLink.title,
                     thumbnail = responseLink.thumbnail,
                     domain = responseLink.domain,
                     createdAt = responseLink.createdAt,
-                    pokitId = responseLink.categoryId
+                    pokitId = currentSelectedPokit.id.toInt()
                 )
 
                 val isCreate = (currentLinkId == null)

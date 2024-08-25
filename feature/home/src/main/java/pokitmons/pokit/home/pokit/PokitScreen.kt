@@ -35,8 +35,8 @@ fun PokitScreen(
     modifier: Modifier = Modifier,
     viewModel: PokitViewModel,
     onNavigateToPokitDetail: (String) -> Unit,
+    onNavigateToLinkModify: (String) -> Unit,
 ) {
-    viewModel.loadPokits()
     val pokits = viewModel.pokits.collectAsState()
     val pokitsState by viewModel.pokitsState.collectAsState()
     val selectedCategory by viewModel.selectedCategory
@@ -154,7 +154,10 @@ fun PokitScreen(
                         )
                     }
                     else -> {
-                        UnclassifiedScreen()
+                        UnclassifiedScreen(
+                            viewModel = viewModel,
+                            onNavigateToLinkModify = onNavigateToLinkModify
+                        )
                     }
                 }
             }

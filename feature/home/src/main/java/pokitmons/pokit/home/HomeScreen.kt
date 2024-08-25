@@ -175,7 +175,8 @@ fun HomeScreen(
                             PokitScreen(
                                 viewModel = viewModel,
                                 modifier = Modifier.padding(padding),
-                                onNavigateToPokitDetail = onNavigateToPokitDetail
+                                onNavigateToPokitDetail = onNavigateToPokitDetail,
+                                onNavigateToLinkModify = onNavigateToLinkModify
                             )
                         }
 
