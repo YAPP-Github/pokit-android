@@ -121,8 +121,9 @@ class AddLinkViewModel @Inject constructor(
                     )
                 }
                 _title.update { response.result.title }
-                _linkUrl.update { response.result.data }
                 _memo.update { response.result.memo }
+                _linkUrl.update { response.result.data }
+                getLinkMetaData(response.result.data)
             } else {
                 postSideEffect(AddLinkScreenSideEffect.OnNavigationBack)
             }
@@ -138,13 +139,17 @@ class AddLinkViewModel @Inject constructor(
                 delay(1000L)
                 reduce { state.copy(step = ScreenStep.LINK_LOADING, link = null) }
 
-                val response = getLinkCardUseCase.getLinkCard(linkUrl)
-                if (response is PokitResult.Success) {
-                    reduce { state.copy(step = ScreenStep.IDLE, link = Link.fromDomainLinkCard(response.result)) }
-                } else {
-                    reduce { state.copy(step = ScreenStep.IDLE) }
-                }
+                getLinkMetaData(linkUrl)
             }
+        }
+    }
+
+    private suspend fun getLinkMetaData(linkUrl: String) = intent {
+        val response = getLinkCardUseCase.getLinkCard(linkUrl)
+        if (response is PokitResult.Success) {
+            reduce { state.copy(step = ScreenStep.IDLE, link = Link.fromDomainLinkCard(response.result)) }
+        } else {
+            reduce { state.copy(step = ScreenStep.IDLE) }
         }
     }
 
