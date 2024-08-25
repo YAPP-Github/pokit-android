@@ -88,7 +88,7 @@ fun SettingsScreen(
         TwoButtonBottomSheetContent(
             subText = if (settingViewModel.type.value == "회원탈퇴") stringResource(id = StringResource.delete_account_sub) else null,
             title = stringResource(id = if (settingViewModel.type.value == "회원탈퇴") StringResource.delete_account_title else StringResource.logout_title),
-            rightButtonText = stringResource(id =  if (settingViewModel.type.value == "회원탈퇴") StringResource.start_delete_account else StringResource.logout),
+            rightButtonText = stringResource(id = if (settingViewModel.type.value == "회원탈퇴") StringResource.start_delete_account else StringResource.logout),
             onClickLeftButton = { settingViewModel.changeBottomSheetHideState(false) },
             onClickRightButton = { if (settingViewModel.type.value == "회원탈퇴") settingViewModel.withdraw() else settingViewModel.logout() }
         )

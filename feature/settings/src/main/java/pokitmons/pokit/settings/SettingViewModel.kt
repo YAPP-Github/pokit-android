@@ -1,6 +1,5 @@
 package pokitmons.pokit.settings
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
@@ -94,7 +93,6 @@ class SettingViewModel @Inject constructor(
                 }
 
                 is PokitResult.Error -> {
-
                 }
             }
         }
