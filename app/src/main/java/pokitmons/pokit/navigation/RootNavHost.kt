@@ -46,7 +46,13 @@ fun RootNavHost(
             LoginScreen(
                 loginViewModel = viewModel,
                 onNavigateToTermsOfServiceScreen = { navHostController.navigate(TermOfService.route) },
-                onNavigateToHomeScreen = { navHostController.navigate(Home.route) }
+                onNavigateToHomeScreen = {
+                    navHostController.navigate(Home.route) {
+                        popUpTo(navHostController.graph.startDestinationId) {
+                            inclusive = true
+                        }
+                    }
+                }
             )
         }
 
@@ -77,7 +83,13 @@ fun RootNavHost(
 
         composable(SignUpSuccess.route) {
             SignUpSuccessScreen(
-                onNavigateToMainScreen = { navHostController.navigate(Home.route) }
+                onNavigateToMainScreen = {
+                    navHostController.navigate(Home.route) {
+                        popUpTo(navHostController.graph.startDestinationId) {
+                            inclusive = true
+                        }
+                    }
+                }
             )
         }
 

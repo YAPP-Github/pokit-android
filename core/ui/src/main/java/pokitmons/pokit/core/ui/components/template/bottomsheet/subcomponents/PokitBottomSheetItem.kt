@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 
 @Composable
 fun <T> PokitBottomSheetItem(
@@ -25,7 +26,7 @@ fun <T> PokitBottomSheetItem(
 ) {
     Row(
         modifier = Modifier
-            .clickable {
+            .noRippleClickable {
                 onClick(data)
             }
             .padding(horizontal = 24.dp, vertical = 20.dp)

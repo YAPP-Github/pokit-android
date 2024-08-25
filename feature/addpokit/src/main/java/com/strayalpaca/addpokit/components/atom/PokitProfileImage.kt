@@ -14,6 +14,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.strayalpaca.addpokit.model.PokitImage
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 
 @Composable
 fun PokitProfileImage(
@@ -37,7 +38,7 @@ fun PokitProfileImage(
         modifier = Modifier
             .aspectRatio(1f)
             .clip(shape = RoundedCornerShape(12.dp))
-            .clickable {
+            .noRippleClickable {
                 onClick(pokitImage)
             }
             .border(

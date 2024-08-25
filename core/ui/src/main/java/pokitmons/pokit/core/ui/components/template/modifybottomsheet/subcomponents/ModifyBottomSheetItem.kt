@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 
 @Composable
 internal fun ModifyBottomSheetItem(
@@ -24,7 +25,7 @@ internal fun ModifyBottomSheetItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable {
+            .noRippleClickable {
                 onClick()
             }
             .padding(horizontal = 24.dp, vertical = 20.dp),

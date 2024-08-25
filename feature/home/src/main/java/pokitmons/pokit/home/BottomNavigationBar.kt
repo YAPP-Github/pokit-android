@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 import pokitmons.pokit.home.pokit.PokitViewModel
 import pokitmons.pokit.home.pokit.ScreenType
 import pokitmons.pokit.core.ui.R.drawable as DrawableResource
@@ -43,7 +44,7 @@ fun BottomNavigationBar(viewModel: PokitViewModel = hiltViewModel()) {
             Column(
                 modifier = Modifier
                     .weight(2f)
-                    .clickable { viewModel.updateScreenType(ScreenType.Pokit) }
+                    .noRippleClickable { viewModel.updateScreenType(ScreenType.Pokit) }
                     .padding(bottom = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
@@ -71,7 +72,7 @@ fun BottomNavigationBar(viewModel: PokitViewModel = hiltViewModel()) {
             Column(
                 modifier = Modifier
                     .weight(2f)
-                    .clickable { viewModel.updateScreenType(ScreenType.Remind) }
+                    .noRippleClickable { viewModel.updateScreenType(ScreenType.Remind) }
                     .padding(bottom = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {

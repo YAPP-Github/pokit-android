@@ -27,6 +27,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 
 @Composable
 fun PokitCard(
@@ -46,7 +47,7 @@ fun PokitCard(
                 color = PokitTheme.colors.backgroundPrimary,
                 shape = RoundedCornerShape(8.dp)
             )
-            .clickable(onClick = onClick)
+            .noRippleClickable { onClick() }
             .padding(top = 12.dp, start = 12.dp, bottom = 8.dp, end = 8.dp)
     ) {
         Row(

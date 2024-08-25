@@ -12,6 +12,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 
 @Composable
 fun <T> PokitTap(
@@ -25,7 +26,7 @@ fun <T> PokitTap(
 
     Box(
         modifier = modifier
-            .clickable {
+            .noRippleClickable {
                 onClick(data)
             }
     ) {

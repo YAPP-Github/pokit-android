@@ -18,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 import pokitmons.pokit.home.pokit.PokitViewModel
 import pokitmons.pokit.home.pokit.ScreenType
 
@@ -55,7 +56,7 @@ fun HomeHeader(
                 contentDescription = "검색",
                 modifier = Modifier
                     .size(24.dp)
-                    .clickable { onNavigateToSearch() }
+                    .noRippleClickable { onNavigateToSearch() }
             )
             Icon(
                 painterResource(id = R.drawable.icon_24_bell),
@@ -70,7 +71,7 @@ fun HomeHeader(
                         contentDescription = "설정",
                         modifier = Modifier
                             .size(24.dp)
-                            .clickable { onNavigateToSetting() }
+                            .noRippleClickable { onNavigateToSetting() }
                     )
                 }
                 is ScreenType.Remind -> Unit

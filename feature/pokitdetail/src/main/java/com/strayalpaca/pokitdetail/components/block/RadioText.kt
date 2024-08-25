@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 
 @Composable
 internal fun RadioText(
@@ -30,11 +31,9 @@ internal fun RadioText(
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.clickable(
-            indication = null,
-            interactionSource = remember { MutableInteractionSource() },
-            onClick = onClick
-        )
+        modifier = modifier.noRippleClickable {
+            onClick()
+        }
     ) {
         Box(
             modifier = Modifier

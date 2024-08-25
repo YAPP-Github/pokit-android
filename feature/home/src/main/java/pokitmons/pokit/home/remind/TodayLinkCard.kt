@@ -29,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 
 @Composable
 fun ToadyLinkCard(
@@ -45,7 +46,7 @@ fun ToadyLinkCard(
             .width(216.dp)
             .height(194.dp)
             .clip(RoundedCornerShape(8.dp))
-            .clickable {
+            .noRippleClickable {
                 onClick()
             }
     ) {

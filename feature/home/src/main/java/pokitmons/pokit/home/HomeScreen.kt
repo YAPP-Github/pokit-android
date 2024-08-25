@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 import pokitmons.pokit.home.pokit.PokitScreen
 import pokitmons.pokit.home.pokit.PokitViewModel
 import pokitmons.pokit.home.pokit.ScreenType
@@ -80,7 +81,7 @@ fun HomeScreen(
                                 shape = RoundedCornerShape(12.dp)
                             )
                             .size(96.dp)
-                            .clickable {
+                            .noRippleClickable {
                                 scope.launch {
                                     sheetState.hide()
                                     showBottomSheet = false
@@ -113,7 +114,7 @@ fun HomeScreen(
                                 shape = RoundedCornerShape(12.dp)
                             )
                             .size(96.dp)
-                            .clickable {
+                            .noRippleClickable {
                                 scope.launch {
                                     sheetState.hide()
                                     showBottomSheet = false
@@ -176,7 +177,7 @@ fun HomeScreen(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 60.dp)
-                .clickable {
+                .noRippleClickable {
                     showBottomSheet = true
                 },
             painter = painterResource(id = R.drawable.image_floating),

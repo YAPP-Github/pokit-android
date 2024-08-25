@@ -32,6 +32,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 
 @Composable
 fun<T> LinkCard(
@@ -49,7 +50,7 @@ fun<T> LinkCard(
         Row(
             modifier = Modifier
                 .clip(RoundedCornerShape(8.dp))
-                .clickable { onClickItem(item) }
+                .noRippleClickable { onClickItem(item) }
         ) {
             Box(
                 modifier = Modifier

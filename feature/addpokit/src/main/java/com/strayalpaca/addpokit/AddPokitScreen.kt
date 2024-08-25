@@ -57,6 +57,7 @@ import pokitmons.pokit.core.ui.components.block.pokitlist.PokitList
 import pokitmons.pokit.core.ui.components.block.pokitlist.attributes.PokitListState
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 import pokitmons.pokit.core.ui.R.drawable as coreDrawable
 import pokitmons.pokit.core.ui.R.string as coreString
 
@@ -165,9 +166,9 @@ fun AddPokitScreen(
                     .clip(
                         shape = CircleShape
                     )
-                    .clickable(
-                        onClick = showSelectProfileBottomSheet
-                    )
+                    .noRippleClickable {
+                        showSelectProfileBottomSheet()
+                    }
                     .padding(3.dp)
             ) {
                 Image(
