@@ -1,7 +1,6 @@
 package pokitmons.pokit.core.ui.components.template.bottomsheet.subcomponents
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -15,6 +14,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 
 @Composable
 fun <T> PokitBottomSheetItem(
@@ -25,7 +25,7 @@ fun <T> PokitBottomSheetItem(
 ) {
     Row(
         modifier = Modifier
-            .clickable {
+            .noRippleClickable {
                 onClick(data)
             }
             .padding(horizontal = 24.dp, vertical = 20.dp)

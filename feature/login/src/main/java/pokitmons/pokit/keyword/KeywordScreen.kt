@@ -2,7 +2,6 @@ package pokitmons.pokit.keyword
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -33,6 +32,7 @@ import pokitmons.pokit.core.ui.components.atom.chip.PokitChip
 import pokitmons.pokit.core.ui.components.atom.chip.attributes.PokitChipSize
 import pokitmons.pokit.core.ui.components.atom.chip.attributes.PokitChipState
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 import pokitmons.pokit.core.ui.R as Ui
 import pokitmons.pokit.login.R as Login
 
@@ -67,7 +67,7 @@ fun KeywordScreen(
     ) {
         Column {
             Icon(
-                modifier = Modifier.clickable { onBackPressed() },
+                modifier = Modifier.noRippleClickable { onBackPressed() },
                 painter = painterResource(id = Ui.drawable.icon_24_arrow_left),
                 contentDescription = null
             )

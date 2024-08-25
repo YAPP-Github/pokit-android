@@ -30,7 +30,7 @@ class TokenManager @Inject constructor(
 
     fun getAuthType(): Flow<String> {
         return dataStore.data.map { prefs ->
-            prefs[ACCESS_TOKEN] ?: ""
+            prefs[AUTH_TYPE] ?: ""
         }
     }
 

@@ -3,7 +3,6 @@ package pokitmons.pokit.terms
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.components.atom.checkbox.PokitCheckbox
 import pokitmons.pokit.core.ui.components.atom.checkbox.attributes.PokitCheckboxStyle
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 
 @Composable
 fun TermsCheckBoxItem(
@@ -39,7 +39,7 @@ fun TermsCheckBoxItem(
 
             Text(
                 modifier = Modifier
-                    .clickable { moveToUrl(url, context) }
+                    .noRippleClickable { moveToUrl(url, context) }
                     .padding(start = 4.dp),
                 text = text,
                 style = PokitTheme.typography.body2Medium

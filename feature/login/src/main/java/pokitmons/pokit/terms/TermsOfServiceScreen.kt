@@ -1,7 +1,6 @@
 package pokitmons.pokit.terms
 
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -27,6 +26,7 @@ import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.components.atom.checkbox.PokitCheckbox
 import pokitmons.pokit.core.ui.components.atom.checkbox.attributes.PokitCheckboxStyle
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 import pokitmons.pokit.core.ui.R as UI
 import pokitmons.pokit.login.R as Login
 
@@ -47,13 +47,12 @@ fun TermsOfServiceScreen(
             Icon(
                 painter = painterResource(id = UI.drawable.icon_24_arrow_left),
                 contentDescription = "뒤로가기",
-                modifier = Modifier.clickable { onBackPressed() }
+                modifier = Modifier.noRippleClickable { onBackPressed() }
             )
 
             Spacer(modifier = Modifier.height(32.dp))
 
             Text(
-                modifier = Modifier.clickable { },
                 text = stringResource(id = Login.string.service_privacy_title),
                 style = PokitTheme.typography.title1
             )

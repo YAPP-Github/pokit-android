@@ -1,6 +1,5 @@
 package pokitmons.pokit.home.pokit
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,6 +25,7 @@ import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonStyle
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonType
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.noRippleClickable
 import pokitmons.pokit.core.ui.R.drawable as DrawableResource
 
 @Composable
@@ -93,7 +93,7 @@ fun HomeMid(viewModel: PokitViewModel = hiltViewModel()) {
 
                 Text(
                     modifier = Modifier
-                        .clickable {
+                        .noRippleClickable {
                             when (viewModel.sortOrder.value) {
                                 is SortOrder.Latest -> viewModel.updateSortOrder(SortOrder.Name)
                                 is SortOrder.Name -> viewModel.updateSortOrder(SortOrder.Latest)

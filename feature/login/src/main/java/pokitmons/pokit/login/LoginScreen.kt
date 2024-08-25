@@ -98,16 +98,16 @@ fun LoginScreen(
                 .padding(bottom = 32.dp)
                 .align(Alignment.BottomCenter)
         ) {
-            PokitLoginButton(
-                loginType = PokitLoginButtonType.APPLE,
-                text = stringResource(id = R.string.apple_login),
-                onClick = {
-                    appleLogin(
-                        context = context,
-                        snsLogin = loginViewModel::snsLogin
-                    )
-                }
-            )
+//            PokitLoginButton(
+//                loginType = PokitLoginButtonType.APPLE,
+//                text = stringResource(id = R.string.apple_login),
+//                onClick = {
+//                    appleLogin(
+//                        context = context,
+//                        snsLogin = loginViewModel::snsLogin
+//                    )
+//                }
+//            )
 
             Spacer(modifier = Modifier.height(8.dp))
 
