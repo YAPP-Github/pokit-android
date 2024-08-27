@@ -1,4 +1,4 @@
-package pokitmons.pokit.search.components.linkdetailbottomsheet
+package pokitmons.pokit.core.ui.components.block.linkurlcard
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -15,19 +15,20 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberAsyncImagePainter
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.core.ui.utils.noRippleClickable
-import pokitmons.pokit.search.model.Link
 
 @Composable
-internal fun Link(
-    link: Link,
+fun LinkUrlCard(
     modifier: Modifier = Modifier,
-    openWebBrowserByClick: Boolean = true,
+    thumbnailPainter: Painter,
+    url: String,
+    title: String,
+    openWebBrowserByClick: Boolean
 ) {
     val uriHandler = LocalUriHandler.current
 
@@ -38,7 +39,7 @@ internal fun Link(
             .height(IntrinsicSize.Min)
             .noRippleClickable {
                 if (openWebBrowserByClick) {
-                    uriHandler.openUri(link.url)
+                    uriHandler.openUri(url)
                 }
             }
             .border(
@@ -48,7 +49,7 @@ internal fun Link(
             )
     ) {
         Image(
-            painter = rememberAsyncImagePainter(link.imageUrl),
+            painter = thumbnailPainter,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.width(124.dp)
@@ -61,7 +62,7 @@ internal fun Link(
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = link.title,
+                text = title,
                 maxLines = 2,
                 style = PokitTheme.typography.body3Medium.copy(color = PokitTheme.colors.textSecondary)
             )
@@ -70,7 +71,7 @@ internal fun Link(
 
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = link.url,
+                text = url,
                 maxLines = 2,
                 style = PokitTheme.typography.detail2.copy(color = PokitTheme.colors.textTertiary)
             )

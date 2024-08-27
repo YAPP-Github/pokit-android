@@ -12,8 +12,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import coil.compose.rememberAsyncImagePainter
 import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
+import pokitmons.pokit.core.ui.components.template.linkdetailbottomsheet.LinkDetailBottomSheet
 import pokitmons.pokit.core.ui.components.template.modifybottomsheet.ModifyBottomSheetContent
 import pokitmons.pokit.core.ui.components.template.pokkiempty.EmptyPokki
 import pokitmons.pokit.core.ui.components.template.pokkierror.ErrorPokki
@@ -21,7 +23,6 @@ import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButt
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.search.components.filter.FilterArea
 import pokitmons.pokit.search.components.filterbottomsheet.FilterBottomSheet
-import pokitmons.pokit.search.components.linkdetailbottomsheet.LinkDetailBottomSheet
 import pokitmons.pokit.search.components.recentsearchword.RecentSearchWord
 import pokitmons.pokit.search.components.searchitemlist.SearchItemList
 import pokitmons.pokit.search.components.toolbar.Toolbar
@@ -47,19 +48,28 @@ fun SearchScreenContainer(
     val pokitList by viewModel.pokitList.collectAsState()
     val pokitPagingState by viewModel.pokitPagingState.collectAsState()
 
-    LinkDetailBottomSheet(
-        link = state.currentLink ?: Link(),
-        onHideBottomSheet = viewModel::hideLinkDetailBottomSheet,
-        show = state.showLinkDetailBottomSheet,
-        onClickModifyLink = remember {
-            { link ->
+    state.currentLink?.let { link ->
+        LinkDetailBottomSheet(
+            title = link.title,
+            memo = link.memo,
+            url = link.url,
+            thumbnailPainter = rememberAsyncImagePainter(link.imageUrl),
+            bookmark = link.bookmark,
+            openWebBrowserByClick = true,
+            linkType = stringResource(id = link.linkType.textResourceId),
+            dateString = link.dateString,
+            onHideBottomSheet = viewModel::hideLinkDetailBottomSheet,
+            show = state.showLinkDetailBottomSheet,
+            onClickModifyLink = {
                 viewModel.hideLinkDetailBottomSheet()
                 onNavigateToLinkModify(link.id)
-            }
-        },
-        onClickRemoveLink = viewModel::showLinkRemoveBottomSheet,
-        onClickBookmark = viewModel::toggleBookmark
-    )
+            },
+            onClickRemoveLink = {
+                viewModel.showLinkRemoveBottomSheet(link)
+            },
+            onClickBookmark = viewModel::toggleBookmark
+        )
+    }
 
     FilterBottomSheet(
         filter = state.filter ?: Filter(),

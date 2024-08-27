@@ -15,11 +15,10 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.strayalpaca.pokitdetail.R
-import com.strayalpaca.pokitdetail.components.template.linkdetailbottomsheet.LinkDetailBottomSheet
 import com.strayalpaca.pokitdetail.model.BottomSheetType
-import com.strayalpaca.pokitdetail.model.Link
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
+import pokitmons.pokit.core.ui.components.template.linkdetailbottomsheet.LinkDetailBottomSheet
 import pokitmons.pokit.core.ui.components.template.modifybottomsheet.ModifyBottomSheetContent
 import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButtonBottomSheetContent
 
@@ -34,11 +33,21 @@ fun UnclassifiedScreen(
     val currentSelectedLink by viewModel.currentSelectedLink.collectAsState()
     val currentDetailShowLink by viewModel.currentDetailShowLink.collectAsState()
 
-    LinkDetailBottomSheet(
-        show = currentDetailShowLink != null,
-        link = currentDetailShowLink ?: Link(),
-        onHideBottomSheet = viewModel::hideDetailLinkBottomSheet
-    )
+    currentDetailShowLink?.let { link ->
+        LinkDetailBottomSheet(
+            title = link.title,
+            memo = link.memo,
+            url = link.url,
+            thumbnailPainter = rememberAsyncImagePainter(model = link.imageUrl),
+            bookmark = link.bookmark,
+            openWebBrowserByClick = true,
+            linkType = stringResource(link.linkType.textResourceId),
+            dateString = link.dateString,
+            onHideBottomSheet = viewModel::hideDetailLinkBottomSheet,
+            show = true,
+            onClickBookmark = {}
+        )
+    }
 
     PokitBottomSheet(
         onHideBottomSheet = viewModel::hideLinkOptionBottomSheet,
