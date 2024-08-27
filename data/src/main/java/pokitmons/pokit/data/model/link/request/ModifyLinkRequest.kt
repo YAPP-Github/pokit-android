@@ -9,5 +9,5 @@ data class ModifyLinkRequest(
     val categoryId: Int,
     val memo: String,
     val alertYn: String,
-    val thumbNail: String,
+    val thumbNail: String?,
 )
