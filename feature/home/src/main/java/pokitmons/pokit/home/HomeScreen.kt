@@ -55,6 +55,7 @@ fun HomeScreen(
     onNavigateAddLink: () -> Unit,
     onNavigateAddPokit: () -> Unit,
     onNavigateToLinkModify: (String) -> Unit,
+    onNavigateToPokitModify: (String) -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -176,7 +177,8 @@ fun HomeScreen(
                                 viewModel = viewModel,
                                 modifier = Modifier.padding(padding),
                                 onNavigateToPokitDetail = onNavigateToPokitDetail,
-                                onNavigateToLinkModify = onNavigateToLinkModify
+                                onNavigateToLinkModify = onNavigateToLinkModify,
+                                onNavigateToPokitModify = onNavigateToPokitModify
                             )
                         }
 
