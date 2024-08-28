@@ -22,6 +22,7 @@ import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.link.Link
 import pokitmons.pokit.domain.model.link.LinksSort
 import pokitmons.pokit.domain.model.pokit.MAX_POKIT_COUNT
+import pokitmons.pokit.domain.model.pokit.PokitsSort
 import pokitmons.pokit.domain.usecase.link.DeleteLinkUseCase
 import pokitmons.pokit.domain.usecase.link.GetLinksUseCase
 import pokitmons.pokit.domain.usecase.pokit.DeletePokitUseCase
@@ -136,15 +137,13 @@ class PokitViewModel @Inject constructor(
         initCategoryId = 1
     )
 
-    private var _pokits: MutableStateFlow<List<Pokit>> = pokitPaging._pagingData
     val pokits: StateFlow<List<Pokit>>
-        get() = _pokits.asStateFlow()
+        get() = pokitPaging._pagingData.asStateFlow()
 
     val pokitsState = pokitPaging.pagingState
 
-    private var _unCategoryLinks: MutableStateFlow<List<DetailLink>> = linkPaging._pagingData
     val unCategoryLinks: StateFlow<List<DetailLink>>
-        get() = _unCategoryLinks.asStateFlow()
+        get() = linkPaging._pagingData.asStateFlow()
 
     val linksState = linkPaging.pagingState
 
@@ -184,19 +183,15 @@ class PokitViewModel @Inject constructor(
     private fun sortPokits() {
         when (sortOrder.value) {
             is SortOrder.Name -> {
-                _pokits.update { pokit ->
-                    pokit.sortedBy { pokitDetail ->
-                        pokitDetail.title
-                    }
-                }
+                pokitPaging.changeSort(PokitsSort.ALPHABETICAL)
             }
             is SortOrder.Latest -> {
-                _pokits.update { pokit ->
-                    pokit.sortedByDescending { pokitDetail ->
-                        pokitDetail.createdAt
-                    }
-                }
+                pokitPaging.changeSort(PokitsSort.RECENT)
             }
+        }
+
+        viewModelScope.launch {
+            pokitPaging.refresh()
         }
     }
 

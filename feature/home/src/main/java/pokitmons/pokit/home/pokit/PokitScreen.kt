@@ -87,7 +87,7 @@ fun PokitScreen(
             .padding(horizontal = 20.dp)
             .fillMaxSize()
     ) {
-        HomeMid()
+        HomeMid(viewModel = viewModel)
 
         when (selectedCategory) {
             is Category.Pokit -> {
@@ -118,7 +118,10 @@ fun PokitScreen(
                             verticalArrangement = Arrangement.spacedBy(12.dp),
                             horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
-                            items(pokits.value) { pokitDetail ->
+                            items(
+                                items = pokits.value,
+                                key = { it.id }
+                            ) { pokitDetail ->
                                 PokitCard(
                                     text = pokitDetail.title,
                                     linkCount = pokitDetail.count,
