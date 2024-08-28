@@ -1,6 +1,7 @@
 package pokitmons.pokit
 
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -43,6 +44,9 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
+
+    val nicknameRegex = Regex("^[a-zA-Z0-9가-힣]+$")
+
     private var duplicateNicknameJob: Job? = null
 
     private val _isBottomSheetVisible: MutableState<Boolean> = mutableStateOf(false)
@@ -145,6 +149,13 @@ class LoginViewModel @Inject constructor(
                 is PokitResult.Error -> {}
             }
         }
+    }
+
+    fun checkNicknameRegex(nickname: String): Boolean {
+        _inputNicknameState.update { duplicateNicknameState ->
+            duplicateNicknameState.copy(isRegex = nicknameRegex.matches(nickname))
+        }
+        return nicknameRegex.matches(nickname)
     }
 
     fun setCategories() {

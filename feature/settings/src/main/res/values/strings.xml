@@ -16,6 +16,6 @@
     <string name="save">저장</string>
     <string name="input_restriction_message">한글, 영어, 숫자로만 입력이 가능합니다.</string>
     <string name="nickname_already_in_use">사용 중인 닉네임입니다.</string>
-    <string name="input_max_length">최대 20자까지 입력 가능합니다.</string>
+    <string name="input_max_length">최대 10자까지 입력 가능합니다.</string>
     <string name="input_nickname_hint">닉네임을 입력해주세요</string>
 </resources>

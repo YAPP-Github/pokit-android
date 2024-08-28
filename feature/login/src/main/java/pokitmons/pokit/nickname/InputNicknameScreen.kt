@@ -1,5 +1,6 @@
 package pokitmons.pokit.nickname
 
+import android.util.Log
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -65,17 +66,24 @@ fun InputNicknameScreen(
                 inputText = inputNicknameState.nickname,
                 maxLength = NICKNAME_MAX_LENGTH,
                 sub = when {
-                    inputNicknameState.nickname.length < NICKNAME_MAX_LENGTH -> stringResource(id = Login.string.input_restriction_message)
-                    !inputNicknameState.isDuplicate -> stringResource(id = Login.string.nickname_already_in_use)
-                    else -> stringResource(id = Login.string.input_max_length)
+                    inputNicknameState.isDuplicate -> stringResource(id = Login.string.nickname_already_in_use)
+                    inputNicknameState.isRegex -> stringResource(id = Login.string.input_restriction_message)
+                    inputNicknameState.nickname.length < NICKNAME_MAX_LENGTH -> stringResource(id = Login.string.input_max_length)
+                    else -> ""
                 },
-                isError = inputNicknameState.nickname.length > NICKNAME_MAX_LENGTH || !inputNicknameState.isDuplicate,
+                isError = inputNicknameState.nickname.length > NICKNAME_MAX_LENGTH || inputNicknameState.isDuplicate || inputNicknameState.isRegex,
                 hintText = stringResource(id = Login.string.input_nickname_hint),
                 onChangeText = { text ->
+                    Log.d("!! : ", text)
                     if (text.length <= NICKNAME_MAX_LENGTH) {
                         viewModel.apply {
                             inputText(text)
-                            checkDuplicateNickname(text)
+                            if (checkNicknameRegex(text)) {
+                                Log.d("!! : ", "else call")
+                                checkDuplicateNickname(text)
+                            } else {
+
+                            }
                         }
                     }
                 }
@@ -89,7 +97,7 @@ fun InputNicknameScreen(
             text = stringResource(id = pokitmons.pokit.login.R.string.next),
             icon = null,
             size = PokitButtonSize.LARGE,
-            enable = !inputNicknameState.isDuplicate,
+            enable = !inputNicknameState.isDuplicate && inputNicknameState.isRegex && inputNicknameState.nickname.length < NICKNAME_MAX_LENGTH,
             onClick = { onNavigateToKeywordScreen() }
         )
     }
