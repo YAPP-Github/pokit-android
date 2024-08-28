@@ -56,6 +56,7 @@ fun HomeScreen(
     onNavigateAddPokit: () -> Unit,
     onNavigateToLinkModify: (String) -> Unit,
     onNavigateToPokitModify: (String) -> Unit,
+    onNavigateToAlarm: () -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -165,7 +166,8 @@ fun HomeScreen(
             HomeHeader(
                 viewModel = viewModel,
                 onNavigateToSearch = { onNavigateToSearch() },
-                onNavigateToSetting = { onNavigateToSetting() }
+                onNavigateToSetting = { onNavigateToSetting() },
+                onNavigateToAlarm = onNavigateToAlarm
             )
             Scaffold(
                 bottomBar = { BottomNavigationBar() }

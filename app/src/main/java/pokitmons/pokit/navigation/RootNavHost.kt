@@ -186,7 +186,8 @@ fun RootNavHost(
                 onNavigateAddLink = { navHostController.navigate(AddLink.route) },
                 onNavigateAddPokit = { navHostController.navigate(AddPokit.route) },
                 onNavigateToLinkModify = { navHostController.navigate("${AddLink.route}?${AddLink.linkIdArg}=$it") },
-                onNavigateToPokitModify = { navHostController.navigate("${AddPokit.route}?${AddPokit.pokitIdArg}=$it") }
+                onNavigateToPokitModify = { navHostController.navigate("${AddPokit.route}?${AddPokit.pokitIdArg}=$it") },
+                onNavigateToAlarm = { navHostController.navigate(Alarm.route) }
             )
         }
 
