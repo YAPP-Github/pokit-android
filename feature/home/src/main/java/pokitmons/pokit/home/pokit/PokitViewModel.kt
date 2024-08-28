@@ -68,10 +68,10 @@ class PokitViewModel @Inject constructor(
     private fun initLinkAddEventDetector() {
         viewModelScope.launch {
             LinkUpdateEvent.addedLink.collectLatest { addedLink ->
+                linkPaging.refresh()
                 val linkAddedPokit = pokitPaging.pagingData.value.find { it.id == addedLink.pokitId.toString() } ?: return@collectLatest
                 val modifiedPokit = linkAddedPokit.copy(count = (linkAddedPokit.count + 1))
                 pokitPaging.modifyItem(modifiedPokit)
-                linkPaging.refresh()
             }
         }
     }
