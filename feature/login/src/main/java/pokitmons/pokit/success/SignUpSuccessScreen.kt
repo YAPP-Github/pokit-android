@@ -34,12 +34,6 @@ fun SignUpSuccessScreen(
             .background(color = Color.White)
             .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 28.dp)
     ) {
-        Icon(
-            modifier = Modifier.padding(start = 4.dp),
-            painter = painterResource(id = coreDrawable.icon_24_arrow_left),
-            contentDescription = null
-        )
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()
