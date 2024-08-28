@@ -1,7 +1,6 @@
 package pokitmons.pokit.home
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,6 +25,7 @@ fun HomeHeader(
     viewModel: PokitViewModel,
     onNavigateToSetting: () -> Unit,
     onNavigateToSearch: () -> Unit,
+    onNavigateToAlarm: () -> Unit,
 ) {
     Spacer(modifier = Modifier.height(8.dp))
     Row(
@@ -33,7 +33,7 @@ fun HomeHeader(
             .background(color = Color.White)
             .fillMaxWidth()
             .height(56.dp)
-            .padding(horizontal = 20.dp),
+            .padding(start = 20.dp, end = 14.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -47,20 +47,22 @@ fun HomeHeader(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) {
+        Row {
             Icon(
                 painterResource(id = R.drawable.icon_24_search),
                 contentDescription = "검색",
                 modifier = Modifier
-                    .size(24.dp)
+                    .size(36.dp)
                     .noRippleClickable { onNavigateToSearch() }
+                    .padding(6.dp)
             )
             Icon(
                 painterResource(id = R.drawable.icon_24_bell),
                 contentDescription = "알림",
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier
+                    .size(36.dp)
+                    .noRippleClickable { onNavigateToAlarm() }
+                    .padding(6.dp)
             )
 
             when (viewModel.screenType.value) {
@@ -69,8 +71,9 @@ fun HomeHeader(
                         painterResource(id = R.drawable.icon_24_setup),
                         contentDescription = "설정",
                         modifier = Modifier
-                            .size(24.dp)
+                            .size(36.dp)
                             .noRippleClickable { onNavigateToSetting() }
+                            .padding(6.dp)
                     )
                 }
                 is ScreenType.Remind -> Unit

@@ -22,6 +22,7 @@ import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.link.Link
 import pokitmons.pokit.domain.model.link.LinksSort
 import pokitmons.pokit.domain.model.pokit.MAX_POKIT_COUNT
+import pokitmons.pokit.domain.model.pokit.PokitsSort
 import pokitmons.pokit.domain.usecase.link.DeleteLinkUseCase
 import pokitmons.pokit.domain.usecase.link.GetLinksUseCase
 import pokitmons.pokit.domain.usecase.pokit.DeletePokitUseCase
@@ -115,7 +116,10 @@ class PokitViewModel @Inject constructor(
     var selectedCategory = mutableStateOf<Category>(Category.Pokit)
         private set
 
-    var sortOrder = mutableStateOf<SortOrder>(SortOrder.Latest)
+    var pokitsSortOrder = mutableStateOf<PokitsSortOrder>(PokitsSortOrder.Latest)
+        private set
+
+    var linksSortOrder = mutableStateOf<UncategorizedLinksSortOrder>(UncategorizedLinksSortOrder.Latest)
         private set
 
     var screenType = mutableStateOf<ScreenType>(ScreenType.Pokit)
@@ -136,15 +140,13 @@ class PokitViewModel @Inject constructor(
         initCategoryId = 1
     )
 
-    private var _pokits: MutableStateFlow<List<Pokit>> = pokitPaging._pagingData
     val pokits: StateFlow<List<Pokit>>
-        get() = _pokits.asStateFlow()
+        get() = pokitPaging._pagingData.asStateFlow()
 
     val pokitsState = pokitPaging.pagingState
 
-    private var _unCategoryLinks: MutableStateFlow<List<DetailLink>> = linkPaging._pagingData
     val unCategoryLinks: StateFlow<List<DetailLink>>
-        get() = _unCategoryLinks.asStateFlow()
+        get() = linkPaging._pagingData.asStateFlow()
 
     val linksState = linkPaging.pagingState
 
@@ -176,27 +178,43 @@ class PokitViewModel @Inject constructor(
         selectedCategory.value = category
     }
 
-    fun updateSortOrder(order: SortOrder) {
-        sortOrder.value = order
+    fun updatePokitsSortOrder(order: PokitsSortOrder) {
+        pokitsSortOrder.value = order
         sortPokits()
     }
 
     private fun sortPokits() {
-        when (sortOrder.value) {
-            is SortOrder.Name -> {
-                _pokits.update { pokit ->
-                    pokit.sortedBy { pokitDetail ->
-                        pokitDetail.title
-                    }
-                }
+        when (pokitsSortOrder.value) {
+            is PokitsSortOrder.Name -> {
+                pokitPaging.changeSort(PokitsSort.ALPHABETICAL)
             }
-            is SortOrder.Latest -> {
-                _pokits.update { pokit ->
-                    pokit.sortedByDescending { pokitDetail ->
-                        pokitDetail.createdAt
-                    }
-                }
+            is PokitsSortOrder.Latest -> {
+                pokitPaging.changeSort(PokitsSort.RECENT)
             }
+        }
+
+        viewModelScope.launch {
+            pokitPaging.refresh()
+        }
+    }
+
+    fun updateLinksSortOrder(order: UncategorizedLinksSortOrder) {
+        linksSortOrder.value = order
+        sortUncategorizedLinks()
+    }
+
+    private fun sortUncategorizedLinks() {
+        when (linksSortOrder.value) {
+            is UncategorizedLinksSortOrder.Latest -> {
+                linkPaging.changeOptions(0, LinksSort.RECENT)
+            }
+            is UncategorizedLinksSortOrder.Older -> {
+                linkPaging.changeOptions(0, LinksSort.OLDER)
+            }
+        }
+
+        viewModelScope.launch {
+            linkPaging.refresh()
         }
     }
 
@@ -307,9 +325,14 @@ sealed class Category {
     data object Unclassified : Category()
 }
 
-sealed class SortOrder {
-    data object Latest : SortOrder()
-    data object Name : SortOrder()
+sealed class PokitsSortOrder {
+    data object Latest : PokitsSortOrder()
+    data object Name : PokitsSortOrder()
+}
+
+sealed class UncategorizedLinksSortOrder {
+    data object Latest : UncategorizedLinksSortOrder()
+    data object Older : UncategorizedLinksSortOrder()
 }
 
 sealed class ScreenType {

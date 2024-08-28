@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pokitmons.pokit.domain.commom.PokitResult
+import pokitmons.pokit.domain.model.pokit.PokitsSort
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
 
 class PokitPaging(
@@ -28,6 +29,7 @@ class PokitPaging(
     override val pagingData: StateFlow<List<Pokit>> = _pagingData.asStateFlow()
     private var currentPageIndex = initPage
     private var requestJob: Job? = null
+    private var sort: PokitsSort = PokitsSort.RECENT
 
     override suspend fun refresh() {
         requestJob?.cancel()
@@ -37,7 +39,7 @@ class PokitPaging(
         requestJob = coroutineScope.launch {
             try {
                 currentPageIndex = initPage
-                val response = getPokits.getPokits(size = perPage * firstRequestPage, page = currentPageIndex)
+                val response = getPokits.getPokits(sort = sort, size = perPage * firstRequestPage, page = currentPageIndex)
                 when (response) {
                     is PokitResult.Success -> {
                         val pokitList = response.result.map { domainPokit ->
@@ -66,7 +68,7 @@ class PokitPaging(
 
         requestJob = coroutineScope.launch {
             try {
-                val response = getPokits.getPokits(size = perPage, page = currentPageIndex)
+                val response = getPokits.getPokits(sort = sort, size = perPage, page = currentPageIndex)
                 when (response) {
                     is PokitResult.Success -> {
                         val pokitList = response.result.map { domainPokit ->
@@ -121,5 +123,9 @@ class PokitPaging(
                 }
             }
         }
+    }
+
+    fun changeSort(sort: PokitsSort) {
+        this.sort = sort
     }
 }

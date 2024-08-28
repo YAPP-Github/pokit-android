@@ -20,6 +20,8 @@ import pokitmons.pokit.domain.usecase.home.remind.BookMarkContentsUseCase
 import pokitmons.pokit.domain.usecase.home.remind.TodayContentsUseCase
 import pokitmons.pokit.domain.usecase.home.remind.UnReadContentsUseCase
 import pokitmons.pokit.domain.usecase.link.DeleteLinkUseCase
+import pokitmons.pokit.domain.usecase.link.GetLinkUseCase
+import pokitmons.pokit.domain.usecase.link.SetBookmarkUseCase
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,7 +29,9 @@ class RemindViewModel @Inject constructor(
     private val unReadContentsUseCase: UnReadContentsUseCase,
     private val todayContentsUseCase: TodayContentsUseCase,
     private val bookMarkContentsUseCase: BookMarkContentsUseCase,
+    private val bookmarkUseCase: SetBookmarkUseCase,
     private val deleteLinkUseCase: DeleteLinkUseCase,
+    private val getLinkUseCase: GetLinkUseCase,
 ) : ViewModel() {
 
     private var _unReadContents: MutableStateFlow<List<RemindResult>> = MutableStateFlow(emptyList())
@@ -228,6 +232,28 @@ class RemindViewModel @Inject constructor(
                 imageUrl = remindResult.thumbNail
             )
         }
+
+        viewModelScope.launch {
+            val response = getLinkUseCase.getLink(remindResult.id)
+            if (response is PokitResult.Success) {
+                val responseLink = response.result
+                if (_currentShowingLink.value?.id == responseLink.id.toString()) {
+                    _currentShowingLink.update {
+                        Link(
+                            id = responseLink.id.toString(),
+                            title = responseLink.title,
+                            dateString = responseLink.createdAt,
+                            url = responseLink.data,
+                            isRead = responseLink.isRead,
+                            domainUrl = responseLink.domain,
+                            imageUrl = _currentShowingLink.value?.imageUrl,
+                            memo = responseLink.memo,
+                            bookmark = responseLink.favorites
+                        )
+                    }
+                }
+            }
+        }
     }
 
     fun hideDetailLinkBottomSheet() {
@@ -267,6 +293,18 @@ class RemindViewModel @Inject constructor(
             val response = deleteLinkUseCase.deleteLink(currentSelectedLinkId)
             if (response is PokitResult.Success) {
                 LinkUpdateEvent.removeSuccess(response.result)
+            }
+        }
+    }
+
+    fun toggleBookmark() {
+        val currentLink = currentShowingLink.value ?: return
+        val applyBookmarked = !currentLink.bookmark
+        viewModelScope.launch {
+            val response = bookmarkUseCase.setBookMarked(currentLink.id.toInt(), applyBookmarked)
+
+            if (currentLink == currentShowingLink.value && response is PokitResult.Success) {
+                _currentShowingLink.update { currentLink.copy(bookmark = applyBookmarked) }
             }
         }
     }

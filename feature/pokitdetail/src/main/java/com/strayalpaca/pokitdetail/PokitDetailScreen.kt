@@ -23,7 +23,6 @@ import coil.compose.rememberAsyncImagePainter
 import com.strayalpaca.pokitdetail.components.block.TitleArea
 import com.strayalpaca.pokitdetail.components.block.Toolbar
 import com.strayalpaca.pokitdetail.components.template.filterselectbottomsheet.FilterSelectBottomSheet
-import com.strayalpaca.pokitdetail.components.template.linkdetailbottomsheet.LinkDetailBottomSheet
 import com.strayalpaca.pokitdetail.model.BottomSheetType
 import com.strayalpaca.pokitdetail.model.Filter
 import com.strayalpaca.pokitdetail.model.Link
@@ -36,6 +35,7 @@ import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
 import pokitmons.pokit.core.ui.components.block.pokitlist.PokitList
 import pokitmons.pokit.core.ui.components.block.pokitlist.attributes.PokitListState
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
+import pokitmons.pokit.core.ui.components.template.linkdetailbottomsheet.LinkDetailBottomSheet
 import pokitmons.pokit.core.ui.components.template.modifybottomsheet.ModifyBottomSheetContent
 import pokitmons.pokit.core.ui.components.template.pokkiempty.EmptyPokki
 import pokitmons.pokit.core.ui.components.template.pokkierror.ErrorPokki
@@ -212,11 +212,20 @@ fun PokitDetailScreen(
             }
         }
 
-        LinkDetailBottomSheet(
-            show = state.linkDetailBottomSheetVisible && state.currentLink != null,
-            link = state.currentLink ?: Link(),
-            onHideBottomSheet = hideLinkDetailBottomSheet
-        )
+        if (state.currentLink != null) {
+            LinkDetailBottomSheet(
+                title = state.currentLink.title,
+                memo = state.currentLink.memo,
+                url = state.currentLink.url,
+                thumbnailPainter = rememberAsyncImagePainter(state.currentLink.imageUrl),
+                bookmark = state.currentLink.bookmark,
+                openWebBrowserByClick = true,
+                linkType = stringResource(state.currentLink.linkType.textResourceId),
+                dateString = state.currentLink.dateString,
+                onHideBottomSheet = hideLinkDetailBottomSheet,
+                show = state.linkDetailBottomSheetVisible
+            )
+        }
 
         FilterSelectBottomSheet(
             filter = state.currentFilter,

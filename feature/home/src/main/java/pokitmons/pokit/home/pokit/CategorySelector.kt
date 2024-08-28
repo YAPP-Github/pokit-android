@@ -91,21 +91,39 @@ fun HomeMid(viewModel: PokitViewModel = hiltViewModel()) {
 
                 Spacer(modifier = Modifier.padding(start = 2.dp))
 
-                Text(
-                    modifier = Modifier
-                        .noRippleClickable {
-                            when (viewModel.sortOrder.value) {
-                                is SortOrder.Latest -> viewModel.updateSortOrder(SortOrder.Name)
-                                is SortOrder.Name -> viewModel.updateSortOrder(SortOrder.Latest)
+                if (viewModel.selectedCategory.value == Category.Pokit) {
+                    Text(
+                        modifier = Modifier
+                            .noRippleClickable {
+                                when (viewModel.pokitsSortOrder.value) {
+                                    is PokitsSortOrder.Latest -> viewModel.updatePokitsSortOrder(PokitsSortOrder.Name)
+                                    is PokitsSortOrder.Name -> viewModel.updatePokitsSortOrder(PokitsSortOrder.Latest)
+                                }
                             }
-                        }
-                        .align(Alignment.CenterVertically),
-                    text = when (viewModel.sortOrder.value) {
-                        is SortOrder.Latest -> "최신순"
-                        is SortOrder.Name -> "이름순"
-                    },
-                    style = PokitTheme.typography.body3Medium
-                )
+                            .align(Alignment.CenterVertically),
+                        text = when (viewModel.pokitsSortOrder.value) {
+                            is PokitsSortOrder.Latest -> "최신순"
+                            is PokitsSortOrder.Name -> "이름순"
+                        },
+                        style = PokitTheme.typography.body3Medium
+                    )
+                } else {
+                    Text(
+                        modifier = Modifier
+                            .noRippleClickable {
+                                when (viewModel.linksSortOrder.value) {
+                                    is UncategorizedLinksSortOrder.Latest -> viewModel.updateLinksSortOrder(UncategorizedLinksSortOrder.Older)
+                                    is UncategorizedLinksSortOrder.Older -> viewModel.updateLinksSortOrder(UncategorizedLinksSortOrder.Latest)
+                                }
+                            }
+                            .align(Alignment.CenterVertically),
+                        text = when (viewModel.linksSortOrder.value) {
+                            is UncategorizedLinksSortOrder.Latest -> "최신순"
+                            is UncategorizedLinksSortOrder.Older -> "오래된순"
+                        },
+                        style = PokitTheme.typography.body3Medium
+                    )
+                }
             }
         }
         Spacer(modifier = Modifier.height(20.dp))

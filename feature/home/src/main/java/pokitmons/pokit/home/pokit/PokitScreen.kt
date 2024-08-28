@@ -36,6 +36,7 @@ fun PokitScreen(
     viewModel: PokitViewModel,
     onNavigateToPokitDetail: (String) -> Unit,
     onNavigateToLinkModify: (String) -> Unit,
+    onNavigateToPokitModify: (String) -> Unit,
 ) {
     val pokits = viewModel.pokits.collectAsState()
     val pokitsState by viewModel.pokitsState.collectAsState()
@@ -57,7 +58,7 @@ fun PokitScreen(
                     onClickModify = remember {
                         {
                             viewModel.hidePokitDetailRemoveBottomSheet()
-                            onNavigateToPokitDetail(currentDetailSelectedCategory!!.id)
+                            onNavigateToPokitModify(currentDetailSelectedCategory!!.id)
                         }
                     },
                     onClickRemove = viewModel::showPokitDetailRemoveBottomSheet
@@ -86,7 +87,7 @@ fun PokitScreen(
             .padding(horizontal = 20.dp)
             .fillMaxSize()
     ) {
-        HomeMid()
+        HomeMid(viewModel = viewModel)
 
         when (selectedCategory) {
             is Category.Pokit -> {
@@ -117,7 +118,10 @@ fun PokitScreen(
                             verticalArrangement = Arrangement.spacedBy(12.dp),
                             horizontalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
-                            items(pokits.value) { pokitDetail ->
+                            items(
+                                items = pokits.value,
+                                key = { it.id }
+                            ) { pokitDetail ->
                                 PokitCard(
                                     text = pokitDetail.title,
                                     linkCount = pokitDetail.count,
