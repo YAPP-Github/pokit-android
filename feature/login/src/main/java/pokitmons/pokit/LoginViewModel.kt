@@ -43,6 +43,9 @@ class LoginViewModel @Inject constructor(
             }
         }
     }
+
+    val nicknameRegex = Regex("^[a-zA-Z0-9가-힣]+$")
+
     private var duplicateNicknameJob: Job? = null
 
     private val _isBottomSheetVisible: MutableState<Boolean> = mutableStateOf(false)
@@ -134,7 +137,7 @@ class LoginViewModel @Inject constructor(
     fun checkDuplicateNickname(nickname: String) {
         duplicateNicknameJob?.cancel()
         duplicateNicknameJob = viewModelScope.launch {
-            delay(1.second())
+            delay(0.5.second())
             when (val duplicateNicknameResult = nicknameUseCase.checkDuplicateNickname(nickname)) {
                 is PokitResult.Success -> {
                     _inputNicknameState.update { duplicateNicknameState ->
@@ -145,6 +148,13 @@ class LoginViewModel @Inject constructor(
                 is PokitResult.Error -> {}
             }
         }
+    }
+
+    fun checkNicknameRegex(nickname: String): Boolean {
+        _inputNicknameState.update { duplicateNicknameState ->
+            duplicateNicknameState.copy(isRegex = nicknameRegex.matches(nickname))
+        }
+        return nicknameRegex.matches(nickname)
     }
 
     fun setCategories() {
@@ -193,6 +203,10 @@ class LoginViewModel @Inject constructor(
     companion object {
         private fun Int.second(): Long {
             return (this * 1000L)
+        }
+
+        private fun Double.second(): Long {
+            return (this * 1000L).toLong()
         }
 
         private const val LIMIT_SELECTED_COUNT = 3

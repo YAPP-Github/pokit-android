@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -34,12 +33,6 @@ fun SignUpSuccessScreen(
             .background(color = Color.White)
             .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 28.dp)
     ) {
-        Icon(
-            modifier = Modifier.padding(start = 4.dp),
-            painter = painterResource(id = coreDrawable.icon_24_arrow_left),
-            contentDescription = null
-        )
-
         Column(
             modifier = Modifier
                 .fillMaxWidth()

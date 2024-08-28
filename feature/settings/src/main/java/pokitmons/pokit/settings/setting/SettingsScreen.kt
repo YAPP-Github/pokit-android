@@ -45,9 +45,10 @@ fun SettingsScreen(
             SettingItem(title = stringResource(StringResource.nickname_settings)) {
                 onNavigateToEditNickname()
             }
-            SettingItem(title = stringResource(StringResource.notification_settings)) {
-                // TODO 커스텀 토스트 메세지
-            }
+
+//            SettingItem(title = stringResource(StringResource.notification_settings)) {
+//                // TODO 커스텀 토스트 메세지
+//            }
 
             DividerItem()
 
