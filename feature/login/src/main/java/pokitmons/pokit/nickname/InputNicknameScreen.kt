@@ -82,7 +82,6 @@ fun InputNicknameScreen(
                                 Log.d("!! : ", "else call")
                                 checkDuplicateNickname(text)
                             } else {
-
                             }
                         }
                     }
