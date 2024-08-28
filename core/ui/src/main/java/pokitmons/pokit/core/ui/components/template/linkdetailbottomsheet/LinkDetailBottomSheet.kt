@@ -168,7 +168,6 @@ fun LinkDetailBottomSheet(
                     .clickable(
                         indication = null,
                         interactionSource = remember { MutableInteractionSource() },
-                        enabled = onClickShareLink != null,
                         onClick = {
                             onClickBookmark?.invoke()
                         }
