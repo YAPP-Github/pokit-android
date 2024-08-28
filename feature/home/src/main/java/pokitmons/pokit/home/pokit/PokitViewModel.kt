@@ -116,7 +116,10 @@ class PokitViewModel @Inject constructor(
     var selectedCategory = mutableStateOf<Category>(Category.Pokit)
         private set
 
-    var sortOrder = mutableStateOf<SortOrder>(SortOrder.Latest)
+    var pokitsSortOrder = mutableStateOf<PokitsSortOrder>(PokitsSortOrder.Latest)
+        private set
+
+    var linksSortOrder = mutableStateOf<UncategorizedLinksSortOrder>(UncategorizedLinksSortOrder.Latest)
         private set
 
     var screenType = mutableStateOf<ScreenType>(ScreenType.Pokit)
@@ -175,23 +178,43 @@ class PokitViewModel @Inject constructor(
         selectedCategory.value = category
     }
 
-    fun updateSortOrder(order: SortOrder) {
-        sortOrder.value = order
+    fun updatePokitsSortOrder(order: PokitsSortOrder) {
+        pokitsSortOrder.value = order
         sortPokits()
     }
 
     private fun sortPokits() {
-        when (sortOrder.value) {
-            is SortOrder.Name -> {
+        when (pokitsSortOrder.value) {
+            is PokitsSortOrder.Name -> {
                 pokitPaging.changeSort(PokitsSort.ALPHABETICAL)
             }
-            is SortOrder.Latest -> {
+            is PokitsSortOrder.Latest -> {
                 pokitPaging.changeSort(PokitsSort.RECENT)
             }
         }
 
         viewModelScope.launch {
             pokitPaging.refresh()
+        }
+    }
+
+    fun updateLinksSortOrder(order: UncategorizedLinksSortOrder) {
+        linksSortOrder.value = order
+        sortUncategorizedLinks()
+    }
+
+    private fun sortUncategorizedLinks() {
+        when (linksSortOrder.value) {
+            is UncategorizedLinksSortOrder.Latest -> {
+                linkPaging.changeOptions(0, LinksSort.RECENT)
+            }
+            is UncategorizedLinksSortOrder.Older -> {
+                linkPaging.changeOptions(0, LinksSort.OLDER)
+            }
+        }
+
+        viewModelScope.launch {
+            linkPaging.refresh()
         }
     }
 
@@ -302,9 +325,14 @@ sealed class Category {
     data object Unclassified : Category()
 }
 
-sealed class SortOrder {
-    data object Latest : SortOrder()
-    data object Name : SortOrder()
+sealed class PokitsSortOrder {
+    data object Latest : PokitsSortOrder()
+    data object Name : PokitsSortOrder()
+}
+
+sealed class UncategorizedLinksSortOrder {
+    data object Latest : UncategorizedLinksSortOrder()
+    data object Older : UncategorizedLinksSortOrder()
 }
 
 sealed class ScreenType {
