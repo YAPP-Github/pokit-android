@@ -29,7 +29,7 @@ fun LinkUrlCard(
     thumbnailPainter: Painter,
     url: String,
     title: String,
-    openWebBrowserByClick: Boolean
+    openWebBrowserByClick: Boolean,
 ) {
     val uriHandler = LocalUriHandler.current
 

@@ -31,7 +31,7 @@ class RemindViewModel @Inject constructor(
     private val bookMarkContentsUseCase: BookMarkContentsUseCase,
     private val bookmarkUseCase: SetBookmarkUseCase,
     private val deleteLinkUseCase: DeleteLinkUseCase,
-    private val getLinkUseCase: GetLinkUseCase
+    private val getLinkUseCase: GetLinkUseCase,
 ) : ViewModel() {
 
     private var _unReadContents: MutableStateFlow<List<RemindResult>> = MutableStateFlow(emptyList())
