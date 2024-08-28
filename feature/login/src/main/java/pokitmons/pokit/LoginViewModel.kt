@@ -134,7 +134,7 @@ class LoginViewModel @Inject constructor(
     fun checkDuplicateNickname(nickname: String) {
         duplicateNicknameJob?.cancel()
         duplicateNicknameJob = viewModelScope.launch {
-            delay(1.second())
+            delay(0.5.second())
             when (val duplicateNicknameResult = nicknameUseCase.checkDuplicateNickname(nickname)) {
                 is PokitResult.Success -> {
                     _inputNicknameState.update { duplicateNicknameState ->
@@ -193,6 +193,10 @@ class LoginViewModel @Inject constructor(
     companion object {
         private fun Int.second(): Long {
             return (this * 1000L)
+        }
+
+        private fun Double.second(): Long {
+            return (this * 1000L).toLong()
         }
 
         private const val LIMIT_SELECTED_COUNT = 3
