@@ -196,7 +196,7 @@ fun PokitDetailScreen(
                             sub = "${link.dateString} · ${link.domainUrl}",
                             painter = rememberAsyncImagePainter(link.imageUrl),
                             notRead = link.isRead,
-                            badgeText = stringResource(id = link.linkType.textResourceId),
+                            badgeText = link.pokitName,
                             onClickKebab = showLinkModifyBottomSheet,
                             onClickItem = onClickLink,
                             modifier = Modifier.padding(20.dp)
@@ -220,7 +220,7 @@ fun PokitDetailScreen(
                 thumbnailPainter = rememberAsyncImagePainter(state.currentLink.imageUrl),
                 bookmark = state.currentLink.bookmark,
                 openWebBrowserByClick = true,
-                linkType = stringResource(state.currentLink.linkType.textResourceId),
+                pokitName = state.currentLink.pokitName,
                 dateString = state.currentLink.dateString,
                 onHideBottomSheet = hideLinkDetailBottomSheet,
                 show = state.linkDetailBottomSheetVisible

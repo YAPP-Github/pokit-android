@@ -56,7 +56,7 @@ fun SearchScreenContainer(
             thumbnailPainter = rememberAsyncImagePainter(link.imageUrl),
             bookmark = link.bookmark,
             openWebBrowserByClick = true,
-            linkType = stringResource(id = link.linkType.textResourceId),
+            pokitName = link.pokitName,
             dateString = link.dateString,
             onHideBottomSheet = viewModel::hideLinkDetailBottomSheet,
             show = state.showLinkDetailBottomSheet,

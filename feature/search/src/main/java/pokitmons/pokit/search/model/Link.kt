@@ -1,6 +1,5 @@
 package pokitmons.pokit.search.model
 
-import pokitmons.pokit.search.R
 import pokitmons.pokit.domain.model.link.Link as DomainLink
 
 data class Link(
@@ -9,7 +8,8 @@ data class Link(
     val dateString: String = "",
     val domainUrl: String = "",
     val isRead: Boolean = false,
-    val linkType: LinkType = LinkType.TEXT,
+    val pokitName: String = "",
+    val pokitId: String = "",
     val url: String = "",
     val memo: String = "",
     val bookmark: Boolean = false,
@@ -27,12 +27,9 @@ data class Link(
                 memo = domainLink.memo,
                 imageUrl = domainLink.thumbnail,
                 bookmark = domainLink.favorites,
-                linkType = LinkType.TEXT
+                pokitName = domainLink.categoryName,
+                pokitId = domainLink.categoryId.toString()
             )
         }
     }
-}
-
-enum class LinkType(val textResourceId: Int) {
-    TEXT(R.string.text),
 }

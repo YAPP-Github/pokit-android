@@ -248,7 +248,8 @@ class RemindViewModel @Inject constructor(
                             domainUrl = responseLink.domain,
                             imageUrl = _currentShowingLink.value?.imageUrl,
                             memo = responseLink.memo,
-                            bookmark = responseLink.favorites
+                            bookmark = responseLink.favorites,
+                            pokitName = responseLink.categoryName
                         )
                     }
                 }

@@ -41,10 +41,11 @@ fun LinkDetailBottomSheet(
     thumbnailPainter: Painter,
     bookmark: Boolean,
     openWebBrowserByClick: Boolean,
-    linkType: String,
+    pokitName: String,
     dateString: String,
     onHideBottomSheet: () -> Unit,
     show: Boolean = false,
+    useRemind: Boolean = false,
     onClickBookmark: (() -> Unit)? = null,
     onClickRemoveLink: (() -> Unit)? = null,
     onClickModifyLink: (() -> Unit)? = null,
@@ -63,23 +64,25 @@ fun LinkDetailBottomSheet(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Image(
-                    painter = painterResource(id = R.drawable.icon_24_bell),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(20.dp)
-                        .background(
-                            color = PokitTheme.colors.brand,
-                            shape = CircleShape
-                        )
-                        .padding(2.dp),
-                    colorFilter = ColorFilter.tint(PokitTheme.colors.inverseWh)
-                )
+                if (useRemind) {
+                    Image(
+                        painter = painterResource(id = R.drawable.icon_24_bell),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(20.dp)
+                            .background(
+                                color = PokitTheme.colors.brand,
+                                shape = CircleShape
+                            )
+                            .padding(2.dp),
+                        colorFilter = ColorFilter.tint(PokitTheme.colors.inverseWh)
+                    )
 
-                Spacer(modifier = Modifier.width(4.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
+                }
 
                 Text(
-                    text = linkType,
+                    text = pokitName,
                     modifier = Modifier
                         .border(
                             width = 1.dp,

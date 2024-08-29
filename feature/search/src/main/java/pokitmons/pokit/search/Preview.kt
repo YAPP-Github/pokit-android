@@ -7,7 +7,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.search.model.Link
-import pokitmons.pokit.search.model.LinkType
 import pokitmons.pokit.search.model.SearchScreenState
 import pokitmons.pokit.search.model.SearchScreenStep
 
@@ -34,7 +33,6 @@ internal val sampleLinks = listOf(
         dateString = "2024.04.12",
         domainUrl = "youtu.be",
         isRead = true,
-        linkType = LinkType.TEXT,
         url = "",
         memo = "",
         bookmark = true
@@ -46,7 +44,6 @@ internal val sampleLinks = listOf(
         dateString = "2024.05.12",
         domainUrl = "youtu.be",
         isRead = false,
-        linkType = LinkType.TEXT,
         url = "",
         memo = "",
         bookmark = true
@@ -58,7 +55,6 @@ internal val sampleLinks = listOf(
         dateString = "2024.04.12",
         domainUrl = "pokitmons.pokit",
         isRead = true,
-        linkType = LinkType.TEXT,
         url = "",
         memo = "",
         bookmark = true
@@ -70,7 +66,6 @@ internal val sampleLinks = listOf(
         dateString = "2024.06.12",
         domainUrl = "youtu.be",
         isRead = true,
-        linkType = LinkType.TEXT,
         url = "",
         memo = "",
         bookmark = true
@@ -82,7 +77,6 @@ internal val sampleLinks = listOf(
         dateString = "2024.07.14",
         domainUrl = "youtu.be",
         isRead = false,
-        linkType = LinkType.TEXT,
         url = "",
         memo = "",
         bookmark = true

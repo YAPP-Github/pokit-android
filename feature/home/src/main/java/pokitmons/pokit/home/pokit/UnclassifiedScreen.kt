@@ -41,7 +41,7 @@ fun UnclassifiedScreen(
             thumbnailPainter = rememberAsyncImagePainter(model = link.imageUrl),
             bookmark = link.bookmark,
             openWebBrowserByClick = true,
-            linkType = stringResource(link.linkType.textResourceId),
+            pokitName = link.pokitName,
             dateString = link.dateString,
             onHideBottomSheet = viewModel::hideDetailLinkBottomSheet,
             show = true,
@@ -93,7 +93,7 @@ fun UnclassifiedScreen(
             key = { it.id }
         ) { unCategoryDetail ->
             LinkCard(
-                item = unCategoryDetail.linkType,
+                item = unCategoryDetail.pokitName,
                 title = unCategoryDetail.title,
                 sub = unCategoryDetail.createdAt,
                 painter = rememberAsyncImagePainter(model = unCategoryDetail.imageUrl),
