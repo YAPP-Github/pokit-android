@@ -70,7 +70,6 @@ fun RemindScreen(
         when (pokitOptionBottomSheetType) {
             BottomSheetType.MODIFY -> {
                 ModifyBottomSheetContent(
-                    onClickShare = {},
                     onClickModify = remember {
                         {
                             viewModel.hideLinkOptionBottomSheet()

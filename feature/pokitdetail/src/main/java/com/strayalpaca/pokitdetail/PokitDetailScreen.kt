@@ -87,7 +87,8 @@ fun PokitDetailScreenContainer(
         onClickLinkRemove = viewModel::deleteLink,
         loadNextPokits = viewModel::loadNextPokits,
         refreshPokits = viewModel::refreshPokits,
-        loadNextLinks = viewModel::loadNextLinks
+        loadNextLinks = viewModel::loadNextLinks,
+        onClickBookmark = viewModel::toggleBookmark
     )
 }
 
@@ -120,6 +121,7 @@ fun PokitDetailScreen(
     loadNextPokits: () -> Unit = {},
     refreshPokits: () -> Unit = {},
     loadNextLinks: () -> Unit = {},
+    onClickBookmark: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -223,7 +225,8 @@ fun PokitDetailScreen(
                 pokitName = state.currentLink.pokitName,
                 dateString = state.currentLink.dateString,
                 onHideBottomSheet = hideLinkDetailBottomSheet,
-                show = state.linkDetailBottomSheetVisible
+                show = state.linkDetailBottomSheetVisible,
+                onClickBookmark = onClickBookmark
             )
         }
 
@@ -281,7 +284,6 @@ fun PokitDetailScreen(
             when (state.linkBottomSheetType) {
                 BottomSheetType.MODIFY -> {
                     ModifyBottomSheetContent(
-                        onClickShare = {},
                         onClickModify = remember {
                             {
                                 state.currentLink?.let { link ->
@@ -317,7 +319,6 @@ fun PokitDetailScreen(
             when (state.pokitBottomSheetType) {
                 BottomSheetType.MODIFY -> {
                     ModifyBottomSheetContent(
-                        onClickShare = {},
                         onClickModify = remember {
                             {
                                 hidePokitModifyBottomSheet()

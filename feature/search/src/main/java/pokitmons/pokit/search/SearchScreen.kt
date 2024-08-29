@@ -103,10 +103,6 @@ fun SearchScreenContainer(
                             viewModel.showLinkRemoveBottomSheet(link)
                         }
                     }
-                },
-                onClickShare = remember {
-                    {
-                    }
                 }
             )
         }

@@ -45,7 +45,7 @@ fun UnclassifiedScreen(
             dateString = link.dateString,
             onHideBottomSheet = viewModel::hideDetailLinkBottomSheet,
             show = true,
-            onClickBookmark = {}
+            onClickBookmark = viewModel::toggleBookmark
         )
     }
 
@@ -56,7 +56,6 @@ fun UnclassifiedScreen(
         when (pokitOptionBottomSheetType) {
             BottomSheetType.MODIFY -> {
                 ModifyBottomSheetContent(
-                    onClickShare = {},
                     onClickModify = remember {
                         {
                             viewModel.hideLinkOptionBottomSheet()

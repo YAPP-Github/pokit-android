@@ -26,6 +26,7 @@ import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.link.LinksSort
 import pokitmons.pokit.domain.usecase.link.DeleteLinkUseCase
 import pokitmons.pokit.domain.usecase.link.GetLinksUseCase
+import pokitmons.pokit.domain.usecase.link.SetBookmarkUseCase
 import pokitmons.pokit.domain.usecase.pokit.DeletePokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
@@ -39,6 +40,7 @@ class PokitDetailViewModel @Inject constructor(
     private val getPokitUseCase: GetPokitUseCase,
     private val deletePokitUseCase: DeletePokitUseCase,
     private val deleteLinkUseCase: DeleteLinkUseCase,
+    private val setBookmarkUseCase: SetBookmarkUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
     private val pokitPaging = PokitPaging(
@@ -247,6 +249,28 @@ class PokitDetailViewModel @Inject constructor(
             val response = deleteLinkUseCase.deleteLink(linkId)
             if (response is PokitResult.Success) {
                 LinkUpdateEvent.removeSuccess(linkId)
+            }
+        }
+    }
+
+    fun toggleBookmark() {
+        val currentLink = state.value.currentLink ?: return
+        val currentLinkId = currentLink.id.toIntOrNull() ?: return
+        val applyBookmarked = !currentLink.bookmark
+
+        viewModelScope.launch {
+            val response = setBookmarkUseCase.setBookMarked(currentLinkId, applyBookmarked)
+            if (response is PokitResult.Success) {
+                val bookmarkChangedLink = currentLink.copy(bookmark = applyBookmarked)
+                linkPaging.modifyItem(bookmarkChangedLink)
+
+                if (currentLink.id == state.value.currentLink?.id) {
+                    _state.update { state ->
+                        state.copy(
+                            currentLink = bookmarkChangedLink
+                        )
+                    }
+                }
             }
         }
     }
