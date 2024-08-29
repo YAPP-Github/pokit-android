@@ -5,7 +5,7 @@
     <string name="link">링크</string>
     <string name="placeholder_link">내용을 입력해주세요.</string>
     <string name="title">제목</string>
-    <string name="placeholder_title">내용을 입력해주세요.</string>
+    <string name="placeholder_title">제목을 입력해주세요.</string>
     <string name="pokit">포킷</string>
     <string name="memo">메모</string>
     <string name="placeholder_memo">내용을 입력해주세요.</string>

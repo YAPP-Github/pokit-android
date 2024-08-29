@@ -109,7 +109,7 @@ class LinkRepositoryImpl @Inject constructor(
                 categoryId = categoryId,
                 memo = memo,
                 alertYn = alertYn,
-                thumbNail = if (thumbNail.isEmpty()) thumbNail else null
+                thumbNail = thumbNail.ifEmpty { null }
             )
             val response = dataSource.modifyLink(contentId = linkId, modifyLinkRequest = modifyLinkRequest)
             val mappedResponse = LinkMapper.mapperToLink(response)
@@ -127,7 +127,7 @@ class LinkRepositoryImpl @Inject constructor(
                 categoryId = categoryId,
                 memo = memo,
                 alertYn = alertYn,
-                thumbNail = if (thumbNail.isEmpty()) thumbNail else null
+                thumbNail = thumbNail.ifEmpty { null }
             )
             val response = dataSource.createLink(createLinkRequest = createLinkRequest)
             val mappedResponse = LinkMapper.mapperToLink(response)

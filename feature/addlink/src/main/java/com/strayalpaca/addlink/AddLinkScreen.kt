@@ -205,7 +205,7 @@ fun AddLinkScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     if (state.link != null) {
-                        Link(state.link)
+                        Link(link = state.link, title = title.ifEmpty { null })
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 
