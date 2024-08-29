@@ -54,6 +54,7 @@ import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.components.block.labeledinput.LabeledInput
 import pokitmons.pokit.core.ui.components.block.pokitlist.PokitList
 import pokitmons.pokit.core.ui.components.block.pokitlist.attributes.PokitListState
+import pokitmons.pokit.core.ui.components.block.pokittoast.PokitToast
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.core.ui.utils.noRippleClickable
@@ -75,6 +76,7 @@ fun AddPokitScreenContainer(
         derivedStateOf {
             state.step != AddPokitScreenStep.POKIT_SAVE_LOADING &&
                 state.pokitInputErrorMessage == null &&
+                state.errorToastMessage == null &&
                 state.pokitImage != null
         }
     }
@@ -99,6 +101,7 @@ fun AddPokitScreenContainer(
         hideProfileSelectBottomSheet = viewModel::hidePokitProfileSelectBottomSheet,
         showSelectProfileBottomSheet = viewModel::showPokitProfileSelectBottomSheet,
         selectPokitProfileImage = viewModel::selectPokitProfile,
+        hideToastMessage = viewModel::hideToastMessage,
         pokits = pokits,
         pokitsState = pokitsState,
         loadPokits = viewModel::loadPokitList,
@@ -117,6 +120,7 @@ fun AddPokitScreen(
     hideProfileSelectBottomSheet: () -> Unit = {},
     showSelectProfileBottomSheet: () -> Unit = {},
     selectPokitProfileImage: (PokitImage) -> Unit = {},
+    hideToastMessage: () -> Unit = {},
     pokits: List<Pokit> = emptyList(),
     pokitsState: SimplePagingState = SimplePagingState.IDLE,
     loadPokits: () -> Unit = {},
@@ -249,6 +253,17 @@ fun AddPokitScreen(
                     modifier = Modifier.width(64.dp),
                     color = PokitTheme.colors.brand,
                     trackColor = PokitTheme.colors.backgroundSecondary
+                )
+            }
+
+            state.errorToastMessage?.let { message ->
+                PokitToast(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .align(Alignment.BottomCenter)
+                        .padding(start = 12.dp, end = 12.dp, bottom = 16.dp),
+                    text = message,
+                    onClickClose = hideToastMessage
                 )
             }
         }

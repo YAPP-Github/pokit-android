@@ -27,6 +27,7 @@ import org.orbitmvi.orbit.viewmodel.container
 import pokitmons.pokit.core.feature.navigation.args.PokitArg
 import pokitmons.pokit.core.feature.navigation.args.PokitUpdateEvent
 import pokitmons.pokit.domain.commom.PokitResult
+import pokitmons.pokit.domain.model.pokit.PokitErrorCode
 import pokitmons.pokit.domain.usecase.pokit.CreatePokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitImagesUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitUseCase
@@ -65,10 +66,16 @@ class AddPokitViewModel @Inject constructor(
     val pokitImages: StateFlow<List<PokitImage>> = _pokitIamges.asStateFlow()
 
     init {
-        loadPokitList()
+        initPokitList()
         loadPokitImages()
 
         setAddModifyMode(pokitId)
+    }
+
+    private fun initPokitList() {
+        viewModelScope.launch {
+            pokitPaging.refresh()
+        }
     }
 
     fun loadPokitList() {
@@ -117,9 +124,9 @@ class AddPokitViewModel @Inject constructor(
         _pokitName.update { pokitName }
 
         intent {
-            val isInAvailableLength = pokitName.length > POKIT_NAME_MAX_LENGTH
+            val isOutOfMaxLength = pokitName.length > POKIT_NAME_MAX_LENGTH
 
-            if (isInAvailableLength) {
+            if (isOutOfMaxLength) {
                 val errorMessage = errorMessageProvider.getTextLengthErrorMessage()
                 reduce { state.copy(pokitInputErrorMessage = errorMessage) }
             } else {
@@ -129,6 +136,13 @@ class AddPokitViewModel @Inject constructor(
     }
 
     fun savePokit() = intent {
+        // todo 에러 코드 파싱 수정시 제거 필요
+        if (pokitPaging.pagingData.value.find { it.title == pokitName.value } != null) {
+            val errorMessage = errorMessageProvider.errorCodeToMessage(PokitErrorCode.ALREADY_USED_POKIT_NAME)
+            reduce { state.copy(errorToastMessage = errorMessage) }
+            return@intent
+        }
+
         reduce {
             state.copy(step = AddPokitScreenStep.POKIT_SAVE_LOADING)
         }
@@ -159,7 +173,7 @@ class AddPokitViewModel @Inject constructor(
         } else {
             response as PokitResult.Error
             val errorMessage = errorMessageProvider.errorCodeToMessage(response.error.code)
-            reduce { state.copy(pokitInputErrorMessage = errorMessage) }
+            reduce { state.copy(errorToastMessage = errorMessage, step = AddPokitScreenStep.IDLE) }
         }
     }
 
@@ -191,6 +205,12 @@ class AddPokitViewModel @Inject constructor(
     fun selectPokitProfile(pokitImage: PokitImage) = intent {
         reduce {
             state.copy(pokitImage = pokitImage)
+        }
+    }
+
+    fun hideToastMessage() = intent {
+        reduce {
+            state.copy(errorToastMessage = null)
         }
     }
 }
