@@ -18,6 +18,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import org.orbitmvi.orbit.Container
@@ -28,6 +29,7 @@ import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
 import pokitmons.pokit.core.feature.navigation.args.LinkArg
 import pokitmons.pokit.core.feature.navigation.args.LinkUpdateEvent
+import pokitmons.pokit.core.feature.navigation.args.PokitUpdateEvent
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.pokit.MAX_POKIT_COUNT
 import pokitmons.pokit.domain.usecase.link.CreateLinkUseCase
@@ -74,10 +76,24 @@ class AddLinkViewModel @Inject constructor(
     val currentLinkId: Int? = savedStateHandle.get<String>("link_id")?.toIntOrNull()
 
     init {
+        initPokitAddEventDetector()
+
         if (currentLinkId != null) {
             loadPokitLink(currentLinkId)
         } else {
             loadUncategorizedPokit()
+        }
+    }
+
+    private fun initPokitAddEventDetector() {
+        viewModelScope.launch {
+            PokitUpdateEvent.addedPokit.collectLatest { addedPokit ->
+                intent {
+                    reduce {
+                        state.copy(currentPokit = Pokit(addedPokit.title, addedPokit.id.toString(), 0))
+                    }
+                }
+            }
         }
     }
 

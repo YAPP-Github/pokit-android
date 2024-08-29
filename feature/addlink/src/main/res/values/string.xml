@@ -22,4 +22,6 @@
 
     <string name="network_error">네트워크 에러가 발생했습니다. 네트워크 환경을 확인해주세요.</string>
     <string name="toast_cannot_create_pokit">최대 30개의 포킷을 생성할 수 있습니다.\n포킷을 삭제한 뒤에 추가해주세요.</string>
+
+    <string name="see_you_soon">준비중인 기능이니 조금만 기다려주세요.</string>
 </resources>
