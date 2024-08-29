@@ -19,7 +19,7 @@ class PokitPaging(
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO),
     private val initPage: Int = 0,
     private val firstRequestPage: Int = 3,
-    private val showUncategorizedPokit: Boolean = true
+    private val showUncategorizedPokit: Boolean = true,
 ) : SimplePaging<Pokit> {
     private val _pagingState = MutableStateFlow(SimplePagingState.IDLE)
     override val pagingState: StateFlow<SimplePagingState> = _pagingState.asStateFlow()

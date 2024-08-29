@@ -164,7 +164,7 @@ class AddLinkViewModel @Inject constructor(
         val response = getLinkCardUseCase.getLinkCard(linkUrl)
         if (response is PokitResult.Success) {
             reduce { state.copy(step = ScreenStep.IDLE, link = Link.fromDomainLinkCard(response.result)) }
-            if (response.result.title.isNotEmpty()) {
+            if (response.result.title.isNotEmpty() && title.value.isEmpty()) {
                 _title.update { response.result.title }
             }
         } else {
