@@ -8,6 +8,7 @@ data class AddPokitScreenState(
     val step: AddPokitScreenStep = AddPokitScreenStep.IDLE,
     val pokitImage: PokitImage? = null,
     val isModify: Boolean = false,
+    val errorToastMessage: String? = null,
 )
 
 sealed class AddPokitScreenStep {

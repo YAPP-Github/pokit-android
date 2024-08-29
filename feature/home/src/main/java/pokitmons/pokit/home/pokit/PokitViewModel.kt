@@ -68,10 +68,10 @@ class PokitViewModel @Inject constructor(
     private fun initLinkAddEventDetector() {
         viewModelScope.launch {
             LinkUpdateEvent.addedLink.collectLatest { addedLink ->
+                linkPaging.refresh()
                 val linkAddedPokit = pokitPaging.pagingData.value.find { it.id == addedLink.pokitId.toString() } ?: return@collectLatest
                 val modifiedPokit = linkAddedPokit.copy(count = (linkAddedPokit.count + 1))
                 pokitPaging.modifyItem(modifiedPokit)
-                linkPaging.refresh()
             }
         }
     }
@@ -161,6 +161,9 @@ class PokitViewModel @Inject constructor(
 
     private val _currentDetailShowLink = MutableStateFlow<DetailLink?>(null)
     val currentDetailShowLink = _currentDetailShowLink.asStateFlow()
+
+    private val _linkOptionBottomSheetType = MutableStateFlow<BottomSheetType?>(null)
+    val linkOptionBottomSheetType = _linkOptionBottomSheetType.asStateFlow()
 
     init {
         initLinkUpdateEventDetector()
@@ -288,17 +291,17 @@ class PokitViewModel @Inject constructor(
     }
 
     fun showLinkOptionBottomSheet(link: DetailLink) {
-        _pokitOptionBottomSheetType.update { BottomSheetType.MODIFY }
+        _linkOptionBottomSheetType.update { BottomSheetType.MODIFY }
         _currentSelectedLink.update { link }
     }
 
     fun hideLinkOptionBottomSheet() {
-        _pokitOptionBottomSheetType.update { null }
+        _linkOptionBottomSheetType.update { null }
         _currentSelectedLink.update { null }
     }
 
     fun showLinkRemoveBottomSheet() {
-        _pokitOptionBottomSheetType.update { BottomSheetType.REMOVE }
+        _linkOptionBottomSheetType.update { BottomSheetType.REMOVE }
     }
 
     fun removeCurrentSelectedLink() {

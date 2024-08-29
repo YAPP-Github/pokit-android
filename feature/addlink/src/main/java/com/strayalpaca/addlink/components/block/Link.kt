@@ -12,12 +12,15 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.strayalpaca.addlink.R
 import com.strayalpaca.addlink.model.Link
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.core.ui.utils.noRippleClickable
@@ -25,10 +28,13 @@ import pokitmons.pokit.core.ui.utils.noRippleClickable
 @Composable
 internal fun Link(
     link: Link,
+    title: String?,
     modifier: Modifier = Modifier,
     openWebBrowserByClick: Boolean = true,
 ) {
     val uriHandler = LocalUriHandler.current
+    val placeHolder = stringResource(id = R.string.placeholder_title)
+    val linkTitle = remember(link, title) { title ?: link.title.ifEmpty { placeHolder } }
 
     Row(
         modifier = modifier
@@ -60,7 +66,7 @@ internal fun Link(
         ) {
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = link.title,
+                text = linkTitle,
                 maxLines = 2,
                 style = PokitTheme.typography.body3Medium.copy(color = PokitTheme.colors.textSecondary)
             )

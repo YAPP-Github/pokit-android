@@ -205,7 +205,7 @@ fun AddLinkScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     if (state.link != null) {
-                        Link(state.link)
+                        Link(link = state.link, title = title.ifEmpty { null })
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 
@@ -224,7 +224,6 @@ fun AddLinkScreen(
                     LabeledInput(
                         label = stringResource(id = R.string.title),
                         sub = "",
-                        maxLength = 20,
                         inputText = title,
                         hintText = stringResource(id = R.string.placeholder_title),
                         onChangeText = inputTitle,
@@ -310,13 +309,13 @@ fun AddLinkScreen(
                             toggleRemindRadio(it.second)
                         },
                         getTitleFromItem = { it.first },
-                        enabled = enable
+                        enabled = false
                     )
 
                     Spacer(modifier = Modifier.height(8.dp))
 
                     Text(
-                        text = stringResource(id = R.string.sub_remind),
+                        text = stringResource(id = R.string.see_you_soon),
                         style = PokitTheme.typography.detail1.copy(color = PokitTheme.colors.textTertiary)
                     )
 

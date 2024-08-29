@@ -19,6 +19,7 @@ class PokitPaging(
     private val coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO),
     private val initPage: Int = 0,
     private val firstRequestPage: Int = 3,
+    private val showUncategorizedPokit: Boolean = true,
 ) : SimplePaging<Pokit> {
     private val _pagingState = MutableStateFlow(SimplePagingState.IDLE)
     override val pagingState: StateFlow<SimplePagingState> = _pagingState.asStateFlow()
@@ -36,7 +37,7 @@ class PokitPaging(
         requestJob = coroutineScope.launch {
             try {
                 currentPageIndex = initPage
-                val response = getPokits.getPokits(size = perPage * firstRequestPage, page = currentPageIndex)
+                val response = getPokits.getPokits(size = perPage * firstRequestPage, page = currentPageIndex, filterUncategorized = !showUncategorizedPokit)
                 when (response) {
                     is PokitResult.Success -> {
                         val pokitList = response.result.map { domainPokit ->
@@ -65,7 +66,7 @@ class PokitPaging(
 
         requestJob = coroutineScope.launch {
             try {
-                val response = getPokits.getPokits(size = perPage, page = currentPageIndex)
+                val response = getPokits.getPokits(size = perPage, page = currentPageIndex, filterUncategorized = !showUncategorizedPokit)
                 when (response) {
                     is PokitResult.Success -> {
                         val pokitList = response.result.map { domainPokit ->

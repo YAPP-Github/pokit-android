@@ -29,7 +29,7 @@ fun UnclassifiedScreen(
 ) {
     val unCategoryLinks = viewModel.unCategoryLinks.collectAsState()
 
-    val pokitOptionBottomSheetType by viewModel.pokitOptionBottomSheetType.collectAsState()
+    val pokitOptionBottomSheetType by viewModel.linkOptionBottomSheetType.collectAsState()
     val currentSelectedLink by viewModel.currentSelectedLink.collectAsState()
     val currentDetailShowLink by viewModel.currentDetailShowLink.collectAsState()
 
