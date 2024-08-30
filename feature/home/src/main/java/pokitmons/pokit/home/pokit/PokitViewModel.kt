@@ -42,7 +42,7 @@ class PokitViewModel @Inject constructor(
     private val deletePokitUseCase: DeletePokitUseCase,
     private val getPokitCountUseCase: GetPokitCountUseCase,
     private val deleteLinkUseCase: DeleteLinkUseCase,
-    private val setBookmarkUseCase: SetBookmarkUseCase
+    private val setBookmarkUseCase: SetBookmarkUseCase,
 ) : ViewModel() {
 
     private val _sideEffect = MutableEventFlow<HomeSideEffect>()
