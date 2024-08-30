@@ -1,6 +1,7 @@
 package com.strayalpaca.pokitdetail
 
 import android.content.Context
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -216,6 +217,7 @@ fun PokitDetailScreen(
         }
 
         if (state.currentLink != null) {
+            val context: Context = LocalContext.current
             LinkDetailBottomSheet(
                 title = state.currentLink.title,
                 memo = state.currentLink.memo,
@@ -226,7 +228,20 @@ fun PokitDetailScreen(
                 linkType = stringResource(state.currentLink.linkType.textResourceId),
                 dateString = state.currentLink.dateString,
                 onHideBottomSheet = hideLinkDetailBottomSheet,
-                show = state.linkDetailBottomSheetVisible
+                show = state.linkDetailBottomSheetVisible,
+                onClickShareLink = {
+                    val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
+                        type = "text/plain"
+                        putExtra(Intent.EXTRA_TEXT, state.currentLink.url)
+                    }
+                    context.startActivity(Intent.createChooser(intent, "Pokit"))
+                },
+                onClickModifyLink = {
+
+                },
+                onClickRemoveLink = {
+
+                },
             )
         }
 
@@ -282,7 +297,6 @@ fun PokitDetailScreen(
             show = state.linkBottomSheetType != null
         ) {
             val context: Context = LocalContext.current
-
             when (state.linkBottomSheetType) {
                 BottomSheetType.MODIFY -> {
                     ModifyBottomSheetContent(

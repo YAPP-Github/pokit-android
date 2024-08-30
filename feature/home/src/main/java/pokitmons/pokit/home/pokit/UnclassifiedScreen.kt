@@ -1,6 +1,7 @@
 package pokitmons.pokit.home.pokit
 
 import android.content.Context
+import android.content.Intent
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -50,7 +51,19 @@ fun UnclassifiedScreen(
             dateString = link.dateString,
             onHideBottomSheet = viewModel::hideDetailLinkBottomSheet,
             show = true,
-            onClickBookmark = {}
+            onClickShareLink = {
+                val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, link.url)
+                }
+                context.startActivity(Intent.createChooser(intent, "Pokit"))
+            },
+            onClickModifyLink = {
+
+            },
+            onClickRemoveLink = {
+
+            },
         )
     }
 
