@@ -30,7 +30,7 @@ data class Link(
                 createdAt = domainLink.createdAt,
                 pokitName = domainLink.categoryName,
                 pokitId = domainLink.categoryId.toString(),
-                bookmark = domainLink.favorites,
+                bookmark = domainLink.favorites
             )
         }
     }
