@@ -197,7 +197,7 @@ fun PokitDetailScreen(
                             title = link.title,
                             sub = "${link.dateString} · ${link.domainUrl}",
                             painter = rememberAsyncImagePainter(link.imageUrl),
-                            notRead = link.isRead,
+                            notRead = !link.isRead,
                             badgeText = link.pokitName,
                             onClickKebab = showLinkModifyBottomSheet,
                             onClickItem = onClickLink,
@@ -264,7 +264,8 @@ fun PokitDetailScreen(
                 state = lazyColumnListState
             ) {
                 items(
-                    items = pokitList
+                    items = pokitList,
+                    key = { it.id }
                 ) { pokit ->
                     PokitList(
                         item = pokit,

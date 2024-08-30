@@ -29,7 +29,8 @@ data class Link(
                 imageUrl = domainLink.thumbnail,
                 createdAt = domainLink.createdAt,
                 pokitName = domainLink.categoryName,
-                pokitId = domainLink.categoryId.toString()
+                pokitId = domainLink.categoryId.toString(),
+                bookmark = domainLink.favorites,
             )
         }
     }
