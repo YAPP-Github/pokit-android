@@ -59,11 +59,9 @@ fun UnclassifiedScreen(
                 context.startActivity(Intent.createChooser(intent, "Pokit"))
             },
             onClickModifyLink = {
-
             },
             onClickRemoveLink = {
-
-            },
+            }
         )
     }
 

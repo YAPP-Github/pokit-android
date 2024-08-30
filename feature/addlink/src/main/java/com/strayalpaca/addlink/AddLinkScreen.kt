@@ -216,7 +216,7 @@ fun AddLinkScreen(
                         inputText = url,
                         hintText = stringResource(id = R.string.placeholder_link),
                         onChangeText = inputUrl,
-                        enable = enable,
+                        enable = enable
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
@@ -273,7 +273,7 @@ fun AddLinkScreen(
                         hintText = stringResource(id = R.string.placeholder_memo),
                         onChangeText = inputMemo,
                         enable = enable,
-                        isError = memo.length >= 100,
+                        isError = memo.length >= 100
                     )
 
                     Spacer(modifier = Modifier.height(4.dp))
@@ -283,7 +283,7 @@ fun AddLinkScreen(
                             Text(
                                 color = PokitTheme.colors.error,
                                 text = "최대 100자까지 입력 가능합니다.",
-                                style = PokitTheme.typography.detail1,
+                                style = PokitTheme.typography.detail1
                             )
                         }
 

@@ -197,7 +197,7 @@ fun AddPokitScreen(
             isError = state.pokitInputErrorMessage != null,
             sub = state.pokitInputErrorMessage ?: "",
             enable = (state.step != AddPokitScreenStep.POKIT_SAVE_LOADING),
-            maxLength = 10,
+            maxLength = 10
         )
 
         Spacer(modifier = Modifier.height(28.dp))
