@@ -1,5 +1,7 @@
 package pokitmons.pokit.home.pokit
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
@@ -47,6 +50,8 @@ fun PokitScreen(
     val pokitOptionBottomSheetType by viewModel.pokitOptionBottomSheetType.collectAsState()
     val currentDetailSelectedCategory by viewModel.currentDetailSelectedCategory.collectAsState()
 
+    val context: Context = LocalContext.current
+
     PokitBottomSheet(
         onHideBottomSheet = viewModel::hidePokitDetailRemoveBottomSheet,
         show = pokitOptionBottomSheetType != null
@@ -54,7 +59,7 @@ fun PokitScreen(
         when (pokitOptionBottomSheetType) {
             BottomSheetType.MODIFY -> {
                 ModifyBottomSheetContent(
-                    onClickShare = {},
+                    onClickShare = { Toast.makeText(context, "준비중입니다.", Toast.LENGTH_SHORT).show() },
                     onClickModify = remember {
                         {
                             viewModel.hidePokitDetailRemoveBottomSheet()

@@ -1,5 +1,7 @@
 package com.strayalpaca.pokitdetail
 
+import android.content.Context
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +19,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
@@ -278,10 +281,12 @@ fun PokitDetailScreen(
             onHideBottomSheet = hideLinkModifyBottomSheet,
             show = state.linkBottomSheetType != null
         ) {
+            val context: Context = LocalContext.current
+
             when (state.linkBottomSheetType) {
                 BottomSheetType.MODIFY -> {
                     ModifyBottomSheetContent(
-                        onClickShare = {},
+                        onClickShare = { Toast.makeText(context, "준비중입니다.", Toast.LENGTH_SHORT).show() },
                         onClickModify = remember {
                             {
                                 state.currentLink?.let { link ->
@@ -316,8 +321,9 @@ fun PokitDetailScreen(
         ) {
             when (state.pokitBottomSheetType) {
                 BottomSheetType.MODIFY -> {
+                    val context: Context = LocalContext.current
                     ModifyBottomSheetContent(
-                        onClickShare = {},
+                        onClickShare = { Toast.makeText(context, "준비중입니다.", Toast.LENGTH_SHORT).show() },
                         onClickModify = remember {
                             {
                                 hidePokitModifyBottomSheet()
