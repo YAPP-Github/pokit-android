@@ -242,7 +242,7 @@ fun RemindScreen(
                                         sub = "${favoriteContent.createdAt} • ${favoriteContent.domain}",
                                         painter = rememberAsyncImagePainter(favoriteContent.thumbNail),
                                         notRead = favoriteContent.isRead,
-                                        badgeText = favoriteContent.data,
+                                        badgeText = null,
                                         onClickKebab = {
                                             viewModel.showLinkOptionBottomSheet(remindResult = favoriteContent)
                                         },
