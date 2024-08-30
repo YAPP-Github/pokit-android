@@ -22,7 +22,7 @@ private fun LinkDetailBottomSheetPreview() {
                 bookmark = true,
                 openWebBrowserByClick = false,
                 show = true,
-                linkType = "TEXT",
+                pokitName = "TEXT",
                 dateString = "2024.08.27",
                 onHideBottomSheet = { },
                 onClickBookmark = { },

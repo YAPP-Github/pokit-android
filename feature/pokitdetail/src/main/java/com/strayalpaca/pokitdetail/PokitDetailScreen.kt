@@ -87,7 +87,8 @@ fun PokitDetailScreenContainer(
         onClickLinkRemove = viewModel::deleteLink,
         loadNextPokits = viewModel::loadNextPokits,
         refreshPokits = viewModel::refreshPokits,
-        loadNextLinks = viewModel::loadNextLinks
+        loadNextLinks = viewModel::loadNextLinks,
+        onClickBookmark = viewModel::toggleBookmark
     )
 }
 
@@ -120,6 +121,7 @@ fun PokitDetailScreen(
     loadNextPokits: () -> Unit = {},
     refreshPokits: () -> Unit = {},
     loadNextLinks: () -> Unit = {},
+    onClickBookmark: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -195,8 +197,8 @@ fun PokitDetailScreen(
                             title = link.title,
                             sub = "${link.dateString} · ${link.domainUrl}",
                             painter = rememberAsyncImagePainter(link.imageUrl),
-                            notRead = link.isRead,
-                            badgeText = stringResource(id = link.linkType.textResourceId),
+                            notRead = !link.isRead,
+                            badgeText = link.pokitName,
                             onClickKebab = showLinkModifyBottomSheet,
                             onClickItem = onClickLink,
                             modifier = Modifier.padding(20.dp)
@@ -220,10 +222,11 @@ fun PokitDetailScreen(
                 thumbnailPainter = rememberAsyncImagePainter(state.currentLink.imageUrl),
                 bookmark = state.currentLink.bookmark,
                 openWebBrowserByClick = true,
-                linkType = stringResource(state.currentLink.linkType.textResourceId),
+                pokitName = state.currentLink.pokitName,
                 dateString = state.currentLink.dateString,
                 onHideBottomSheet = hideLinkDetailBottomSheet,
-                show = state.linkDetailBottomSheetVisible
+                show = state.linkDetailBottomSheetVisible,
+                onClickBookmark = onClickBookmark
             )
         }
 
@@ -261,7 +264,8 @@ fun PokitDetailScreen(
                 state = lazyColumnListState
             ) {
                 items(
-                    items = pokitList
+                    items = pokitList,
+                    key = { it.id }
                 ) { pokit ->
                     PokitList(
                         item = pokit,
@@ -281,7 +285,6 @@ fun PokitDetailScreen(
             when (state.linkBottomSheetType) {
                 BottomSheetType.MODIFY -> {
                     ModifyBottomSheetContent(
-                        onClickShare = {},
                         onClickModify = remember {
                             {
                                 state.currentLink?.let { link ->
@@ -317,7 +320,6 @@ fun PokitDetailScreen(
             when (state.pokitBottomSheetType) {
                 BottomSheetType.MODIFY -> {
                     ModifyBottomSheetContent(
-                        onClickShare = {},
                         onClickModify = remember {
                             {
                                 hidePokitModifyBottomSheet()

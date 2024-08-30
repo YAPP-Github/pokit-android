@@ -64,7 +64,7 @@ interface LinkApi {
     ): ModifyLinkResponse
 
     @PUT("content/{contentId}/bookmark")
-    suspend fun cancelBookmark(@Path("contentId") contentId: Int)
+    suspend fun cancelBookmark(@Path("contentId") contentId: Int): Response<Unit>
 
     @POST("content/{contentId}/bookmark")
     suspend fun applyBookmark(@Path("contentId") contentId: Int): ApplyBookmarkResponse

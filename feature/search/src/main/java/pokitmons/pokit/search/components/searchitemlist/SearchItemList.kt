@@ -92,7 +92,7 @@ internal fun SearchItemList(
                     sub = "${link.dateString} · ${link.domainUrl}",
                     painter = rememberAsyncImagePainter(link.imageUrl),
                     notRead = !link.isRead,
-                    badgeText = stringResource(id = link.linkType.textResourceId),
+                    badgeText = link.pokitName,
                     onClickKebab = onClickLinkKebab,
                     onClickItem = onClickLink,
                     modifier = Modifier.padding(20.dp)

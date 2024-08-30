@@ -54,7 +54,6 @@ fun PokitScreen(
         when (pokitOptionBottomSheetType) {
             BottomSheetType.MODIFY -> {
                 ModifyBottomSheetContent(
-                    onClickShare = {},
                     onClickModify = remember {
                         {
                             viewModel.hidePokitDetailRemoveBottomSheet()

@@ -1,6 +1,5 @@
 package com.strayalpaca.pokitdetail.model
 
-import com.strayalpaca.pokitdetail.R
 import pokitmons.pokit.domain.model.link.Link as DomainLink
 
 data class Link(
@@ -9,7 +8,8 @@ data class Link(
     val dateString: String = "",
     val domainUrl: String = "",
     val isRead: Boolean = false,
-    val linkType: LinkType = LinkType.TEXT,
+    val pokitName: String = "",
+    val pokitId: String = "",
     val url: String = "",
     val memo: String = "",
     val bookmark: Boolean = false,
@@ -27,14 +27,13 @@ data class Link(
                 url = domainLink.data,
                 memo = domainLink.memo,
                 imageUrl = domainLink.thumbnail,
-                createdAt = domainLink.createdAt
+                createdAt = domainLink.createdAt,
+                pokitName = domainLink.categoryName,
+                pokitId = domainLink.categoryId.toString(),
+                bookmark = domainLink.favorites
             )
         }
     }
-}
-
-enum class LinkType(val textResourceId: Int) {
-    TEXT(R.string.badge_text),
 }
 
 internal val sampleLinkList = listOf(
@@ -45,7 +44,6 @@ internal val sampleLinkList = listOf(
         dateString = "2024.04.12",
         domainUrl = "youtu.be",
         isRead = true,
-        linkType = LinkType.TEXT,
         url = "",
         memo = "",
         bookmark = true
@@ -57,7 +55,6 @@ internal val sampleLinkList = listOf(
         dateString = "2024.05.12",
         domainUrl = "youtu.be",
         isRead = false,
-        linkType = LinkType.TEXT,
         url = "",
         memo = "",
         bookmark = true
@@ -69,7 +66,6 @@ internal val sampleLinkList = listOf(
         dateString = "2024.04.12",
         domainUrl = "pokitmons.pokit",
         isRead = true,
-        linkType = LinkType.TEXT,
         url = "",
         memo = "",
         bookmark = true
@@ -81,7 +77,6 @@ internal val sampleLinkList = listOf(
         dateString = "2024.06.12",
         domainUrl = "youtu.be",
         isRead = true,
-        linkType = LinkType.TEXT,
         url = "",
         memo = "",
         bookmark = true
@@ -93,7 +88,6 @@ internal val sampleLinkList = listOf(
         dateString = "2024.07.14",
         domainUrl = "youtu.be",
         isRead = false,
-        linkType = LinkType.TEXT,
         url = "",
         memo = "",
         bookmark = true

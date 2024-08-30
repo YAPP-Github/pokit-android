@@ -70,7 +70,6 @@ fun RemindScreen(
         when (pokitOptionBottomSheetType) {
             BottomSheetType.MODIFY -> {
                 ModifyBottomSheetContent(
-                    onClickShare = {},
                     onClickModify = remember {
                         {
                             viewModel.hideLinkOptionBottomSheet()
@@ -105,7 +104,7 @@ fun RemindScreen(
             thumbnailPainter = rememberAsyncImagePainter(model = link.imageUrl),
             bookmark = link.bookmark,
             openWebBrowserByClick = true,
-            linkType = stringResource(link.linkType.textResourceId),
+            pokitName = link.pokitName,
             dateString = link.dateString,
             onHideBottomSheet = viewModel::hideDetailLinkBottomSheet,
             show = true,
@@ -243,7 +242,7 @@ fun RemindScreen(
                                         sub = "${favoriteContent.createdAt} • ${favoriteContent.domain}",
                                         painter = rememberAsyncImagePainter(favoriteContent.thumbNail),
                                         notRead = favoriteContent.isRead,
-                                        badgeText = favoriteContent.data,
+                                        badgeText = null,
                                         onClickKebab = {
                                             viewModel.showLinkOptionBottomSheet(remindResult = favoriteContent)
                                         },
