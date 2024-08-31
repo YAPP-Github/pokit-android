@@ -2,6 +2,7 @@ package pokitmons.pokit.home.remind
 
 import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -35,6 +36,7 @@ import pokitmons.pokit.core.ui.components.template.modifybottomsheet.ModifyBotto
 import pokitmons.pokit.core.ui.components.template.pokkiempty.EmptyPokki
 import pokitmons.pokit.core.ui.components.template.pokkierror.ErrorPokki
 import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButtonBottomSheetContent
+import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.core.ui.R.string as coreString
 
 @Composable
@@ -130,6 +132,7 @@ fun RemindScreen(
     } else {
         Column(
             modifier = modifier
+                .background(PokitTheme.colors.backgroundBase)
                 .padding(20.dp)
                 .fillMaxHeight()
                 .verticalScroll(rememberScrollState())
