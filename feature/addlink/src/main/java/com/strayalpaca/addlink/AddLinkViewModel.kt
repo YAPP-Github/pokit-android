@@ -177,7 +177,9 @@ class AddLinkViewModel @Inject constructor(
     }
 
     fun inputMemo(memo: String) {
-        _memo.update { memo }
+        if (memo.length <= 100) {
+            _memo.update { memo }
+        }
     }
 
     fun showSelectPokitBottomSheet() = intent {

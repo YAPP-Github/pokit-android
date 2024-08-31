@@ -67,11 +67,11 @@ fun InputNicknameScreen(
                 maxLength = NICKNAME_MAX_LENGTH,
                 sub = when {
                     inputNicknameState.isDuplicate -> stringResource(id = Login.string.nickname_already_in_use)
-                    inputNicknameState.isRegex -> stringResource(id = Login.string.input_restriction_message)
-                    inputNicknameState.nickname.length < NICKNAME_MAX_LENGTH -> stringResource(id = Login.string.input_max_length)
+                    !inputNicknameState.isRegex -> stringResource(id = Login.string.input_restriction_message)
+                    inputNicknameState.nickname.length >= NICKNAME_MAX_LENGTH -> stringResource(id = Login.string.input_max_length)
                     else -> ""
                 },
-                isError = inputNicknameState.nickname.length > NICKNAME_MAX_LENGTH || inputNicknameState.isDuplicate || inputNicknameState.isRegex,
+                isError = inputNicknameState.isRegex || inputNicknameState.isDuplicate || inputNicknameState.nickname.length >= NICKNAME_MAX_LENGTH,
                 hintText = stringResource(id = Login.string.input_nickname_hint),
                 onChangeText = { text ->
                     Log.d("!! : ", text)
@@ -79,9 +79,7 @@ fun InputNicknameScreen(
                         viewModel.apply {
                             inputText(text)
                             if (checkNicknameRegex(text)) {
-                                Log.d("!! : ", "else call")
                                 checkDuplicateNickname(text)
-                            } else {
                             }
                         }
                     }
