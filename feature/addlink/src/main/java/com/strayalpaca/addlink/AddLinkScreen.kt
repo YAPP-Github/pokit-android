@@ -89,7 +89,8 @@ fun AddLinkScreenContainer(
 
     PokitBottomSheet(
         onHideBottomSheet = viewModel::hideSelectPokitBottomSheet,
-        show = state.step == ScreenStep.POKIT_SELECT
+        show = state.step == ScreenStep.POKIT_SELECT,
+        skipPartiallyExpanded = false
     ) {
         val lazyColumnListState = rememberLazyListState()
         val startPaging = remember {
@@ -272,17 +273,31 @@ fun AddLinkScreen(
                         text = memo,
                         hintText = stringResource(id = R.string.placeholder_memo),
                         onChangeText = inputMemo,
-                        enable = enable
+                        enable = enable,
+                        isError = memo.length >= 100
                     )
 
                     Spacer(modifier = Modifier.height(4.dp))
 
-                    Text(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = "${memo.length}/100",
-                        style = PokitTheme.typography.detail1.copy(color = PokitTheme.colors.textTertiary),
-                        textAlign = TextAlign.End
-                    )
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        if (memo.length >= 100) {
+                            Text(
+                                color = PokitTheme.colors.error,
+                                text = "최대 100자까지 입력 가능합니다.",
+                                style = PokitTheme.typography.detail1
+                            )
+                        }
+
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        Text(
+                            color = if (memo.length >= 100) PokitTheme.colors.error else PokitTheme.colors.textTertiary,
+                            modifier = Modifier.weight(1f),
+                            text = "${memo.length}/100",
+                            style = PokitTheme.typography.detail1,
+                            textAlign = TextAlign.End
+                        )
+                    }
 
                     Spacer(modifier = Modifier.height(24.dp))
 

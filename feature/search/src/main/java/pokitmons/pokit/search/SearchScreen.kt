@@ -1,5 +1,7 @@
 package pokitmons.pokit.search
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
@@ -48,6 +51,8 @@ fun SearchScreenContainer(
     val pokitList by viewModel.pokitList.collectAsState()
     val pokitPagingState by viewModel.pokitPagingState.collectAsState()
 
+    val context: Context = LocalContext.current
+
     state.currentLink?.let { link ->
         LinkDetailBottomSheet(
             title = link.title,
@@ -60,6 +65,13 @@ fun SearchScreenContainer(
             dateString = link.dateString,
             onHideBottomSheet = viewModel::hideLinkDetailBottomSheet,
             show = state.showLinkDetailBottomSheet,
+            onClickShareLink = {
+                val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, state.currentLink?.url)
+                }
+                context.startActivity(Intent.createChooser(intent, "Pokit"))
+            },
             onClickModifyLink = {
                 viewModel.hideLinkDetailBottomSheet()
                 onNavigateToLinkModify(link.id)
@@ -102,6 +114,15 @@ fun SearchScreenContainer(
                         state.currentLink?.let { link ->
                             viewModel.showLinkRemoveBottomSheet(link)
                         }
+                    }
+                },
+                onClickShare = remember {
+                    {
+                        val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
+                            type = "text/plain"
+                            putExtra(Intent.EXTRA_TEXT, state.currentLink?.url)
+                        }
+                        context.startActivity(Intent.createChooser(intent, "Pokit"))
                     }
                 }
             )
@@ -211,7 +232,9 @@ fun SearchScreen(
                 }
                 (linkPagingState == SimplePagingState.FAILURE_INIT) -> {
                     ErrorPokki(
-                        modifier = Modifier.fillMaxWidth().weight(1f),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
                         title = stringResource(id = coreString.title_error),
                         sub = stringResource(id = coreString.sub_error),
                         onClickRetry = onClickSearch
@@ -219,7 +242,9 @@ fun SearchScreen(
                 }
                 (linkList.isEmpty()) -> {
                     EmptyPokki(
-                        modifier = Modifier.fillMaxWidth().weight(1f),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
                         title = stringResource(id = coreString.title_empty_search),
                         sub = stringResource(id = coreString.sub_empty_search)
                     )

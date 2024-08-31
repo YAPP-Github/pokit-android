@@ -82,7 +82,8 @@ fun HomeScreen(
                 onDismissRequest = {
                     showBottomSheet = false
                 },
-                sheetState = sheetState
+                sheetState = sheetState,
+                containerColor = PokitTheme.colors.backgroundBase
             ) {
                 Row(
                     modifier = Modifier

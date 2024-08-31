@@ -1,5 +1,8 @@
 package pokitmons.pokit.home.remind
 
+import android.content.Context
+import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,6 +20,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -32,6 +36,7 @@ import pokitmons.pokit.core.ui.components.template.modifybottomsheet.ModifyBotto
 import pokitmons.pokit.core.ui.components.template.pokkiempty.EmptyPokki
 import pokitmons.pokit.core.ui.components.template.pokkierror.ErrorPokki
 import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButtonBottomSheetContent
+import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.core.ui.R.string as coreString
 
 @Composable
@@ -54,6 +59,8 @@ fun RemindScreen(
     val pokitOptionBottomSheetType by viewModel.pokitOptionBottomSheetType.collectAsState()
     val currentSelectedLink by viewModel.currentSelectedLink.collectAsState()
 
+    val context: Context = LocalContext.current
+
     val showTotalEmpty by remember {
         derivedStateOf {
             todayContentsState == NetworkState.IDLE &&
@@ -70,6 +77,7 @@ fun RemindScreen(
         when (pokitOptionBottomSheetType) {
             BottomSheetType.MODIFY -> {
                 ModifyBottomSheetContent(
+                    onClickShare = { Toast.makeText(context, "준비중입니다.", Toast.LENGTH_SHORT).show() },
                     onClickModify = remember {
                         {
                             viewModel.hideLinkOptionBottomSheet()
@@ -124,6 +132,7 @@ fun RemindScreen(
     } else {
         Column(
             modifier = modifier
+                .background(PokitTheme.colors.backgroundBase)
                 .padding(20.dp)
                 .fillMaxHeight()
                 .verticalScroll(rememberScrollState())
@@ -154,7 +163,7 @@ fun RemindScreen(
                                         title = todayContent.title,
                                         sub = todayContent.createdAt,
                                         painter = rememberAsyncImagePainter(todayContent.thumbNail),
-                                        badgeText = todayContent.data,
+                                        badgeText = null,
                                         domain = todayContent.domain,
                                         onClick = {
                                             viewModel.showDetailLinkBottomSheet(remindResult = todayContent)
