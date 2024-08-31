@@ -36,7 +36,7 @@ fun ToadyLinkCard(
     title: String,
     sub: String,
     painter: Painter,
-    badgeText: String,
+    badgeText: String?,
     domain: String,
     onClick: () -> Unit,
     onClickKebab: () -> Unit,
@@ -70,19 +70,21 @@ fun ToadyLinkCard(
                 .align(Alignment.BottomStart)
                 .padding(12.dp)
         ) {
-            Text(
-                style = PokitTheme.typography.label4,
-                text = badgeText,
-                color = PokitTheme.colors.textTertiary,
-                modifier = Modifier
-                    .height(16.dp)
-                    .width(34.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(PokitTheme.colors.backgroundPrimary)
-                    .padding(horizontal = 4.dp, vertical = 2.dp)
-            )
+            badgeText?.let {
+                Text(
+                    style = PokitTheme.typography.label4,
+                    text = badgeText,
+                    color = PokitTheme.colors.textTertiary,
+                    modifier = Modifier
+                        .height(16.dp)
+                        .width(34.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(PokitTheme.colors.backgroundPrimary)
+                        .padding(horizontal = 4.dp, vertical = 2.dp)
+                )
 
-            Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(4.dp))
+            }
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
