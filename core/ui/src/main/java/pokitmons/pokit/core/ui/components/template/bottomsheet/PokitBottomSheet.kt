@@ -34,9 +34,10 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 fun PokitBottomSheet(
     onHideBottomSheet: () -> Unit,
     show: Boolean = false,
+    skipPartiallyExpanded: Boolean = true,
     content: @Composable (ColumnScope.() -> Unit),
 ) {
-    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val bottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = skipPartiallyExpanded)
     var visibility by remember { mutableStateOf(show) }
     val scope = rememberCoroutineScope()
 

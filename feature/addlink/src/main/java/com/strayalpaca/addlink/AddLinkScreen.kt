@@ -89,7 +89,8 @@ fun AddLinkScreenContainer(
 
     PokitBottomSheet(
         onHideBottomSheet = viewModel::hideSelectPokitBottomSheet,
-        show = state.step == ScreenStep.POKIT_SELECT
+        show = state.step == ScreenStep.POKIT_SELECT,
+        skipPartiallyExpanded = false
     ) {
         val lazyColumnListState = rememberLazyListState()
         val startPaging = remember {

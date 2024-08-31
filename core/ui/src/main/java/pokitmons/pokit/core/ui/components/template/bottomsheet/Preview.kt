@@ -27,36 +27,35 @@ private fun PokitSwitchRadioPreview() {
         Surface(modifier = Modifier.fillMaxSize()) {
             Surface(
                 modifier = Modifier.fillMaxSize(),
-                color = MaterialTheme.colorScheme.background
+                color = PokitTheme.colors.backgroundBase
             ) {
                 Button(onClick = { showBottomSheet = true }) {
                     Text(text = "Click!")
                 }
             }
 
-            if (showBottomSheet) {
-                PokitBottomSheet(
-                    onHideBottomSheet = { showBottomSheet = false }
-                ) {
-                    PokitBottomSheetItem(
-                        text = "즐겨찾기",
-                        resourceId = R.drawable.icon_24_star_1,
-                        data = "즐겨찾기",
-                        onClick = { }
-                    )
+            PokitBottomSheet(
+                onHideBottomSheet = { showBottomSheet = false },
+                show = showBottomSheet
+            ) {
+                PokitBottomSheetItem(
+                    text = "즐겨찾기",
+                    resourceId = R.drawable.icon_24_star_1,
+                    data = "즐겨찾기",
+                    onClick = { }
+                )
 
-                    HorizontalDivider(
-                        thickness = 1.dp,
-                        color = PokitTheme.colors.borderTertiary
-                    )
+                HorizontalDivider(
+                    thickness = 1.dp,
+                    color = PokitTheme.colors.borderTertiary
+                )
 
-                    PokitBottomSheetItem(
-                        text = "공유하기",
-                        resourceId = R.drawable.icon_24_share,
-                        data = "공유하기",
-                        onClick = { showBottomSheet = false }
-                    )
-                }
+                PokitBottomSheetItem(
+                    text = "공유하기",
+                    resourceId = R.drawable.icon_24_share,
+                    data = "공유하기",
+                    onClick = { showBottomSheet = false }
+                )
             }
         }
     }
