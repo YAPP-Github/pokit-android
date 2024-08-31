@@ -115,6 +115,15 @@ fun SearchScreenContainer(
                             viewModel.showLinkRemoveBottomSheet(link)
                         }
                     }
+                },
+                onClickShare = remember {
+                    {
+                        val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
+                            type = "text/plain"
+                            putExtra(Intent.EXTRA_TEXT, state.currentLink?.url)
+                        }
+                        context.startActivity(Intent.createChooser(intent, "Pokit"))
+                    }
                 }
             )
         }
@@ -223,7 +232,9 @@ fun SearchScreen(
                 }
                 (linkPagingState == SimplePagingState.FAILURE_INIT) -> {
                     ErrorPokki(
-                        modifier = Modifier.fillMaxWidth().weight(1f),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
                         title = stringResource(id = coreString.title_error),
                         sub = stringResource(id = coreString.sub_error),
                         onClickRetry = onClickSearch
@@ -231,7 +242,9 @@ fun SearchScreen(
                 }
                 (linkList.isEmpty()) -> {
                     EmptyPokki(
-                        modifier = Modifier.fillMaxWidth().weight(1f),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
                         title = stringResource(id = coreString.title_empty_search),
                         sub = stringResource(id = coreString.sub_empty_search)
                     )
