@@ -37,7 +37,7 @@ import pokitmons.pokit.core.ui.R.string as coreString
 fun PokitScreen(
     modifier: Modifier = Modifier,
     viewModel: PokitViewModel,
-    onNavigateToPokitDetail: (String) -> Unit,
+    onNavigateToPokitDetail: (String, Int) -> Unit,
     onNavigateToLinkModify: (String) -> Unit,
     onNavigateToPokitModify: (String) -> Unit,
 ) {
@@ -131,7 +131,7 @@ fun PokitScreen(
                                     text = pokitDetail.title,
                                     linkCount = pokitDetail.count,
                                     painter = rememberAsyncImagePainter(model = pokitDetail.image.url),
-                                    onClick = { onNavigateToPokitDetail(pokitDetail.id) },
+                                    onClick = { onNavigateToPokitDetail(pokitDetail.id, pokitDetail.count) },
                                     onClickKebab = {
                                         viewModel.showPokitDetailOptionBottomSheet(pokitDetail)
                                     }

@@ -49,7 +49,7 @@ import pokitmons.pokit.home.remind.RemindScreen
 @Composable
 fun HomeScreen(
     viewModel: PokitViewModel,
-    onNavigateToPokitDetail: (String) -> Unit,
+    onNavigateToPokitDetail: (String, Int) -> Unit,
     onNavigateToSearch: () -> Unit,
     onNavigateToSetting: () -> Unit,
     onNavigateAddLink: () -> Unit,
