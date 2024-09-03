@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pokitmons.pokit.core.feature.flow.MutableEventFlow
 import pokitmons.pokit.core.feature.flow.asEventFlow
+import pokitmons.pokit.core.feature.navigation.args.LinkArg
 import pokitmons.pokit.core.feature.navigation.args.LinkUpdateEvent
 import pokitmons.pokit.core.feature.navigation.args.PokitUpdateEvent
 import pokitmons.pokit.domain.commom.PokitResult
@@ -24,6 +25,7 @@ import pokitmons.pokit.domain.model.link.LinksSort
 import pokitmons.pokit.domain.model.pokit.MAX_POKIT_COUNT
 import pokitmons.pokit.domain.model.pokit.PokitsSort
 import pokitmons.pokit.domain.usecase.link.DeleteLinkUseCase
+import pokitmons.pokit.domain.usecase.link.GetLinkUseCase
 import pokitmons.pokit.domain.usecase.link.GetLinksUseCase
 import pokitmons.pokit.domain.usecase.link.SetBookmarkUseCase
 import pokitmons.pokit.domain.usecase.pokit.DeletePokitUseCase
@@ -43,6 +45,7 @@ class PokitViewModel @Inject constructor(
     private val getPokitCountUseCase: GetPokitCountUseCase,
     private val deleteLinkUseCase: DeleteLinkUseCase,
     private val setBookmarkUseCase: SetBookmarkUseCase,
+    private val getLinkUseCase: GetLinkUseCase
 ) : ViewModel() {
 
     private val _sideEffect = MutableEventFlow<HomeSideEffect>()
@@ -56,13 +59,18 @@ class PokitViewModel @Inject constructor(
             LinkUpdateEvent.updatedLink.collectLatest { updatedLink ->
                 val targetLink = linkPaging.pagingData.value.find { it.id == updatedLink.id.toString() } ?: return@collectLatest
 
-                val modifiedLink = targetLink.copy(
-                    title = updatedLink.title,
-                    imageUrl = updatedLink.thumbnail,
-                    domainUrl = updatedLink.domain,
-                    createdAt = updatedLink.createdAt
-                )
-                linkPaging.modifyItem(modifiedLink)
+                val isCategoryChanged = (targetLink.pokitId != updatedLink.pokitId.toString())
+                if (isCategoryChanged) {
+                    linkPaging.deleteItem(targetLink)
+                } else {
+                    val modifiedLink = targetLink.copy(
+                        title = updatedLink.title,
+                        imageUrl = updatedLink.thumbnail,
+                        domainUrl = updatedLink.domain,
+                        createdAt = updatedLink.createdAt
+                    )
+                    linkPaging.modifyItem(modifiedLink)
+                }
             }
         }
     }
@@ -318,6 +326,39 @@ class PokitViewModel @Inject constructor(
 
     fun showDetailLinkBottomSheet(link: DetailLink) {
         _currentDetailShowLink.update { link }
+
+        viewModelScope.launch {
+            val response = getLinkUseCase.getLink(link.id.toInt())
+            if (response is PokitResult.Success) {
+                val responseLink = response.result
+                if (_currentDetailShowLink.value?.id == responseLink.id.toString()) {
+                    _currentDetailShowLink.update {
+                        DetailLink(
+                            id = responseLink.id.toString(),
+                            title = responseLink.title,
+                            dateString = responseLink.createdAt,
+                            url = responseLink.data,
+                            isRead = responseLink.isRead,
+                            domainUrl = responseLink.domain,
+                            imageUrl = _currentDetailShowLink.value?.imageUrl,
+                            memo = responseLink.memo,
+                            bookmark = responseLink.favorites,
+                            pokitName = responseLink.categoryName
+                        )
+                    }
+                }
+                LinkUpdateEvent.modifySuccess(
+                    LinkArg(
+                        id = responseLink.id,
+                        title = responseLink.title,
+                        thumbnail = responseLink.thumbnail,
+                        createdAt = responseLink.createdAt,
+                        domain = responseLink.domain,
+                        pokitId = responseLink.categoryId
+                    )
+                )
+            }
+        }
     }
 
     fun hideDetailLinkBottomSheet() {
