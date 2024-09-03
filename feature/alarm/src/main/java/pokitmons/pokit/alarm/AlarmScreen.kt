@@ -19,6 +19,10 @@ import pokitmons.pokit.alarm.components.alarmitem.AlarmItem
 import pokitmons.pokit.alarm.components.toolbar.Toolbar
 import pokitmons.pokit.alarm.model.Alarm
 import pokitmons.pokit.alarm.paging.SimplePagingState
+import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
+import pokitmons.pokit.core.ui.components.template.pokki.Pokki
+import pokitmons.pokit.core.ui.components.template.pokkierror.ErrorPokki
+import pokitmons.pokit.core.ui.R.string as coreString
 
 @Composable
 fun AlarmScreenContainer(
@@ -40,7 +44,8 @@ fun AlarmScreenContainer(
         onClickAlarmRemove = viewModel::removeAlarm,
         alarms = alarms,
         alarmsState = alarmsState,
-        loadNextAlarms = viewModel::loadNextAlarms
+        loadNextAlarms = viewModel::loadNextAlarms,
+        refreshAlarms = viewModel::refreshAlarms
     )
 }
 
@@ -53,6 +58,7 @@ fun AlarmScreen(
     alarms: List<Alarm> = emptyList(),
     alarmsState: SimplePagingState = SimplePagingState.IDLE,
     loadNextAlarms: () -> Unit = {},
+    refreshAlarms: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier.fillMaxSize()
@@ -77,23 +83,54 @@ fun AlarmScreen(
             }
         }
 
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .weight(1f),
-            state = alarmLazyColumnListState
-        ) {
-            items(
-                items = alarms,
-                key = { alarm -> alarm.id }
-            ) { alarm ->
-                AlarmItem(
-                    modifier = Modifier.animateItemPlacement(),
-                    alarm = alarm,
-                    onClickAlarm = onClickAlarm,
-                    onClickRemove = onClickAlarmRemove
+        when {
+            alarmsState == SimplePagingState.LOADING_INIT -> {
+                LoadingProgress(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f)
                 )
             }
+            alarmsState == SimplePagingState.FAILURE_INIT -> {
+                ErrorPokki(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    title = stringResource(id = coreString.title_error),
+                    sub = stringResource(id = coreString.sub_error),
+                    onClickRetry = refreshAlarms
+                )
+            }
+            alarms.isEmpty() -> {
+                Pokki(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    title = stringResource(id = coreString.title_empty_alarms),
+                    sub = stringResource(id = coreString.sub_empty_alarms)
+                )
+            }
+            else -> {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .weight(1f),
+                    state = alarmLazyColumnListState
+                ) {
+                    items(
+                        items = alarms,
+                        key = { alarm -> alarm.id }
+                    ) { alarm ->
+                        AlarmItem(
+                            modifier = Modifier.animateItemPlacement(),
+                            alarm = alarm,
+                            onClickAlarm = onClickAlarm,
+                            onClickRemove = onClickAlarmRemove
+                        )
+                    }
+                }
+            }
         }
+
     }
 }
