@@ -3,8 +3,10 @@ package pokitmons.pokit.settings.nickname
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -41,10 +43,11 @@ fun EditNicknameScreen(
 
     Box(
         modifier = Modifier
-            .padding(start = 20.dp, end = 20.dp, top = 20.dp, bottom = 28.dp)
+            .padding(start = 20.dp, end = 20.dp, bottom = 28.dp)
             .fillMaxSize()
     ) {
         Column {
+            Spacer(modifier = Modifier.height(8.dp))
             NicknameHeader(onBackPressed)
             LabeledInput(
                 modifier = Modifier

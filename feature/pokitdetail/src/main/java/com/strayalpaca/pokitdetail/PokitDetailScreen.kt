@@ -130,6 +130,8 @@ fun PokitDetailScreen(
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
+        Spacer(modifier = Modifier.height(8.dp))
+
         Toolbar(
             onBackPressed = onBackPressed,
             onClickKebab = showPokitModifyBottomSheet
