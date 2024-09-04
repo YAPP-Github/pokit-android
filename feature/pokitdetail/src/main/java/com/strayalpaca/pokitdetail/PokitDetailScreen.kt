@@ -253,7 +253,8 @@ fun PokitDetailScreen(
 
         PokitBottomSheet(
             onHideBottomSheet = hidePokitSelectBottomSheet,
-            show = state.pokitSelectBottomSheetVisible
+            show = state.pokitSelectBottomSheetVisible,
+            skipPartiallyExpanded = false,
         ) {
             val lazyColumnListState = rememberLazyListState()
             val startPaging = remember {
