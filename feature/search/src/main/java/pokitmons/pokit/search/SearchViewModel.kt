@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import pokitmons.pokit.core.feature.navigation.args.LinkUpdateEvent
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.usecase.link.DeleteLinkUseCase
+import pokitmons.pokit.domain.usecase.link.GetLinkUseCase
 import pokitmons.pokit.domain.usecase.link.SearchLinksUseCase
 import pokitmons.pokit.domain.usecase.link.SetBookmarkUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
@@ -41,6 +42,7 @@ class SearchViewModel @Inject constructor(
     getPokitsUseCase: GetPokitsUseCase,
     getRecentSearchWordsUseCase: GetRecentSearchWordsUseCase,
     getUseRecentSearchWordsUseCase: GetUseRecentSearchWordsUseCase,
+    private val getLinkUseCase: GetLinkUseCase,
     private val deleteLinkUseCase: DeleteLinkUseCase,
     private val setUseRecentSearchWordsUseCase: SetUseRecentSearchWordsUseCase,
     private val addRecentSearchWordUseCase: AddRecentSearchWordUseCase,
@@ -232,6 +234,19 @@ class SearchViewModel @Inject constructor(
                 showLinkDetailBottomSheet = true,
                 linkBottomSheetType = null
             )
+        }
+
+        viewModelScope.launch {
+            val response = getLinkUseCase.getLink(link.id.toInt())
+            if (response is PokitResult.Success && state.value.currentDetailLink?.id == link.id && state.value.showLinkDetailBottomSheet) {
+                _state.update { it.copy(currentDetailLink = Link.fromDomainLink(response.result).copy(imageUrl = link.imageUrl, isRead = true)) }
+            }
+
+            val isReadChangedLink = linkPaging.pagingData.value
+                .find { it.id == link.id }
+                ?.copy(isRead = true) ?: return@launch
+
+            linkPaging.modifyItem(isReadChangedLink)
         }
     }
 
