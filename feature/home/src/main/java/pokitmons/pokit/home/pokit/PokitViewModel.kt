@@ -314,6 +314,11 @@ class PokitViewModel @Inject constructor(
         _linkOptionBottomSheetType.update { BottomSheetType.REMOVE }
     }
 
+    fun showLinkRemoveBottomSheet(link: DetailLink) {
+        _currentSelectedLink.update { link }
+        _linkOptionBottomSheetType.update { BottomSheetType.REMOVE }
+    }
+
     fun removeCurrentSelectedLink() {
         val currentSelectedLinkId = currentSelectedLink.value?.id?.toIntOrNull() ?: return
         viewModelScope.launch {

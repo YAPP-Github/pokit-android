@@ -77,6 +77,10 @@ fun PokitDetailScreenContainer(
         hidePokitModifyBottomSheet = viewModel::hidePokitBottomSheet,
         showLinkModifyBottomSheet = viewModel::showLinkModifyBottomSheet,
         showLinkRemoveBottomSheet = viewModel::showLinkRemoveBottomSheet,
+        showLinkRemoveBottomSheetWithLink = remember {{ link ->
+            viewModel.hideLinkDetailBottomSheet()
+            viewModel.showLinkRemoveBottomSheet(link)
+        }},
         hideLinkModifyBottomSheet = viewModel::hideLinkBottomSheet,
         hideLinkDetailBottomSheet = viewModel::hideLinkDetailBottomSheet,
         state = state,
@@ -110,6 +114,7 @@ fun PokitDetailScreen(
     hidePokitModifyBottomSheet: () -> Unit = {},
     showLinkModifyBottomSheet: (Link) -> Unit = {},
     showLinkRemoveBottomSheet: () -> Unit = {},
+    showLinkRemoveBottomSheetWithLink: (Link) -> Unit = {},
     hideLinkModifyBottomSheet: () -> Unit = {},
     hideLinkDetailBottomSheet: () -> Unit = {},
     state: PokitDetailScreenState = PokitDetailScreenState(),
@@ -239,6 +244,14 @@ fun PokitDetailScreen(
                         putExtra(Intent.EXTRA_TEXT, state.currentLink.url)
                     }
                     context.startActivity(Intent.createChooser(intent, "Pokit"))
+                },
+                onClickModifyLink = {
+                    hideLinkDetailBottomSheet()
+                    onClickLinkModify(state.currentLink.id)
+                },
+                onClickRemoveLink = {
+                    hideLinkDetailBottomSheet()
+                    showLinkRemoveBottomSheetWithLink(state.currentLink)
                 },
                 onClickBookmark = onClickBookmark
             )

@@ -201,7 +201,7 @@ class SearchViewModel @Inject constructor(
         _state.update { state ->
             state.copy(
                 linkBottomSheetType = BottomSheetType.MODIFY,
-                currentLink = link
+                currentTargetLink = link
             )
         }
     }
@@ -211,7 +211,7 @@ class SearchViewModel @Inject constructor(
             state.copy(
                 linkBottomSheetType = BottomSheetType.REMOVE,
                 showLinkDetailBottomSheet = false,
-                currentLink = link
+                currentTargetLink = link
             )
         }
     }
@@ -220,7 +220,7 @@ class SearchViewModel @Inject constructor(
         _state.update { state ->
             state.copy(
                 linkBottomSheetType = null,
-                currentLink = null
+                currentTargetLink = null
             )
         }
     }
@@ -228,7 +228,7 @@ class SearchViewModel @Inject constructor(
     fun showLinkDetailBottomSheet(link: Link) {
         _state.update { state ->
             state.copy(
-                currentLink = link,
+                currentDetailLink = link,
                 showLinkDetailBottomSheet = true,
                 linkBottomSheetType = null
             )
@@ -238,7 +238,7 @@ class SearchViewModel @Inject constructor(
     fun hideLinkDetailBottomSheet() {
         _state.update { state ->
             state.copy(
-                currentLink = null,
+                currentDetailLink = null,
                 showLinkDetailBottomSheet = false
             )
         }
@@ -292,7 +292,7 @@ class SearchViewModel @Inject constructor(
     }
 
     fun toggleBookmark() {
-        val currentLink = state.value.currentLink ?: return
+        val currentLink = state.value.currentTargetLink ?: return
         val currentLinkId = currentLink.id.toIntOrNull() ?: return
         val applyBookmarked = !currentLink.bookmark
 
@@ -302,7 +302,7 @@ class SearchViewModel @Inject constructor(
                 val bookmarkChangedLink = currentLink.copy(bookmark = applyBookmarked)
                 _state.update { state ->
                     state.copy(
-                        currentLink = bookmarkChangedLink
+                        currentDetailLink = bookmarkChangedLink
                     )
                 }
                 linkPaging.modifyItem(bookmarkChangedLink)
@@ -311,7 +311,7 @@ class SearchViewModel @Inject constructor(
     }
 
     fun deleteLink() {
-        val currentLinkId = state.value.currentLink?.id?.toIntOrNull() ?: return
+        val currentLinkId = state.value.currentTargetLink?.id?.toIntOrNull() ?: return
         viewModelScope.launch {
             val response = deleteLinkUseCase.deleteLink(currentLinkId)
             if (response is PokitResult.Success) {

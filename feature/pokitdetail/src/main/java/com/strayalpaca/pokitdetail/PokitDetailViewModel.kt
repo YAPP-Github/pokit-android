@@ -189,6 +189,10 @@ class PokitDetailViewModel @Inject constructor(
         _state.update { it.copy(linkBottomSheetType = BottomSheetType.REMOVE) }
     }
 
+    fun showLinkRemoveBottomSheet(link: Link) {
+        _state.update { it.copy(linkBottomSheetType = BottomSheetType.REMOVE, currentLink = link) }
+    }
+
     fun hideLinkBottomSheet() {
         _state.update { it.copy(linkBottomSheetType = null, currentLink = null) }
     }

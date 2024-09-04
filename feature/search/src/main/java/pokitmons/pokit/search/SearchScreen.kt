@@ -53,7 +53,7 @@ fun SearchScreenContainer(
 
     val context: Context = LocalContext.current
 
-    state.currentLink?.let { link ->
+    state.currentDetailLink?.let { link ->
         LinkDetailBottomSheet(
             title = link.title,
             memo = link.memo,
@@ -68,7 +68,7 @@ fun SearchScreenContainer(
             onClickShareLink = {
                 val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
                     type = "text/plain"
-                    putExtra(Intent.EXTRA_TEXT, state.currentLink?.url)
+                    putExtra(Intent.EXTRA_TEXT, state.currentDetailLink?.url)
                 }
                 context.startActivity(Intent.createChooser(intent, "Pokit"))
             },
@@ -103,7 +103,7 @@ fun SearchScreenContainer(
             ModifyBottomSheetContent(
                 onClickModify = remember {
                     {
-                        state.currentLink?.let { link ->
+                        state.currentTargetLink?.let { link ->
                             viewModel.hideLinkModifyBottomSheet()
                             onNavigateToLinkModify(link.id)
                         }
@@ -111,7 +111,7 @@ fun SearchScreenContainer(
                 },
                 onClickRemove = remember {
                     {
-                        state.currentLink?.let { link ->
+                        state.currentTargetLink?.let { link ->
                             viewModel.showLinkRemoveBottomSheet(link)
                         }
                     }
@@ -120,7 +120,7 @@ fun SearchScreenContainer(
                     {
                         val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
                             type = "text/plain"
-                            putExtra(Intent.EXTRA_TEXT, state.currentLink?.url)
+                            putExtra(Intent.EXTRA_TEXT, state.currentTargetLink?.url)
                         }
                         context.startActivity(Intent.createChooser(intent, "Pokit"))
                     }

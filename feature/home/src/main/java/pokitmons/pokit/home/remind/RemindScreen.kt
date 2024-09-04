@@ -116,6 +116,14 @@ fun RemindScreen(
             dateString = link.dateString,
             onHideBottomSheet = viewModel::hideDetailLinkBottomSheet,
             show = true,
+            onClickModifyLink = {
+                viewModel.hideDetailLinkBottomSheet()
+                onNavigateToLinkModify(link.id)
+            },
+            onClickRemoveLink = {
+                viewModel.hideDetailLinkBottomSheet()
+                viewModel.showLinkRemoveBottomSheet(link)
+            },
             onClickBookmark = viewModel::toggleBookmark
         )
     }
