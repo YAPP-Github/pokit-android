@@ -77,10 +77,12 @@ fun PokitDetailScreenContainer(
         hidePokitModifyBottomSheet = viewModel::hidePokitBottomSheet,
         showLinkModifyBottomSheet = viewModel::showLinkModifyBottomSheet,
         showLinkRemoveBottomSheet = viewModel::showLinkRemoveBottomSheet,
-        showLinkRemoveBottomSheetWithLink = remember {{ link ->
-            viewModel.hideLinkDetailBottomSheet()
-            viewModel.showLinkRemoveBottomSheet(link)
-        }},
+        showLinkRemoveBottomSheetWithLink = remember {
+            { link ->
+                viewModel.hideLinkDetailBottomSheet()
+                viewModel.showLinkRemoveBottomSheet(link)
+            } 
+        },
         hideLinkModifyBottomSheet = viewModel::hideLinkBottomSheet,
         hideLinkDetailBottomSheet = viewModel::hideLinkDetailBottomSheet,
         state = state,
@@ -267,7 +269,7 @@ fun PokitDetailScreen(
         PokitBottomSheet(
             onHideBottomSheet = hidePokitSelectBottomSheet,
             show = state.pokitSelectBottomSheetVisible,
-            skipPartiallyExpanded = false,
+            skipPartiallyExpanded = false
         ) {
             val lazyColumnListState = rememberLazyListState()
             val startPaging = remember {

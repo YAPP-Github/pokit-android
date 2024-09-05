@@ -65,7 +65,7 @@ class AddPokitViewModel @Inject constructor(
     private val _pokitIamges = MutableStateFlow<List<PokitImage>>(emptyList())
     val pokitImages: StateFlow<List<PokitImage>> = _pokitIamges.asStateFlow()
 
-    private var existingPokitName : String? = null
+    private var existingPokitName: String? = null
 
     init {
         initPokitList()

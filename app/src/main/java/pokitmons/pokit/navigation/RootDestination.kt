@@ -61,7 +61,7 @@ object PokitDetail {
         navArgument(pokitCountQuery) {
             nullable = true
             type = NavType.StringType
-        },
+        }
     )
 }
 

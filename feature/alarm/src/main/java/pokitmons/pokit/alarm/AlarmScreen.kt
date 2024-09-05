@@ -131,6 +131,5 @@ fun AlarmScreen(
                 }
             }
         }
-
     }
 }

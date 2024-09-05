@@ -44,7 +44,7 @@ class PokitViewModel @Inject constructor(
     private val getPokitCountUseCase: GetPokitCountUseCase,
     private val deleteLinkUseCase: DeleteLinkUseCase,
     private val setBookmarkUseCase: SetBookmarkUseCase,
-    private val getLinkUseCase: GetLinkUseCase
+    private val getLinkUseCase: GetLinkUseCase,
 ) : ViewModel() {
 
     private val _sideEffect = MutableEventFlow<HomeSideEffect>()
@@ -356,7 +356,7 @@ class PokitViewModel @Inject constructor(
                     ?.copy(isRead = true) ?: return@launch
 
                 linkPaging.modifyItem(isReadChangedLink)
-             }
+            }
         }
     }
 
