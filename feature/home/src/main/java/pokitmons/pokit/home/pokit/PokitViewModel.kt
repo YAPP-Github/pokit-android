@@ -16,7 +16,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pokitmons.pokit.core.feature.flow.MutableEventFlow
 import pokitmons.pokit.core.feature.flow.asEventFlow
-import pokitmons.pokit.core.feature.navigation.args.LinkArg
 import pokitmons.pokit.core.feature.navigation.args.LinkUpdateEvent
 import pokitmons.pokit.core.feature.navigation.args.PokitUpdateEvent
 import pokitmons.pokit.domain.commom.PokitResult
@@ -343,7 +342,7 @@ class PokitViewModel @Inject constructor(
                             title = responseLink.title,
                             dateString = responseLink.createdAt,
                             url = responseLink.data,
-                            isRead = responseLink.isRead,
+                            isRead = true,
                             domainUrl = responseLink.domain,
                             imageUrl = _currentDetailShowLink.value?.imageUrl,
                             memo = responseLink.memo,
@@ -352,17 +351,12 @@ class PokitViewModel @Inject constructor(
                         )
                     }
                 }
-                LinkUpdateEvent.modifySuccess(
-                    LinkArg(
-                        id = responseLink.id,
-                        title = responseLink.title,
-                        thumbnail = responseLink.thumbnail,
-                        createdAt = responseLink.createdAt,
-                        domain = responseLink.domain,
-                        pokitId = responseLink.categoryId
-                    )
-                )
-            }
+                val isReadChangedLink = linkPaging.pagingData.value
+                    .find { it.id == link.id }
+                    ?.copy(isRead = true) ?: return@launch
+
+                linkPaging.modifyItem(isReadChangedLink)
+             }
         }
     }
 
