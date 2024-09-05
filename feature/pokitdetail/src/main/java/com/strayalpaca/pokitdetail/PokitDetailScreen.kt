@@ -81,7 +81,7 @@ fun PokitDetailScreenContainer(
             { link ->
                 viewModel.hideLinkDetailBottomSheet()
                 viewModel.showLinkRemoveBottomSheet(link)
-            } 
+            }
         },
         hideLinkModifyBottomSheet = viewModel::hideLinkBottomSheet,
         hideLinkDetailBottomSheet = viewModel::hideLinkDetailBottomSheet,
