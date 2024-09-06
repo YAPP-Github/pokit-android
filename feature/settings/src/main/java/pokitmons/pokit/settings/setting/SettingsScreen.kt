@@ -39,6 +39,7 @@ fun SettingsScreen(
     }
 
     Column(modifier = Modifier.fillMaxWidth()) {
+        Spacer(modifier = Modifier.height(8.dp))
         SettingHeader(onBackPressed)
         Spacer(modifier = Modifier.height(16.dp))
         Column(modifier = Modifier.fillMaxWidth()) {

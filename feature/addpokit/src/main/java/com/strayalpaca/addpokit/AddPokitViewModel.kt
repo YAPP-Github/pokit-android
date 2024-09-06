@@ -65,6 +65,8 @@ class AddPokitViewModel @Inject constructor(
     private val _pokitIamges = MutableStateFlow<List<PokitImage>>(emptyList())
     val pokitImages: StateFlow<List<PokitImage>> = _pokitIamges.asStateFlow()
 
+    private var existingPokitName: String? = null
+
     init {
         initPokitList()
         loadPokitImages()
@@ -114,6 +116,7 @@ class AddPokitViewModel @Inject constructor(
                     state.copy(isModify = true, pokitImage = PokitImage.fromDomainPokitImage(response.result.image))
                 }
                 _pokitName.update { response.result.name }
+                existingPokitName = response.result.name
             } else {
                 postSideEffect(AddPokitSideEffect.OnNavigationBack)
             }
@@ -137,7 +140,9 @@ class AddPokitViewModel @Inject constructor(
 
     fun savePokit() = intent {
         // todo 에러 코드 파싱 수정시 제거 필요
-        if (pokitPaging.pagingData.value.find { it.title == pokitName.value } != null) {
+        val needNicknameCheck = (pokitName.value != existingPokitName)
+        val nicknameDuplicated = (pokitPaging.pagingData.value.find { it.title == pokitName.value } != null)
+        if (needNicknameCheck && nicknameDuplicated) {
             val errorMessage = errorMessageProvider.errorCodeToMessage(PokitErrorCode.ALREADY_USED_POKIT_NAME)
             reduce { state.copy(errorToastMessage = errorMessage) }
             return@intent

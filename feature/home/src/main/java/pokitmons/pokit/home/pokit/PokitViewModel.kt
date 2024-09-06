@@ -24,6 +24,7 @@ import pokitmons.pokit.domain.model.link.LinksSort
 import pokitmons.pokit.domain.model.pokit.MAX_POKIT_COUNT
 import pokitmons.pokit.domain.model.pokit.PokitsSort
 import pokitmons.pokit.domain.usecase.link.DeleteLinkUseCase
+import pokitmons.pokit.domain.usecase.link.GetLinkUseCase
 import pokitmons.pokit.domain.usecase.link.GetLinksUseCase
 import pokitmons.pokit.domain.usecase.link.SetBookmarkUseCase
 import pokitmons.pokit.domain.usecase.pokit.DeletePokitUseCase
@@ -43,6 +44,7 @@ class PokitViewModel @Inject constructor(
     private val getPokitCountUseCase: GetPokitCountUseCase,
     private val deleteLinkUseCase: DeleteLinkUseCase,
     private val setBookmarkUseCase: SetBookmarkUseCase,
+    private val getLinkUseCase: GetLinkUseCase,
 ) : ViewModel() {
 
     private val _sideEffect = MutableEventFlow<HomeSideEffect>()
@@ -56,13 +58,18 @@ class PokitViewModel @Inject constructor(
             LinkUpdateEvent.updatedLink.collectLatest { updatedLink ->
                 val targetLink = linkPaging.pagingData.value.find { it.id == updatedLink.id.toString() } ?: return@collectLatest
 
-                val modifiedLink = targetLink.copy(
-                    title = updatedLink.title,
-                    imageUrl = updatedLink.thumbnail,
-                    domainUrl = updatedLink.domain,
-                    createdAt = updatedLink.createdAt
-                )
-                linkPaging.modifyItem(modifiedLink)
+                val isCategoryChanged = (targetLink.pokitId != updatedLink.pokitId.toString())
+                if (isCategoryChanged) {
+                    linkPaging.deleteItem(targetLink)
+                } else {
+                    val modifiedLink = targetLink.copy(
+                        title = updatedLink.title,
+                        imageUrl = updatedLink.thumbnail,
+                        domainUrl = updatedLink.domain,
+                        createdAt = updatedLink.createdAt
+                    )
+                    linkPaging.modifyItem(modifiedLink)
+                }
             }
         }
     }
@@ -306,6 +313,11 @@ class PokitViewModel @Inject constructor(
         _linkOptionBottomSheetType.update { BottomSheetType.REMOVE }
     }
 
+    fun showLinkRemoveBottomSheet(link: DetailLink) {
+        _currentSelectedLink.update { link }
+        _linkOptionBottomSheetType.update { BottomSheetType.REMOVE }
+    }
+
     fun removeCurrentSelectedLink() {
         val currentSelectedLinkId = currentSelectedLink.value?.id?.toIntOrNull() ?: return
         viewModelScope.launch {
@@ -318,6 +330,34 @@ class PokitViewModel @Inject constructor(
 
     fun showDetailLinkBottomSheet(link: DetailLink) {
         _currentDetailShowLink.update { link }
+
+        viewModelScope.launch {
+            val response = getLinkUseCase.getLink(link.id.toInt())
+            if (response is PokitResult.Success) {
+                val responseLink = response.result
+                if (_currentDetailShowLink.value?.id == responseLink.id.toString()) {
+                    _currentDetailShowLink.update {
+                        DetailLink(
+                            id = responseLink.id.toString(),
+                            title = responseLink.title,
+                            dateString = responseLink.createdAt,
+                            url = responseLink.data,
+                            isRead = true,
+                            domainUrl = responseLink.domain,
+                            imageUrl = _currentDetailShowLink.value?.imageUrl,
+                            memo = responseLink.memo,
+                            bookmark = responseLink.favorites,
+                            pokitName = responseLink.categoryName
+                        )
+                    }
+                }
+                val isReadChangedLink = linkPaging.pagingData.value
+                    .find { it.id == link.id }
+                    ?.copy(isRead = true) ?: return@launch
+
+                linkPaging.modifyItem(isReadChangedLink)
+            }
+        }
     }
 
     fun hideDetailLinkBottomSheet() {

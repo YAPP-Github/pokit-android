@@ -68,8 +68,8 @@ fun SignUpSuccessScreen(
 
             Image(
                 modifier = Modifier.height(308.dp),
-                painter = painterResource(id = coreDrawable.big_pokki),
-                contentDescription = "big_pokki"
+                painter = painterResource(id = coreDrawable.big_pooki),
+                contentDescription = "big_pooki"
             )
 
             Spacer(modifier = Modifier.height(16.dp))

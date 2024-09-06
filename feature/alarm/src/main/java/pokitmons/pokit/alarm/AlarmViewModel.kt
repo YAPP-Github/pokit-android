@@ -50,6 +50,12 @@ class AlarmViewModel @Inject constructor(
         }
     }
 
+    fun refreshAlarms() {
+        viewModelScope.launch {
+            alarmPaging.refresh()
+        }
+    }
+
     fun readAlarm(alarmId: String) {
         val targetAlarm = alarms.value.find { it.id == alarmId } ?: return
 

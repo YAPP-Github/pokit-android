@@ -33,8 +33,8 @@ import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.components.template.linkdetailbottomsheet.LinkDetailBottomSheet
 import pokitmons.pokit.core.ui.components.template.modifybottomsheet.ModifyBottomSheetContent
-import pokitmons.pokit.core.ui.components.template.pokkiempty.EmptyPokki
-import pokitmons.pokit.core.ui.components.template.pokkierror.ErrorPokki
+import pokitmons.pokit.core.ui.components.template.pookiempty.EmptyPooki
+import pokitmons.pokit.core.ui.components.template.pookierror.ErrorPooki
 import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButtonBottomSheetContent
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.core.ui.R.string as coreString
@@ -116,12 +116,20 @@ fun RemindScreen(
             dateString = link.dateString,
             onHideBottomSheet = viewModel::hideDetailLinkBottomSheet,
             show = true,
+            onClickModifyLink = {
+                viewModel.hideDetailLinkBottomSheet()
+                onNavigateToLinkModify(link.id)
+            },
+            onClickRemoveLink = {
+                viewModel.hideDetailLinkBottomSheet()
+                viewModel.showLinkRemoveBottomSheet(link)
+            },
             onClickBookmark = viewModel::toggleBookmark
         )
     }
 
     if (showTotalEmpty) {
-        ErrorPokki(
+        ErrorPooki(
             modifier = Modifier
                 .fillMaxWidth()
                 .fillMaxHeight()
@@ -145,11 +153,11 @@ fun RemindScreen(
                 when (todayContentsState) {
                     NetworkState.IDLE -> {
                         if (todayContents.value.isEmpty()) {
-                            ErrorPokki(
+                            ErrorPooki(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(208.dp),
-                                pokkiSize = 140.dp,
+                                pookiSize = 140.dp,
                                 title = stringResource(id = coreString.title_lack_of_links),
                                 sub = stringResource(id = coreString.sub_lack_of_links)
                             )
@@ -184,11 +192,11 @@ fun RemindScreen(
                         )
                     }
                     NetworkState.ERROR -> {
-                        ErrorPokki(
+                        ErrorPooki(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(208.dp),
-                            pokkiSize = 140.dp,
+                            pookiSize = 140.dp,
                             title = stringResource(id = coreString.title_error),
                             sub = stringResource(id = coreString.sub_error)
                         )
@@ -232,7 +240,7 @@ fun RemindScreen(
                 when (bookmarkContentState) {
                     NetworkState.IDLE -> {
                         if (bookmarkContents.value.isEmpty()) {
-                            EmptyPokki(
+                            EmptyPooki(
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .height(252.dp),
@@ -271,11 +279,11 @@ fun RemindScreen(
                         )
                     }
                     NetworkState.ERROR -> {
-                        ErrorPokki(
+                        ErrorPooki(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(252.dp),
-                            pokkiSize = 140.dp,
+                            pookiSize = 140.dp,
                             title = stringResource(id = coreString.title_empty_favorite),
                             sub = stringResource(id = coreString.sub_empty_favorite)
                         )

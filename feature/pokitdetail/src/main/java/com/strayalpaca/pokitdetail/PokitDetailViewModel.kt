@@ -73,12 +73,15 @@ class PokitDetailViewModel @Inject constructor(
     val moveToBackEvent = _moveToBackEvent.asEventFlow()
 
     init {
-        savedStateHandle.get<String>("pokit_id")?.toIntOrNull()?.let { pokitId ->
-            linkPaging.changeOptions(categoryId = pokitId, sort = LinksSort.RECENT)
+        val pokitId = savedStateHandle.get<String>("pokit_id")?.toIntOrNull()
+        val linkCount = savedStateHandle.get<String>("pokit_count")?.toIntOrNull() ?: 0
+
+        pokitId?.let { id ->
+            linkPaging.changeOptions(categoryId = id, sort = LinksSort.RECENT)
             viewModelScope.launch {
                 linkPaging.refresh()
             }
-            getPokit(pokitId)
+            getPokit(id, linkCount)
         }
 
         initLinkUpdateEventDetector()
@@ -135,11 +138,11 @@ class PokitDetailViewModel @Inject constructor(
         )
     }
 
-    private fun getPokit(pokitId: Int) {
+    private fun getPokit(pokitId: Int, linkCount: Int) {
         viewModelScope.launch {
             val response = getPokitUseCase.getPokit(pokitId)
             if (response is PokitResult.Success) {
-                _state.update { it.copy(currentPokit = Pokit.fromDomainPokit(response.result)) }
+                _state.update { it.copy(currentPokit = Pokit.fromDomainPokit(response.result).copy(count = linkCount)) }
             }
         }
     }
@@ -184,6 +187,10 @@ class PokitDetailViewModel @Inject constructor(
 
     fun showLinkRemoveBottomSheet() {
         _state.update { it.copy(linkBottomSheetType = BottomSheetType.REMOVE) }
+    }
+
+    fun showLinkRemoveBottomSheet(link: Link) {
+        _state.update { it.copy(linkBottomSheetType = BottomSheetType.REMOVE, currentLink = link) }
     }
 
     fun hideLinkBottomSheet() {

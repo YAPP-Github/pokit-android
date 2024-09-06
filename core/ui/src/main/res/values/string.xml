@@ -31,4 +31,7 @@
 
     <string name="title_empty_search">검색된 링크가 없어요</string>
     <string name="sub_empty_search">검색어를 다시 확인해주세요</string>
+
+    <string name="title_empty_alarms">아직 알람이 없어요</string>
+    <string name="sub_empty_alarms">리마인드 알림을 설정하세요</string>
 </resources>

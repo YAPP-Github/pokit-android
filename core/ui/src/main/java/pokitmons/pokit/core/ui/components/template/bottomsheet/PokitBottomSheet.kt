@@ -28,6 +28,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import pokitmons.pokit.core.ui.theme.PokitTheme
@@ -65,6 +66,7 @@ fun PokitBottomSheet(
                     visibility = false
                 }
             },
+            shape = RectangleShape,
             sheetState = bottomSheetState,
             scrimColor = Color.Transparent,
             containerColor = Color.Transparent,
@@ -75,7 +77,7 @@ fun PokitBottomSheet(
             Surface(
                 shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
                 color = PokitTheme.colors.backgroundBase,
-                shadowElevation = 20.dp
+                shadowElevation = 8.dp
             ) {
                 Column(
                     modifier = Modifier.fillMaxWidth()

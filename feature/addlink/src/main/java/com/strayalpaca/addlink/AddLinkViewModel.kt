@@ -245,7 +245,7 @@ class AddLinkViewModel @Inject constructor(
                 val linkArg = LinkArg(
                     id = responseLink.id,
                     title = responseLink.title,
-                    thumbnail = responseLink.thumbnail,
+                    thumbnail = currentState.link.imageUrl ?: responseLink.thumbnail,
                     domain = responseLink.domain,
                     createdAt = responseLink.createdAt,
                     pokitId = currentSelectedPokit.id.toInt()

@@ -182,7 +182,11 @@ fun RootNavHost(
                 viewModel = viewModel,
                 onNavigateToSearch = { navHostController.navigate(Search.route) },
                 onNavigateToSetting = { navHostController.navigate(Setting.route) },
-                onNavigateToPokitDetail = { navHostController.navigate("${PokitDetail.route}/$it") },
+                onNavigateToPokitDetail = { pokitId, linkCount ->
+                    navHostController.navigate(
+                        "${PokitDetail.route}/$pokitId?${PokitDetail.pokitCountQuery}=$linkCount"
+                    )
+                },
                 onNavigateAddLink = { navHostController.navigate(AddLink.route) },
                 onNavigateAddPokit = { navHostController.navigate(AddPokit.route) },
                 onNavigateToLinkModify = { navHostController.navigate("${AddLink.route}?${AddLink.linkIdArg}=$it") },

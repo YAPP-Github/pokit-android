@@ -58,6 +58,14 @@ fun UnclassifiedScreen(
                 }
                 context.startActivity(Intent.createChooser(intent, "Pokit"))
             },
+            onClickModifyLink = {
+                viewModel.hideDetailLinkBottomSheet()
+                onNavigateToLinkModify(link.id)
+            },
+            onClickRemoveLink = {
+                viewModel.hideDetailLinkBottomSheet()
+                viewModel.showLinkRemoveBottomSheet(link)
+            },
             onClickBookmark = viewModel::toggleBookmark
         )
     }

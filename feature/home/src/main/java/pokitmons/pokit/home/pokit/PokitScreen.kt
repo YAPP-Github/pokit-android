@@ -28,8 +28,8 @@ import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
 import pokitmons.pokit.core.ui.components.block.pokitcard.PokitCard
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.components.template.modifybottomsheet.ModifyBottomSheetContent
-import pokitmons.pokit.core.ui.components.template.pokkiempty.EmptyPokki
-import pokitmons.pokit.core.ui.components.template.pokkierror.ErrorPokki
+import pokitmons.pokit.core.ui.components.template.pookiempty.EmptyPooki
+import pokitmons.pokit.core.ui.components.template.pookierror.ErrorPooki
 import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButtonBottomSheetContent
 import pokitmons.pokit.core.ui.R.string as coreString
 
@@ -37,7 +37,7 @@ import pokitmons.pokit.core.ui.R.string as coreString
 fun PokitScreen(
     modifier: Modifier = Modifier,
     viewModel: PokitViewModel,
-    onNavigateToPokitDetail: (String) -> Unit,
+    onNavigateToPokitDetail: (String, Int) -> Unit,
     onNavigateToLinkModify: (String) -> Unit,
     onNavigateToPokitModify: (String) -> Unit,
 ) {
@@ -101,7 +101,7 @@ fun PokitScreen(
                         LoadingProgress(modifier = Modifier.fillMaxSize())
                     }
                     (pokitsState == SimplePagingState.FAILURE_INIT) -> {
-                        ErrorPokki(
+                        ErrorPooki(
                             modifier = Modifier.fillMaxSize(),
                             title = stringResource(id = coreString.title_error),
                             sub = stringResource(id = coreString.sub_error),
@@ -109,7 +109,7 @@ fun PokitScreen(
                         )
                     }
                     (pokits.value.isEmpty()) -> {
-                        EmptyPokki(
+                        EmptyPooki(
                             modifier = Modifier.fillMaxSize(),
                             title = stringResource(id = coreString.title_empty_pokits),
                             sub = stringResource(id = coreString.sub_empty_pokits)
@@ -131,7 +131,7 @@ fun PokitScreen(
                                     text = pokitDetail.title,
                                     linkCount = pokitDetail.count,
                                     painter = rememberAsyncImagePainter(model = pokitDetail.image.url),
-                                    onClick = { onNavigateToPokitDetail(pokitDetail.id) },
+                                    onClick = { onNavigateToPokitDetail(pokitDetail.id, pokitDetail.count) },
                                     onClickKebab = {
                                         viewModel.showPokitDetailOptionBottomSheet(pokitDetail)
                                     }
@@ -148,7 +148,7 @@ fun PokitScreen(
                         LoadingProgress(modifier = Modifier.fillMaxSize())
                     }
                     (unCategoryLinksState == SimplePagingState.FAILURE_INIT) -> {
-                        ErrorPokki(
+                        ErrorPooki(
                             modifier = Modifier.fillMaxSize(),
                             title = stringResource(id = coreString.title_error),
                             sub = stringResource(id = coreString.sub_error),
@@ -156,7 +156,7 @@ fun PokitScreen(
                         )
                     }
                     (unCategoryLinks.value.isEmpty()) -> {
-                        EmptyPokki(
+                        EmptyPooki(
                             modifier = Modifier.fillMaxSize(),
                             title = stringResource(id = coreString.title_empty_links),
                             sub = stringResource(id = coreString.sub_empty_links)

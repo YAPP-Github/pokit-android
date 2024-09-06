@@ -10,7 +10,8 @@ data class SearchScreenState(
     val showLinkDetailBottomSheet: Boolean = false,
     val linkBottomSheetType: BottomSheetType? = null,
     val sortRecent: Boolean = true,
-    val currentLink: Link? = null,
+    val currentTargetLink: Link? = null,
+    val currentDetailLink: Link? = null,
 )
 
 enum class SearchScreenStep {

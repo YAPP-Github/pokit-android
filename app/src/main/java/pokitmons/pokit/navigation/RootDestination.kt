@@ -54,8 +54,15 @@ object AddPokit {
 object PokitDetail {
     val route: String = "pokitDetail"
     val pokitIdArg = "pokit_id"
-    val routeWithArgs = "$route/{$pokitIdArg}"
-    var arguments = listOf(navArgument(pokitIdArg) { defaultValue = "-" })
+    val pokitCountQuery = "pokit_count"
+    val routeWithArgs = "$route/{$pokitIdArg}?$pokitCountQuery={$pokitCountQuery}"
+    var arguments = listOf(
+        navArgument(pokitIdArg) { defaultValue = "-" },
+        navArgument(pokitCountQuery) {
+            nullable = true
+            type = NavType.StringType
+        }
+    )
 }
 
 object Search {
