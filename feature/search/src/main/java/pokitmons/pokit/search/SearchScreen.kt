@@ -20,8 +20,8 @@ import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.components.template.linkdetailbottomsheet.LinkDetailBottomSheet
 import pokitmons.pokit.core.ui.components.template.modifybottomsheet.ModifyBottomSheetContent
-import pokitmons.pokit.core.ui.components.template.pokkiempty.EmptyPokki
-import pokitmons.pokit.core.ui.components.template.pokkierror.ErrorPokki
+import pokitmons.pokit.core.ui.components.template.pookiempty.EmptyPooki
+import pokitmons.pokit.core.ui.components.template.pookierror.ErrorPooki
 import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButtonBottomSheetContent
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.search.components.filter.FilterArea
@@ -231,7 +231,7 @@ fun SearchScreen(
                     )
                 }
                 (linkPagingState == SimplePagingState.FAILURE_INIT) -> {
-                    ErrorPokki(
+                    ErrorPooki(
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f),
@@ -241,7 +241,7 @@ fun SearchScreen(
                     )
                 }
                 (linkList.isEmpty()) -> {
-                    EmptyPokki(
+                    EmptyPooki(
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f),

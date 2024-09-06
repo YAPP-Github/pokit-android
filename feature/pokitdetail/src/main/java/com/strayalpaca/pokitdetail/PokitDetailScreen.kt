@@ -41,8 +41,8 @@ import pokitmons.pokit.core.ui.components.block.pokitlist.attributes.PokitListSt
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.components.template.linkdetailbottomsheet.LinkDetailBottomSheet
 import pokitmons.pokit.core.ui.components.template.modifybottomsheet.ModifyBottomSheetContent
-import pokitmons.pokit.core.ui.components.template.pokkiempty.EmptyPokki
-import pokitmons.pokit.core.ui.components.template.pokkierror.ErrorPokki
+import pokitmons.pokit.core.ui.components.template.pookiempty.EmptyPooki
+import pokitmons.pokit.core.ui.components.template.pookierror.ErrorPooki
 import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButtonBottomSheetContent
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.core.ui.R.string as coreString
@@ -177,7 +177,7 @@ fun PokitDetailScreen(
                 )
             }
             (linkListState == SimplePagingState.FAILURE_INIT) -> {
-                ErrorPokki(
+                ErrorPooki(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
@@ -186,7 +186,7 @@ fun PokitDetailScreen(
                 )
             }
             (linkList.isEmpty()) -> {
-                EmptyPokki(
+                EmptyPooki(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),

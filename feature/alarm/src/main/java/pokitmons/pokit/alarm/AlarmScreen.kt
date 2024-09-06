@@ -20,8 +20,8 @@ import pokitmons.pokit.alarm.components.toolbar.Toolbar
 import pokitmons.pokit.alarm.model.Alarm
 import pokitmons.pokit.alarm.paging.SimplePagingState
 import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
-import pokitmons.pokit.core.ui.components.template.pokki.Pokki
-import pokitmons.pokit.core.ui.components.template.pokkierror.ErrorPokki
+import pokitmons.pokit.core.ui.components.template.pooki.Pooki
+import pokitmons.pokit.core.ui.components.template.pookierror.ErrorPooki
 import pokitmons.pokit.core.ui.R.string as coreString
 
 @Composable
@@ -92,7 +92,7 @@ fun AlarmScreen(
                 )
             }
             alarmsState == SimplePagingState.FAILURE_INIT -> {
-                ErrorPokki(
+                ErrorPooki(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),
@@ -102,7 +102,7 @@ fun AlarmScreen(
                 )
             }
             alarms.isEmpty() -> {
-                Pokki(
+                Pooki(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f),

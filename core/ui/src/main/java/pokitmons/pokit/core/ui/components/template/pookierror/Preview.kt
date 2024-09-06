@@ -1,4 +1,4 @@
-package pokitmons.pokit.core.ui.components.template.pokkiempty
+package pokitmons.pokit.core.ui.components.template.pookierror
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
@@ -12,7 +12,8 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 private fun Preview() {
     PokitTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            EmptyPokki(title = "저장된 포킷이 없어요!", sub = "포킷을 생성해 링크를 저장해보세요")
+            ErrorPooki(title = "오류가 발생했어요", sub = "조금 뒤 다시 접속해주세요", onClickRetry = null)
+            // ErrorPooki(title = "오류가 발생했어요", sub = "조금 뒤 다시 접속해주세요", onClickRetry = {})
         }
     }
 }
