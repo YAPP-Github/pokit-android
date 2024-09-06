@@ -5,7 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -30,8 +30,7 @@ fun EmptyPooki(
         ) {
             Image(
                 modifier = Modifier
-                    .height(180.dp)
-                    .width(180.dp),
+                    .size(180.dp),
                 painter = painterResource(id = R.drawable.empty_pooki),
                 contentDescription = "empty"
             )
