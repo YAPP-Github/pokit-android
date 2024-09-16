@@ -36,10 +36,10 @@ import com.strayalpaca.addlink.model.AddLinkScreenSideEffect
 import com.strayalpaca.addlink.model.AddLinkScreenState
 import com.strayalpaca.addlink.model.ScreenStep
 import com.strayalpaca.addlink.model.ToastMessageEvent
-import com.strayalpaca.addlink.paging.SimplePagingState
 import com.strayalpaca.addlink.utils.BackPressHandler
 import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
+import pokitmons.pokit.core.feature.model.paging.PagingState
 import pokitmons.pokit.core.ui.components.atom.button.PokitButton
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonIcon
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonIconPosition
@@ -106,7 +106,7 @@ fun AddLinkScreenContainer(
         }
 
         LaunchedEffect(startPaging.value) {
-            if (startPaging.value && pokitListState == SimplePagingState.IDLE) {
+            if (startPaging.value && pokitListState == PagingState.IDLE) {
                 viewModel.loadNextPokits()
             }
         }

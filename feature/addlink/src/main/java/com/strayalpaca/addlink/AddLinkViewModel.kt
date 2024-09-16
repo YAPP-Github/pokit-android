@@ -9,8 +9,6 @@ import com.strayalpaca.addlink.model.Link
 import com.strayalpaca.addlink.model.Pokit
 import com.strayalpaca.addlink.model.ScreenStep
 import com.strayalpaca.addlink.model.ToastMessageEvent
-import com.strayalpaca.addlink.paging.PokitPaging
-import com.strayalpaca.addlink.paging.SimplePagingState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -27,6 +25,10 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import pokitmons.pokit.core.feature.model.paging.PagingLoadResult
+import pokitmons.pokit.core.feature.model.paging.PagingSource
+import pokitmons.pokit.core.feature.model.paging.PagingState
+import pokitmons.pokit.core.feature.model.paging.SimplePaging
 import pokitmons.pokit.core.feature.navigation.args.LinkArg
 import pokitmons.pokit.core.feature.navigation.args.LinkUpdateEvent
 import pokitmons.pokit.core.feature.navigation.args.PokitUpdateEvent
@@ -54,15 +56,24 @@ class AddLinkViewModel @Inject constructor(
 ) : ContainerHost<AddLinkScreenState, AddLinkScreenSideEffect>, ViewModel() {
     override val container: Container<AddLinkScreenState, AddLinkScreenSideEffect> = container(AddLinkScreenState())
 
-    private val pokitPaging = PokitPaging(
-        getPokits = getPokitsUseCase,
-        perPage = 10,
-        coroutineScope = viewModelScope,
-        initPage = 0
+    private val pokitPagingSource = object: PagingSource<Pokit> {
+        override suspend fun load(pageIndex: Int, pageSize: Int): PagingLoadResult<Pokit> {
+            val response = getPokitsUseCase.getPokits(page = pageIndex, size = pageSize)
+            return PagingLoadResult.fromPokitResult(
+                pokitResult = response,
+                mapper = { domainPokits -> domainPokits.map { Pokit.fromDomainPokit(it) } }
+            )
+        }
+    }
+
+    private val pokitPaging = SimplePaging(
+        pagingSource = pokitPagingSource,
+        getKeyFromItem = { pokit -> pokit.id },
+        coroutineScope = viewModelScope
     )
 
     val pokitList: StateFlow<List<Pokit>> = pokitPaging.pagingData
-    val pokitListState: StateFlow<SimplePagingState> = pokitPaging.pagingState
+    val pokitListState: StateFlow<PagingState> = pokitPaging.pagingState
 
     private val _linkUrl = MutableStateFlow("")
     val linkUrl: StateFlow<String> = _linkUrl.asStateFlow()

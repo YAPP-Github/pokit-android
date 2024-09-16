@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import pokitmons.pokit.alarm.components.alarmitem.AlarmItem
 import pokitmons.pokit.alarm.components.toolbar.Toolbar
 import pokitmons.pokit.alarm.model.Alarm
-import pokitmons.pokit.alarm.paging.SimplePagingState
+import pokitmons.pokit.core.feature.model.paging.PagingState
 import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
 import pokitmons.pokit.core.ui.components.template.pooki.Pooki
 import pokitmons.pokit.core.ui.components.template.pookierror.ErrorPooki
@@ -56,7 +56,7 @@ fun AlarmScreen(
     onClickAlarm: (String) -> Unit = {},
     onClickAlarmRemove: (String) -> Unit = {},
     alarms: List<Alarm> = emptyList(),
-    alarmsState: SimplePagingState = SimplePagingState.IDLE,
+    alarmsState: PagingState = PagingState.IDLE,
     loadNextAlarms: () -> Unit = {},
     refreshAlarms: () -> Unit = {},
 ) {
@@ -78,20 +78,20 @@ fun AlarmScreen(
         }
 
         LaunchedEffect(startAlarmPaging.value) {
-            if (startAlarmPaging.value && alarmsState == SimplePagingState.IDLE) {
+            if (startAlarmPaging.value && alarmsState == PagingState.IDLE) {
                 loadNextAlarms()
             }
         }
 
         when {
-            alarmsState == SimplePagingState.LOADING_INIT -> {
+            alarmsState == PagingState.LOADING_INIT -> {
                 LoadingProgress(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
                 )
             }
-            alarmsState == SimplePagingState.FAILURE_INIT -> {
+            alarmsState == PagingState.FAILURE_INIT -> {
                 ErrorPooki(
                     modifier = Modifier
                         .fillMaxWidth()
