@@ -5,6 +5,10 @@ plugins {
 }
 
 android {
+    tasks.withType<Test>().configureEach {
+        useJUnitPlatform()
+    }
+
     namespace = "pokitmons.pokit.core.feature"
     compileSdk = 34
 
@@ -56,4 +60,14 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // kotest
+    testImplementation(libs.kotest.runner.junit5)
+    testImplementation(libs.kotlin.reflect)
+
+    // mockk
+    testImplementation(libs.mockk)
+    androidTestImplementation(libs.mockk.android)
+
+    implementation(project(":domain"))
 }
