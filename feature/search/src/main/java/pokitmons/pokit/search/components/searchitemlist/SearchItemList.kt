@@ -22,10 +22,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import pokitmons.pokit.core.feature.model.paging.PagingState
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.search.model.Link
-import pokitmons.pokit.search.paging.SimplePagingState
 import pokitmons.pokit.core.ui.R.drawable as coreDrawable
 import pokitmons.pokit.search.R.string as SearchString
 
@@ -35,7 +35,7 @@ internal fun SearchItemList(
     onToggleSort: () -> Unit = {},
     useRecentOrder: Boolean = true,
     links: List<Link> = emptyList(),
-    linkPagingState: SimplePagingState = SimplePagingState.IDLE,
+    linkPagingState: PagingState = PagingState.IDLE,
     onClickLinkKebab: (Link) -> Unit = {},
     onClickLink: (Link) -> Unit = {},
     loadNextLinks: () -> Unit = {},
@@ -50,7 +50,7 @@ internal fun SearchItemList(
     }
 
     LaunchedEffect(startLinkPaging.value) {
-        if (startLinkPaging.value && linkPagingState == SimplePagingState.IDLE) {
+        if (startLinkPaging.value && linkPagingState == PagingState.IDLE) {
             loadNextLinks()
         }
     }

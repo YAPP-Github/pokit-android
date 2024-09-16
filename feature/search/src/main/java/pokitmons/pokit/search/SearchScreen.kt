@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import pokitmons.pokit.core.feature.model.paging.PagingState
 import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.components.template.linkdetailbottomsheet.LinkDetailBottomSheet
@@ -35,7 +36,6 @@ import pokitmons.pokit.search.model.FilterType
 import pokitmons.pokit.search.model.Link
 import pokitmons.pokit.search.model.SearchScreenState
 import pokitmons.pokit.search.model.SearchScreenStep
-import pokitmons.pokit.search.paging.SimplePagingState
 import pokitmons.pokit.core.ui.R.string as coreString
 
 @Composable
@@ -167,7 +167,7 @@ fun SearchScreen(
     state: SearchScreenState = SearchScreenState(),
     currentSearchWord: String = "",
     linkList: List<Link> = emptyList(),
-    linkPagingState: SimplePagingState = SimplePagingState.IDLE,
+    linkPagingState: PagingState = PagingState.IDLE,
     onClickBack: () -> Unit = {},
     inputSearchWord: (String) -> Unit = {},
     onClickSearch: () -> Unit = {},
@@ -223,14 +223,14 @@ fun SearchScreen(
 
         if (state.step == SearchScreenStep.RESULT) {
             when {
-                (linkPagingState == SimplePagingState.LOADING_INIT) -> {
+                (linkPagingState == PagingState.LOADING_INIT) -> {
                     LoadingProgress(
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f)
                     )
                 }
-                (linkPagingState == SimplePagingState.FAILURE_INIT) -> {
+                (linkPagingState == PagingState.FAILURE_INIT) -> {
                     ErrorPooki(
                         modifier = Modifier
                             .fillMaxWidth()

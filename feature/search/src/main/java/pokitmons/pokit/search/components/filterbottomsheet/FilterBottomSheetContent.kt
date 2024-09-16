@@ -32,6 +32,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import pokitmons.pokit.core.feature.model.paging.PagingState
 import pokitmons.pokit.core.ui.components.atom.button.PokitButton
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.components.atom.checkbox.PokitCheckbox
@@ -48,7 +49,6 @@ import pokitmons.pokit.search.model.Filter
 import pokitmons.pokit.search.model.FilterType
 import pokitmons.pokit.search.model.Pokit
 import pokitmons.pokit.search.model.samplePokits
-import pokitmons.pokit.search.paging.SimplePagingState
 import pokitmons.pokit.core.ui.R.string as coreString
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -58,7 +58,7 @@ fun FilterBottomSheetContent(
     firstShowType: FilterType = FilterType.Pokit,
     onSaveClilck: (Filter) -> Unit = {},
     pokits: List<Pokit> = samplePokits,
-    pokitPagingState: SimplePagingState = SimplePagingState.IDLE,
+    pokitPagingState: PagingState = PagingState.IDLE,
     loadNextPokits: () -> Unit = {},
 ) {
     var currentFilter by remember { mutableStateOf(filter) }
@@ -80,7 +80,7 @@ fun FilterBottomSheetContent(
     }
 
     LaunchedEffect(startLinkPaging.value) {
-        if (startLinkPaging.value && pokitPagingState == SimplePagingState.IDLE) {
+        if (startLinkPaging.value && pokitPagingState == PagingState.IDLE) {
             loadNextPokits()
         }
     }

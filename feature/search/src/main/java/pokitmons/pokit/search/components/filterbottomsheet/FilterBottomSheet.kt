@@ -2,12 +2,12 @@ package pokitmons.pokit.search.components.filterbottomsheet
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import pokitmons.pokit.core.feature.model.paging.PagingState
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.search.model.Filter
 import pokitmons.pokit.search.model.FilterType
 import pokitmons.pokit.search.model.Pokit
 import pokitmons.pokit.search.model.samplePokits
-import pokitmons.pokit.search.paging.SimplePagingState
 
 @Composable
 fun FilterBottomSheet(
@@ -15,7 +15,7 @@ fun FilterBottomSheet(
     firstShowType: FilterType = FilterType.Pokit,
     onSaveClilck: (Filter) -> Unit = {},
     pokits: List<Pokit> = samplePokits,
-    pokitPagingState: SimplePagingState = SimplePagingState.IDLE,
+    pokitPagingState: PagingState = PagingState.IDLE,
     loadNextPokits: () -> Unit = {},
     refreshPokits: () -> Unit = {},
     show: Boolean = false,
