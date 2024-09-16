@@ -85,7 +85,7 @@ internal fun SearchItemList(
         LazyColumn(
             state = linkLazyColumnListState
         ) {
-            items(links) { link ->
+            items(items = links, key = { link -> link.id }) { link ->
                 LinkCard(
                     item = link,
                     title = link.title,
