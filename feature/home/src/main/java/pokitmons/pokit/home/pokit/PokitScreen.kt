@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import com.strayalpaca.pokitdetail.R
 import com.strayalpaca.pokitdetail.model.BottomSheetType
-import com.strayalpaca.pokitdetail.paging.SimplePagingState
+import pokitmons.pokit.core.feature.model.paging.PagingState
 import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
 import pokitmons.pokit.core.ui.components.block.pokitcard.PokitCard
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
@@ -97,10 +97,10 @@ fun PokitScreen(
         when (selectedCategory) {
             is Category.Pokit -> {
                 when {
-                    (pokitsState == SimplePagingState.LOADING_INIT) -> {
+                    (pokitsState == PagingState.LOADING_INIT) -> {
                         LoadingProgress(modifier = Modifier.fillMaxSize())
                     }
-                    (pokitsState == SimplePagingState.FAILURE_INIT) -> {
+                    (pokitsState == PagingState.FAILURE_INIT) -> {
                         ErrorPooki(
                             modifier = Modifier.fillMaxSize(),
                             title = stringResource(id = coreString.title_error),
@@ -144,10 +144,10 @@ fun PokitScreen(
 
             is Category.Unclassified -> {
                 when {
-                    (unCategoryLinksState == SimplePagingState.LOADING_INIT) -> {
+                    (unCategoryLinksState == PagingState.LOADING_INIT) -> {
                         LoadingProgress(modifier = Modifier.fillMaxSize())
                     }
-                    (unCategoryLinksState == SimplePagingState.FAILURE_INIT) -> {
+                    (unCategoryLinksState == PagingState.FAILURE_INIT) -> {
                         ErrorPooki(
                             modifier = Modifier.fillMaxSize(),
                             title = stringResource(id = coreString.title_error),
