@@ -46,12 +46,12 @@ class PokitDetailViewModel @Inject constructor(
     private val getLinkUseCase: GetLinkUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-    private val pokitPagingSource = object: PagingSource<Pokit> {
+    private val pokitPagingSource = object : PagingSource<Pokit> {
         override suspend fun load(pageIndex: Int, pageSize: Int): PagingLoadResult<Pokit> {
             val response = getPokitsUseCase.getPokits(size = pageSize, page = pageIndex)
             return PagingLoadResult.fromPokitResult(
                 pokitResult = response,
-                mapper = { domainPokits -> domainPokits.map { Pokit.fromDomainPokit(it) }}
+                mapper = { domainPokits -> domainPokits.map { Pokit.fromDomainPokit(it) } }
             )
         }
     }
@@ -61,7 +61,7 @@ class PokitDetailViewModel @Inject constructor(
         coroutineScope = viewModelScope
     )
 
-    private val linkPagingSource = object: PagingSource<Link> {
+    private val linkPagingSource = object : PagingSource<Link> {
         override suspend fun load(pageIndex: Int, pageSize: Int): PagingLoadResult<Link> {
             val currentPokit = state.value.currentPokit
             val currentFilter = state.value.currentFilter
@@ -73,7 +73,7 @@ class PokitDetailViewModel @Inject constructor(
                 categoryId = categoryId,
                 sort = sort,
                 isRead = if (currentFilter.notReadChecked) false else null,
-                favorite = if (currentFilter.bookmarkChecked) true else null,
+                favorite = if (currentFilter.bookmarkChecked) true else null
             )
             return PagingLoadResult.fromPokitResult(
                 pokitResult = response,

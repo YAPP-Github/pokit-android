@@ -51,7 +51,7 @@ class AddPokitViewModel @Inject constructor(
 
     private val pokitId = savedStateHandle.get<String>("pokit_id")?.toIntOrNull()
 
-    private val pokitPagingSource = object: PagingSource<Pokit> {
+    private val pokitPagingSource = object : PagingSource<Pokit> {
         override suspend fun load(pageIndex: Int, pageSize: Int): PagingLoadResult<Pokit> {
             val response = getPokitsUseCase.getPokits(page = pageIndex, size = pageSize)
             return PagingLoadResult.fromPokitResult(

@@ -57,7 +57,7 @@ class SearchViewModel @Inject constructor(
         initLinkRemoveEventDetector()
     }
 
-    private val linkPagingSource = object: PagingSource<Link> {
+    private val linkPagingSource = object : PagingSource<Link> {
         override suspend fun load(pageIndex: Int, pageSize: Int): PagingLoadResult<Link> {
             val currentFilter = state.value.filter ?: Filter()
 
@@ -82,7 +82,6 @@ class SearchViewModel @Inject constructor(
                 mapper = { domainLinks -> domainLinks.map { Link.fromDomainLink(it) } }
             )
         }
-
     }
 
     private val linkPaging = SimplePaging(
@@ -91,7 +90,7 @@ class SearchViewModel @Inject constructor(
         coroutineScope = viewModelScope
     )
 
-    private val pokitPagingSource = object: PagingSource<Pokit> {
+    private val pokitPagingSource = object : PagingSource<Pokit> {
         override suspend fun load(pageIndex: Int, pageSize: Int): PagingLoadResult<Pokit> {
             val response = getPokitsUseCase.getPokits(page = pageIndex, size = pageSize)
             return PagingLoadResult.fromPokitResult(

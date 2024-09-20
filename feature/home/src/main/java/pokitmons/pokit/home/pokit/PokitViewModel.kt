@@ -121,7 +121,6 @@ class PokitViewModel @Inject constructor(
                         pokitPaging.modifyItem(linkCountDecreasedPokit.copy(count = decreasedLinkCount))
                     }
                 }
-
             }
         }
     }
@@ -154,7 +153,7 @@ class PokitViewModel @Inject constructor(
     var screenType = mutableStateOf<ScreenType>(ScreenType.Pokit)
         private set
 
-    private val pokitPagingSource = object: PagingSource<Pokit> {
+    private val pokitPagingSource = object : PagingSource<Pokit> {
         override suspend fun load(pageIndex: Int, pageSize: Int): PagingLoadResult<Pokit> {
             val sort = when (pokitsSortOrder.value) {
                 PokitsSortOrder.Latest -> PokitsSort.RECENT
@@ -163,7 +162,7 @@ class PokitViewModel @Inject constructor(
             val response = getPokitsUseCase.getPokits(size = pageSize, page = pageIndex, sort = sort)
             return PagingLoadResult.fromPokitResult(
                 pokitResult = response,
-                mapper = { domainPokits -> domainPokits.map { Pokit.fromDomainPokit(it) }}
+                mapper = { domainPokits -> domainPokits.map { Pokit.fromDomainPokit(it) } }
             )
         }
     }
@@ -174,9 +173,9 @@ class PokitViewModel @Inject constructor(
         coroutineScope = viewModelScope
     )
 
-    private val linksPagingSource = object: PagingSource<DetailLink> {
+    private val linksPagingSource = object : PagingSource<DetailLink> {
         override suspend fun load(pageIndex: Int, pageSize: Int): PagingLoadResult<DetailLink> {
-            val sort = when(linksSortOrder.value) {
+            val sort = when (linksSortOrder.value) {
                 UncategorizedLinksSortOrder.Latest -> LinksSort.RECENT
                 UncategorizedLinksSortOrder.Older -> LinksSort.OLDER
             }

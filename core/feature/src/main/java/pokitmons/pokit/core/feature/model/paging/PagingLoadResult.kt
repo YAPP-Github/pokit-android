@@ -3,7 +3,7 @@ package pokitmons.pokit.core.feature.model.paging
 import pokitmons.pokit.domain.commom.PokitResult
 
 sealed interface PagingLoadResult<out T> {
-    data class Success<T>(val result: List<T>): PagingLoadResult<T>
+    data class Success<T>(val result: List<T>) : PagingLoadResult<T>
     data class Error<T>(val errorCode: String) : PagingLoadResult<T>
 
     companion object {

@@ -56,7 +56,7 @@ class AddLinkViewModel @Inject constructor(
 ) : ContainerHost<AddLinkScreenState, AddLinkScreenSideEffect>, ViewModel() {
     override val container: Container<AddLinkScreenState, AddLinkScreenSideEffect> = container(AddLinkScreenState())
 
-    private val pokitPagingSource = object: PagingSource<Pokit> {
+    private val pokitPagingSource = object : PagingSource<Pokit> {
         override suspend fun load(pageIndex: Int, pageSize: Int): PagingLoadResult<Pokit> {
             val response = getPokitsUseCase.getPokits(page = pageIndex, size = pageSize)
             return PagingLoadResult.fromPokitResult(

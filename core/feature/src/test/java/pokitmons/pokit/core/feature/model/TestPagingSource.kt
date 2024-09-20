@@ -21,7 +21,7 @@ class TestPagingSource(
         val startIndex = pageIndex * pageSize
         val lastIndex = min(((pageIndex + 1) * pageSize), totalItemCount)
 
-        val itemList = (startIndex until  lastIndex).map { "${it}번째 아이템" }
+        val itemList = (startIndex until lastIndex).map { "${it}번째 아이템" }
         return PagingLoadResult.Success(itemList)
     }
 }

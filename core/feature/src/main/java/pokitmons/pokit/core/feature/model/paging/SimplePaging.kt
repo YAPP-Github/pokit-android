@@ -18,11 +18,11 @@ class SimplePaging<ITEM, KEY> (
     private val initPage: Int = 0,
     private val firstRequestPage: Int = 3,
 ) {
-    private val _pagingData : MutableStateFlow<List<ITEM>> = MutableStateFlow(emptyList())
-    val pagingData : StateFlow<List<ITEM>> = _pagingData.asStateFlow()
+    private val _pagingData: MutableStateFlow<List<ITEM>> = MutableStateFlow(emptyList())
+    val pagingData: StateFlow<List<ITEM>> = _pagingData.asStateFlow()
 
-    private val _pagingState : MutableStateFlow<PagingState> = MutableStateFlow(PagingState.IDLE)
-    val pagingState : StateFlow<PagingState> = _pagingState.asStateFlow()
+    private val _pagingState: MutableStateFlow<PagingState> = MutableStateFlow(PagingState.IDLE)
+    val pagingState: StateFlow<PagingState> = _pagingState.asStateFlow()
 
     private var pagingDataRequestJob: Job? = null
     private var currentPageIndex = 0

@@ -25,8 +25,8 @@ class SimplePagingUnitTest : DescribeSpec({
                 loadTime = PAGE_LOAD_TIME,
                 totalItemCount = TOTAL_ITEM_COUNT
             ),
-            getKeyFromItem = {it},
-            firstRequestPage = FIRST_REQUEST_PAGE_SAMPLE,
+            getKeyFromItem = { it },
+            firstRequestPage = FIRST_REQUEST_PAGE_SAMPLE
         )
 
         context("새로고침을 한 상황에서") {

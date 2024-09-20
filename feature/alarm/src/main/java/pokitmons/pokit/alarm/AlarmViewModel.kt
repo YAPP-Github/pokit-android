@@ -21,7 +21,7 @@ class AlarmViewModel @Inject constructor(
     private val deleteAlertUseCase: DeleteAlertUseCase,
 ) : ViewModel() {
 
-    private val alarmPagingSource = object: PagingSource<Alarm> {
+    private val alarmPagingSource = object : PagingSource<Alarm> {
         override suspend fun load(pageIndex: Int, pageSize: Int): PagingLoadResult<Alarm> {
             val response = getAlertsUseCase.getAlerts(page = pageIndex, size = pageSize)
             return PagingLoadResult.fromPokitResult(
