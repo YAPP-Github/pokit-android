@@ -33,6 +33,7 @@ import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
 import pokitmons.pokit.home.model.HomeSideEffect
 import pokitmons.pokit.home.model.HomeToastMessage
 import javax.inject.Inject
+import kotlin.math.max
 import com.strayalpaca.pokitdetail.model.Link as DetailLink
 import pokitmons.pokit.domain.model.pokit.Pokit as DomainPokit
 
@@ -100,6 +101,27 @@ class PokitViewModel @Inject constructor(
                 val pokitImage = DomainPokit.Image(id = updatedPokit.imageId, url = updatedPokit.imageUrl)
                 val modifiedPokit = targetPokit.copy(title = updatedPokit.title, image = pokitImage)
                 pokitPaging.modifyItem(modifiedPokit)
+            }
+        }
+
+        viewModelScope.launch {
+            PokitUpdateEvent.countModifiedPokitIds.collectLatest { linkCountChangedPokitIds ->
+                linkCountChangedPokitIds.increasedPokitId?.let { linkCountIncreasedPokitId ->
+                    val currentPokit = pokitPaging.pagingData.value.find { it.id == linkCountIncreasedPokitId.toString() }
+                    currentPokit?.let { linkCountIncreasedPokit ->
+                        val increasedLinkCount = linkCountIncreasedPokit.count + 1
+                        pokitPaging.modifyItem(linkCountIncreasedPokit.copy(count = increasedLinkCount))
+                    }
+                }
+
+                linkCountChangedPokitIds.decreasedPokitId?.let { linkCountDecreasedPokitId ->
+                    val currentPokit = pokitPaging.pagingData.value.find { it.id == linkCountDecreasedPokitId.toString() }
+                    currentPokit?.let { linkCountDecreasedPokit ->
+                        val decreasedLinkCount = max(0, linkCountDecreasedPokit.count - 1)
+                        pokitPaging.modifyItem(linkCountDecreasedPokit.copy(count = decreasedLinkCount))
+                    }
+                }
+
             }
         }
     }

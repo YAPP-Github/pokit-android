@@ -33,6 +33,7 @@ import pokitmons.pokit.domain.usecase.pokit.DeletePokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
 import javax.inject.Inject
+import kotlin.math.max
 
 @HiltViewModel
 class PokitDetailViewModel @Inject constructor(
@@ -119,13 +120,18 @@ class PokitDetailViewModel @Inject constructor(
         viewModelScope.launch {
             LinkUpdateEvent.updatedLink.collectLatest { updatedLink ->
                 val targetLink = linkPaging.pagingData.value.find { it.id == updatedLink.id.toString() } ?: return@collectLatest
-                val modifiedLink = targetLink.copy(
-                    title = updatedLink.title,
-                    imageUrl = updatedLink.thumbnail,
-                    domainUrl = updatedLink.domain,
-                    createdAt = updatedLink.createdAt
-                )
-                linkPaging.modifyItem(modifiedLink)
+
+                if (updatedLink.pokitId.toString() != targetLink.pokitId) {
+                    linkPaging.deleteItem(targetLink.id)
+                } else {
+                    val modifiedLink = targetLink.copy(
+                        title = updatedLink.title,
+                        imageUrl = updatedLink.thumbnail,
+                        domainUrl = updatedLink.domain,
+                        createdAt = updatedLink.createdAt
+                    )
+                    linkPaging.modifyItem(modifiedLink)
+                }
             }
         }
     }
@@ -135,6 +141,10 @@ class PokitDetailViewModel @Inject constructor(
             LinkUpdateEvent.removedLink.collectLatest { removedLinkId ->
                 val targetLink = linkPaging.pagingData.value.find { it.id == removedLinkId.toString() } ?: return@collectLatest
                 linkPaging.deleteItem(targetLink.id)
+
+                val currentPokit = state.value.currentPokit ?: return@collectLatest
+                val changedLinkCount = max(currentPokit.count - 1, 0)
+                _state.update { it.copy(currentPokit = currentPokit.copy(count = changedLinkCount)) }
             }
         }
     }
@@ -148,6 +158,18 @@ class PokitDetailViewModel @Inject constructor(
                     title = updatedPokit.title
                 ) ?: return@collectLatest
                 _state.update { it.copy(currentPokit = pokit) }
+            }
+        }
+
+        viewModelScope.launch {
+            PokitUpdateEvent.countModifiedPokitIds.collectLatest { linkCountChangedPokitIds ->
+                val currentPokit = state.value.currentPokit ?: return@collectLatest
+                linkCountChangedPokitIds.decreasedPokitId?.let { targetId ->
+                    if (targetId.toString() == currentPokit.id) {
+                        val changedLinkCount = max(currentPokit.count - 1, 0)
+                        _state.update { it.copy(currentPokit = currentPokit.copy(count = changedLinkCount)) }
+                    }
+                }
             }
         }
     }

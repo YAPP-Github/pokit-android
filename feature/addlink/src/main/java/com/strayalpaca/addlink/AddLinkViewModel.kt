@@ -86,6 +86,9 @@ class AddLinkViewModel @Inject constructor(
 
     val currentLinkId: Int? = savedStateHandle.get<String>("link_id")?.toIntOrNull()
 
+    // 수정 이전 pokit과 수정 이후 pokit이 다른 경우를 체크하기 위해서만 사용
+    private var prevPokitId: Int? = null
+
     init {
         initPokitAddEventDetector()
 
@@ -147,6 +150,7 @@ class AddLinkViewModel @Inject constructor(
                         step = ScreenStep.IDLE
                     )
                 }
+                prevPokitId = responseResult.categoryId
                 _title.update { response.result.title }
                 _memo.update { response.result.memo }
                 _linkUrl.update { response.result.data }
@@ -266,6 +270,10 @@ class AddLinkViewModel @Inject constructor(
                 if (isCreate) {
                     LinkUpdateEvent.createSuccess(linkArg)
                 } else {
+                    PokitUpdateEvent.updatePokitLinkCount(
+                        linkAddedPokitId = currentSelectedPokit.id.toIntOrNull(),
+                        linkRemovedPokitId = prevPokitId
+                    )
                     LinkUpdateEvent.modifySuccess(linkArg)
                 }
 
