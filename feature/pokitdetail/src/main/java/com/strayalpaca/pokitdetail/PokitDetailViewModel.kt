@@ -8,9 +8,6 @@ import com.strayalpaca.pokitdetail.model.Filter
 import com.strayalpaca.pokitdetail.model.Link
 import com.strayalpaca.pokitdetail.model.Pokit
 import com.strayalpaca.pokitdetail.model.PokitDetailScreenState
-import com.strayalpaca.pokitdetail.paging.LinkPaging
-import com.strayalpaca.pokitdetail.paging.PokitPaging
-import com.strayalpaca.pokitdetail.paging.SimplePagingState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,6 +17,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pokitmons.pokit.core.feature.flow.MutableEventFlow
 import pokitmons.pokit.core.feature.flow.asEventFlow
+import pokitmons.pokit.core.feature.model.paging.PagingLoadResult
+import pokitmons.pokit.core.feature.model.paging.PagingSource
+import pokitmons.pokit.core.feature.model.paging.PagingState
+import pokitmons.pokit.core.feature.model.paging.SimplePaging
 import pokitmons.pokit.core.feature.navigation.args.LinkUpdateEvent
 import pokitmons.pokit.core.feature.navigation.args.PokitUpdateEvent
 import pokitmons.pokit.domain.commom.PokitResult
@@ -32,7 +33,7 @@ import pokitmons.pokit.domain.usecase.pokit.DeletePokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
 import javax.inject.Inject
-import pokitmons.pokit.domain.model.link.Link as DomainLink
+import kotlin.math.max
 
 @HiltViewModel
 class PokitDetailViewModel @Inject constructor(
@@ -45,29 +46,56 @@ class PokitDetailViewModel @Inject constructor(
     private val getLinkUseCase: GetLinkUseCase,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {
-    private val pokitPaging = PokitPaging(
-        getPokits = getPokitsUseCase,
-        perPage = 10,
-        coroutineScope = viewModelScope,
-        initPage = 0
+    private val pokitPagingSource = object : PagingSource<Pokit> {
+        override suspend fun load(pageIndex: Int, pageSize: Int): PagingLoadResult<Pokit> {
+            val response = getPokitsUseCase.getPokits(size = pageSize, page = pageIndex)
+            return PagingLoadResult.fromPokitResult(
+                pokitResult = response,
+                mapper = { domainPokits -> domainPokits.map { Pokit.fromDomainPokit(it) } }
+            )
+        }
+    }
+    private val pokitPaging = SimplePaging(
+        pagingSource = pokitPagingSource,
+        getKeyFromItem = { pokit -> pokit.id },
+        coroutineScope = viewModelScope
     )
 
-    private val linkPaging = LinkPaging(
-        getLinks = ::getLinks,
-        perPage = 10,
-        coroutineScope = viewModelScope,
-        initPage = 0,
-        initCategoryId = 1
+    private val linkPagingSource = object : PagingSource<Link> {
+        override suspend fun load(pageIndex: Int, pageSize: Int): PagingLoadResult<Link> {
+            val currentPokit = state.value.currentPokit
+            val currentFilter = state.value.currentFilter
+            val categoryId = currentPokit?.id?.toIntOrNull() ?: savedStateHandle.get<String>("pokit_id")?.toIntOrNull() ?: 0
+            val sort = if (currentFilter.recentSortUsed) LinksSort.RECENT else LinksSort.OLDER
+            val response = getLinksUseCase.getLinks(
+                page = pageIndex,
+                size = pageSize,
+                categoryId = categoryId,
+                sort = sort,
+                isRead = if (currentFilter.notReadChecked) false else null,
+                favorite = if (currentFilter.bookmarkChecked) true else null
+            )
+            return PagingLoadResult.fromPokitResult(
+                pokitResult = response,
+                mapper = { domainLinks -> domainLinks.map { Link.fromDomainLink(it) } }
+            )
+        }
+    }
+
+    private val linkPaging = SimplePaging(
+        pagingSource = linkPagingSource,
+        getKeyFromItem = { link -> link.id },
+        coroutineScope = viewModelScope
     )
 
     private val _state = MutableStateFlow(PokitDetailScreenState())
     val state: StateFlow<PokitDetailScreenState> = _state.asStateFlow()
 
     val pokitList: StateFlow<List<Pokit>> = pokitPaging.pagingData
-    val pokitListState: StateFlow<SimplePagingState> = pokitPaging.pagingState
+    val pokitListState: StateFlow<PagingState> = pokitPaging.pagingState
 
     val linkList: StateFlow<List<Link>> = linkPaging.pagingData
-    val linkListState: StateFlow<SimplePagingState> = linkPaging.pagingState
+    val linkListState: StateFlow<PagingState> = linkPaging.pagingState
 
     private val _moveToBackEvent = MutableEventFlow<Boolean>()
     val moveToBackEvent = _moveToBackEvent.asEventFlow()
@@ -77,7 +105,6 @@ class PokitDetailViewModel @Inject constructor(
         val linkCount = savedStateHandle.get<String>("pokit_count")?.toIntOrNull() ?: 0
 
         pokitId?.let { id ->
-            linkPaging.changeOptions(categoryId = id, sort = LinksSort.RECENT)
             viewModelScope.launch {
                 linkPaging.refresh()
             }
@@ -93,13 +120,18 @@ class PokitDetailViewModel @Inject constructor(
         viewModelScope.launch {
             LinkUpdateEvent.updatedLink.collectLatest { updatedLink ->
                 val targetLink = linkPaging.pagingData.value.find { it.id == updatedLink.id.toString() } ?: return@collectLatest
-                val modifiedLink = targetLink.copy(
-                    title = updatedLink.title,
-                    imageUrl = updatedLink.thumbnail,
-                    domainUrl = updatedLink.domain,
-                    createdAt = updatedLink.createdAt
-                )
-                linkPaging.modifyItem(modifiedLink)
+
+                if (updatedLink.pokitId.toString() != targetLink.pokitId) {
+                    linkPaging.deleteItem(targetLink.id)
+                } else {
+                    val modifiedLink = targetLink.copy(
+                        title = updatedLink.title,
+                        imageUrl = updatedLink.thumbnail,
+                        domainUrl = updatedLink.domain,
+                        createdAt = updatedLink.createdAt
+                    )
+                    linkPaging.modifyItem(modifiedLink)
+                }
             }
         }
     }
@@ -108,7 +140,11 @@ class PokitDetailViewModel @Inject constructor(
         viewModelScope.launch {
             LinkUpdateEvent.removedLink.collectLatest { removedLinkId ->
                 val targetLink = linkPaging.pagingData.value.find { it.id == removedLinkId.toString() } ?: return@collectLatest
-                linkPaging.deleteItem(targetLink)
+                linkPaging.deleteItem(targetLink.id)
+
+                val currentPokit = state.value.currentPokit ?: return@collectLatest
+                val changedLinkCount = max(currentPokit.count - 1, 0)
+                _state.update { it.copy(currentPokit = currentPokit.copy(count = changedLinkCount)) }
             }
         }
     }
@@ -124,18 +160,18 @@ class PokitDetailViewModel @Inject constructor(
                 _state.update { it.copy(currentPokit = pokit) }
             }
         }
-    }
 
-    private suspend fun getLinks(categoryId: Int, size: Int, page: Int, sort: LinksSort): PokitResult<List<DomainLink>> {
-        val currentFilter = state.value.currentFilter
-        return getLinksUseCase.getLinks(
-            categoryId = categoryId,
-            size = size,
-            page = page,
-            sort = sort,
-            isRead = if (currentFilter.notReadChecked) false else null,
-            favorite = if (currentFilter.bookmarkChecked) true else null
-        )
+        viewModelScope.launch {
+            PokitUpdateEvent.countModifiedPokitIds.collectLatest { linkCountChangedPokitIds ->
+                val currentPokit = state.value.currentPokit ?: return@collectLatest
+                linkCountChangedPokitIds.decreasedPokitId?.let { targetId ->
+                    if (targetId.toString() == currentPokit.id) {
+                        val changedLinkCount = max(currentPokit.count - 1, 0)
+                        _state.update { it.copy(currentPokit = currentPokit.copy(count = changedLinkCount)) }
+                    }
+                }
+            }
+        }
     }
 
     private fun getPokit(pokitId: Int, linkCount: Int) {
@@ -149,7 +185,6 @@ class PokitDetailViewModel @Inject constructor(
 
     fun changePokit(pokit: Pokit) {
         _state.update { it.copy(currentPokit = pokit, pokitSelectBottomSheetVisible = false) }
-        linkPaging.changeOptions(categoryId = pokit.id.toInt(), sort = LinksSort.RECENT)
         viewModelScope.launch {
             linkPaging.refresh()
         }

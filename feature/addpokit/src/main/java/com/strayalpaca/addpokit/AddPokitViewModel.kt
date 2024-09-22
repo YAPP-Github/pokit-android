@@ -9,8 +9,6 @@ import com.strayalpaca.addpokit.model.AddPokitScreenStep
 import com.strayalpaca.addpokit.model.AddPokitSideEffect
 import com.strayalpaca.addpokit.model.Pokit
 import com.strayalpaca.addpokit.model.PokitImage
-import com.strayalpaca.addpokit.paging.PokitPaging
-import com.strayalpaca.addpokit.paging.SimplePagingState
 import com.strayalpaca.addpokit.utils.ErrorMessageProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,6 +22,10 @@ import org.orbitmvi.orbit.syntax.simple.intent
 import org.orbitmvi.orbit.syntax.simple.postSideEffect
 import org.orbitmvi.orbit.syntax.simple.reduce
 import org.orbitmvi.orbit.viewmodel.container
+import pokitmons.pokit.core.feature.model.paging.PagingLoadResult
+import pokitmons.pokit.core.feature.model.paging.PagingSource
+import pokitmons.pokit.core.feature.model.paging.PagingState
+import pokitmons.pokit.core.feature.model.paging.SimplePaging
 import pokitmons.pokit.core.feature.navigation.args.PokitArg
 import pokitmons.pokit.core.feature.navigation.args.PokitUpdateEvent
 import pokitmons.pokit.domain.commom.PokitResult
@@ -49,18 +51,27 @@ class AddPokitViewModel @Inject constructor(
 
     private val pokitId = savedStateHandle.get<String>("pokit_id")?.toIntOrNull()
 
-    private val pokitPaging = PokitPaging(
-        getPokits = getPokitsUseCase,
-        perPage = 10,
-        coroutineScope = viewModelScope,
-        initPage = 0
+    private val pokitPagingSource = object : PagingSource<Pokit> {
+        override suspend fun load(pageIndex: Int, pageSize: Int): PagingLoadResult<Pokit> {
+            val response = getPokitsUseCase.getPokits(page = pageIndex, size = pageSize)
+            return PagingLoadResult.fromPokitResult(
+                pokitResult = response,
+                mapper = { domainPokits -> domainPokits.map { Pokit.fromDomainPokit(it) } }
+            )
+        }
+    }
+
+    private val pokitPaging = SimplePaging(
+        pagingSource = pokitPagingSource,
+        getKeyFromItem = { pokit -> pokit.id },
+        coroutineScope = viewModelScope
     )
 
     private val _pokitName = MutableStateFlow("")
     val pokitName: StateFlow<String> = _pokitName.asStateFlow()
 
     val pokitList: StateFlow<List<Pokit>> = pokitPaging.pagingData
-    val pokitListState: StateFlow<SimplePagingState> = pokitPaging.pagingState
+    val pokitListState: StateFlow<PagingState> = pokitPaging.pagingState
 
     private val _pokitIamges = MutableStateFlow<List<PokitImage>>(emptyList())
     val pokitImages: StateFlow<List<PokitImage>> = _pokitIamges.asStateFlow()

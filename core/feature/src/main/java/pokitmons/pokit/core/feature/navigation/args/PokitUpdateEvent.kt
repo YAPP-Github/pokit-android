@@ -16,6 +16,9 @@ object PokitUpdateEvent {
     private val _addedPokit = MutableSharedFlow<PokitArg>()
     val addedPokit = _addedPokit.asSharedFlow()
 
+    private val _countModifiedPokitIds = MutableSharedFlow<LinkCountChangedPokitIds>()
+    val countModifiedPokitIds = _countModifiedPokitIds.asSharedFlow()
+
     fun updatePokit(pokitArg: PokitArg) {
         CoroutineScope(Dispatchers.Default).launch {
             _updatedPokit.emit(pokitArg)
@@ -31,6 +34,14 @@ object PokitUpdateEvent {
     fun createPokit(pokitArg: PokitArg) {
         CoroutineScope(Dispatchers.Default).launch {
             _addedPokit.emit(pokitArg)
+        }
+    }
+
+    fun updatePokitLinkCount(linkRemovedPokitId: Int? = null, linkAddedPokitId: Int? = null) {
+        if (linkRemovedPokitId == linkAddedPokitId) return
+
+        CoroutineScope(Dispatchers.Default).launch {
+            _countModifiedPokitIds.emit(LinkCountChangedPokitIds(increasedPokitId = linkAddedPokitId, decreasedPokitId = linkRemovedPokitId))
         }
     }
 }

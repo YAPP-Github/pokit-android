@@ -12,8 +12,13 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import pokitmons.pokit.core.feature.model.paging.PagingLoadResult
+import pokitmons.pokit.core.feature.model.paging.PagingSource
+import pokitmons.pokit.core.feature.model.paging.PagingState
+import pokitmons.pokit.core.feature.model.paging.SimplePaging
 import pokitmons.pokit.core.feature.navigation.args.LinkUpdateEvent
 import pokitmons.pokit.domain.commom.PokitResult
+import pokitmons.pokit.domain.model.link.LinksSort
 import pokitmons.pokit.domain.usecase.link.DeleteLinkUseCase
 import pokitmons.pokit.domain.usecase.link.GetLinkUseCase
 import pokitmons.pokit.domain.usecase.link.SearchLinksUseCase
@@ -31,9 +36,6 @@ import pokitmons.pokit.search.model.Link
 import pokitmons.pokit.search.model.Pokit
 import pokitmons.pokit.search.model.SearchScreenState
 import pokitmons.pokit.search.model.SearchScreenStep
-import pokitmons.pokit.search.paging.LinkPaging
-import pokitmons.pokit.search.paging.PokitPaging
-import pokitmons.pokit.search.paging.SimplePagingState
 import javax.inject.Inject
 
 @HiltViewModel
@@ -55,26 +57,60 @@ class SearchViewModel @Inject constructor(
         initLinkRemoveEventDetector()
     }
 
-    private val linkPaging = LinkPaging(
-        searchLinksUseCase = searchLinksUseCase,
-        filter = Filter(),
-        perPage = 10,
-        coroutineScope = viewModelScope,
-        initPage = 0
+    private val linkPagingSource = object : PagingSource<Link> {
+        override suspend fun load(pageIndex: Int, pageSize: Int): PagingLoadResult<Link> {
+            val currentFilter = state.value.filter ?: Filter()
+
+            val isRead = if (currentFilter.notRead) false else null
+            val favorites = if (currentFilter.bookmark) true else null
+            val sort = if (state.value.sortRecent) LinksSort.RECENT else LinksSort.OLDER
+            val currentAppliedSearchWord = appliedSearchWord
+
+            val response = searchLinksUseCase.searchLinks(
+                page = pageIndex,
+                size = pageSize,
+                sort = listOf(sort.value),
+                isRead = isRead,
+                favorites = favorites,
+                startDate = currentFilter.startDate?.toDateString(),
+                endDate = currentFilter.endDate?.toDateString(),
+                categoryIds = currentFilter.selectedPokits.mapNotNull { it.id.toIntOrNull() },
+                searchWord = currentAppliedSearchWord
+            )
+            return PagingLoadResult.fromPokitResult(
+                pokitResult = response,
+                mapper = { domainLinks -> domainLinks.map { Link.fromDomainLink(it) } }
+            )
+        }
+    }
+
+    private val linkPaging = SimplePaging(
+        pagingSource = linkPagingSource,
+        getKeyFromItem = { link -> link.id },
+        coroutineScope = viewModelScope
     )
 
-    private val pokitPaging = PokitPaging(
-        getPokits = getPokitsUseCase,
-        perPage = 10,
-        coroutineScope = viewModelScope,
-        initPage = 0
+    private val pokitPagingSource = object : PagingSource<Pokit> {
+        override suspend fun load(pageIndex: Int, pageSize: Int): PagingLoadResult<Pokit> {
+            val response = getPokitsUseCase.getPokits(page = pageIndex, size = pageSize)
+            return PagingLoadResult.fromPokitResult(
+                pokitResult = response,
+                mapper = { domainPokits -> domainPokits.map { Pokit.fromDomainPokit(it) } }
+            )
+        }
+    }
+
+    private val pokitPaging = SimplePaging(
+        pagingSource = pokitPagingSource,
+        getKeyFromItem = { pokit -> pokit.id },
+        coroutineScope = viewModelScope
     )
 
     val linkList: StateFlow<List<Link>> = linkPaging.pagingData
-    val linkPagingState: StateFlow<SimplePagingState> = linkPaging.pagingState
+    val linkPagingState: StateFlow<PagingState> = linkPaging.pagingState
 
     val pokitList: StateFlow<List<Pokit>> = pokitPaging.pagingData
-    val pokitPagingState: StateFlow<SimplePagingState> = pokitPaging.pagingState
+    val pokitPagingState: StateFlow<PagingState> = pokitPaging.pagingState
 
     private val _searchWord = MutableStateFlow("")
     val searchWord = _searchWord.asStateFlow()
@@ -108,7 +144,7 @@ class SearchViewModel @Inject constructor(
         viewModelScope.launch {
             LinkUpdateEvent.removedLink.collectLatest { removedLinkId ->
                 val targetItem = linkPaging.pagingData.value.find { it.id == removedLinkId.toString() } ?: return@collectLatest
-                linkPaging.deleteItem(targetItem)
+                linkPaging.deleteItem(targetItem.id)
             }
         }
     }
@@ -133,7 +169,6 @@ class SearchViewModel @Inject constructor(
             }
             viewModelScope.launch {
                 addRecentSearchWordUseCase.addRecentSearchWord(appliedSearchWord)
-                linkPaging.changeSearchWord(appliedSearchWord)
                 linkPaging.refresh()
             }
         }
@@ -149,7 +184,6 @@ class SearchViewModel @Inject constructor(
             }
             viewModelScope.launch {
                 addRecentSearchWordUseCase.addRecentSearchWord(appliedSearchWord)
-                linkPaging.changeSearchWord(appliedSearchWord)
                 linkPaging.refresh()
             }
         }
@@ -272,7 +306,6 @@ class SearchViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            linkPaging.changeFilter(filter)
             linkPaging.refresh()
         }
     }
@@ -283,7 +316,6 @@ class SearchViewModel @Inject constructor(
         }
 
         viewModelScope.launch {
-            linkPaging.changeRecentSort(state.value.sortRecent)
             linkPaging.refresh()
         }
     }
@@ -332,7 +364,7 @@ class SearchViewModel @Inject constructor(
             if (response is PokitResult.Success) {
                 LinkUpdateEvent.removeSuccess(currentLinkId)
                 val targetLink = linkPaging.pagingData.value.find { it.id == currentLinkId.toString() } ?: return@launch
-                linkPaging.deleteItem(targetLink)
+                linkPaging.deleteItem(targetLink.id)
             }
         }
     }

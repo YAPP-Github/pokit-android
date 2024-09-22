@@ -46,9 +46,10 @@ import com.strayalpaca.addpokit.model.AddPokitScreenStep
 import com.strayalpaca.addpokit.model.AddPokitSideEffect
 import com.strayalpaca.addpokit.model.Pokit
 import com.strayalpaca.addpokit.model.PokitImage
-import com.strayalpaca.addpokit.paging.SimplePagingState
 import com.strayalpaca.addpokit.utils.BackPressHandler
 import org.orbitmvi.orbit.compose.collectSideEffect
+import pokitmons.pokit.core.feature.model.NetworkState
+import pokitmons.pokit.core.feature.model.paging.PagingState
 import pokitmons.pokit.core.ui.components.atom.button.PokitButton
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.components.block.labeledinput.LabeledInput
@@ -122,10 +123,10 @@ fun AddPokitScreen(
     selectPokitProfileImage: (PokitImage) -> Unit = {},
     hideToastMessage: () -> Unit = {},
     pokits: List<Pokit> = emptyList(),
-    pokitsState: SimplePagingState = SimplePagingState.IDLE,
+    pokitsState: PagingState = PagingState.IDLE,
     loadPokits: () -> Unit = {},
     pokitImages: List<PokitImage> = emptyList(),
-    pokitImagesState: SimplePagingState = SimplePagingState.IDLE,
+    pokitImagesState: NetworkState = NetworkState.IDLE,
 ) {
     Column(
         modifier = Modifier
@@ -228,7 +229,7 @@ fun AddPokitScreen(
             }
 
             LaunchedEffect(startPokitPaging.value) {
-                if (startPokitPaging.value && pokitsState == SimplePagingState.IDLE) {
+                if (startPokitPaging.value && pokitsState == PagingState.IDLE) {
                     loadPokits()
                 }
             }
@@ -248,7 +249,7 @@ fun AddPokitScreen(
                 }
             }
 
-            if (pokitImagesState == SimplePagingState.LOADING_INIT) {
+            if (pokitImagesState == NetworkState.LOADING) {
                 CircularProgressIndicator(
                     modifier = Modifier.width(64.dp),
                     color = PokitTheme.colors.brand,

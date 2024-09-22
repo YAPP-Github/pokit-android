@@ -32,8 +32,8 @@ import com.strayalpaca.pokitdetail.model.Filter
 import com.strayalpaca.pokitdetail.model.Link
 import com.strayalpaca.pokitdetail.model.Pokit
 import com.strayalpaca.pokitdetail.model.PokitDetailScreenState
-import com.strayalpaca.pokitdetail.paging.SimplePagingState
 import pokitmons.pokit.core.feature.flow.collectAsEffect
+import pokitmons.pokit.core.feature.model.paging.PagingState
 import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
 import pokitmons.pokit.core.ui.components.block.pokitlist.PokitList
@@ -121,9 +121,9 @@ fun PokitDetailScreen(
     hideLinkDetailBottomSheet: () -> Unit = {},
     state: PokitDetailScreenState = PokitDetailScreenState(),
     linkList: List<Link> = emptyList(),
-    linkListState: SimplePagingState = SimplePagingState.IDLE,
+    linkListState: PagingState = PagingState.IDLE,
     pokitList: List<Pokit> = emptyList(),
-    pokitListState: SimplePagingState = SimplePagingState.IDLE,
+    pokitListState: PagingState = PagingState.IDLE,
     onClickLink: (Link) -> Unit = {},
     onClickPokitModify: (String) -> Unit = {},
     onClickPokitRemove: () -> Unit = {},
@@ -163,20 +163,20 @@ fun PokitDetailScreen(
         }
 
         LaunchedEffect(startLinkPaging.value) {
-            if (startLinkPaging.value && linkListState == SimplePagingState.IDLE) {
+            if (startLinkPaging.value && linkListState == PagingState.IDLE) {
                 loadNextLinks()
             }
         }
 
         when {
-            (linkListState == SimplePagingState.LOADING_INIT) -> {
+            (linkListState == PagingState.LOADING_INIT) -> {
                 LoadingProgress(
                     modifier = Modifier
                         .fillMaxWidth()
                         .weight(1f)
                 )
             }
-            (linkListState == SimplePagingState.FAILURE_INIT) -> {
+            (linkListState == PagingState.FAILURE_INIT) -> {
                 ErrorPooki(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -285,7 +285,7 @@ fun PokitDetailScreen(
             }
 
             LaunchedEffect(startPaging.value) {
-                if (startPaging.value && pokitListState == SimplePagingState.IDLE) {
+                if (startPaging.value && pokitListState == PagingState.IDLE) {
                     loadNextPokits()
                 }
             }

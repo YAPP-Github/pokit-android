@@ -5,8 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.strayalpaca.pokitdetail.model.BottomSheetType
 import com.strayalpaca.pokitdetail.model.Pokit
-import com.strayalpaca.pokitdetail.paging.LinkPaging
-import com.strayalpaca.pokitdetail.paging.PokitPaging
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,10 +14,12 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pokitmons.pokit.core.feature.flow.MutableEventFlow
 import pokitmons.pokit.core.feature.flow.asEventFlow
+import pokitmons.pokit.core.feature.model.paging.PagingLoadResult
+import pokitmons.pokit.core.feature.model.paging.PagingSource
+import pokitmons.pokit.core.feature.model.paging.SimplePaging
 import pokitmons.pokit.core.feature.navigation.args.LinkUpdateEvent
 import pokitmons.pokit.core.feature.navigation.args.PokitUpdateEvent
 import pokitmons.pokit.domain.commom.PokitResult
-import pokitmons.pokit.domain.model.link.Link
 import pokitmons.pokit.domain.model.link.LinksSort
 import pokitmons.pokit.domain.model.pokit.MAX_POKIT_COUNT
 import pokitmons.pokit.domain.model.pokit.PokitsSort
@@ -33,6 +33,7 @@ import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
 import pokitmons.pokit.home.model.HomeSideEffect
 import pokitmons.pokit.home.model.HomeToastMessage
 import javax.inject.Inject
+import kotlin.math.max
 import com.strayalpaca.pokitdetail.model.Link as DetailLink
 import pokitmons.pokit.domain.model.pokit.Pokit as DomainPokit
 
@@ -60,7 +61,7 @@ class PokitViewModel @Inject constructor(
 
                 val isCategoryChanged = (targetLink.pokitId != updatedLink.pokitId.toString())
                 if (isCategoryChanged) {
-                    linkPaging.deleteItem(targetLink)
+                    linkPaging.deleteItem(targetLink.id)
                 } else {
                     val modifiedLink = targetLink.copy(
                         title = updatedLink.title,
@@ -87,9 +88,8 @@ class PokitViewModel @Inject constructor(
 
     private fun initLinkRemoveEventDetector() {
         viewModelScope.launch {
-            LinkUpdateEvent.removedLink.collectLatest { removedLink ->
-                val targetLink = linkPaging.pagingData.value.find { it.id == removedLink.toString() } ?: return@collectLatest
-                linkPaging.deleteItem(targetLink)
+            LinkUpdateEvent.removedLink.collectLatest { removedLinkId ->
+                linkPaging.deleteItem(removedLinkId.toString())
             }
         }
     }
@@ -103,13 +103,32 @@ class PokitViewModel @Inject constructor(
                 pokitPaging.modifyItem(modifiedPokit)
             }
         }
+
+        viewModelScope.launch {
+            PokitUpdateEvent.countModifiedPokitIds.collectLatest { linkCountChangedPokitIds ->
+                linkCountChangedPokitIds.increasedPokitId?.let { linkCountIncreasedPokitId ->
+                    val currentPokit = pokitPaging.pagingData.value.find { it.id == linkCountIncreasedPokitId.toString() }
+                    currentPokit?.let { linkCountIncreasedPokit ->
+                        val increasedLinkCount = linkCountIncreasedPokit.count + 1
+                        pokitPaging.modifyItem(linkCountIncreasedPokit.copy(count = increasedLinkCount))
+                    }
+                }
+
+                linkCountChangedPokitIds.decreasedPokitId?.let { linkCountDecreasedPokitId ->
+                    val currentPokit = pokitPaging.pagingData.value.find { it.id == linkCountDecreasedPokitId.toString() }
+                    currentPokit?.let { linkCountDecreasedPokit ->
+                        val decreasedLinkCount = max(0, linkCountDecreasedPokit.count - 1)
+                        pokitPaging.modifyItem(linkCountDecreasedPokit.copy(count = decreasedLinkCount))
+                    }
+                }
+            }
+        }
     }
 
     private fun initPokitRemoveEventDetector() {
         viewModelScope.launch {
             PokitUpdateEvent.removedPokitId.collectLatest { removedPokitId ->
-                val targetPokit = pokitPaging.pagingData.value.find { it.id == removedPokitId.toString() } ?: return@collectLatest
-                pokitPaging.deleteItem(targetPokit)
+                pokitPaging.deleteItem(removedPokitId.toString())
             }
         }
     }
@@ -134,28 +153,53 @@ class PokitViewModel @Inject constructor(
     var screenType = mutableStateOf<ScreenType>(ScreenType.Pokit)
         private set
 
-    private val pokitPaging = PokitPaging(
-        getPokits = getPokitsUseCase,
-        perPage = 10,
-        coroutineScope = viewModelScope,
-        initPage = 0
+    private val pokitPagingSource = object : PagingSource<Pokit> {
+        override suspend fun load(pageIndex: Int, pageSize: Int): PagingLoadResult<Pokit> {
+            val sort = when (pokitsSortOrder.value) {
+                PokitsSortOrder.Latest -> PokitsSort.RECENT
+                PokitsSortOrder.Name -> PokitsSort.ALPHABETICAL
+            }
+            val response = getPokitsUseCase.getPokits(size = pageSize, page = pageIndex, sort = sort)
+            return PagingLoadResult.fromPokitResult(
+                pokitResult = response,
+                mapper = { domainPokits -> domainPokits.map { Pokit.fromDomainPokit(it) } }
+            )
+        }
+    }
+
+    private val pokitPaging = SimplePaging(
+        pagingSource = pokitPagingSource,
+        getKeyFromItem = { pokit -> pokit.id },
+        coroutineScope = viewModelScope
     )
 
-    private val linkPaging = LinkPaging(
-        getLinks = ::getUncategorizedLinks,
-        perPage = 10,
-        coroutineScope = viewModelScope,
-        initPage = 0,
-        initCategoryId = 1
+    private val linksPagingSource = object : PagingSource<DetailLink> {
+        override suspend fun load(pageIndex: Int, pageSize: Int): PagingLoadResult<DetailLink> {
+            val sort = when (linksSortOrder.value) {
+                UncategorizedLinksSortOrder.Latest -> LinksSort.RECENT
+                UncategorizedLinksSortOrder.Older -> LinksSort.OLDER
+            }
+            val response = getLinksUseCase.getUncategorizedLinks(size = pageSize, page = pageIndex, sort = sort)
+            return PagingLoadResult.fromPokitResult(
+                pokitResult = response,
+                mapper = { domainLinks -> domainLinks.map { DetailLink.fromDomainLink(it) } }
+            )
+        }
+    }
+
+    private val linkPaging = SimplePaging(
+        pagingSource = linksPagingSource,
+        getKeyFromItem = { link -> link.id },
+        coroutineScope = viewModelScope
     )
 
     val pokits: StateFlow<List<Pokit>>
-        get() = pokitPaging._pagingData.asStateFlow()
+        get() = pokitPaging.pagingData
 
     val pokitsState = pokitPaging.pagingState
 
     val unCategoryLinks: StateFlow<List<DetailLink>>
-        get() = linkPaging._pagingData.asStateFlow()
+        get() = linkPaging.pagingData
 
     val linksState = linkPaging.pagingState
 
@@ -192,19 +236,6 @@ class PokitViewModel @Inject constructor(
 
     fun updatePokitsSortOrder(order: PokitsSortOrder) {
         pokitsSortOrder.value = order
-        sortPokits()
-    }
-
-    private fun sortPokits() {
-        when (pokitsSortOrder.value) {
-            is PokitsSortOrder.Name -> {
-                pokitPaging.changeSort(PokitsSort.ALPHABETICAL)
-            }
-            is PokitsSortOrder.Latest -> {
-                pokitPaging.changeSort(PokitsSort.RECENT)
-            }
-        }
-
         viewModelScope.launch {
             pokitPaging.refresh()
         }
@@ -212,30 +243,9 @@ class PokitViewModel @Inject constructor(
 
     fun updateLinksSortOrder(order: UncategorizedLinksSortOrder) {
         linksSortOrder.value = order
-        sortUncategorizedLinks()
-    }
-
-    private fun sortUncategorizedLinks() {
-        when (linksSortOrder.value) {
-            is UncategorizedLinksSortOrder.Latest -> {
-                linkPaging.changeOptions(0, LinksSort.RECENT)
-            }
-            is UncategorizedLinksSortOrder.Older -> {
-                linkPaging.changeOptions(0, LinksSort.OLDER)
-            }
-        }
-
         viewModelScope.launch {
             linkPaging.refresh()
         }
-    }
-
-    private suspend fun getUncategorizedLinks(categoryId: Int, size: Int, page: Int, sort: LinksSort): PokitResult<List<Link>> {
-        return getLinksUseCase.getUncategorizedLinks(
-            size = size,
-            page = page,
-            sort = sort
-        )
     }
 
     fun updateScreenType(type: ScreenType) {

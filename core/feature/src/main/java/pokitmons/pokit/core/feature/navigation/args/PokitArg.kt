@@ -10,3 +10,8 @@ data class PokitArg(
     val imageUrl: String,
     val title: String,
 ) : Parcelable
+
+data class LinkCountChangedPokitIds(
+    val increasedPokitId: Int?,
+    val decreasedPokitId: Int?,
+)
