@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="not_read">안읽음</string>
+    <string name="pokit_count_format">링크 %d개</string>
+
+    <string name="cancellation">취소</string>
+    <string name="removal">삭제</string>
+
+    <string name="share">공유하기</string>
+    <string name="modify">수정하기</string>
+    <string name="remove">삭제하기</string>
+
+    <string name="confirmation">확인</string>
+
+    <string name="retry">다시 시도하기</string>
+
+    <string name="title_error">오류가 발생했어요</string>
+    <string name="sub_error">조금 뒤 다시 접속해주세요</string>
+
+    <string name="title_empty_pokits">저장된 포킷이 없어요!</string>
+    <string name="sub_empty_pokits">포킷을 생성해 링크를 저장해보세요</string>
+    
+    <string name="title_empty_links">저장된 링크가 없어요!</string>
+    <string name="sub_empty_links">다양한 링크를 한 곳에 저장해보세요</string>
+    
+    <string name="title_lack_of_links">링크가 부족해요!</string>
+    <string name="sub_lack_of_links">링크를 5개 이상 저장하고 추천을 받아보세요</string>
+
+    <string name="title_empty_favorite">즐겨찾기 링크가 없어요!</string>
+    <string name="sub_empty_favorite">링크를 즐겨찾기로 관리해보세요</string>
+
+    <string name="title_empty_search">검색된 링크가 없어요</string>
+    <string name="sub_empty_search">검색어를 다시 확인해주세요</string>
+
+    <string name="title_empty_alarms">아직 알람이 없어요</string>
+    <string name="sub_empty_alarms">리마인드 알림을 설정하세요</string>
+</resources>

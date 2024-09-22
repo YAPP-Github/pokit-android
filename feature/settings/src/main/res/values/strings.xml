@@ -1,0 +1,21 @@
+<resources>
+    <string name="settings">설정</string>
+    <string name="nickname_settings">닉네임 설정</string>
+    <string name="notification_settings">알림 설정</string>
+    <string name="announcements">공지사항</string>
+    <string name="terms_of_service">서비스 이용약관</string>
+    <string name="privacy_policy">개인정보 처리방침</string>
+    <string name="customer_support">고객문의</string>
+    <string name="logout">로그아웃</string>
+    <string name="delete_account">회원탈퇴</string>
+    <string name="start_delete_account">탈퇴하기</string>
+    <string name="logout_title">로그아웃하시겠습니까?</string>
+    <string name="delete_account_title">회원 탈퇴하시겠습니까?</string>
+    <string name="delete_account_sub">함께 저장된 모든 정보가 삭제되며,\n복구하실 수 없습니다.</string>
+    <string name="edit_nickname_title">닉네임 설정</string>
+    <string name="save">저장</string>
+    <string name="input_restriction_message">한글, 영어, 숫자로만 입력이 가능합니다.</string>
+    <string name="nickname_already_in_use">사용 중인 닉네임입니다.</string>
+    <string name="input_max_length">최대 10자까지 입력 가능합니다.</string>
+    <string name="input_nickname_hint">닉네임을 입력해주세요</string>
+</resources>

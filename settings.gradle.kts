@@ -21,3 +21,16 @@ dependencyResolutionManagement {
 
 rootProject.name = "pokit"
 include(":app")
+include(":domain")
+include(":data")
+include(":feature:login")
+include(":core:ui")
+include(":feature:addlink")
+include(":feature:addpokit")
+include(":feature:login")
+include(":feature:pokitdetail")
+include(":feature:search")
+include(":feature:settings")
+include(":feature:alarm")
+include(":feature:home")
+include(":core:feature")
