@@ -30,8 +30,10 @@ import pokitmons.pokit.domain.usecase.link.SetBookmarkUseCase
 import pokitmons.pokit.domain.usecase.pokit.DeletePokitUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitCountUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
+import pokitmons.pokit.home.model.ClipboardLinkManager
 import pokitmons.pokit.home.model.HomeSideEffect
 import pokitmons.pokit.home.model.HomeToastMessage
+import pokitmons.pokit.home.model.LinkAddToastMessage
 import javax.inject.Inject
 import kotlin.math.max
 import com.strayalpaca.pokitdetail.model.Link as DetailLink
@@ -53,6 +55,9 @@ class PokitViewModel @Inject constructor(
 
     private val _toastMessage = MutableStateFlow<HomeToastMessage?>(null)
     val toastMessage = _toastMessage.asStateFlow()
+
+    private val _copiedLinkUrlToastMessage = MutableStateFlow<LinkAddToastMessage?>(null)
+    val copiedLinkUrl = _copiedLinkUrlToastMessage.asStateFlow()
 
     private fun initLinkUpdateEventDetector() {
         viewModelScope.launch {
@@ -90,6 +95,14 @@ class PokitViewModel @Inject constructor(
         viewModelScope.launch {
             LinkUpdateEvent.removedLink.collectLatest { removedLinkId ->
                 linkPaging.deleteItem(removedLinkId.toString())
+            }
+        }
+    }
+
+    private fun initClipboardLinkUrlDetector() {
+        viewModelScope.launch {
+            ClipboardLinkManager.clipboardLinkUrl.collectLatest { linkUrl ->
+                _copiedLinkUrlToastMessage.update { LinkAddToastMessage(linkUrl) }
             }
         }
     }
@@ -225,6 +238,7 @@ class PokitViewModel @Inject constructor(
         initLinkAddEventDetector()
         initPokitAddEventDetector()
         initLinkRemoveEventDetector()
+        initClipboardLinkUrlDetector()
 
         loadUnCategoryLinks()
         loadPokits()
@@ -307,6 +321,10 @@ class PokitViewModel @Inject constructor(
 
     fun closeToastMessage() {
         _toastMessage.update { null }
+    }
+
+    fun closeLinkAddToastMessage() {
+        _copiedLinkUrlToastMessage.update { null }
     }
 
     fun showLinkOptionBottomSheet(link: DetailLink) {

@@ -1,5 +1,7 @@
 package pokitmons.pokit
 
+import android.content.ClipboardManager
+import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -22,6 +24,7 @@ import androidx.navigation.compose.rememberNavController
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.home.model.ClipboardLinkManager
 import pokitmons.pokit.navigation.RootNavHost
 
 @AndroidEntryPoint
@@ -51,6 +54,25 @@ class MainActivity : ComponentActivity() {
                     currentDestination?.route?.let { route ->
                         // 믹스패널/파베 애널리틱스 화면 이동 로깅용
                     }
+                }
+            }
+        }
+    }
+
+    override fun onWindowFocusChanged(hasFocus: Boolean) {
+        super.onWindowFocusChanged(hasFocus)
+
+        if (hasFocus) {
+            val clipboardManager = getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+            clipboardManager.primaryClip?.let { clipData ->
+                if (clipData.itemCount == 0) return@let
+                val clipboardTextData = clipData.getItemAt(0).text.toString()
+
+                if (!ClipboardLinkManager.checkUrlIsValid(clipboardTextData)) return@let
+
+                ClipboardLinkManager.setClipboardLink(clipboardTextData)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                    clipboardManager.clearPrimaryClip()
                 }
             }
         }
