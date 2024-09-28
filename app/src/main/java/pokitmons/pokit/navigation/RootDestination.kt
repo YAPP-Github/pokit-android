@@ -31,7 +31,7 @@ object AddLink {
     val route: String = "addLink"
     val linkIdArg = "link_id"
     val linkUrl = "link_url"
-    val routeWithArgs = "$route?$linkIdArg={$linkIdArg}&$linkUrl={${linkUrl}}"
+    val routeWithArgs = "$route?$linkIdArg={$linkIdArg}&$linkUrl={$linkUrl}"
     var arguments = listOf(
         navArgument(linkIdArg) {
             nullable = true

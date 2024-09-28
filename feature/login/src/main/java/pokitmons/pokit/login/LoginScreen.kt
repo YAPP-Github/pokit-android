@@ -64,7 +64,6 @@ fun LoginScreen(
         }
     }
 
-
     Box(
         modifier = Modifier
             .background(color = PokitTheme.colors.backgroundBase)
