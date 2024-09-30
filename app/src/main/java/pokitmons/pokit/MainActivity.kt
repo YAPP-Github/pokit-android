@@ -1,5 +1,6 @@
 package pokitmons.pokit
 
+import android.content.ClipData
 import android.content.ClipboardManager
 import android.os.Build
 import android.os.Bundle
@@ -73,6 +74,9 @@ class MainActivity : ComponentActivity() {
                 ClipboardLinkManager.setClipboardLink(clipboardTextData)
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     clipboardManager.clearPrimaryClip()
+                } else {
+                    val emptyClip = ClipData.newPlainText("", "")
+                    clipboardManager.setPrimaryClip(emptyClip)
                 }
             }
         }
