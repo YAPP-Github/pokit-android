@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.theme.PokitTheme
@@ -41,6 +42,8 @@ fun PokitToast(
         Text(
             text = text,
             style = PokitTheme.typography.body3Medium.copy(color = PokitTheme.colors.inverseWh),
+            maxLines = 2,
+            overflow = TextOverflow.Ellipsis,
             modifier = Modifier.weight(1f)
         )
 

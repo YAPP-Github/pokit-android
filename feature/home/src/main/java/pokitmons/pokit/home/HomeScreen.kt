@@ -52,7 +52,7 @@ fun HomeScreen(
     onNavigateToPokitDetail: (String, Int) -> Unit,
     onNavigateToSearch: () -> Unit,
     onNavigateToSetting: () -> Unit,
-    onNavigateAddLink: () -> Unit,
+    onNavigateAddLink: (String?) -> Unit,
     onNavigateAddPokit: () -> Unit,
     onNavigateToLinkModify: (String) -> Unit,
     onNavigateToPokitModify: (String) -> Unit,
@@ -63,6 +63,7 @@ fun HomeScreen(
     var showBottomSheet by remember { mutableStateOf(false) }
 
     val toastMessage by viewModel.toastMessage.collectAsState()
+    val copiedLinkToastMessage by viewModel.copiedLinkUrl.collectAsState()
 
     viewModel.sideEffect.collectAsEffect { homeSideEffect: HomeSideEffect ->
         when (homeSideEffect) {
@@ -102,7 +103,7 @@ fun HomeScreen(
                                 scope.launch {
                                     sheetState.hide()
                                     showBottomSheet = false
-                                    onNavigateAddLink()
+                                    onNavigateAddLink(null)
                                 }
                             },
                         verticalArrangement = Arrangement.Center,
@@ -171,7 +172,7 @@ fun HomeScreen(
                 onNavigateToAlarm = onNavigateToAlarm
             )
             Scaffold(
-                bottomBar = { BottomNavigationBar() }
+                bottomBar = { BottomNavigationBar(viewModel) }
             ) { padding ->
                 Box {
                     when (viewModel.screenType.value) {
@@ -201,6 +202,21 @@ fun HomeScreen(
                                 .padding(start = 12.dp, end = 12.dp, bottom = 48.dp),
                             text = stringResource(id = toastMessageEvent.resourceId),
                             onClickClose = viewModel::closeToastMessage
+                        )
+                    }
+
+                    copiedLinkToastMessage?.linkUrl?.let { linkUrl ->
+                        PokitToast(
+                            modifier = Modifier
+                                .align(Alignment.BottomCenter)
+                                .padding(padding)
+                                .padding(start = 12.dp, end = 12.dp, bottom = 48.dp),
+                            text = stringResource(id = pokitmons.pokit.home.R.string.toast_add_copied_link, linkUrl),
+                            onClickClose = viewModel::closeLinkAddToastMessage,
+                            onClick = {
+                                viewModel.closeLinkAddToastMessage()
+                                onNavigateAddLink(linkUrl)
+                            }
                         )
                     }
                 }

@@ -1,8 +1,6 @@
 package pokitmons.pokit.navigation
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -91,10 +89,6 @@ fun RootNavHost(
                     }
                 }
             )
-        }
-
-        composable(Home.route) {
-            Box(modifier = Modifier.fillMaxSize())
         }
 
         composable(
@@ -187,7 +181,7 @@ fun RootNavHost(
                         "${PokitDetail.route}/$pokitId?${PokitDetail.pokitCountQuery}=$linkCount"
                     )
                 },
-                onNavigateAddLink = { navHostController.navigate(AddLink.route) },
+                onNavigateAddLink = { navHostController.navigate("${AddLink.route}?${AddLink.linkUrl}=$it") },
                 onNavigateAddPokit = { navHostController.navigate(AddPokit.route) },
                 onNavigateToLinkModify = { navHostController.navigate("${AddLink.route}?${AddLink.linkIdArg}=$it") },
                 onNavigateToPokitModify = { navHostController.navigate("${AddPokit.route}?${AddPokit.pokitIdArg}=$it") },

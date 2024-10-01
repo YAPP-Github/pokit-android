@@ -85,6 +85,7 @@ class AddLinkViewModel @Inject constructor(
     val memo: StateFlow<String> = _memo.asStateFlow()
 
     val currentLinkId: Int? = savedStateHandle.get<String>("link_id")?.toIntOrNull()
+    private val copiedLinkUrl: String? = savedStateHandle.get<String>("link_url")
 
     // 수정 이전 pokit과 수정 이후 pokit이 다른 경우를 체크하기 위해서만 사용
     private var prevPokitId: Int? = null
@@ -96,6 +97,10 @@ class AddLinkViewModel @Inject constructor(
             loadPokitLink(currentLinkId)
         } else {
             loadUncategorizedPokit()
+        }
+
+        copiedLinkUrl?.let { url ->
+            inputLinkUrl(url)
         }
     }
 
