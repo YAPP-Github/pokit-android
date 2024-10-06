@@ -51,8 +51,9 @@ class MainActivity : ComponentActivity() {
             val currentDestination by remember(navBackStackEntry) { derivedStateOf { navBackStackEntry?.destination } }
 
             viewModel.navigationEvent.collectAsEffect { navigationEvent ->
-                if (navigationEvent is NavigationEvent.AddLink)
+                if (navigationEvent is NavigationEvent.AddLink) {
                     navHostController.navigate("${AddLink.route}?${AddLink.linkUrl}=${navigationEvent.url}")
+                }
             }
 
             PokitTheme {

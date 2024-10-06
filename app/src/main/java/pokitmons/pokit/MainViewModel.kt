@@ -19,9 +19,9 @@ import pokitmons.pokit.navigation.ROUTE_WITHOUT_LOGIN
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor(): ViewModel() {
+class MainViewModel @Inject constructor() : ViewModel() {
     private val _currentRoute: MutableStateFlow<String> = MutableStateFlow(Login.route)
-    val currentRoute : StateFlow<String> = _currentRoute.asStateFlow()
+    val currentRoute: StateFlow<String> = _currentRoute.asStateFlow()
 
     private val _navigationEvent: MutableEventFlow<NavigationEvent> = MutableEventFlow()
     val navigationEvent: EventFlow<NavigationEvent> = _navigationEvent.asEventFlow()
@@ -52,5 +52,5 @@ class MainViewModel @Inject constructor(): ViewModel() {
 }
 
 sealed class NavigationEvent {
-    data class AddLink(val url: String): NavigationEvent()
+    data class AddLink(val url: String) : NavigationEvent()
 }
