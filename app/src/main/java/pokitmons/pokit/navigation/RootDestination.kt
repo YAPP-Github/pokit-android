@@ -3,6 +3,8 @@ package pokitmons.pokit.navigation
 import androidx.navigation.NavType
 import androidx.navigation.navArgument
 
+val ROUTE_WITHOUT_LOGIN = listOf(Login.route, TermOfService.route, InputNickname.route, SelectKeyword.route, SignUpSuccess.route)
+
 object Login {
     val route: String = "login"
 }
