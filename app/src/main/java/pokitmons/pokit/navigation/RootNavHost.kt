@@ -154,7 +154,7 @@ fun RootNavHost(
                 onNavigateToEditNickname = { navHostController.navigate(EditNickname.route) },
                 onNavigateToLogin = {
                     navHostController.navigate(Login.route) {
-                        popUpTo(navHostController.graph.startDestinationId) {
+                        popUpTo(navHostController.graph.id) {
                             inclusive = true
                         }
                     }
