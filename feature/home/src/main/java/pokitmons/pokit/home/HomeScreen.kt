@@ -70,6 +70,9 @@ fun HomeScreen(
             HomeSideEffect.NavigateToAddPokit -> {
                 onNavigateAddPokit()
             }
+            is HomeSideEffect.NavigateToAddLink -> {
+                onNavigateAddLink(homeSideEffect.url)
+            }
         }
     }
 

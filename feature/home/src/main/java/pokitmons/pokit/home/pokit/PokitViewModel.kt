@@ -34,6 +34,7 @@ import pokitmons.pokit.home.model.ClipboardLinkManager
 import pokitmons.pokit.home.model.HomeSideEffect
 import pokitmons.pokit.home.model.HomeToastMessage
 import pokitmons.pokit.home.model.LinkAddToastMessage
+import pokitmons.pokit.home.model.PendingSharedLinkManager
 import javax.inject.Inject
 import kotlin.math.max
 import com.strayalpaca.pokitdetail.model.Link as DetailLink
@@ -103,6 +104,14 @@ class PokitViewModel @Inject constructor(
         viewModelScope.launch {
             ClipboardLinkManager.clipboardLinkUrl.collectLatest { linkUrl ->
                 _copiedLinkUrlToastMessage.update { LinkAddToastMessage(linkUrl) }
+            }
+        }
+    }
+
+    private fun initPendingSharedLinkUrlDetector() {
+        viewModelScope.launch {
+            PendingSharedLinkManager.sharedLinkUrl.collectLatest { linkUrl ->
+                _sideEffect.emit(HomeSideEffect.NavigateToAddLink(linkUrl))
             }
         }
     }
@@ -239,6 +248,7 @@ class PokitViewModel @Inject constructor(
         initPokitAddEventDetector()
         initLinkRemoveEventDetector()
         initClipboardLinkUrlDetector()
+        initPendingSharedLinkUrlDetector()
 
         loadUnCategoryLinks()
         loadPokits()
