@@ -36,6 +36,15 @@ private fun LinkUrlCardPreview() {
                     title = "네이버",
                     openWebBrowserByClick = false
                 )
+
+                LinkUrlCard(
+                    modifier = Modifier.padding(20.dp),
+                    thumbnailPainter = painterResource(id = R.drawable.icon_24_google),
+                    url = "",
+                    title = "",
+                    openWebBrowserByClick = false,
+                    isLoading = true
+                )
             }
         }
     }
