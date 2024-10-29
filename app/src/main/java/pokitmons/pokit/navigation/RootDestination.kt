@@ -33,13 +33,23 @@ object AddLink {
     val route: String = "addLink"
     val linkIdArg = "link_id"
     val linkUrl = "link_url"
-    val routeWithArgs = "$route?$linkIdArg={$linkIdArg}&$linkUrl={$linkUrl}"
+    val pokitId = "pokit_id"
+    val pokitName = "pokit_name"
+    val routeWithArgs = "$route?$linkIdArg={$linkIdArg}&$linkUrl={$linkUrl}&$pokitId={$pokitId}&$pokitName={$pokitName}"
     var arguments = listOf(
         navArgument(linkIdArg) {
             nullable = true
             type = NavType.StringType
         },
         navArgument(linkUrl) {
+            nullable = true
+            type = NavType.StringType
+        },
+        navArgument(pokitId) {
+            nullable = true
+            type = NavType.StringType
+        },
+        navArgument(pokitName) {
             nullable = true
             type = NavType.StringType
         }

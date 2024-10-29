@@ -111,9 +111,19 @@ class PokitDetailViewModel @Inject constructor(
             getPokit(id, linkCount)
         }
 
+        initLinkAddEventDetector()
         initLinkUpdateEventDetector()
         initLinkRemoveEventDetector()
         initPokitUpdateEventDetector()
+    }
+
+    private fun initLinkAddEventDetector() {
+        viewModelScope.launch {
+            LinkUpdateEvent.addedLink.collectLatest { addedLink ->
+                if (state.value.currentPokit?.id != addedLink.pokitId.toString()) return@collectLatest
+                linkPaging.refresh()
+            }
+        }
     }
 
     private fun initLinkUpdateEventDetector() {

@@ -129,6 +129,9 @@ fun RootNavHost(
                 },
                 onNavigateToPokitModify = { pokitId ->
                     navHostController.navigate("${AddPokit.route}?${AddPokit.pokitIdArg}=$pokitId")
+                },
+                onNavigateToAddLink = { pokitId, pokitName ->
+                    navHostController.navigate("${AddLink.route}?${AddLink.pokitId}=$pokitId&${AddLink.pokitName}=$pokitName")
                 }
             )
         }

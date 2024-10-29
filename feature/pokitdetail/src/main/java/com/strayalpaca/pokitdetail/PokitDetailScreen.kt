@@ -3,15 +3,21 @@ package com.strayalpaca.pokitdetail
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -19,8 +25,12 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
@@ -46,6 +56,7 @@ import pokitmons.pokit.core.ui.components.template.pookierror.ErrorPooki
 import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButtonBottomSheetContent
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.core.ui.R.string as coreString
+import pokitmons.pokit.core.ui.R.drawable as coreDrawable
 
 @Composable
 fun PokitDetailScreenContainer(
@@ -53,6 +64,7 @@ fun PokitDetailScreenContainer(
     onBackPressed: () -> Unit,
     onNavigateToLinkModify: (String) -> Unit,
     onNavigateToPokitModify: (String) -> Unit,
+    onNavigateToAddLink: (String, String) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
     val linkList by viewModel.linkList.collectAsState()
@@ -98,7 +110,8 @@ fun PokitDetailScreenContainer(
         loadNextPokits = viewModel::loadNextPokits,
         refreshPokits = viewModel::refreshPokits,
         loadNextLinks = viewModel::loadNextLinks,
-        onClickBookmark = viewModel::toggleBookmark
+        onClickBookmark = viewModel::toggleBookmark,
+        onClickAddLink = onNavigateToAddLink
     )
 }
 
@@ -133,99 +146,122 @@ fun PokitDetailScreen(
     refreshPokits: () -> Unit = {},
     loadNextLinks: () -> Unit = {},
     onClickBookmark: () -> Unit = {},
+    onClickAddLink: (String, String) -> Unit = { _, _ -> },
 ) {
-    Column(
+    Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        Spacer(modifier = Modifier.height(8.dp))
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
+            Spacer(modifier = Modifier.height(8.dp))
 
-        Toolbar(
-            onBackPressed = onBackPressed,
-            onClickKebab = showPokitModifyBottomSheet
-        )
+            Toolbar(
+                onBackPressed = onBackPressed,
+                onClickKebab = showPokitModifyBottomSheet
+            )
 
-        Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(12.dp))
 
-        TitleArea(
-            title = state.currentPokit?.title ?: "",
-            sub = stringResource(id = pokitmons.pokit.core.ui.R.string.pokit_count_format, state.currentPokit?.count ?: 0),
-            onClickSelectPokit = showPokitSelectBottomSheet,
-            onClickSelectFilter = onClickFilter
-        )
+            TitleArea(
+                title = state.currentPokit?.title ?: "",
+                sub = stringResource(id = pokitmons.pokit.core.ui.R.string.pokit_count_format, state.currentPokit?.count ?: 0),
+                onClickSelectPokit = showPokitSelectBottomSheet,
+                onClickSelectFilter = onClickFilter
+            )
 
-        val linkLazyColumnListState = rememberLazyListState()
-        val startLinkPaging = remember {
-            derivedStateOf {
-                linkLazyColumnListState.layoutInfo.visibleItemsInfo.lastOrNull()?.let { last ->
-                    last.index >= linkLazyColumnListState.layoutInfo.totalItemsCount - 3
-                } ?: false
+            val linkLazyColumnListState = rememberLazyListState()
+            val startLinkPaging = remember {
+                derivedStateOf {
+                    linkLazyColumnListState.layoutInfo.visibleItemsInfo.lastOrNull()?.let { last ->
+                        last.index >= linkLazyColumnListState.layoutInfo.totalItemsCount - 3
+                    } ?: false
+                }
             }
-        }
 
-        LaunchedEffect(startLinkPaging.value) {
-            if (startLinkPaging.value && linkListState == PagingState.IDLE) {
-                loadNextLinks()
+            LaunchedEffect(startLinkPaging.value) {
+                if (startLinkPaging.value && linkListState == PagingState.IDLE) {
+                    loadNextLinks()
+                }
             }
-        }
 
-        when {
-            (linkListState == PagingState.LOADING_INIT) -> {
-                LoadingProgress(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                )
-            }
-            (linkListState == PagingState.FAILURE_INIT) -> {
-                ErrorPooki(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
-                    title = stringResource(id = coreString.title_error),
-                    sub = stringResource(id = coreString.sub_error)
-                )
-            }
-            (linkList.isEmpty()) -> {
-                EmptyPooki(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
-                    title = stringResource(id = coreString.title_empty_links),
-                    sub = stringResource(id = coreString.sub_empty_links)
-                )
-            }
-            else -> {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
-                    state = linkLazyColumnListState
-                ) {
-                    items(
-                        items = linkList,
-                        key = { it.id }
-                    ) { link ->
-                        LinkCard(
-                            item = link,
-                            title = link.title,
-                            sub = "${link.dateString} · ${link.domainUrl}",
-                            painter = rememberAsyncImagePainter(link.imageUrl),
-                            notRead = !link.isRead,
-                            badgeText = link.pokitName,
-                            onClickKebab = showLinkModifyBottomSheet,
-                            onClickItem = onClickLink,
-                            modifier = Modifier.padding(20.dp)
-                        )
+            when {
+                (linkListState == PagingState.LOADING_INIT) -> {
+                    LoadingProgress(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    )
+                }
+                (linkListState == PagingState.FAILURE_INIT) -> {
+                    ErrorPooki(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        title = stringResource(id = coreString.title_error),
+                        sub = stringResource(id = coreString.sub_error)
+                    )
+                }
+                (linkList.isEmpty()) -> {
+                    EmptyPooki(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        title = stringResource(id = coreString.title_empty_links),
+                        sub = stringResource(id = coreString.sub_empty_links)
+                    )
+                }
+                else -> {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f),
+                        state = linkLazyColumnListState
+                    ) {
+                        items(
+                            items = linkList,
+                            key = { it.id }
+                        ) { link ->
+                            LinkCard(
+                                item = link,
+                                title = link.title,
+                                sub = "${link.dateString} · ${link.domainUrl}",
+                                painter = rememberAsyncImagePainter(link.imageUrl),
+                                notRead = !link.isRead,
+                                badgeText = link.pokitName,
+                                onClickKebab = showLinkModifyBottomSheet,
+                                onClickItem = onClickLink,
+                                modifier = Modifier.padding(20.dp)
+                            )
 
-                        HorizontalDivider(
-                            modifier = Modifier.padding(horizontal = 20.dp),
-                            thickness = 1.dp,
-                            color = PokitTheme.colors.borderTertiary
-                        )
+                            HorizontalDivider(
+                                modifier = Modifier.padding(horizontal = 20.dp),
+                                thickness = 1.dp,
+                                color = PokitTheme.colors.borderTertiary
+                            )
+                        }
                     }
                 }
             }
         }
+
+        Image(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(bottom = 48.dp, end = 20.dp)
+                .size(60.dp)
+                .clip(shape = CircleShape)
+                .background(color = PokitTheme.colors.brand)
+                .clickable {
+                    state.currentPokit?.let { currentPokit ->
+                        onClickAddLink(currentPokit.id, currentPokit.title)
+                    }
+                }
+                .padding(12.dp),
+            painter = painterResource(id = coreDrawable.icon_24_plus),
+            contentDescription = "add link",
+            colorFilter = ColorFilter.tint(color = PokitTheme.colors.inverseWh)
+        )
 
         if (state.currentLink != null) {
             val context: Context = LocalContext.current
