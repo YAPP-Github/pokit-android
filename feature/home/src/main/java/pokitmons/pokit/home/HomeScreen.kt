@@ -185,7 +185,9 @@ fun HomeScreen(
                                 modifier = Modifier.padding(padding),
                                 onNavigateToPokitDetail = onNavigateToPokitDetail,
                                 onNavigateToLinkModify = onNavigateToLinkModify,
-                                onNavigateToPokitModify = onNavigateToPokitModify
+                                onNavigateToPokitModify = onNavigateToPokitModify,
+                                onNavigateToAddLink = { onNavigateAddLink(null) },
+                                onNavigateToAddPokit = onNavigateAddPokit
                             )
                         }
 
