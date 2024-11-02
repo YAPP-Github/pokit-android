@@ -31,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.strayalpaca.addlink.components.block.Link
+import com.strayalpaca.addlink.components.block.LoadingLink
 import com.strayalpaca.addlink.components.block.Toolbar
 import com.strayalpaca.addlink.model.AddLinkScreenSideEffect
 import com.strayalpaca.addlink.model.AddLinkScreenState
@@ -205,7 +206,10 @@ fun AddLinkScreen(
                 ) {
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    if (state.link != null) {
+                    if (state.step == ScreenStep.LINK_LOADING) {
+                        LoadingLink()
+                        Spacer(modifier = Modifier.height(16.dp))
+                    } else if (state.link != null) {
                         Link(link = state.link, title = title.ifEmpty { null })
                         Spacer(modifier = Modifier.height(16.dp))
                     }
