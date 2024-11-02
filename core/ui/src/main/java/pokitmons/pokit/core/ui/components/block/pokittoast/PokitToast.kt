@@ -19,6 +19,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.R
+import pokitmons.pokit.core.ui.components.block.pokittoast.attributes.PokitToastType
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
 @Composable
@@ -27,11 +28,12 @@ fun PokitToast(
     text: String,
     onClick: (() -> Unit)? = null,
     onClickClose: () -> Unit = {},
+    type: PokitToastType = PokitToastType.Normal
 ) {
     Row(
         modifier = modifier
             .clip(RoundedCornerShape(9999.dp))
-            .background(PokitTheme.colors.backgroundTertiary)
+            .background(type.color)
             .clickable(
                 enabled = onClick != null,
                 onClick = onClick ?: {}
@@ -39,13 +41,25 @@ fun PokitToast(
             .padding(start = 20.dp, end = 14.dp, top = 12.dp, bottom = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Text(
-            text = text,
-            style = PokitTheme.typography.body3Medium.copy(color = PokitTheme.colors.inverseWh),
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis,
-            modifier = Modifier.weight(1f)
-        )
+        Row(
+            modifier = Modifier.weight(1f),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = text,
+                style = PokitTheme.typography.body3Medium.copy(color = PokitTheme.colors.inverseWh),
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
+            type.iconResourceId?.let { resourceId ->
+                Spacer(modifier = Modifier.width(8.dp))
+                Icon(
+                    painter = painterResource(id = resourceId),
+                    contentDescription = null,
+                    tint = PokitTheme.colors.inverseWh
+                )
+            }
+        }
 
         Spacer(modifier = Modifier.width(12.dp))
 
