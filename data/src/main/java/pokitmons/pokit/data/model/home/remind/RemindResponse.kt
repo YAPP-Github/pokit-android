@@ -10,3 +10,13 @@ data class RemindResponse(
     val size: Int = 10,
     val sort: List<Sort> = emptyList(),
 )
+
+@Serializable
+data class BookmarkContentCountResponse(
+    val bookmarkContentCount: Int = 0,
+)
+
+@Serializable
+data class UnreadContentCountResponse(
+    val unreadContentCount: Int = 0,
+)

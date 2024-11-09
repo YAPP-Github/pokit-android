@@ -12,6 +12,8 @@ interface RemindRepository {
         sort: PokitsSort = PokitsSort.RECENT,
     ): PokitResult<List<RemindResult>>
 
+    suspend fun getUnReadContentsCount(): PokitResult<Int>
+
     suspend fun getTodayContents(
         filterUncategorized: Boolean = true,
         size: Int = 10,
@@ -25,4 +27,6 @@ interface RemindRepository {
         page: Int = 0,
         sort: PokitsSort = PokitsSort.RECENT,
     ): PokitResult<List<RemindResult>>
+
+    suspend fun getBookmarkContentsCount(): PokitResult<Int>
 }

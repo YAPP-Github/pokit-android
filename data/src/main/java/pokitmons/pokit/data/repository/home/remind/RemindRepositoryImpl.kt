@@ -26,6 +26,15 @@ class RemindRepositoryImpl @Inject constructor(private val remindDataSource: Rem
         }
     }
 
+    override suspend fun getUnReadContentsCount(): PokitResult<Int> {
+        return runCatching {
+            val response = remindDataSource.getUnreadContentsCount()
+            PokitResult.Success(response.unreadContentCount)
+        }.getOrElse { throwable ->
+            parseErrorResult(throwable)
+        }
+    }
+
     override suspend fun getTodayContents(
         filterUncategorized: Boolean,
         size: Int,
@@ -51,6 +60,15 @@ class RemindRepositoryImpl @Inject constructor(private val remindDataSource: Rem
             val response = remindDataSource.getBookmarkContents(RemindRequest())
             val remindResponse = RemindMapper.mapperToRemind(response)
             PokitResult.Success(remindResponse)
+        }.getOrElse { throwable ->
+            parseErrorResult(throwable)
+        }
+    }
+
+    override suspend fun getBookmarkContentsCount(): PokitResult<Int> {
+        return runCatching {
+            val response = remindDataSource.getBookmarkContentsCount()
+            PokitResult.Success(response.bookmarkContentCount)
         }.getOrElse { throwable ->
             parseErrorResult(throwable)
         }

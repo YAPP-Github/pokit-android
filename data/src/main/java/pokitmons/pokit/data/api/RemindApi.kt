@@ -1,7 +1,9 @@
 package pokitmons.pokit.data.api
 
+import pokitmons.pokit.data.model.home.remind.BookmarkContentCountResponse
 import pokitmons.pokit.data.model.home.remind.Remind
 import pokitmons.pokit.data.model.home.remind.RemindResponse
+import pokitmons.pokit.data.model.home.remind.UnreadContentCountResponse
 import pokitmons.pokit.domain.model.pokit.PokitsSort
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -13,6 +15,9 @@ interface RemindApi {
         @Query("page") page: Int = 0,
         @Query("sort") sort: String = PokitsSort.RECENT.value,
     ): RemindResponse
+
+    @GET("remind/unread/count")
+    suspend fun getUnreadContentsCount(): UnreadContentCountResponse
 
     @GET("remind/today")
     suspend fun getTodayContents(
@@ -27,4 +32,7 @@ interface RemindApi {
         @Query("page") page: Int = 0,
         @Query("sort") sort: String = PokitsSort.RECENT.value,
     ): RemindResponse
+
+    @GET("remind/bookmark/count")
+    suspend fun getBookmarkContentsCount(): BookmarkContentCountResponse
 }

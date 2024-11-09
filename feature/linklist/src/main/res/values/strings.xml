@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_unread">안읽음</string>
+    <string name="title_bookmark">즐겨찾기</string>
+
+    <string name="title_sort_recent">최신순</string>
+    <string name="title_sort_alphabet">이름순</string>
+
+    <string name="format_link_count">링크 %d개</string>
+</resources>
