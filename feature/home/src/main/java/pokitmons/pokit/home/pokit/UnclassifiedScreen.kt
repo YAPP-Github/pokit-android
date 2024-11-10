@@ -2,6 +2,7 @@ package pokitmons.pokit.home.pokit
 
 import android.content.Context
 import android.content.Intent
+import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
@@ -20,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.strayalpaca.pokitdetail.R
 import com.strayalpaca.pokitdetail.model.BottomSheetType
+import pokitmons.pokit.core.feature.utils.shareUrlLink
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.components.template.linkdetailbottomsheet.LinkDetailBottomSheet
@@ -52,11 +54,10 @@ fun UnclassifiedScreen(
             onHideBottomSheet = viewModel::hideDetailLinkBottomSheet,
             show = true,
             onClickShareLink = {
-                val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_TEXT, link.url)
-                }
-                context.startActivity(Intent.createChooser(intent, "Pokit"))
+                shareUrlLink(
+                    context = context,
+                    url = link.url
+                )
             },
             onClickModifyLink = {
                 viewModel.hideDetailLinkBottomSheet()
@@ -77,7 +78,12 @@ fun UnclassifiedScreen(
         when (pokitOptionBottomSheetType) {
             BottomSheetType.MODIFY -> {
                 ModifyBottomSheetContent(
-                    onClickShare = { Toast.makeText(context, "준비중입니다.", Toast.LENGTH_SHORT).show() },
+                    onClickShare = {
+                        shareUrlLink(
+                            context = context,
+                            url = currentDetailShowLink?.url ?: ""
+                        )
+                    },
                     onClickModify = remember {
                         {
                             viewModel.hideLinkOptionBottomSheet()
