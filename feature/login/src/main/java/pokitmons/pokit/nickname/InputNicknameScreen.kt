@@ -74,7 +74,6 @@ fun InputNicknameScreen(
                 isError = inputNicknameState.isRegex || inputNicknameState.isDuplicate || inputNicknameState.nickname.length >= NICKNAME_MAX_LENGTH,
                 hintText = stringResource(id = Login.string.input_nickname_hint),
                 onChangeText = { text ->
-                    Log.d("!! : ", text)
                     if (text.length <= NICKNAME_MAX_LENGTH) {
                         viewModel.apply {
                             inputText(text)
