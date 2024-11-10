@@ -59,7 +59,9 @@ fun PokitScreen(
         when (pokitOptionBottomSheetType) {
             BottomSheetType.MODIFY -> {
                 ModifyBottomSheetContent(
-                    onClickShare = { Toast.makeText(context, "준비중입니다.", Toast.LENGTH_SHORT).show() },
+                    onClickShare = {
+                        // TODO 카카오 공유 구현
+                    },
                     onClickModify = remember {
                         {
                             viewModel.hidePokitDetailRemoveBottomSheet()
