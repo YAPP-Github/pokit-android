@@ -70,6 +70,9 @@ dependencies {
     // coil
     implementation(libs.coil.compose)
 
+    // kakao share
+    implementation(libs.kakao.share.v2)
+
     // module
     implementation(project(":core:ui"))
     implementation(project(":core:feature"))
