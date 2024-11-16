@@ -99,4 +99,7 @@ dependencies {
     implementation(libs.orbit.compose)
     implementation(libs.orbit.core)
     implementation(libs.orbit.viewmodel)
+
+    // kakao
+    implementation(libs.kakao.share.v2)
 }
