@@ -19,7 +19,13 @@ fun Preview() {
                 state = LinkListScreenState(),
                 onBackPressed = { },
                 loadNextLinkList = { },
-                toggleSort = {}
+                toggleSort = {},
+                showLinkDetailBottomSheet = {},
+                showCheckLinkRemoveBottomSheet = {},
+                hideBottomSheet = {},
+                onClickBookmark = {},
+                onClickModifyLink = {},
+                onClickLinkRemove = {}
             )
         }
     }

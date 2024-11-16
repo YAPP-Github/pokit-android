@@ -10,7 +10,7 @@ import javax.inject.Inject
 
 class RemindDataSourceImpl @Inject constructor(private val remindApi: RemindApi) : RemindDataSource {
     override suspend fun getUnreadContents(remindRequest: RemindRequest): RemindResponse {
-        return remindApi.getUnreadContents()
+        return remindApi.getUnreadContents(size = remindRequest.size, page = remindRequest.page, sort = remindRequest.sort.value)
     }
 
     override suspend fun getUnreadContentsCount(): UnreadContentCountResponse {
@@ -22,7 +22,7 @@ class RemindDataSourceImpl @Inject constructor(private val remindApi: RemindApi)
     }
 
     override suspend fun getBookmarkContents(remindRequest: RemindRequest): RemindResponse {
-        return remindApi.getBookmarkContents()
+        return remindApi.getBookmarkContents(size = remindRequest.size, page = remindRequest.page, sort = remindRequest.sort.value)
     }
 
     override suspend fun getBookmarkContentsCount(): BookmarkContentCountResponse {

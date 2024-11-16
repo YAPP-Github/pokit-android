@@ -1,5 +1,7 @@
 package pokitmons.pokit.linklist
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -19,10 +21,13 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -31,10 +36,14 @@ import pokitmons.pokit.core.feature.model.paging.PagingState
 import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
 import pokitmons.pokit.core.ui.components.block.toolbar.Toolbar
+import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
+import pokitmons.pokit.core.ui.components.template.linkdetailbottomsheet.LinkDetailBottomSheet
 import pokitmons.pokit.core.ui.components.template.pookiempty.EmptyPooki
 import pokitmons.pokit.core.ui.components.template.pookierror.ErrorPooki
+import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButtonBottomSheetContent
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.core.ui.utils.noRippleClickable
+import pokitmons.pokit.linklist.model.BottomSheetType
 import pokitmons.pokit.linklist.model.Link
 import pokitmons.pokit.linklist.model.LinkListScreenState
 import pokitmons.pokit.core.ui.R.string as CoreString
@@ -42,8 +51,28 @@ import pokitmons.pokit.core.ui.R.drawable as CoreDrawable
 
 @Composable
 fun LinkListScreenContainer(
-
+    viewModel: LinkListViewModel,
+    onBackPressed: () -> Unit,
+    onNavigateToLinkModify: (String) -> Unit,
 ) {
+    val state by viewModel.state.collectAsState()
+    val linkList by viewModel.linkList.collectAsState()
+    val linkListState by viewModel.linkListState.collectAsState()
+
+    LinkListScreen(
+        state = state,
+        onBackPressed = onBackPressed,
+        loadNextLinkList = viewModel::loadNextLinks,
+        toggleSort = viewModel::toggleSort,
+        linkList = linkList,
+        linkListState = linkListState,
+        showLinkDetailBottomSheet = viewModel::showLinkDetailBottomSheet,
+        showCheckLinkRemoveBottomSheet = viewModel::showCheckLinkRemoveBottomSheet,
+        hideBottomSheet = viewModel::hideBottomSheet,
+        onClickLinkRemove = viewModel::removeLink,
+        onClickModifyLink = onNavigateToLinkModify,
+        onClickBookmark = viewModel::toggleBookmark
+    )
 
 }
 
@@ -55,6 +84,12 @@ fun LinkListScreen(
     linkListState: PagingState = PagingState.IDLE,
     loadNextLinkList: () -> Unit,
     toggleSort: () -> Unit,
+    showLinkDetailBottomSheet: (Link) -> Unit,
+    showCheckLinkRemoveBottomSheet: () -> Unit,
+    hideBottomSheet: () -> Unit,
+    onClickLinkRemove: () -> Unit,
+    onClickModifyLink: (String) -> Unit,
+    onClickBookmark: () -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -151,7 +186,6 @@ fun LinkListScreen(
                 ) {
                     items(
                         items = linkList,
-                        key = { it.id }
                     ) { link ->
                         LinkCard(
                             item = link,
@@ -160,8 +194,8 @@ fun LinkListScreen(
                             painter = rememberAsyncImagePainter(link.imageUrl),
                             notRead = !link.isRead,
                             badgeText = link.pokitName,
-                            onClickKebab = {},
-                            onClickItem = {},
+                            onClickKebab = showLinkDetailBottomSheet,
+                            onClickItem = showLinkDetailBottomSheet,
                             modifier = Modifier.padding(20.dp)
                         )
 
@@ -174,6 +208,57 @@ fun LinkListScreen(
                 }
             }
         }
+
+        val context: Context = LocalContext.current
+        val link = state.bottomSheetInfo?.link ?: Link()
+        LinkDetailBottomSheet(
+            title = link.title,
+            memo = link.memo,
+            url = link.url,
+            thumbnailPainter = rememberAsyncImagePainter(link.imageUrl),
+            bookmark = link.bookmark,
+            openWebBrowserByClick = true,
+            pokitName = link.pokitName,
+            dateString = link.dateString,
+            onHideBottomSheet = hideBottomSheet,
+            show = state.bottomSheetInfo?.type == BottomSheetType.DETAIL,
+            onClickShareLink = {
+                val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, link.url)
+                }
+                context.startActivity(Intent.createChooser(intent, "Pokit"))
+            },
+            onClickModifyLink = {
+                hideBottomSheet()
+                onClickModifyLink(link.id)
+            },
+            onClickRemoveLink = {
+                showCheckLinkRemoveBottomSheet()
+            },
+            onClickBookmark = onClickBookmark
+        )
+
+
+
+        PokitBottomSheet(
+            onHideBottomSheet = hideBottomSheet,
+            show = state.bottomSheetInfo?.type == BottomSheetType.CHECK_REMOVE
+        ) {
+            TwoButtonBottomSheetContent(
+                title = stringResource(id = R.string.title_remove_link),
+                subText = stringResource(id = R.string.sub_remove_link),
+                onClickLeftButton = hideBottomSheet,
+                onClickRightButton = remember {
+                    {
+                        onClickLinkRemove()
+                        hideBottomSheet()
+                    }
+                }
+            )
+        }
+
+
     }
 }
 

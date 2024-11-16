@@ -29,5 +29,23 @@ data class Link(
                 isRead = remindResult.isRead
             )
         }
+
+        fun fromDomainLink(domainLink: pokitmons.pokit.domain.model.link.Link): Link {
+            return Link(
+                id = domainLink.id.toString(),
+                title = domainLink.title,
+                dateString = domainLink.createdAt,
+                domainUrl = domainLink.domain,
+                isRead = domainLink.isRead,
+                url = domainLink.data,
+                memo = domainLink.memo,
+                imageUrl = domainLink.thumbnail,
+                createdAt = domainLink.createdAt,
+                pokitName = domainLink.categoryName,
+                pokitId = domainLink.categoryId.toString(),
+                bookmark = domainLink.favorites
+            )
+        }
+
     }
 }

@@ -97,3 +97,12 @@ object EditNickname {
 object Alarm {
     val route: String = "alarm"
 }
+
+object LinkList {
+    val route: String = "linklist"
+    val linkListTypeArg = "type"
+    val routeWithArgs = "$route/{$linkListTypeArg}"
+    var arguments = listOf(
+        navArgument(linkListTypeArg) { defaultValue = "bookmark" },
+    )
+}

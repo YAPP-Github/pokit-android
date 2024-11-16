@@ -18,7 +18,7 @@ class RemindRepositoryImpl @Inject constructor(private val remindDataSource: Rem
         sort: PokitsSort,
     ): PokitResult<List<RemindResult>> {
         return runCatching {
-            val response = remindDataSource.getUnreadContents(RemindRequest())
+            val response = remindDataSource.getUnreadContents(RemindRequest(size = size, page = page, sort = sort))
             val remindResponse = RemindMapper.mapperToRemind(response)
             PokitResult.Success(remindResponse)
         }.getOrElse { throwable ->
@@ -57,7 +57,7 @@ class RemindRepositoryImpl @Inject constructor(private val remindDataSource: Rem
         sort: PokitsSort,
     ): PokitResult<List<RemindResult>> {
         return runCatching {
-            val response = remindDataSource.getBookmarkContents(RemindRequest())
+            val response = remindDataSource.getBookmarkContents(RemindRequest(size = size, page = page, sort = sort))
             val remindResponse = RemindMapper.mapperToRemind(response)
             PokitResult.Success(remindResponse)
         }.getOrElse { throwable ->

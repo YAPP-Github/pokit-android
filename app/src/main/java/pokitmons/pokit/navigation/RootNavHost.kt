@@ -20,6 +20,8 @@ import pokitmons.pokit.alarm.AlarmViewModel
 import pokitmons.pokit.home.HomeScreen
 import pokitmons.pokit.home.pokit.PokitViewModel
 import pokitmons.pokit.keyword.KeywordScreen
+import pokitmons.pokit.linklist.LinkListScreenContainer
+import pokitmons.pokit.linklist.LinkListViewModel
 import pokitmons.pokit.login.LoginScreen
 import pokitmons.pokit.nickname.InputNicknameScreen
 import pokitmons.pokit.search.SearchScreenContainer
@@ -188,13 +190,29 @@ fun RootNavHost(
                 onNavigateAddPokit = { navHostController.navigate(AddPokit.route) },
                 onNavigateToLinkModify = { navHostController.navigate("${AddLink.route}?${AddLink.linkIdArg}=$it") },
                 onNavigateToPokitModify = { navHostController.navigate("${AddPokit.route}?${AddPokit.pokitIdArg}=$it") },
-                onNavigateToAlarm = { navHostController.navigate(Alarm.route) }
+                onNavigateToAlarm = { navHostController.navigate(Alarm.route) },
+                onNavigateToUnreadLinkList = { navHostController.navigate("${LinkList.route}/unread") },
+                onNavigateToBookmarkLinkList = { navHostController.navigate("${LinkList.route}/bookmark") }
             )
         }
 
         composable(route = Alarm.route) {
             val viewModel: AlarmViewModel = hiltViewModel()
             AlarmScreenContainer(
+                viewModel = viewModel,
+                onBackPressed = navHostController::popBackStack,
+                onNavigateToLinkModify = { linkId ->
+                    navHostController.navigate("${AddLink.route}?${AddLink.linkIdArg}=$linkId")
+                }
+            )
+        }
+
+        composable(
+            route = LinkList.routeWithArgs,
+            arguments = LinkList.arguments
+        ) {
+            val viewModel: LinkListViewModel = hiltViewModel()
+            LinkListScreenContainer(
                 viewModel = viewModel,
                 onBackPressed = navHostController::popBackStack,
                 onNavigateToLinkModify = { linkId ->

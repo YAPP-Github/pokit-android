@@ -57,6 +57,8 @@ fun HomeScreen(
     onNavigateToLinkModify: (String) -> Unit,
     onNavigateToPokitModify: (String) -> Unit,
     onNavigateToAlarm: () -> Unit,
+    onNavigateToBookmarkLinkList: () -> Unit,
+    onNavigateToUnreadLinkList: () -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -194,7 +196,9 @@ fun HomeScreen(
                         is ScreenType.Remind -> {
                             RemindScreen(
                                 modifier = Modifier.padding(padding),
-                                onNavigateToLinkModify = onNavigateToLinkModify
+                                onNavigateToLinkModify = onNavigateToLinkModify,
+                                onNavigateToUnreadLinkList = onNavigateToUnreadLinkList,
+                                onNavigateToBookmarkLinkList = onNavigateToBookmarkLinkList
                             )
                         }
                     }
