@@ -2,7 +2,7 @@ package pokitmons.pokit.data.repository.auth
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import pokitmons.pokit.data.datasource.local.TokenManager
+import pokitmons.pokit.data.datasource.local.AuthManager
 import pokitmons.pokit.data.datasource.remote.auth.AuthDataSource
 import pokitmons.pokit.data.mapper.auth.AuthMapper
 import pokitmons.pokit.data.model.auth.request.SNSLoginRequest
@@ -21,7 +21,7 @@ import javax.inject.Inject
 
 class AuthRepositoryImpl @Inject constructor(
     private val remoteAuthDataSource: AuthDataSource,
-    private val tokenManager: TokenManager,
+    private val authManager: AuthManager,
 ) : AuthRepository {
     override suspend fun snsLogin(
         authPlatform: String,
@@ -61,7 +61,7 @@ class AuthRepositoryImpl @Inject constructor(
             remoteAuthDataSource.withdraw(
                 WithdrawRequest(
                     refreshToken = "",
-                    authPlatform = tokenManager.getAuthType().first()
+                    authPlatform = authManager.getAuthType().first()
                 )
             )
             PokitResult.Success(Unit)
@@ -71,18 +71,18 @@ class AuthRepositoryImpl @Inject constructor(
     }
 
     override suspend fun setAccessToken(token: String) {
-        tokenManager.saveAccessToken(token)
+        authManager.saveAccessToken(token)
     }
 
     override suspend fun setRefreshToken(token: String) {
-        tokenManager.saveRefreshToken(token)
+        authManager.saveRefreshToken(token)
     }
 
     override suspend fun setAuthType(type: String) {
-        tokenManager.setAuthType(type)
+        authManager.setAuthType(type)
     }
 
     override suspend fun getAuthType(): Flow<String> {
-        return tokenManager.getAuthType()
+        return authManager.getAuthType()
     }
 }

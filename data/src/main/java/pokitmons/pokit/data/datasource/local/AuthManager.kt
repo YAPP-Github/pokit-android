@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class TokenManager @Inject constructor(
+class AuthManager @Inject constructor(
     private val dataStore: DataStore<androidx.datastore.preferences.core.Preferences>,
 ) {
     companion object {
