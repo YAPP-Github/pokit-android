@@ -3,4 +3,8 @@
 
     <string name="toast_cannot_create_pokit">최대 30개의 포킷을 생성할 수 있습니다.\n포킷을 삭제한 뒤에 추가해주세요.</string>
     <string name="toast_add_copied_link">복사한 링크 저장하기\n%s</string>
+
+    <string name="share_pokit_title"> 포킷을 공유받았어요!</string>
+    <string name="share_pokit_description">소중한 링크들이 담긴 포킷을 Pokit\n앱에서 지금 바로 확인해보세요!</string>
+    <string name="share_pokit_button_text">앱에서 보기</string>
 </resources>
