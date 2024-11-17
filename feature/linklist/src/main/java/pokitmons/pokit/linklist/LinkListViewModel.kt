@@ -144,6 +144,13 @@ class LinkListViewModel @Inject constructor(
         }
     }
 
+    fun hideLinkDetailBottomSheet() {
+        if (_state.value.bottomSheetInfo?.type != BottomSheetType.DETAIL) return
+        _state.update {
+            it.copy(bottomSheetInfo = null)
+        }
+    }
+
     fun showCheckLinkRemoveBottomSheet() {
         val currentState = _state.value.copy()
 
@@ -155,7 +162,8 @@ class LinkListViewModel @Inject constructor(
         }
     }
 
-    fun hideBottomSheet() {
+    fun hideCheckLinkRemoveBottomSheet() {
+        if (_state.value.bottomSheetInfo?.type != BottomSheetType.CHECK_REMOVE) return
         _state.update {
             it.copy(bottomSheetInfo = null)
         }

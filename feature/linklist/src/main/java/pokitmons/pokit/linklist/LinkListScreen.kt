@@ -67,8 +67,9 @@ fun LinkListScreenContainer(
         linkList = linkList,
         linkListState = linkListState,
         showLinkDetailBottomSheet = viewModel::showLinkDetailBottomSheet,
+        hideLinkDetailBottomSheet = viewModel::hideLinkDetailBottomSheet,
         showCheckLinkRemoveBottomSheet = viewModel::showCheckLinkRemoveBottomSheet,
-        hideBottomSheet = viewModel::hideBottomSheet,
+        hideCheckLinkRemoveBottomSheet = viewModel::hideCheckLinkRemoveBottomSheet,
         onClickLinkRemove = viewModel::removeLink,
         onClickModifyLink = onNavigateToLinkModify,
         onClickBookmark = viewModel::toggleBookmark
@@ -85,8 +86,9 @@ fun LinkListScreen(
     loadNextLinkList: () -> Unit,
     toggleSort: () -> Unit,
     showLinkDetailBottomSheet: (Link) -> Unit,
+    hideLinkDetailBottomSheet: () -> Unit,
     showCheckLinkRemoveBottomSheet: () -> Unit,
-    hideBottomSheet: () -> Unit,
+    hideCheckLinkRemoveBottomSheet: () -> Unit,
     onClickLinkRemove: () -> Unit,
     onClickModifyLink: (String) -> Unit,
     onClickBookmark: () -> Unit,
@@ -211,6 +213,9 @@ fun LinkListScreen(
 
         val context: Context = LocalContext.current
         val link = state.bottomSheetInfo?.link ?: Link()
+
+        // 수정 필요
+        // onHideBottomSheet 호출로 인해 후속 호출로 발생한 삭제 bottomSheet가 종료되고 있음
         LinkDetailBottomSheet(
             title = link.title,
             memo = link.memo,
@@ -220,7 +225,7 @@ fun LinkListScreen(
             openWebBrowserByClick = true,
             pokitName = link.pokitName,
             dateString = link.dateString,
-            onHideBottomSheet = hideBottomSheet,
+            onHideBottomSheet = hideLinkDetailBottomSheet,
             show = state.bottomSheetInfo?.type == BottomSheetType.DETAIL,
             onClickShareLink = {
                 val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
@@ -230,7 +235,7 @@ fun LinkListScreen(
                 context.startActivity(Intent.createChooser(intent, "Pokit"))
             },
             onClickModifyLink = {
-                hideBottomSheet()
+                hideLinkDetailBottomSheet()
                 onClickModifyLink(link.id)
             },
             onClickRemoveLink = {
@@ -242,17 +247,17 @@ fun LinkListScreen(
 
 
         PokitBottomSheet(
-            onHideBottomSheet = hideBottomSheet,
+            onHideBottomSheet = hideCheckLinkRemoveBottomSheet,
             show = state.bottomSheetInfo?.type == BottomSheetType.CHECK_REMOVE
         ) {
             TwoButtonBottomSheetContent(
                 title = stringResource(id = R.string.title_remove_link),
                 subText = stringResource(id = R.string.sub_remove_link),
-                onClickLeftButton = hideBottomSheet,
+                onClickLeftButton = hideCheckLinkRemoveBottomSheet,
                 onClickRightButton = remember {
                     {
                         onClickLinkRemove()
-                        hideBottomSheet()
+                        hideCheckLinkRemoveBottomSheet()
                     }
                 }
             )

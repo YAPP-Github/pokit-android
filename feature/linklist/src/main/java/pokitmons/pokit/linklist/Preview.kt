@@ -21,8 +21,9 @@ fun Preview() {
                 loadNextLinkList = { },
                 toggleSort = {},
                 showLinkDetailBottomSheet = {},
+                hideLinkDetailBottomSheet = {},
                 showCheckLinkRemoveBottomSheet = {},
-                hideBottomSheet = {},
+                hideCheckLinkRemoveBottomSheet = {},
                 onClickBookmark = {},
                 onClickModifyLink = {},
                 onClickLinkRemove = {}
