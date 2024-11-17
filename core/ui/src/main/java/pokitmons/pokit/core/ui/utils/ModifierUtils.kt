@@ -55,7 +55,7 @@ internal fun Modifier.shimmerEffect(): Modifier = composed {
             colors = listOf(
                 Gray300,
                 Gray500,
-                Gray300,
+                Gray300
             ),
             start = Offset(startOffsetX, 0f),
             end = Offset(startOffsetX + size.width.toFloat(), size.height.toFloat())

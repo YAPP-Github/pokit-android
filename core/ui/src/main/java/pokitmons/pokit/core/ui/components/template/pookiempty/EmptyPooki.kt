@@ -25,7 +25,7 @@ fun EmptyPooki(
     modifier: Modifier = Modifier,
     title: String,
     sub: String,
-    button: EmptyPookiButton? = null
+    button: EmptyPookiButton? = null,
 ) {
     Box(
         modifier = modifier,

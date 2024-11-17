@@ -45,7 +45,7 @@ fun RemindScreen(
     viewModel: RemindViewModel = hiltViewModel(),
     onNavigateToLinkModify: (String) -> Unit,
     onNavigateToBookmarkLinkList: () -> Unit,
-    onNavigateToUnreadLinkList: () ->  Unit,
+    onNavigateToUnreadLinkList: () -> Unit,
 ) {
     val unreadContents = viewModel.unReadContents.collectAsState()
     val unreadContentsState by viewModel.unreadContentNetworkState.collectAsState()

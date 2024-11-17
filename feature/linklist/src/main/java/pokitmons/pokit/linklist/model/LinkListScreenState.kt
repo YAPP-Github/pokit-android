@@ -9,7 +9,7 @@ data class LinkListScreenState(
 
 data class BottomSheetInfo(
     val type: BottomSheetType,
-    val link: Link
+    val link: Link,
 )
 
 enum class BottomSheetType {

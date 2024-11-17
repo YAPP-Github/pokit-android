@@ -55,8 +55,8 @@ import pokitmons.pokit.core.ui.components.template.pookiempty.EmptyPooki
 import pokitmons.pokit.core.ui.components.template.pookierror.ErrorPooki
 import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButtonBottomSheetContent
 import pokitmons.pokit.core.ui.theme.PokitTheme
-import pokitmons.pokit.core.ui.R.string as coreString
 import pokitmons.pokit.core.ui.R.drawable as coreDrawable
+import pokitmons.pokit.core.ui.R.string as coreString
 
 @Composable
 fun PokitDetailScreenContainer(

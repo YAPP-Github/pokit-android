@@ -28,7 +28,7 @@ fun PokitToast(
     text: String,
     onClick: (() -> Unit)? = null,
     onClickClose: () -> Unit = {},
-    type: PokitToastType = PokitToastType.Normal
+    type: PokitToastType = PokitToastType.Normal,
 ) {
     Row(
         modifier = modifier
@@ -49,7 +49,7 @@ fun PokitToast(
                 text = text,
                 style = PokitTheme.typography.body3Medium.copy(color = PokitTheme.colors.inverseWh),
                 maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
+                overflow = TextOverflow.Ellipsis
             )
             type.iconResourceId?.let { resourceId ->
                 Spacer(modifier = Modifier.width(8.dp))

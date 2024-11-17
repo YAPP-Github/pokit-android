@@ -127,7 +127,10 @@ class LinkListViewModel @Inject constructor(
 
         viewModelScope.launch {
             val response = getLinkUseCase.getLink(link.id.toInt())
-            if (response is PokitResult.Success && state.value.bottomSheetInfo?.link?.id == link.id && state.value.bottomSheetInfo?.type == BottomSheetType.DETAIL) {
+            if (response is PokitResult.Success &&
+                state.value.bottomSheetInfo?.link?.id == link.id &&
+                state.value.bottomSheetInfo?.type == BottomSheetType.DETAIL
+            ) {
                 val responseLink = Link.fromDomainLink(response.result).copy(imageUrl = link.imageUrl, isRead = true)
                 _state.update { state ->
                     state.copy(
@@ -204,6 +207,5 @@ class LinkListViewModel @Inject constructor(
                 }
             }
         }
-
     }
 }

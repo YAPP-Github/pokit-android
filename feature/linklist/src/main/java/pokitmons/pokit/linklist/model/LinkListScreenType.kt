@@ -2,7 +2,7 @@ package pokitmons.pokit.linklist.model
 
 import pokitmons.pokit.linklist.R
 
-enum class LinkListScreenType(val resourceId: Int, val key : String) {
+enum class LinkListScreenType(val resourceId: Int, val key: String) {
     Unread(R.string.title_unread, "unread"), Bookmark(R.string.title_bookmark, "bookmark");
 
     companion object {

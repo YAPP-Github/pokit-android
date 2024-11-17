@@ -103,6 +103,6 @@ object LinkList {
     val linkListTypeArg = "type"
     val routeWithArgs = "$route/{$linkListTypeArg}"
     var arguments = listOf(
-        navArgument(linkListTypeArg) { defaultValue = "bookmark" },
+        navArgument(linkListTypeArg) { defaultValue = "bookmark" }
     )
 }

@@ -46,8 +46,8 @@ import pokitmons.pokit.core.ui.utils.noRippleClickable
 import pokitmons.pokit.linklist.model.BottomSheetType
 import pokitmons.pokit.linklist.model.Link
 import pokitmons.pokit.linklist.model.LinkListScreenState
-import pokitmons.pokit.core.ui.R.string as CoreString
 import pokitmons.pokit.core.ui.R.drawable as CoreDrawable
+import pokitmons.pokit.core.ui.R.string as CoreString
 
 @Composable
 fun LinkListScreenContainer(
@@ -74,7 +74,6 @@ fun LinkListScreenContainer(
         onClickModifyLink = onNavigateToLinkModify,
         onClickBookmark = viewModel::toggleBookmark
     )
-
 }
 
 @Composable
@@ -123,7 +122,7 @@ fun LinkListScreen(
                 modifier = Modifier
                     .noRippleClickable { toggleSort() }
                     .padding(vertical = 12.dp)
-            ){
+            ) {
                 Icon(
                     modifier = Modifier.size(18.dp),
                     painter = painterResource(id = CoreDrawable.icon_24_align),
@@ -187,7 +186,7 @@ fun LinkListScreen(
                     state = linkLazyColumnListState
                 ) {
                     items(
-                        items = linkList,
+                        items = linkList
                     ) { link ->
                         LinkCard(
                             item = link,
@@ -244,8 +243,6 @@ fun LinkListScreen(
             onClickBookmark = onClickBookmark
         )
 
-
-
         PokitBottomSheet(
             onHideBottomSheet = hideCheckLinkRemoveBottomSheet,
             show = state.bottomSheetInfo?.type == BottomSheetType.CHECK_REMOVE
@@ -262,8 +259,5 @@ fun LinkListScreen(
                 }
             )
         }
-
-
     }
 }
-
