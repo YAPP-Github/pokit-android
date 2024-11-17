@@ -85,4 +85,12 @@ class AuthRepositoryImpl @Inject constructor(
     override suspend fun getAuthType(): Flow<String> {
         return authManager.getAuthType()
     }
+
+    override suspend fun setUserId(userId: Int) {
+        authManager.setUserId(userId)
+    }
+
+    override suspend fun getUserId(): Flow<Int> {
+        return authManager.getUserId()
+    }
 }
