@@ -95,7 +95,6 @@ fun PokitScreen(
                                 serverCallbackArgs = serverCallbackArgs
                             ) { sharingResult, error ->
                                 if (error != null) {
-
                                 } else if (sharingResult != null) {
                                     context.startActivity(sharingResult.intent)
                                 }

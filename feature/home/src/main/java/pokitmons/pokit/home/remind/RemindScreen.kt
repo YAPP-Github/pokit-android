@@ -27,7 +27,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.strayalpaca.pokitdetail.R
 import com.strayalpaca.pokitdetail.model.BottomSheetType
 import pokitmons.pokit.core.feature.model.NetworkState
-import pokitmons.pokit.core.feature.utils.shareUrlLink
+import pokitmons.pokit.core.feature.utils.ShareUrlLink
 import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
@@ -78,7 +78,7 @@ fun RemindScreen(
             BottomSheetType.MODIFY -> {
                 ModifyBottomSheetContent(
                     onClickShare = {
-                        shareUrlLink(
+                        ShareUrlLink(
                             context = context,
                             url = viewModel.currentShowingLink.value?.url ?: ""
                         )

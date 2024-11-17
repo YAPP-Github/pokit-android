@@ -17,7 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import pokitmons.pokit.core.feature.model.paging.PagingState
-import pokitmons.pokit.core.feature.utils.shareUrlLink
+import pokitmons.pokit.core.feature.utils.ShareUrlLink
 import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.components.template.linkdetailbottomsheet.LinkDetailBottomSheet
@@ -67,7 +67,7 @@ fun SearchScreenContainer(
             onHideBottomSheet = viewModel::hideLinkDetailBottomSheet,
             show = state.showLinkDetailBottomSheet,
             onClickShareLink = {
-                shareUrlLink(
+                ShareUrlLink(
                     context = context,
                     url = state.currentDetailLink?.url ?: ""
                 )

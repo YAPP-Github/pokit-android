@@ -1,8 +1,6 @@
 package com.strayalpaca.pokitdetail
 
 import android.content.Context
-import android.content.Intent
-import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,7 +32,7 @@ import com.strayalpaca.pokitdetail.model.Pokit
 import com.strayalpaca.pokitdetail.model.PokitDetailScreenState
 import pokitmons.pokit.core.feature.flow.collectAsEffect
 import pokitmons.pokit.core.feature.model.paging.PagingState
-import pokitmons.pokit.core.feature.utils.shareUrlLink
+import pokitmons.pokit.core.feature.utils.ShareUrlLink
 import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
 import pokitmons.pokit.core.ui.components.block.pokitlist.PokitList
@@ -242,7 +240,7 @@ fun PokitDetailScreen(
                 onHideBottomSheet = hideLinkDetailBottomSheet,
                 show = state.linkDetailBottomSheetVisible,
                 onClickShareLink = {
-                    shareUrlLink(
+                    ShareUrlLink(
                         context = context,
                         url = state.currentLink.url
                     )
@@ -317,7 +315,7 @@ fun PokitDetailScreen(
                 BottomSheetType.MODIFY -> {
                     ModifyBottomSheetContent(
                         onClickShare = {
-                            shareUrlLink(
+                            ShareUrlLink(
                                 context = context,
                                 url = state.currentLink?.url ?: ""
                             )
@@ -359,7 +357,7 @@ fun PokitDetailScreen(
                     val context: Context = LocalContext.current
                     ModifyBottomSheetContent(
                         onClickShare = {
-                            shareUrlLink(
+                            ShareUrlLink(
                                 context = context,
                                 url = state.currentLink?.url ?: ""
                             )

@@ -1,9 +1,6 @@
 package pokitmons.pokit.home.pokit
 
 import android.content.Context
-import android.content.Intent
-import android.util.Log
-import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
@@ -21,7 +18,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.rememberAsyncImagePainter
 import com.strayalpaca.pokitdetail.R
 import com.strayalpaca.pokitdetail.model.BottomSheetType
-import pokitmons.pokit.core.feature.utils.shareUrlLink
+import pokitmons.pokit.core.feature.utils.ShareUrlLink
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.components.template.linkdetailbottomsheet.LinkDetailBottomSheet
@@ -54,7 +51,7 @@ fun UnclassifiedScreen(
             onHideBottomSheet = viewModel::hideDetailLinkBottomSheet,
             show = true,
             onClickShareLink = {
-                shareUrlLink(
+                ShareUrlLink(
                     context = context,
                     url = link.url
                 )
@@ -79,7 +76,7 @@ fun UnclassifiedScreen(
             BottomSheetType.MODIFY -> {
                 ModifyBottomSheetContent(
                     onClickShare = {
-                        shareUrlLink(
+                        ShareUrlLink(
                             context = context,
                             url = currentDetailShowLink?.url ?: ""
                         )

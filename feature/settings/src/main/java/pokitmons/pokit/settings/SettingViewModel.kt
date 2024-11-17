@@ -13,8 +13,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pokitmons.pokit.domain.commom.PokitResult
-import pokitmons.pokit.domain.usecase.auth.InputNicknameUseCase
 import pokitmons.pokit.domain.usecase.auth.AuthUseCase
+import pokitmons.pokit.domain.usecase.auth.InputNicknameUseCase
 import pokitmons.pokit.domain.usecase.auth.WithdrawUseCase
 import pokitmons.pokit.domain.usecase.setting.EditNicknameUseCase
 import pokitmons.pokit.model.DuplicateNicknameState

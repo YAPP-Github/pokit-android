@@ -17,10 +17,10 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pokitmons.pokit.domain.commom.PokitResult
+import pokitmons.pokit.domain.usecase.auth.AuthUseCase
 import pokitmons.pokit.domain.usecase.auth.InputNicknameUseCase
 import pokitmons.pokit.domain.usecase.auth.SNSLoginUseCase
 import pokitmons.pokit.domain.usecase.auth.SignUpUseCase
-import pokitmons.pokit.domain.usecase.auth.AuthUseCase
 import pokitmons.pokit.login.R
 import pokitmons.pokit.model.CategoryState
 import pokitmons.pokit.model.DuplicateNicknameState

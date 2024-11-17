@@ -3,10 +3,10 @@ package pokitmons.pokit.core.feature.utils
 import android.content.Context
 import android.content.Intent
 
-fun shareUrlLink(
+fun ShareUrlLink(
     context: Context,
     url: String,
-    chooserTitle: String = "Pokit"
+    chooserTitle: String = "Pokit",
 ) {
     val intent = Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"
