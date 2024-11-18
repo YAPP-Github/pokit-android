@@ -2,10 +2,8 @@ package pokitmons.pokit
 
 import android.content.Context
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,10 +17,10 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pokitmons.pokit.domain.commom.PokitResult
+import pokitmons.pokit.domain.usecase.auth.AuthUseCase
 import pokitmons.pokit.domain.usecase.auth.InputNicknameUseCase
 import pokitmons.pokit.domain.usecase.auth.SNSLoginUseCase
 import pokitmons.pokit.domain.usecase.auth.SignUpUseCase
-import pokitmons.pokit.domain.usecase.auth.TokenUseCase
 import pokitmons.pokit.login.R
 import pokitmons.pokit.model.CategoryState
 import pokitmons.pokit.model.DuplicateNicknameState
@@ -34,11 +32,11 @@ class LoginViewModel @Inject constructor(
     private val loginUseCase: SNSLoginUseCase,
     private val nicknameUseCase: InputNicknameUseCase,
     private val signUpUseCase: SignUpUseCase,
-    private val tokenUseCase: TokenUseCase,
+    private val authUseCase: AuthUseCase,
 ) : ViewModel() {
     init {
         viewModelScope.launch {
-            if (tokenUseCase.getAuthType().first() == "구글") {
+            if (authUseCase.getAuthType().first() == "구글") {
                 _loginState.emit(LoginState.AutoLogin)
             }
         }
@@ -89,7 +87,7 @@ class LoginViewModel @Inject constructor(
                     authType = authPlatform
                     when (loginResult.result.isRegistered) {
                         true -> {
-                            tokenUseCase.apply {
+                            authUseCase.apply {
                                 setAccessToken(loginResult.result.accessToken)
                                 setRefreshToken(loginResult.result.refreshToken)
                                 setAuthType(authType)
@@ -98,7 +96,7 @@ class LoginViewModel @Inject constructor(
                         }
 
                         false -> {
-                            tokenUseCase.apply {
+                            authUseCase.apply {
                                 setAccessToken(loginResult.result.accessToken)
                                 setRefreshToken(loginResult.result.refreshToken)
                             }
@@ -123,7 +121,8 @@ class LoginViewModel @Inject constructor(
                 )
             ) {
                 is PokitResult.Success -> {
-                    tokenUseCase.setAuthType(authType)
+                    authUseCase.setUserId(signUpResult.result.id)
+                    authUseCase.setAuthType(authType)
                     _signUpState.emit(SignUpState.SignUp)
                 }
 

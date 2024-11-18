@@ -4,7 +4,7 @@ import kotlinx.coroutines.flow.Flow
 import pokitmons.pokit.domain.repository.auth.AuthRepository
 import javax.inject.Inject
 
-class TokenUseCase @Inject constructor(private val authRepository: AuthRepository) {
+class AuthUseCase @Inject constructor(private val authRepository: AuthRepository) {
     suspend fun setAccessToken(token: String) {
         authRepository.setAccessToken(token)
     }
@@ -19,5 +19,13 @@ class TokenUseCase @Inject constructor(private val authRepository: AuthRepositor
 
     suspend fun getAuthType(): Flow<String> {
         return authRepository.getAuthType()
+    }
+
+    suspend fun setUserId(userId: Int) {
+        authRepository.setUserId(userId)
+    }
+
+    suspend fun getUserId(): Flow<Int> {
+        return authRepository.getUserId()
     }
 }

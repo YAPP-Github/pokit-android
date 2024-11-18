@@ -31,8 +31,10 @@ firebase-bom = "33.1.2"
 firebase-auth = "23.0.0"
 google-services = "4.4.2"
 mockk = "1.13.12"
+kakao-share = "2.20.6"
 
 [libraries]
+kakao-share-v2 = { group = "com.kakao.sdk", name = "v2-share", version.ref = "kakao-share" }
 androidx-lifecycle-service = { group = "androidx.lifecycle", name = "lifecycle-service", version.ref = "lifecycle-runtime-ktx"}
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "core-ktx" }
 javax-inject = { module = "javax.inject:javax.inject", version.ref = "javax-inject" }
