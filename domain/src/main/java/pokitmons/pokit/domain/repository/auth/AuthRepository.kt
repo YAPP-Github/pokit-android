@@ -18,4 +18,7 @@ interface AuthRepository {
     // TODO 리팩토링
     suspend fun setAuthType(type: String)
     suspend fun getAuthType(): Flow<String>
+
+    suspend fun setUserId(userId: Int)
+    suspend fun getUserId(): Flow<Int>
 }

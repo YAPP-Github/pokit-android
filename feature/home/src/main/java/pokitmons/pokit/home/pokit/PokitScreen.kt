@@ -1,7 +1,6 @@
 package pokitmons.pokit.home.pokit
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -21,6 +20,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
+import com.kakao.sdk.share.ShareClient
+import com.kakao.sdk.template.model.Button
+import com.kakao.sdk.template.model.Content
+import com.kakao.sdk.template.model.FeedTemplate
+import com.kakao.sdk.template.model.Link
 import com.strayalpaca.pokitdetail.R
 import com.strayalpaca.pokitdetail.model.BottomSheetType
 import pokitmons.pokit.core.feature.model.paging.PagingState
@@ -33,7 +37,7 @@ import pokitmons.pokit.core.ui.components.template.pookiempty.EmptyPookiButton
 import pokitmons.pokit.core.ui.components.template.pookierror.ErrorPooki
 import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButtonBottomSheetContent
 import pokitmons.pokit.core.ui.R.string as coreString
-import pokitmons.pokit.home.R.string as stringResource
+import pokitmons.pokit.home.R.string as homeString
 
 @Composable
 fun PokitScreen(
@@ -63,7 +67,43 @@ fun PokitScreen(
         when (pokitOptionBottomSheetType) {
             BottomSheetType.MODIFY -> {
                 ModifyBottomSheetContent(
-                    onClickShare = { Toast.makeText(context, "준비중입니다.", Toast.LENGTH_SHORT).show() },
+                    onClickShare = {
+                        val pokitFeedTemplate = FeedTemplate(
+                            content = Content(
+                                title = currentDetailSelectedCategory?.title + context.getString(homeString.share_pokit_title),
+                                description = context.getString(homeString.share_pokit_description),
+                                imageUrl = currentDetailSelectedCategory?.image?.url,
+                                link = Link(
+                                    webUrl = "",
+                                    mobileWebUrl = ""
+                                )
+                            ),
+
+                            buttons = listOf(
+                                Button(
+                                    context.getString(homeString.share_pokit_button_text),
+                                    Link(
+                                        androidExecutionParams = mapOf("categoryId" to "${currentDetailSelectedCategory?.id}"),
+                                        iosExecutionParams = mapOf("categoryId" to "${currentDetailSelectedCategory?.id}")
+                                    )
+                                )
+                            )
+                        )
+                        val serverCallbackArgs = mapOf("categoryId" to "${currentDetailSelectedCategory?.id}")
+
+                        if (ShareClient.instance.isKakaoTalkSharingAvailable(context)) {
+                            ShareClient.instance.shareDefault(
+                                context = context,
+                                defaultTemplate = pokitFeedTemplate,
+                                serverCallbackArgs = serverCallbackArgs
+                            ) { sharingResult, error ->
+                                if (error != null) {
+                                } else if (sharingResult != null) {
+                                    context.startActivity(sharingResult.intent)
+                                }
+                            }
+                        }
+                    },
                     onClickModify = remember {
                         {
                             viewModel.hidePokitDetailRemoveBottomSheet()
@@ -73,6 +113,7 @@ fun PokitScreen(
                     onClickRemove = viewModel::showPokitDetailRemoveBottomSheet
                 )
             }
+
             BottomSheetType.REMOVE -> {
                 TwoButtonBottomSheetContent(
                     title = stringResource(id = R.string.title_remove_pokit),
@@ -86,6 +127,7 @@ fun PokitScreen(
                     }
                 )
             }
+
             else -> {}
         }
     }
@@ -104,6 +146,7 @@ fun PokitScreen(
                     (pokitsState == PagingState.LOADING_INIT) -> {
                         LoadingProgress(modifier = Modifier.fillMaxSize())
                     }
+
                     (pokitsState == PagingState.FAILURE_INIT) -> {
                         ErrorPooki(
                             modifier = Modifier.fillMaxSize(),
@@ -112,17 +155,19 @@ fun PokitScreen(
                             onClickRetry = viewModel::loadPokits
                         )
                     }
+
                     (pokits.value.isEmpty()) -> {
                         EmptyPooki(
                             modifier = Modifier.fillMaxSize(),
                             title = stringResource(id = coreString.title_empty_pokits),
                             sub = stringResource(id = coreString.sub_empty_pokits),
                             button = EmptyPookiButton(
-                                text = stringResource(id = stringResource.title_add_pokit),
+                                text = stringResource(id = homeString.title_add_pokit),
                                 onClick = onNavigateToAddPokit
                             )
                         )
                     }
+
                     else -> {
                         LazyVerticalGrid(
                             modifier = Modifier.fillMaxSize(),
@@ -155,6 +200,7 @@ fun PokitScreen(
                     (unCategoryLinksState == PagingState.LOADING_INIT) -> {
                         LoadingProgress(modifier = Modifier.fillMaxSize())
                     }
+
                     (unCategoryLinksState == PagingState.FAILURE_INIT) -> {
                         ErrorPooki(
                             modifier = Modifier.fillMaxSize(),
@@ -163,17 +209,19 @@ fun PokitScreen(
                             onClickRetry = viewModel::loadUnCategoryLinks
                         )
                     }
+
                     (unCategoryLinks.value.isEmpty()) -> {
                         EmptyPooki(
                             modifier = Modifier.fillMaxSize(),
                             title = stringResource(id = coreString.title_empty_links),
                             sub = stringResource(id = coreString.sub_empty_links),
                             button = EmptyPookiButton(
-                                text = stringResource(id = stringResource.title_add_link),
+                                text = stringResource(id = homeString.title_add_link),
                                 onClick = onNavigateToAddLink
                             )
                         )
                     }
+
                     else -> {
                         UnclassifiedScreen(
                             viewModel = viewModel,

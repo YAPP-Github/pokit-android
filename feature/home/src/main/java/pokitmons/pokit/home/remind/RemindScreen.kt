@@ -1,7 +1,6 @@
 package pokitmons.pokit.home.remind
 
 import android.content.Context
-import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -28,6 +27,7 @@ import coil.compose.rememberAsyncImagePainter
 import com.strayalpaca.pokitdetail.R
 import com.strayalpaca.pokitdetail.model.BottomSheetType
 import pokitmons.pokit.core.feature.model.NetworkState
+import pokitmons.pokit.core.feature.utils.ShareUrlLink
 import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
@@ -79,7 +79,12 @@ fun RemindScreen(
         when (pokitOptionBottomSheetType) {
             BottomSheetType.MODIFY -> {
                 ModifyBottomSheetContent(
-                    onClickShare = { Toast.makeText(context, "준비중입니다.", Toast.LENGTH_SHORT).show() },
+                    onClickShare = {
+                        ShareUrlLink(
+                            context = context,
+                            url = viewModel.currentShowingLink.value?.url ?: ""
+                        )
+                    },
                     onClickModify = remember {
                         {
                             viewModel.hideLinkOptionBottomSheet()

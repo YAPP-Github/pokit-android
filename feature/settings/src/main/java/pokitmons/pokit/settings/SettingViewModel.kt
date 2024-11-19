@@ -13,8 +13,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import pokitmons.pokit.domain.commom.PokitResult
+import pokitmons.pokit.domain.usecase.auth.AuthUseCase
 import pokitmons.pokit.domain.usecase.auth.InputNicknameUseCase
-import pokitmons.pokit.domain.usecase.auth.TokenUseCase
 import pokitmons.pokit.domain.usecase.auth.WithdrawUseCase
 import pokitmons.pokit.domain.usecase.setting.EditNicknameUseCase
 import pokitmons.pokit.model.DuplicateNicknameState
@@ -25,7 +25,7 @@ class SettingViewModel @Inject constructor(
     private val nicknameUseCase: InputNicknameUseCase,
     private val editNicknameUseCase: EditNicknameUseCase,
     private val withdrawUseCase: WithdrawUseCase,
-    private val tokenUseCase: TokenUseCase,
+    private val authUseCase: AuthUseCase,
 ) : ViewModel() {
     private var duplicateNicknameJob: Job? = null
 
@@ -87,8 +87,8 @@ class SettingViewModel @Inject constructor(
         viewModelScope.launch {
             when (val withdraw = withdrawUseCase.withdraw()) {
                 is PokitResult.Success -> {
-                    tokenUseCase.setAuthType("")
-                    tokenUseCase.setAccessToken("")
+                    authUseCase.setAuthType("")
+                    authUseCase.setAccessToken("")
                     _withdrawState.emit(SettingState.Withdraw)
                 }
 
@@ -100,8 +100,8 @@ class SettingViewModel @Inject constructor(
 
     fun logout() {
         viewModelScope.launch {
-            tokenUseCase.setAuthType("")
-            tokenUseCase.setAccessToken("")
+            authUseCase.setAuthType("")
+            authUseCase.setAccessToken("")
             _withdrawState.emit(SettingState.Logout)
         }
     }

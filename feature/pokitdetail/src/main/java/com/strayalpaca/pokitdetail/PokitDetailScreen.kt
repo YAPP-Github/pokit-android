@@ -44,6 +44,7 @@ import com.strayalpaca.pokitdetail.model.Pokit
 import com.strayalpaca.pokitdetail.model.PokitDetailScreenState
 import pokitmons.pokit.core.feature.flow.collectAsEffect
 import pokitmons.pokit.core.feature.model.paging.PagingState
+import pokitmons.pokit.core.feature.utils.ShareUrlLink
 import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
 import pokitmons.pokit.core.ui.components.block.pokitlist.PokitList
@@ -277,11 +278,10 @@ fun PokitDetailScreen(
                 onHideBottomSheet = hideLinkDetailBottomSheet,
                 show = state.linkDetailBottomSheetVisible,
                 onClickShareLink = {
-                    val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
-                        type = "text/plain"
-                        putExtra(Intent.EXTRA_TEXT, state.currentLink.url)
-                    }
-                    context.startActivity(Intent.createChooser(intent, "Pokit"))
+                    ShareUrlLink(
+                        context = context,
+                        url = state.currentLink.url
+                    )
                 },
                 onClickModifyLink = {
                     hideLinkDetailBottomSheet()
@@ -352,7 +352,12 @@ fun PokitDetailScreen(
             when (state.linkBottomSheetType) {
                 BottomSheetType.MODIFY -> {
                     ModifyBottomSheetContent(
-                        onClickShare = { Toast.makeText(context, "준비중입니다.", Toast.LENGTH_SHORT).show() },
+                        onClickShare = {
+                            ShareUrlLink(
+                                context = context,
+                                url = state.currentLink?.url ?: ""
+                            )
+                        },
                         onClickModify = remember {
                             {
                                 state.currentLink?.let { link ->
@@ -389,7 +394,12 @@ fun PokitDetailScreen(
                 BottomSheetType.MODIFY -> {
                     val context: Context = LocalContext.current
                     ModifyBottomSheetContent(
-                        onClickShare = { Toast.makeText(context, "준비중입니다.", Toast.LENGTH_SHORT).show() },
+                        onClickShare = {
+                            ShareUrlLink(
+                                context = context,
+                                url = state.currentLink?.url ?: ""
+                            )
+                        },
                         onClickModify = remember {
                             {
                                 hidePokitModifyBottomSheet()

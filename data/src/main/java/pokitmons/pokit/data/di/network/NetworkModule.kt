@@ -19,7 +19,7 @@ import pokitmons.pokit.data.api.RemindApi
 import pokitmons.pokit.data.api.SettingApi
 import pokitmons.pokit.data.api.TokenApi
 import pokitmons.pokit.data.datasource.local.AuthAuthenticator
-import pokitmons.pokit.data.datasource.local.TokenManager
+import pokitmons.pokit.data.datasource.local.AuthManager
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 import javax.inject.Named
@@ -75,23 +75,23 @@ object NetworkModule {
 
     @Singleton
     @Provides
-    fun provideTokenManager(dataStore: DataStore<Preferences>): TokenManager {
-        return TokenManager(dataStore)
+    fun provideTokenManager(dataStore: DataStore<Preferences>): AuthManager {
+        return AuthManager(dataStore)
     }
 
     @Singleton
     @Provides
     fun provideAuthenticator(
-        tokenManager: TokenManager,
+        authManager: AuthManager,
         tokenApi: TokenApi,
     ): AuthAuthenticator {
-        return AuthAuthenticator(tokenManager, tokenApi)
+        return AuthAuthenticator(authManager, tokenApi)
     }
 
     @Singleton
     @Provides
-    fun provideInterceptor(tokenManager: TokenManager): BearerTokenInterceptor {
-        return BearerTokenInterceptor(tokenManager)
+    fun provideInterceptor(authManager: AuthManager): BearerTokenInterceptor {
+        return BearerTokenInterceptor(authManager)
     }
 
     @Singleton

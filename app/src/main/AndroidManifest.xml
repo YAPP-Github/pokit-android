@@ -2,6 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <queries>
+        <package android:name="com.kakao.talk" />
+    </queries>
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -14,6 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Pokit"
         tools:targetApi="34">
+
         <activity
             android:screenOrientation="portrait"
             android:name=".MainActivity"
@@ -22,16 +27,27 @@
             android:theme="@style/Theme.Pokit"
             android:launchMode="singleInstance"
             tools:ignore="DiscouragedApi,LockedOrientationActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
             <intent-filter>
                 <action android:name="android.intent.action.SEND"/>
                 <category android:name="android.intent.category.DEFAULT"/>
                 <data android:mimeType="text/plain"/>
             </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:host="kakaolink"
+                    android:scheme="kakao7890f93caf1d9d5da976da4b4bc6e5e7" />
+            </intent-filter>
+
         </activity>
     </application>
 
