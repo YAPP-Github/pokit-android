@@ -96,7 +96,18 @@ class AddLinkViewModel @Inject constructor(
         if (currentLinkId != null) {
             loadPokitLink(currentLinkId)
         } else {
-            loadUncategorizedPokit()
+            val initPokitId = savedStateHandle.get<String>("pokit_id")
+            val initPokitName = savedStateHandle.get<String>("pokit_name")
+            // pokit 상세에서 링크 추가를 누른 경우 (초기 포킷 설정)
+            if (initPokitName != null && initPokitId != null) {
+                intent {
+                    reduce {
+                        state.copy(currentPokit = Pokit(initPokitName, initPokitId, 0))
+                    }
+                }
+            } else { // 홈 화면에서 링크 추가를 누른 경우
+                loadUncategorizedPokit()
+            }
         }
 
         copiedLinkUrl?.let { url ->

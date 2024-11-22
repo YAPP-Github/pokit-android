@@ -1,7 +1,8 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.hilt)
+    id("kotlin-kapt")
 }
 
 android {
@@ -9,7 +10,7 @@ android {
         useJUnitPlatform()
     }
 
-    namespace = "pokitmons.pokit.core.feature"
+    namespace = "pokitmons.pokit.linklist"
     compileSdk = 34
 
     defaultConfig {
@@ -31,22 +32,15 @@ android {
     buildFeatures {
         compose = true
     }
+    composeOptions {
+        kotlinCompilerExtensionVersion = "1.5.1"
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
         jvmTarget = "1.8"
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-            excludes += "META-INF/LICENSE.md"
-            excludes += "META-INF/LICENSE-notice.md"
-        }
     }
 }
 
@@ -68,13 +62,18 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
-    // kotest
-    testImplementation(libs.kotest.runner.junit5)
-    testImplementation(libs.kotlin.reflect)
+    implementation(libs.orbit.compose)
+    implementation(libs.orbit.core)
+    implementation(libs.orbit.viewmodel)
 
-    // mockk
-    testImplementation(libs.mockk)
-    androidTestImplementation(libs.mockk.android)
+    // hilt
+    implementation(libs.hilt)
+    kapt(libs.hilt.compiler)
 
+    // coil
+    implementation(libs.coil.compose)
+
+    implementation(project(":core:ui"))
+    implementation(project(":core:feature"))
     implementation(project(":domain"))
 }

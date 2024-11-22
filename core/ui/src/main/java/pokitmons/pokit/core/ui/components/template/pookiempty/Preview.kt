@@ -12,7 +12,11 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 private fun Preview() {
     PokitTheme {
         Surface(modifier = Modifier.fillMaxSize()) {
-            EmptyPooki(title = "저장된 포킷이 없어요!", sub = "포킷을 생성해 링크를 저장해보세요")
+            EmptyPooki(
+                title = "저장된 포킷이 없어요!",
+                sub = "포킷을 생성해 링크를 저장해보세요",
+                button = EmptyPookiButton("포킷 추가하기", {})
+            )
         }
     }
 }

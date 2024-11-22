@@ -44,6 +44,8 @@ fun RemindScreen(
     modifier: Modifier = Modifier,
     viewModel: RemindViewModel = hiltViewModel(),
     onNavigateToLinkModify: (String) -> Unit,
+    onNavigateToBookmarkLinkList: () -> Unit,
+    onNavigateToUnreadLinkList: () -> Unit,
 ) {
     val unreadContents = viewModel.unReadContents.collectAsState()
     val unreadContentsState by viewModel.unreadContentNetworkState.collectAsState()
@@ -212,7 +214,10 @@ fun RemindScreen(
             Spacer(modifier = Modifier.height(32.dp))
 
             if ((unreadContentsState == NetworkState.IDLE && unreadContents.value.isNotEmpty())) {
-                RemindSection(title = "한번도 읽지 않았어요") {
+                RemindSection(
+                    title = "한번도 읽지 않았어요",
+                    onClickButton = onNavigateToUnreadLinkList
+                ) {
                     Spacer(modifier = Modifier.height(16.dp))
                     Column(
                         modifier = Modifier,
@@ -239,7 +244,10 @@ fun RemindScreen(
                 Spacer(modifier = Modifier.height(32.dp))
             }
 
-            RemindSection(title = "즐겨찾기 링크만 모았어요") {
+            RemindSection(
+                title = "즐겨찾기 링크만 모았어요",
+                onClickButton = onNavigateToBookmarkLinkList
+            ) {
                 Spacer(modifier = Modifier.height(12.dp))
 
                 when (bookmarkContentState) {

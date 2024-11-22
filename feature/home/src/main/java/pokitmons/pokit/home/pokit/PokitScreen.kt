@@ -33,6 +33,7 @@ import pokitmons.pokit.core.ui.components.block.pokitcard.PokitCard
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.components.template.modifybottomsheet.ModifyBottomSheetContent
 import pokitmons.pokit.core.ui.components.template.pookiempty.EmptyPooki
+import pokitmons.pokit.core.ui.components.template.pookiempty.EmptyPookiButton
 import pokitmons.pokit.core.ui.components.template.pookierror.ErrorPooki
 import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButtonBottomSheetContent
 import pokitmons.pokit.core.ui.R.string as coreString
@@ -45,6 +46,8 @@ fun PokitScreen(
     onNavigateToPokitDetail: (String, Int) -> Unit,
     onNavigateToLinkModify: (String) -> Unit,
     onNavigateToPokitModify: (String) -> Unit,
+    onNavigateToAddLink: () -> Unit,
+    onNavigateToAddPokit: () -> Unit,
 ) {
     val pokits = viewModel.pokits.collectAsState()
     val pokitsState by viewModel.pokitsState.collectAsState()
@@ -157,7 +160,11 @@ fun PokitScreen(
                         EmptyPooki(
                             modifier = Modifier.fillMaxSize(),
                             title = stringResource(id = coreString.title_empty_pokits),
-                            sub = stringResource(id = coreString.sub_empty_pokits)
+                            sub = stringResource(id = coreString.sub_empty_pokits),
+                            button = EmptyPookiButton(
+                                text = stringResource(id = homeString.title_add_pokit),
+                                onClick = onNavigateToAddPokit
+                            )
                         )
                     }
 
@@ -207,7 +214,11 @@ fun PokitScreen(
                         EmptyPooki(
                             modifier = Modifier.fillMaxSize(),
                             title = stringResource(id = coreString.title_empty_links),
-                            sub = stringResource(id = coreString.sub_empty_links)
+                            sub = stringResource(id = coreString.sub_empty_links),
+                            button = EmptyPookiButton(
+                                text = stringResource(id = homeString.title_add_link),
+                                onClick = onNavigateToAddLink
+                            )
                         )
                     }
 

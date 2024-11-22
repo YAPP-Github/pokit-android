@@ -82,6 +82,7 @@ dependencies {
     implementation(project(":feature:search"))
     implementation(project(":feature:settings"))
     implementation(project(":feature:home"))
+    implementation(project(":feature:linklist"))
 
     // hilt
     implementation(libs.hilt)

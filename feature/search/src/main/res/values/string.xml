@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="placeholder_input_search_word">내용을 입력해주세요.</string>
+    <string name="placeholder_input_search_word">제목, 메모를 검색해보세요.</string>
     
     <string name="recent_search_word">최근 검색어</string>
     <string name="remove_all">전체 삭제</string>

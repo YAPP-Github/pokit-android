@@ -2,6 +2,7 @@ package pokitmons.pokit.core.ui.components.block.linkurlcard
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
@@ -21,7 +22,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.conditional
 import pokitmons.pokit.core.ui.utils.noRippleClickable
+import pokitmons.pokit.core.ui.utils.shimmerEffect
 
 @Composable
 fun LinkUrlCard(
@@ -30,6 +33,7 @@ fun LinkUrlCard(
     url: String,
     title: String,
     openWebBrowserByClick: Boolean,
+    isLoading: Boolean = false,
 ) {
     val uriHandler = LocalUriHandler.current
 
@@ -39,7 +43,7 @@ fun LinkUrlCard(
             .clip(RoundedCornerShape(12.dp))
             .height(IntrinsicSize.Min)
             .noRippleClickable {
-                if (openWebBrowserByClick) {
+                if (openWebBrowserByClick && !isLoading) {
                     uriHandler.openUri(url)
                 }
             }
@@ -49,12 +53,16 @@ fun LinkUrlCard(
                 shape = RoundedCornerShape(12.dp)
             )
     ) {
-        Image(
-            painter = thumbnailPainter,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier.width(124.dp).fillMaxHeight()
-        )
+        if (isLoading) {
+            Box(modifier = Modifier.width(124.dp).fillMaxHeight().shimmerEffect())
+        } else {
+            Image(
+                painter = thumbnailPainter,
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.width(124.dp).fillMaxHeight()
+            )
+        }
 
         Column(
             modifier = Modifier
@@ -62,7 +70,7 @@ fun LinkUrlCard(
                 .weight(1f)
         ) {
             Text(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().conditional(isLoading) { shimmerEffect() },
                 text = title,
                 maxLines = 2,
                 style = PokitTheme.typography.body3Medium.copy(color = PokitTheme.colors.textSecondary)
@@ -71,7 +79,7 @@ fun LinkUrlCard(
             Spacer(modifier = Modifier.height(8.dp))
 
             Text(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().conditional(isLoading) { shimmerEffect() },
                 text = url,
                 maxLines = 2,
                 style = PokitTheme.typography.detail2.copy(color = PokitTheme.colors.textTertiary)
