@@ -299,41 +299,6 @@ fun AddLinkScreen(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    Text(
-                        text = stringResource(id = R.string.title_remind),
-                        style = PokitTheme.typography.body2Medium.copy(color = PokitTheme.colors.textSecondary)
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    PokitSwitchRadio(
-                        modifier = Modifier.fillMaxWidth(),
-                        itemList = listOf(
-                            Pair(stringResource(id = R.string.reject_remind), false),
-                            Pair(stringResource(id = R.string.accept_remind), true)
-                        ),
-                        style = PokitSwitchRadioStyle.STROKE,
-                        selectedItem = if (state.useRemind) {
-                            Pair(stringResource(id = R.string.accept_remind), true)
-                        } else {
-                            Pair(stringResource(id = R.string.reject_remind), false)
-                        },
-                        onClickItem = {
-                            toggleRemindRadio(it.second)
-                        },
-                        getTitleFromItem = { it.first },
-                        enabled = false
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(
-                        text = stringResource(id = R.string.see_you_soon),
-                        style = PokitTheme.typography.detail1.copy(color = PokitTheme.colors.textTertiary)
-                    )
-
                     Spacer(modifier = Modifier.height(32.dp))
                 }
             }
