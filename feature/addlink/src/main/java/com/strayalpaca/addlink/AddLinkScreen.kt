@@ -245,19 +245,6 @@ fun AddLinkScreen(
                             onClick = onClickSelectPokit,
                             enable = enable
                         )
-
-                        Spacer(modifier = Modifier.width(8.dp))
-
-                        PokitButton(
-                            text = null,
-                            icon = PokitButtonIcon(
-                                resourceId = pokitmons.pokit.core.ui.R.drawable.icon_24_plus,
-                                position = PokitButtonIconPosition.LEFT
-                            ),
-                            size = PokitButtonSize.LARGE,
-                            onClick = onClickAddPokit,
-                            enable = enable
-                        )
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))
