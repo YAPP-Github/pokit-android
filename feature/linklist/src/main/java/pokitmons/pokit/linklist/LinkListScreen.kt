@@ -1,7 +1,6 @@
 package pokitmons.pokit.linklist
 
 import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -33,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import pokitmons.pokit.core.feature.model.paging.PagingState
+import pokitmons.pokit.core.feature.utils.ShareUrlLink
 import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
 import pokitmons.pokit.core.ui.components.block.linkcard.LinkCard
 import pokitmons.pokit.core.ui.components.block.toolbar.Toolbar
@@ -227,11 +227,7 @@ fun LinkListScreen(
             onHideBottomSheet = hideLinkDetailBottomSheet,
             show = state.bottomSheetInfo?.type == BottomSheetType.DETAIL,
             onClickShareLink = {
-                val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
-                    type = "text/plain"
-                    putExtra(Intent.EXTRA_TEXT, link.url)
-                }
-                context.startActivity(Intent.createChooser(intent, "Pokit"))
+                ShareUrlLink(context, link.url)
             },
             onClickModifyLink = {
                 hideLinkDetailBottomSheet()
