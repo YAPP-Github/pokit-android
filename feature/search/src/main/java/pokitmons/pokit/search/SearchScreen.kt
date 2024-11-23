@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberAsyncImagePainter
 import pokitmons.pokit.core.feature.model.paging.PagingState
 import pokitmons.pokit.core.feature.utils.ShareUrlLink
 import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
@@ -58,10 +57,7 @@ fun SearchScreenContainer(
         LinkDetailBottomSheet(
             title = link.title,
             memo = link.memo,
-            url = link.url,
-            thumbnailPainter = rememberAsyncImagePainter(link.imageUrl),
             bookmark = link.bookmark,
-            openWebBrowserByClick = true,
             pokitName = link.pokitName,
             dateString = link.dateString,
             onHideBottomSheet = viewModel::hideLinkDetailBottomSheet,

@@ -1,4 +1,4 @@
-package pokitmons.pokit.core.ui.components.template.modifybottomsheet.subcomponents
+package pokitmons.pokit.core.ui.components.block.texticonbutton
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -10,16 +10,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.core.ui.utils.noRippleClickable
 
 @Composable
-internal fun ModifyBottomSheetItem(
+internal fun TextIconButton(
     onClick: () -> Unit,
     title: String,
     painter: Painter,
+    tintColor: Color? = PokitTheme.colors.iconPrimary
 ) {
     Row(
         modifier = Modifier
@@ -39,7 +42,8 @@ internal fun ModifyBottomSheetItem(
         Image(
             modifier = Modifier.size(24.dp),
             painter = painter,
-            contentDescription = null
+            contentDescription = null,
+            colorFilter = tintColor?.let { ColorFilter.tint(it) }
         )
     }
 }

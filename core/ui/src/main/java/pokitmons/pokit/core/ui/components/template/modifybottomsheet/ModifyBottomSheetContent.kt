@@ -7,7 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import pokitmons.pokit.core.ui.R
-import pokitmons.pokit.core.ui.components.template.modifybottomsheet.subcomponents.ModifyBottomSheetItem
+import pokitmons.pokit.core.ui.components.block.texticonbutton.TextIconButton
 
 @Composable
 fun ModifyBottomSheetContent(
@@ -19,7 +19,7 @@ fun ModifyBottomSheetContent(
         modifier = Modifier.fillMaxWidth()
     ) {
         onClickShare?.let { onClickShare ->
-            ModifyBottomSheetItem(
+            TextIconButton(
                 onClick = onClickShare,
                 title = stringResource(id = R.string.share),
                 painter = painterResource(id = R.drawable.icon_24_share)
@@ -27,7 +27,7 @@ fun ModifyBottomSheetContent(
         }
 
         onClickModify?.let { onClickModify ->
-            ModifyBottomSheetItem(
+            TextIconButton(
                 onClick = onClickModify,
                 title = stringResource(id = R.string.modify),
                 painter = painterResource(id = R.drawable.icon_24_edit)
@@ -35,7 +35,7 @@ fun ModifyBottomSheetContent(
         }
 
         onClickRemove?.let { onClickRemove ->
-            ModifyBottomSheetItem(
+            TextIconButton(
                 onClick = onClickRemove,
                 title = stringResource(id = R.string.remove),
                 painter = painterResource(id = R.drawable.icon_24_trash)

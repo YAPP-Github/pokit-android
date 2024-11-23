@@ -267,10 +267,7 @@ fun PokitDetailScreen(
             LinkDetailBottomSheet(
                 title = state.currentLink.title,
                 memo = state.currentLink.memo,
-                url = state.currentLink.url,
-                thumbnailPainter = rememberAsyncImagePainter(state.currentLink.imageUrl),
                 bookmark = state.currentLink.bookmark,
-                openWebBrowserByClick = true,
                 pokitName = state.currentLink.pokitName,
                 dateString = state.currentLink.dateString,
                 onHideBottomSheet = hideLinkDetailBottomSheet,

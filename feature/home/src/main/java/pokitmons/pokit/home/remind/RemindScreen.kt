@@ -115,10 +115,7 @@ fun RemindScreen(
         LinkDetailBottomSheet(
             title = link.title,
             memo = link.memo,
-            url = link.url,
-            thumbnailPainter = rememberAsyncImagePainter(model = link.imageUrl),
             bookmark = link.bookmark,
-            openWebBrowserByClick = true,
             pokitName = link.pokitName,
             dateString = link.dateString,
             onHideBottomSheet = viewModel::hideDetailLinkBottomSheet,
