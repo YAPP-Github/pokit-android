@@ -13,6 +13,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.feature.model.paging.PagingState
@@ -152,7 +153,6 @@ fun SearchScreenContainer(
         onClickFilterSelect = viewModel::showFilterBottomSheet,
         onClickFilterItem = viewModel::showFilterBottomSheetWithType,
         toggleSortOrder = viewModel::toggleSortOrder,
-        showLinkModifyBottomSheet = viewModel::showLinkModifyBottomSheet,
         showLinkDetailBottomSheet = viewModel::showLinkDetailBottomSheet,
         loadNextLinks = viewModel::loadNextLinks
     )
@@ -174,10 +174,11 @@ fun SearchScreen(
     onClickFilterSelect: () -> Unit = {},
     onClickFilterItem: (FilterType) -> Unit = {},
     toggleSortOrder: () -> Unit = {},
-    showLinkModifyBottomSheet: (Link) -> Unit = {},
     showLinkDetailBottomSheet: (Link) -> Unit = {},
     loadNextLinks: () -> Unit = {},
 ) {
+    val uriHandler = LocalUriHandler.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -252,8 +253,10 @@ fun SearchScreen(
                             .weight(1f),
                         onToggleSort = toggleSortOrder,
                         useRecentOrder = state.sortRecent,
-                        onClickLinkKebab = showLinkModifyBottomSheet,
-                        onClickLink = showLinkDetailBottomSheet,
+                        onClickLinkKebab = showLinkDetailBottomSheet,
+                        onClickLink = {
+                            uriHandler.openUri(it.url)
+                        },
                         links = linkList,
                         linkPagingState = linkPagingState,
                         loadNextLinks = loadNextLinks

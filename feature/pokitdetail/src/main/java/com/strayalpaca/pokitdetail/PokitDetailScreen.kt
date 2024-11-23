@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -86,7 +87,6 @@ fun PokitDetailScreenContainer(
         showPokitModifyBottomSheet = viewModel::showPokitModifyBottomSheet,
         showPokitRemoveBottomSheet = viewModel::showPokitRemoveBottomSheet,
         hidePokitModifyBottomSheet = viewModel::hidePokitBottomSheet,
-        showLinkModifyBottomSheet = viewModel::showLinkModifyBottomSheet,
         showLinkRemoveBottomSheet = viewModel::showLinkRemoveBottomSheet,
         showLinkRemoveBottomSheetWithLink = remember {
             { link ->
@@ -101,7 +101,7 @@ fun PokitDetailScreenContainer(
         linkListState = linkListState,
         pokitList = pokitList,
         pokitListState = pokitListState,
-        onClickLink = viewModel::showLinkDetailBottomSheet,
+        showLinkDetailBottomSheet = viewModel::showLinkDetailBottomSheet,
         onClickPokitModify = onNavigateToPokitModify,
         onClickPokitRemove = viewModel::deletePokit,
         onClickLinkModify = onNavigateToLinkModify,
@@ -126,7 +126,6 @@ fun PokitDetailScreen(
     showPokitModifyBottomSheet: () -> Unit = {},
     showPokitRemoveBottomSheet: () -> Unit = {},
     hidePokitModifyBottomSheet: () -> Unit = {},
-    showLinkModifyBottomSheet: (Link) -> Unit = {},
     showLinkRemoveBottomSheet: () -> Unit = {},
     showLinkRemoveBottomSheetWithLink: (Link) -> Unit = {},
     hideLinkModifyBottomSheet: () -> Unit = {},
@@ -136,7 +135,7 @@ fun PokitDetailScreen(
     linkListState: PagingState = PagingState.IDLE,
     pokitList: List<Pokit> = emptyList(),
     pokitListState: PagingState = PagingState.IDLE,
-    onClickLink: (Link) -> Unit = {},
+    showLinkDetailBottomSheet: (Link) -> Unit = {},
     onClickPokitModify: (String) -> Unit = {},
     onClickPokitRemove: () -> Unit = {},
     onClickLinkModify: (String) -> Unit = {},
@@ -147,6 +146,8 @@ fun PokitDetailScreen(
     onClickBookmark: () -> Unit = {},
     onClickAddLink: (String, String) -> Unit = { _, _ -> },
 ) {
+    val uriHandler = LocalUriHandler.current
+
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -228,8 +229,10 @@ fun PokitDetailScreen(
                                 painter = rememberAsyncImagePainter(link.imageUrl),
                                 notRead = !link.isRead,
                                 badgeText = link.pokitName,
-                                onClickKebab = showLinkModifyBottomSheet,
-                                onClickItem = onClickLink,
+                                onClickKebab = showLinkDetailBottomSheet,
+                                onClickItem = {
+                                    uriHandler.openUri(link.url)
+                                },
                                 modifier = Modifier.padding(20.dp)
                             )
 

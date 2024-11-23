@@ -20,6 +20,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -62,6 +63,7 @@ fun RemindScreen(
     val currentSelectedLink by viewModel.currentSelectedLink.collectAsState()
 
     val context: Context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
 
     val showTotalEmpty by remember {
         derivedStateOf {
@@ -229,10 +231,10 @@ fun RemindScreen(
                                 notRead = !unReadContent.isRead,
                                 badgeText = null,
                                 onClickKebab = {
-                                    viewModel.showLinkOptionBottomSheet(remindResult = unReadContent)
+                                    viewModel.showDetailLinkBottomSheet(remindResult = unReadContent)
                                 },
                                 onClickItem = {
-                                    viewModel.showDetailLinkBottomSheet(remindResult = unReadContent)
+                                    uriHandler.openUri(unReadContent.data)
                                 }
                             )
                         }
@@ -271,10 +273,10 @@ fun RemindScreen(
                                         notRead = favoriteContent.isRead,
                                         badgeText = null,
                                         onClickKebab = {
-                                            viewModel.showLinkOptionBottomSheet(remindResult = favoriteContent)
+                                            viewModel.showDetailLinkBottomSheet(remindResult = favoriteContent)
                                         },
                                         onClickItem = {
-                                            viewModel.showDetailLinkBottomSheet(remindResult = favoriteContent)
+                                            uriHandler.openUri(favoriteContent.data)
                                         }
                                     )
                                 }

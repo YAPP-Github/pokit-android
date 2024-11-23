@@ -27,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -92,6 +93,8 @@ fun LinkListScreen(
     onClickModifyLink: (String) -> Unit,
     onClickBookmark: () -> Unit,
 ) {
+    val uriHandler = LocalUriHandler.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -196,7 +199,9 @@ fun LinkListScreen(
                             notRead = !link.isRead,
                             badgeText = link.pokitName,
                             onClickKebab = showLinkDetailBottomSheet,
-                            onClickItem = showLinkDetailBottomSheet,
+                            onClickItem = {
+                                uriHandler.openUri(link.url)
+                            },
                             modifier = Modifier.padding(20.dp)
                         )
 
@@ -213,8 +218,6 @@ fun LinkListScreen(
         val context: Context = LocalContext.current
         val link = state.bottomSheetInfo?.link ?: Link()
 
-        // 수정 필요
-        // onHideBottomSheet 호출로 인해 후속 호출로 발생한 삭제 bottomSheet가 종료되고 있음
         LinkDetailBottomSheet(
             title = link.title,
             memo = link.memo,

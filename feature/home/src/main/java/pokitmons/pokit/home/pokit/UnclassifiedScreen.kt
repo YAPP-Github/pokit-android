@@ -11,6 +11,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,6 +38,7 @@ fun UnclassifiedScreen(
     val currentDetailShowLink by viewModel.currentDetailShowLink.collectAsState()
 
     val context: Context = LocalContext.current
+    val uriHandler = LocalUriHandler.current
 
     currentDetailShowLink?.let { link ->
         LinkDetailBottomSheet(
@@ -121,10 +123,10 @@ fun UnclassifiedScreen(
                 notRead = !unCategoryDetail.isRead,
                 badgeText = "미분류",
                 onClickKebab = {
-                    viewModel.showLinkOptionBottomSheet(unCategoryDetail)
+                    viewModel.showDetailLinkBottomSheet(unCategoryDetail)
                 },
                 onClickItem = {
-                    viewModel.showDetailLinkBottomSheet(unCategoryDetail)
+                    uriHandler.openUri(unCategoryDetail.url)
                 }
             )
         }
