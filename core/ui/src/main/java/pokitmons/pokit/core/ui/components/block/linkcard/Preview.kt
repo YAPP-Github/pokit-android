@@ -28,12 +28,15 @@ fun LinkCardPreview() {
             LinkCard(
                 title = "타이틀\n컴포스는 왜 이런가",
                 sub = "2024.06.25. youtube.comyoutube.comyoutube.comyoutube",
-                badgeText = "텍스트",
+                badgeText = "텍스트텍스트텍스트텍스트텍스트",
                 painter = painterResource(id = R.drawable.icon_24_link),
                 notRead = true,
                 item = 3,
                 onClickKebab = { value: Int -> },
-                onClickItem = { value: Int -> }
+                onClickItem = { value: Int -> },
+                bookmark = false,
+                hasMemo = true,
+                hasMember = true,
             )
 
             LinkCard(
@@ -44,7 +47,8 @@ fun LinkCardPreview() {
                 notRead = true,
                 item = 3,
                 onClickKebab = { value: Int -> },
-                onClickItem = { value: Int -> }
+                onClickItem = { value: Int -> },
+                checked = true
             )
         }
     }

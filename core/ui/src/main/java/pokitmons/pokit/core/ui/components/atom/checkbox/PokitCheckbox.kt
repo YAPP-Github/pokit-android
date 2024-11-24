@@ -21,11 +21,12 @@ import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.components.atom.checkbox.attributes.PokitCheckboxShape
 import pokitmons.pokit.core.ui.components.atom.checkbox.attributes.PokitCheckboxStyle
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.conditional
 
 @Composable
 fun PokitCheckbox(
     checked: Boolean,
-    onClick: (Boolean) -> Unit,
+    onClick: ((Boolean) -> Unit)? = null,
     style: PokitCheckboxStyle = PokitCheckboxStyle.STROKE,
     shape: PokitCheckboxShape = PokitCheckboxShape.RECTANGLE,
     enabled: Boolean = true,
@@ -44,14 +45,18 @@ fun PokitCheckbox(
             .clip(
                 shape = checkboxShape
             )
-            .clickable(
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() },
-                enabled = enabled,
-                onClick = {
-                    onClick(!checked)
-                }
-            )
+            .conditional(
+                condition = (onClick != null),
+            ) {
+                clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() },
+                    enabled = enabled,
+                    onClick = {
+                        onClick?.invoke(!checked)
+                    }
+                )
+            }
             .background(
                 color = backgroundColor
             )
