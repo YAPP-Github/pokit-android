@@ -29,10 +29,10 @@ import pokitmons.pokit.domain.usecase.search.GetRecentSearchWordsUseCase
 import pokitmons.pokit.domain.usecase.search.GetUseRecentSearchWordsUseCase
 import pokitmons.pokit.domain.usecase.search.RemoveRecentSearchWordUseCase
 import pokitmons.pokit.domain.usecase.search.SetUseRecentSearchWordsUseCase
-import pokitmons.pokit.search.model.BottomSheetType
 import pokitmons.pokit.search.model.Filter
 import pokitmons.pokit.search.model.FilterType
 import pokitmons.pokit.search.model.Link
+import pokitmons.pokit.search.model.LinkBottomSheetState
 import pokitmons.pokit.search.model.Pokit
 import pokitmons.pokit.search.model.SearchScreenState
 import pokitmons.pokit.search.model.SearchScreenStep
@@ -233,30 +233,10 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun showLinkModifyBottomSheet(link: Link) {
-        _state.update { state ->
-            state.copy(
-                linkBottomSheetType = BottomSheetType.MODIFY,
-                currentTargetLink = link
-            )
-        }
-    }
-
     fun showLinkRemoveBottomSheet(link: Link) {
         _state.update { state ->
             state.copy(
-                linkBottomSheetType = BottomSheetType.REMOVE,
-                showLinkDetailBottomSheet = false,
-                currentTargetLink = link
-            )
-        }
-    }
-
-    fun hideLinkModifyBottomSheet() {
-        _state.update { state ->
-            state.copy(
-                linkBottomSheetType = null,
-                currentTargetLink = null
+                linkBottomSheetType = LinkBottomSheetState.CheckRemove(link = link),
             )
         }
     }
@@ -264,16 +244,22 @@ class SearchViewModel @Inject constructor(
     fun showLinkDetailBottomSheet(link: Link) {
         _state.update { state ->
             state.copy(
-                currentDetailLink = link,
-                showLinkDetailBottomSheet = true,
-                linkBottomSheetType = null
+                linkBottomSheetType = LinkBottomSheetState.LinkDetail(link = link),
             )
         }
 
         viewModelScope.launch {
             val response = getLinkUseCase.getLink(link.id.toInt())
-            if (response is PokitResult.Success && state.value.currentDetailLink?.id == link.id && state.value.showLinkDetailBottomSheet) {
-                _state.update { it.copy(currentDetailLink = Link.fromDomainLink(response.result).copy(imageUrl = link.imageUrl, isRead = true)) }
+            val currentBottomSheetState = state.value.linkBottomSheetType ?: return@launch
+
+            val currentShowDetailLinkBottomSheet = (currentBottomSheetState is LinkBottomSheetState.LinkDetail)
+                && (currentBottomSheetState.link.id == link.id)
+
+            if (response is PokitResult.Success && currentShowDetailLinkBottomSheet) {
+                val responseLink = Link.fromDomainLink(response.result).copy(imageUrl = link.imageUrl, isRead = true)
+                _state.update {
+                    it.copy(linkBottomSheetType = LinkBottomSheetState.LinkDetail(link = responseLink))
+                }
             }
 
             val isReadChangedLink = linkPaging.pagingData.value
@@ -284,11 +270,10 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun hideLinkDetailBottomSheet() {
+    fun hideLinkBottomSheet() {
         _state.update { state ->
             state.copy(
-                currentDetailLink = null,
-                showLinkDetailBottomSheet = false
+                linkBottomSheetType = null
             )
         }
     }
@@ -338,27 +323,32 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun toggleBookmark() {
-        val currentLink = state.value.currentTargetLink ?: return
-        val currentLinkId = currentLink.id.toIntOrNull() ?: return
-        val applyBookmarked = !currentLink.bookmark
+    fun toggleBookmarkInBottomSheet() {
+        val currentState = state.value
+        val bottomSheetLink = currentState.linkBottomSheetType?.link ?: return
+        val bottomSheetLinkId = bottomSheetLink.id.toIntOrNull() ?: return
+        val applyBookmarked = !bottomSheetLink.bookmark
 
         viewModelScope.launch {
-            val response = setBookmarkUseCase.setBookMarked(currentLinkId, applyBookmarked)
+            val response = setBookmarkUseCase.setBookMarked(bottomSheetLinkId, applyBookmarked)
             if (response is PokitResult.Success) {
-                val bookmarkChangedLink = currentLink.copy(bookmark = applyBookmarked)
-                _state.update { state ->
-                    state.copy(
-                        currentDetailLink = bookmarkChangedLink
-                    )
+                val bookmarkChangedLink = bottomSheetLink.copy(bookmark = applyBookmarked)
+
+                if (currentState.linkBottomSheetType is LinkBottomSheetState.LinkDetail) {
+                    _state.update { state ->
+                        state.copy(
+                            linkBottomSheetType = LinkBottomSheetState.LinkDetail(link = bookmarkChangedLink)
+                        )
+                    }
                 }
+
                 linkPaging.modifyItem(bookmarkChangedLink)
             }
         }
     }
 
     fun deleteLink() {
-        val currentLinkId = state.value.currentTargetLink?.id?.toIntOrNull() ?: return
+        val currentLinkId = state.value.linkBottomSheetType?.link?.id?.toIntOrNull() ?: return
         viewModelScope.launch {
             val response = deleteLinkUseCase.deleteLink(currentLinkId)
             if (response is PokitResult.Success) {

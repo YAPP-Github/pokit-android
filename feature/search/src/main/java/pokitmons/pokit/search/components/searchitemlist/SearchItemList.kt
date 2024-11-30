@@ -95,7 +95,8 @@ internal fun SearchItemList(
                     badgeText = link.pokitName,
                     onClickKebab = onClickLinkKebab,
                     onClickItem = onClickLink,
-                    modifier = Modifier.padding(20.dp)
+                    modifier = Modifier.padding(20.dp),
+                    bookmark = link.bookmark
                 )
             }
         }

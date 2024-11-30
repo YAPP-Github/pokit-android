@@ -7,17 +7,15 @@ data class SearchScreenState(
     val useRecentSearchWord: Boolean = false,
     val showFilterBottomSheet: Boolean = false,
     val firstBottomSheetFilterType: FilterType = FilterType.Pokit,
-    val showLinkDetailBottomSheet: Boolean = false,
-    val linkBottomSheetType: BottomSheetType? = null,
+    val linkBottomSheetType: LinkBottomSheetState? = null,
     val sortRecent: Boolean = true,
-    val currentTargetLink: Link? = null,
-    val currentDetailLink: Link? = null,
 )
 
 enum class SearchScreenStep {
     INPUT, RESULT
 }
 
-enum class BottomSheetType {
-    MODIFY, REMOVE
+sealed class LinkBottomSheetState(open val link: Link) {
+    data class LinkDetail(override val link: Link) : LinkBottomSheetState(link)
+    data class CheckRemove(override val link: Link) : LinkBottomSheetState(link)
 }

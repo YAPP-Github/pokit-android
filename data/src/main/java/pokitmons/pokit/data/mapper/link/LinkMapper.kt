@@ -19,7 +19,8 @@ object LinkMapper {
                 alertYn = data.alertYn,
                 createdAt = data.createdAt,
                 isRead = data.isRead,
-                thumbnail = data.thumbNail
+                thumbnail = data.thumbNail,
+                favorites = data.isFavorite,
             )
         }
     }

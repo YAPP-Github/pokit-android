@@ -277,12 +277,6 @@ class RemindViewModel @Inject constructor(
         }
     }
 
-    fun showLinkRemoveBottomSheet() {
-        _pokitOptionBottomSheetType.update {
-            BottomSheetType.REMOVE
-        }
-    }
-
     fun showLinkRemoveBottomSheet(link: Link) {
         _pokitOptionBottomSheetType.update {
             BottomSheetType.REMOVE

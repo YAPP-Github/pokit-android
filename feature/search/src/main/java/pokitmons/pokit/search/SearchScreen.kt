@@ -1,7 +1,6 @@
 package pokitmons.pokit.search
 
 import android.content.Context
-import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,8 +19,7 @@ import pokitmons.pokit.core.feature.model.paging.PagingState
 import pokitmons.pokit.core.feature.utils.ShareUrlLink
 import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
-import pokitmons.pokit.core.ui.components.template.linkdetailbottomsheet.LinkDetailBottomSheet
-import pokitmons.pokit.core.ui.components.template.modifybottomsheet.ModifyBottomSheetContent
+import pokitmons.pokit.core.ui.components.template.linkdetailbottomsheet.LinkDetailBottomSheetContent
 import pokitmons.pokit.core.ui.components.template.pookiempty.EmptyPooki
 import pokitmons.pokit.core.ui.components.template.pookierror.ErrorPooki
 import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButtonBottomSheetContent
@@ -31,10 +29,10 @@ import pokitmons.pokit.search.components.filterbottomsheet.FilterBottomSheet
 import pokitmons.pokit.search.components.recentsearchword.RecentSearchWord
 import pokitmons.pokit.search.components.searchitemlist.SearchItemList
 import pokitmons.pokit.search.components.toolbar.Toolbar
-import pokitmons.pokit.search.model.BottomSheetType
 import pokitmons.pokit.search.model.Filter
 import pokitmons.pokit.search.model.FilterType
 import pokitmons.pokit.search.model.Link
+import pokitmons.pokit.search.model.LinkBottomSheetState
 import pokitmons.pokit.search.model.SearchScreenState
 import pokitmons.pokit.search.model.SearchScreenStep
 import pokitmons.pokit.core.ui.R.string as coreString
@@ -54,32 +52,6 @@ fun SearchScreenContainer(
 
     val context: Context = LocalContext.current
 
-    state.currentDetailLink?.let { link ->
-        LinkDetailBottomSheet(
-            title = link.title,
-            memo = link.memo,
-            bookmark = link.bookmark,
-            pokitName = link.pokitName,
-            dateString = link.dateString,
-            onHideBottomSheet = viewModel::hideLinkDetailBottomSheet,
-            show = state.showLinkDetailBottomSheet,
-            onClickShareLink = {
-                ShareUrlLink(
-                    context = context,
-                    url = state.currentDetailLink?.url ?: ""
-                )
-            },
-            onClickModifyLink = {
-                viewModel.hideLinkDetailBottomSheet()
-                onNavigateToLinkModify(link.id)
-            },
-            onClickRemoveLink = {
-                viewModel.showLinkRemoveBottomSheet(link)
-            },
-            onClickBookmark = viewModel::toggleBookmark
-        )
-    }
-
     FilterBottomSheet(
         filter = state.filter ?: Filter(),
         firstShowType = state.firstBottomSheetFilterType,
@@ -93,48 +65,46 @@ fun SearchScreenContainer(
     )
 
     PokitBottomSheet(
-        onHideBottomSheet = viewModel::hideLinkModifyBottomSheet,
+        onHideBottomSheet = viewModel::hideLinkBottomSheet,
         show = state.linkBottomSheetType != null
     ) {
-        if (state.linkBottomSheetType == BottomSheetType.MODIFY) {
-            ModifyBottomSheetContent(
-                onClickModify = remember {
-                    {
-                        state.currentTargetLink?.let { link ->
-                            viewModel.hideLinkModifyBottomSheet()
-                            onNavigateToLinkModify(link.id)
+        state.linkBottomSheetType?.let { linkBottomSheetState ->
+            when(linkBottomSheetState) {
+                is LinkBottomSheetState.CheckRemove -> {
+                    TwoButtonBottomSheetContent(
+                        title = stringResource(id = R.string.title_remove_link),
+                        subText = stringResource(id = R.string.sub_remove_link),
+                        onClickLeftButton = viewModel::hideLinkBottomSheet,
+                        onClickRightButton = {
+                            viewModel.deleteLink()
+                            viewModel.hideLinkBottomSheet()
                         }
-                    }
-                },
-                onClickRemove = remember {
-                    {
-                        state.currentTargetLink?.let { link ->
-                            viewModel.showLinkRemoveBottomSheet(link)
-                        }
-                    }
-                },
-                onClickShare = remember {
-                    {
-                        val intent = Intent(Intent.ACTION_SEND_MULTIPLE).apply {
-                            type = "text/plain"
-                            putExtra(Intent.EXTRA_TEXT, state.currentTargetLink?.url)
-                        }
-                        context.startActivity(Intent.createChooser(intent, "Pokit"))
-                    }
+                    )
                 }
-            )
-        }
-
-        if (state.linkBottomSheetType == BottomSheetType.REMOVE) {
-            TwoButtonBottomSheetContent(
-                title = stringResource(id = R.string.title_remove_link),
-                subText = stringResource(id = R.string.sub_remove_link),
-                onClickLeftButton = viewModel::hideLinkModifyBottomSheet,
-                onClickRightButton = {
-                    viewModel.deleteLink()
-                    viewModel.hideLinkModifyBottomSheet()
+                is LinkBottomSheetState.LinkDetail -> {
+                    LinkDetailBottomSheetContent(
+                        title = linkBottomSheetState.link.title,
+                        memo = linkBottomSheetState.link.memo,
+                        bookmark = linkBottomSheetState.link.bookmark,
+                        pokitName = linkBottomSheetState.link.pokitName,
+                        dateString = linkBottomSheetState.link.dateString,
+                        onClickShareLink = {
+                            ShareUrlLink(
+                                context = context,
+                                url = linkBottomSheetState.link.url
+                            )
+                        },
+                        onClickModifyLink = {
+                            viewModel.hideLinkBottomSheet()
+                            onNavigateToLinkModify(linkBottomSheetState.link.id)
+                        },
+                        onClickRemoveLink = {
+                            viewModel.showLinkRemoveBottomSheet(linkBottomSheetState.link)
+                        },
+                        onClickBookmark = viewModel::toggleBookmarkInBottomSheet
+                    )
                 }
-            )
+            }
         }
     }
 

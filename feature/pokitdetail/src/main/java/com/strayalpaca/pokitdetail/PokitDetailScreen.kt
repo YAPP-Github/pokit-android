@@ -233,7 +233,8 @@ fun PokitDetailScreen(
                                 onClickItem = {
                                     uriHandler.openUri(link.url)
                                 },
-                                modifier = Modifier.padding(20.dp)
+                                modifier = Modifier.padding(20.dp),
+                                bookmark = link.bookmark
                             )
 
                             HorizontalDivider(
