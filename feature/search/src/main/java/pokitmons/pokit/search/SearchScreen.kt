@@ -69,7 +69,7 @@ fun SearchScreenContainer(
         show = state.linkBottomSheetType != null
     ) {
         state.linkBottomSheetType?.let { linkBottomSheetState ->
-            when(linkBottomSheetState) {
+            when (linkBottomSheetState) {
                 is LinkBottomSheetState.CheckRemove -> {
                     TwoButtonBottomSheetContent(
                         title = stringResource(id = R.string.title_remove_link),

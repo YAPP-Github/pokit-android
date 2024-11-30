@@ -236,7 +236,7 @@ class SearchViewModel @Inject constructor(
     fun showLinkRemoveBottomSheet(link: Link) {
         _state.update { state ->
             state.copy(
-                linkBottomSheetType = LinkBottomSheetState.CheckRemove(link = link),
+                linkBottomSheetType = LinkBottomSheetState.CheckRemove(link = link)
             )
         }
     }
@@ -244,7 +244,7 @@ class SearchViewModel @Inject constructor(
     fun showLinkDetailBottomSheet(link: Link) {
         _state.update { state ->
             state.copy(
-                linkBottomSheetType = LinkBottomSheetState.LinkDetail(link = link),
+                linkBottomSheetType = LinkBottomSheetState.LinkDetail(link = link)
             )
         }
 
@@ -252,8 +252,8 @@ class SearchViewModel @Inject constructor(
             val response = getLinkUseCase.getLink(link.id.toInt())
             val currentBottomSheetState = state.value.linkBottomSheetType ?: return@launch
 
-            val currentShowDetailLinkBottomSheet = (currentBottomSheetState is LinkBottomSheetState.LinkDetail)
-                && (currentBottomSheetState.link.id == link.id)
+            val currentShowDetailLinkBottomSheet = (currentBottomSheetState is LinkBottomSheetState.LinkDetail) &&
+                (currentBottomSheetState.link.id == link.id)
 
             if (response is PokitResult.Success && currentShowDetailLinkBottomSheet) {
                 val responseLink = Link.fromDomainLink(response.result).copy(imageUrl = link.imageUrl, isRead = true)

@@ -20,7 +20,7 @@ object LinkMapper {
                 createdAt = data.createdAt,
                 isRead = data.isRead,
                 thumbnail = data.thumbNail,
-                favorites = data.isFavorite,
+                favorites = data.isFavorite
             )
         }
     }

@@ -46,7 +46,7 @@ fun PokitCheckbox(
                 shape = checkboxShape
             )
             .conditional(
-                condition = (onClick != null),
+                condition = (onClick != null)
             ) {
                 clickable(
                     indication = null,

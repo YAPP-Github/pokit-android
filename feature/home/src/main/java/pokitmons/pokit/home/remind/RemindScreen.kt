@@ -211,7 +211,7 @@ fun RemindScreen(
                                 },
                                 onClickItem = {
                                     uriHandler.openUri(unReadContent.data)
-                                },
+                                }
                             )
                         }
                     }

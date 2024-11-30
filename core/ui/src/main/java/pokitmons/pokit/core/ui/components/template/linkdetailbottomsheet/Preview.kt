@@ -22,7 +22,7 @@ private fun LinkDetailBottomSheetPreview() {
                 onHideBottomSheet = { },
                 onClickBookmark = { },
                 onClickModifyLink = { },
-                onClickRemoveLink = { },
+                onClickRemoveLink = { }
             )
         }
     }

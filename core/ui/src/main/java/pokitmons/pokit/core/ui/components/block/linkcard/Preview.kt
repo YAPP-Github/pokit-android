@@ -36,7 +36,7 @@ fun LinkCardPreview() {
                 onClickItem = { value: Int -> },
                 bookmark = false,
                 hasMemo = true,
-                hasMember = true,
+                hasMember = true
             )
 
             LinkCard(

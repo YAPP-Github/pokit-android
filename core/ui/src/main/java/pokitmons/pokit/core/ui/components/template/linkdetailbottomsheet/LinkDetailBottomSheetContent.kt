@@ -75,7 +75,6 @@ fun LinkDetailBottomSheetContent(
                 )
             }
         }
-
     }
 
     Spacer(modifier = Modifier.height(12.dp))
@@ -129,7 +128,6 @@ fun LinkDetailBottomSheetContent(
         thickness = 1.dp,
         color = PokitTheme.colors.borderTertiary
     )
-
 
     onClickBookmark?.let {
         TextIconButton(

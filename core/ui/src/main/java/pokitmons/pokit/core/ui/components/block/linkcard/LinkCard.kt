@@ -64,7 +64,7 @@ fun<T> LinkCard(
             Box(
                 modifier = Modifier
                     .height(94.dp)
-                    .width(124.dp),
+                    .width(124.dp)
             ) {
                 Image(
                     painter = painter,
@@ -85,7 +85,7 @@ fun<T> LinkCard(
                     ) {
                         PokitCheckbox(
                             checked = it,
-                            style = PokitCheckboxStyle.FILLED,
+                            style = PokitCheckboxStyle.FILLED
                         )
                     }
                 }
@@ -210,7 +210,7 @@ fun<T> LinkCard(
                                 .padding(2.dp),
                             painter = painterResource(id = R.drawable.icon_24_file),
                             tint = PokitTheme.colors.iconSecondary,
-                            contentDescription = "hasMemo",
+                            contentDescription = "hasMemo"
                         )
                     }
 
@@ -226,7 +226,7 @@ fun<T> LinkCard(
                                 .padding(2.dp),
                             painter = painterResource(id = R.drawable.icon_24_member),
                             tint = PokitTheme.colors.iconSecondary,
-                            contentDescription = "hasMemo",
+                            contentDescription = "hasMemo"
                         )
                     }
                 }

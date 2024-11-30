@@ -22,7 +22,7 @@ internal fun TextIconButton(
     onClick: () -> Unit,
     title: String,
     painter: Painter,
-    tintColor: Color? = PokitTheme.colors.iconPrimary
+    tintColor: Color? = PokitTheme.colors.iconPrimary,
 ) {
     Row(
         modifier = Modifier
