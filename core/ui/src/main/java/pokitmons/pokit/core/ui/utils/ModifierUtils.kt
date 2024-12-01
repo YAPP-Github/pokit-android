@@ -21,7 +21,8 @@ import androidx.compose.ui.unit.IntSize
 import pokitmons.pokit.core.ui.theme.color.Gray300
 import pokitmons.pokit.core.ui.theme.color.Gray500
 
-internal fun Modifier.conditional(condition: Boolean, modifier: Modifier.() -> Modifier): Modifier {
+@Composable
+internal fun Modifier.conditional(condition: Boolean, modifier: @Composable Modifier.() -> Modifier): Modifier {
     return if (condition) {
         then(modifier(Modifier))
     } else {

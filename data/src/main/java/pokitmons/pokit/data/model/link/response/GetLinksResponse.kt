@@ -22,6 +22,7 @@ data class GetLinksResponse(
         val createdAt: String,
         val isRead: Boolean,
         val thumbNail: String,
+        val isFavorite: Boolean,
     )
 
     @Serializable
