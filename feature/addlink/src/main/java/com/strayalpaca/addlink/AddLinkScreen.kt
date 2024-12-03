@@ -55,6 +55,7 @@ import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.components.atom.inputarea.PokitInputArea
 import pokitmons.pokit.core.ui.components.block.labeledinput.LabeledInput
 import pokitmons.pokit.core.ui.components.block.pokitlist.PokitList
+import pokitmons.pokit.core.ui.components.block.pokitlist.PokitListVer2
 import pokitmons.pokit.core.ui.components.block.pokitlist.attributes.PokitListState
 import pokitmons.pokit.core.ui.components.block.pokittoast.PokitToast
 import pokitmons.pokit.core.ui.components.block.select.PokitSelect
@@ -156,9 +157,10 @@ fun AddLinkScreenContainer(
             items(
                 items = pokitList
             ) { pokit ->
-                PokitList(
+                PokitListVer2(
                     item = pokit,
                     title = pokit.title,
+                    imageUrl = pokit.image,
                     sub = stringResource(id = R.string.count_format, pokit.count),
                     onClickItem = viewModel::selectPokit,
                     state = PokitListState.ACTIVE
