@@ -1,5 +1,7 @@
 package pokitmons.pokit.core.ui.components.atom.input
 
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -16,7 +18,9 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.components.atom.input.attributes.PokitInputIcon
 import pokitmons.pokit.core.ui.components.atom.input.attributes.PokitInputIconPosition
 import pokitmons.pokit.core.ui.components.atom.input.attributes.PokitInputShape
@@ -95,6 +99,12 @@ fun PokitInput(
                 if (icon?.position == PokitInputIconPosition.RIGHT) {
                     PokitInputIcon(state = state, resourceId = icon.resourceId, onClick = onClickIcon)
                 }
+
+                Image(
+                    painter = painterResource(id = R.drawable.icon_24_xs),
+                    contentDescription = "입력된 문자 전체삭제",
+                    Modifier.clickable { }
+                )
             }
         }
     )
