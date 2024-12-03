@@ -122,7 +122,7 @@ fun AddLinkScreenContainer(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(90.dp)
+                .height(84.dp)
                 .clickable(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() },
@@ -145,9 +145,9 @@ fun AddLinkScreenContainer(
         }
 
         HorizontalDivider(
-            modifier = Modifier.fillMaxWidth(), // 가로 길이 전체로 설정
-            thickness = 1.dp,   // 라인 두께
-            color = PokitTheme.colors.borderTertiary // 라인 색상
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 1.dp,
+            color = PokitTheme.colors.borderTertiary
         )
 
         LazyColumn(
