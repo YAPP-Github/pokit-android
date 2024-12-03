@@ -46,7 +46,6 @@ fun <T> PokitListVer2(
             .padding(horizontal = 20.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-
         AsyncImage(
             model = imageUrl,
             contentDescription = null,

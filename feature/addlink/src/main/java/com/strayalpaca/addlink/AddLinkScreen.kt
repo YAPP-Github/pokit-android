@@ -15,13 +15,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Divider
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,7 +31,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -49,18 +46,13 @@ import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import pokitmons.pokit.core.feature.model.paging.PagingState
 import pokitmons.pokit.core.ui.components.atom.button.PokitButton
-import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonIcon
-import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonIconPosition
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.components.atom.inputarea.PokitInputArea
 import pokitmons.pokit.core.ui.components.block.labeledinput.LabeledInput
-import pokitmons.pokit.core.ui.components.block.pokitlist.PokitList
 import pokitmons.pokit.core.ui.components.block.pokitlist.PokitListVer2
 import pokitmons.pokit.core.ui.components.block.pokitlist.attributes.PokitListState
 import pokitmons.pokit.core.ui.components.block.pokittoast.PokitToast
 import pokitmons.pokit.core.ui.components.block.select.PokitSelect
-import pokitmons.pokit.core.ui.components.block.switchradio.PokitSwitchRadio
-import pokitmons.pokit.core.ui.components.block.switchradio.attributes.PokitSwitchRadioStyle
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
@@ -134,7 +126,7 @@ fun AddLinkScreenContainer(
             Image(
                 modifier = Modifier.padding(start = 30.dp),
                 painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.image_add_pokit),
-                contentDescription = "포킷 추가 버튼",
+                contentDescription = "포킷 추가 버튼"
             )
 
             Spacer(modifier = Modifier.size(20.dp))

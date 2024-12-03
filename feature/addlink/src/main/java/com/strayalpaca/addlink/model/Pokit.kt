@@ -6,7 +6,7 @@ data class Pokit(
     val title: String,
     val id: String,
     val count: Int,
-    val image: String = ""
+    val image: String = "",
 ) {
     companion object {
         fun fromDomainPokit(pokit: DomainPokit): Pokit {
