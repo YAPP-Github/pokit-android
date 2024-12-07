@@ -324,6 +324,7 @@ class AddLinkViewModel @Inject constructor(
                 if (response.result >= MAX_POKIT_COUNT) {
                     reduce { state.copy(toastMessage = ToastMessageEvent.CANNOT_CREATE_POKIT_MORE) }
                 } else {
+                    reduce { state.copy(step = ScreenStep.IDLE) }
                     postSideEffect(AddLinkScreenSideEffect.OnNavigateToAddPokit)
                 }
             } else {
