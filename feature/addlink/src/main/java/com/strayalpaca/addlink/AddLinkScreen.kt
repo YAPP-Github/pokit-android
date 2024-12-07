@@ -28,6 +28,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -175,7 +176,9 @@ fun AddLinkScreenContainer(
         toggleRemindRadio = viewModel::setRemind,
         onBackPressed = viewModel::onBackPressed,
         onClickSaveButton = viewModel::saveLink,
-        closeToast = viewModel::closeToastMessage
+        closeToast = viewModel::closeToastMessage,
+        clearTitle = viewModel::clearTitle,
+        clearUrl = viewModel::clearUrl
     )
 }
 
@@ -196,6 +199,8 @@ fun AddLinkScreen(
     onBackPressed: () -> Unit,
     onClickSaveButton: () -> Unit,
     closeToast: () -> Unit,
+    clearUrl: () -> Unit,
+    clearTitle: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
     val enable = remember(state.step) {
@@ -204,6 +209,10 @@ fun AddLinkScreen(
                 state.step == ScreenStep.LOADING ||
                 state.step == ScreenStep.POKIT_ADD_LOADING
             )
+    }
+
+    var currentUrl = remember {
+        mutableStateOf(url)
     }
 
     Column(
@@ -250,7 +259,10 @@ fun AddLinkScreen(
                         inputText = url,
                         hintText = stringResource(id = R.string.placeholder_link),
                         onChangeText = inputUrl,
-                        enable = enable
+                        enable = enable,
+                        onClickRemove = {
+                            clearUrl()
+                        }
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
@@ -261,7 +273,10 @@ fun AddLinkScreen(
                         inputText = title,
                         hintText = stringResource(id = R.string.placeholder_title),
                         onChangeText = inputTitle,
-                        enable = enable
+                        enable = enable,
+                        onClickRemove = {
+                            clearTitle()
+                        }
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))

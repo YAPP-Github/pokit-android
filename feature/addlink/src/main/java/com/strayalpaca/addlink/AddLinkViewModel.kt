@@ -180,6 +180,14 @@ class AddLinkViewModel @Inject constructor(
         }
     }
 
+    fun clearUrl() {
+        this._linkUrl.update { "" }
+    }
+
+    fun clearTitle() {
+        this._title.update { "" }
+    }
+
     private suspend fun getLinkMetaData(linkUrl: String) = intent {
         val response = getLinkCardUseCase.getLinkCard(linkUrl)
         if (response is PokitResult.Success) {
