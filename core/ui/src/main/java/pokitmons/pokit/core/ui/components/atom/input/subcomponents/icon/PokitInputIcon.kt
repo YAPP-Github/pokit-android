@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -17,9 +18,13 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 internal fun PokitInputIcon(
     state: PokitInputState,
     resourceId: Int,
+    applyInputDesignSystem: Boolean = true,
     onClick: (() -> Unit)? = null,
 ) {
-    val iconColor = getColor(state = state)
+    val iconColor = getColor(
+        state = state,
+        applyInputDesignSystem = applyInputDesignSystem
+    )
 
     Icon(
         painter = painterResource(id = resourceId),
@@ -40,11 +45,12 @@ internal fun PokitInputIcon(
 @Composable
 private fun getColor(
     state: PokitInputState,
+    applyInputDesignSystem: Boolean = true
 ): Color {
     return when (state) {
         PokitInputState.DEFAULT -> PokitTheme.colors.iconSecondary
 
-        PokitInputState.INPUT -> PokitTheme.colors.iconPrimary
+        PokitInputState.INPUT -> if (applyInputDesignSystem) PokitTheme.colors.iconPrimary else PokitTheme.colors.iconSecondary
 
         PokitInputState.ACTIVE -> PokitTheme.colors.iconPrimary
 

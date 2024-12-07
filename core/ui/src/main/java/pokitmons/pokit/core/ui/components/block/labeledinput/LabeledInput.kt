@@ -40,6 +40,7 @@ fun LabeledInput(
     enable: Boolean = true,
     isError: Boolean = false,
     onClickRemove: () -> Unit = {},
+    applyInputDesignSystem: Boolean = true,
 ) {
     var focused by remember { mutableStateOf(false) }
 
@@ -71,10 +72,11 @@ fun LabeledInput(
             text = inputText,
             hintText = hintText,
             onChangeText = onChangeText,
+            applyInputDesignSystem = applyInputDesignSystem,
             icon = if (inputText.isNotEmpty()) {
                 PokitInputIcon(
                     position = PokitInputIconPosition.RIGHT,
-                    resourceId = R.drawable.icon_24_xs
+                    resourceId = R.drawable.icon_24_xs,
                 )
             } else {
                 null
