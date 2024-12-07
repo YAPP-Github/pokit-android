@@ -76,7 +76,7 @@ fun LabeledInput(
             icon = if (inputText.isNotEmpty()) {
                 PokitInputIcon(
                     position = PokitInputIconPosition.RIGHT,
-                    resourceId = R.drawable.icon_24_xs,
+                    resourceId = R.drawable.icon_24_xs
                 )
             } else {
                 null
@@ -88,7 +88,7 @@ fun LabeledInput(
             },
             isError = isError,
             enable = enable,
-            readOnly = readOnly,
+            readOnly = readOnly
         )
 
         Spacer(modifier = Modifier.height(4.dp))

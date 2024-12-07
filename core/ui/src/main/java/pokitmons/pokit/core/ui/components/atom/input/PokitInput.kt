@@ -85,7 +85,7 @@ fun PokitInput(
                         state = state,
                         resourceId = icon.resourceId,
                         onClick = onClickIcon,
-                        applyInputDesignSystem = applyInputDesignSystem,
+                        applyInputDesignSystem = applyInputDesignSystem
                     )
                     Box(modifier = Modifier.width(8.dp))
                 }
@@ -103,7 +103,7 @@ fun PokitInput(
                         state = state,
                         resourceId = icon.resourceId,
                         onClick = onClickIcon,
-                        applyInputDesignSystem = applyInputDesignSystem,
+                        applyInputDesignSystem = applyInputDesignSystem
                     )
                 }
             }
