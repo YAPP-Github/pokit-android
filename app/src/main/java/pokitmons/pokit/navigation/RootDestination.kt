@@ -106,3 +106,7 @@ object LinkList {
         navArgument(linkListTypeArg) { defaultValue = "bookmark" }
     )
 }
+
+object Uncategorized {
+    val route: String = "uncategorized"
+}

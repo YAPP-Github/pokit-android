@@ -41,15 +41,15 @@ import pokitmons.pokit.core.ui.utils.noRippleClickable
 
 @Composable
 fun<T> LinkCard(
+    modifier: Modifier = Modifier,
     item: T,
     title: String,
     sub: String,
     painter: Painter,
     notRead: Boolean,
     badgeText: String?,
-    onClickKebab: (T) -> Unit,
     onClickItem: (T) -> Unit,
-    modifier: Modifier = Modifier,
+    onClickKebab: ((T) -> Unit)? = null,
     hasMemo: Boolean = false,
     hasMember: Boolean = false,
     bookmark: Boolean? = null,
@@ -134,14 +134,16 @@ fun<T> LinkCard(
                             overflow = TextOverflow.Ellipsis
                         )
 
-                        IconButton(
-                            onClick = { onClickKebab(item) },
-                            modifier = Modifier.size(24.dp)
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.icon_24_kebab),
-                                contentDescription = null
-                            )
+                        if (onClickKebab != null) {
+                            IconButton(
+                                onClick = { onClickKebab(item) },
+                                modifier = Modifier.size(24.dp)
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.icon_24_kebab),
+                                    contentDescription = null
+                                )
+                            }
                         }
                     }
 

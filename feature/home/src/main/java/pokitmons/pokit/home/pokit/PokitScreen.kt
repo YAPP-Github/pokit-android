@@ -48,6 +48,7 @@ fun PokitScreen(
     onNavigateToPokitModify: (String) -> Unit,
     onNavigateToAddLink: () -> Unit,
     onNavigateToAddPokit: () -> Unit,
+    onNavigateToUncategorizedLinkList: () ->  Unit,
 ) {
     val pokits = viewModel.pokits.collectAsState()
     val pokitsState by viewModel.pokitsState.collectAsState()
@@ -138,7 +139,10 @@ fun PokitScreen(
             .padding(horizontal = 20.dp)
             .fillMaxSize()
     ) {
-        HomeMid(viewModel = viewModel)
+        HomeMid(
+            viewModel = viewModel,
+            onClickModifyButton = onNavigateToUncategorizedLinkList
+        )
 
         when (selectedCategory) {
             is Category.Pokit -> {

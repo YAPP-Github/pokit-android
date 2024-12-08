@@ -31,6 +31,8 @@ import pokitmons.pokit.settings.nickname.EditNicknameScreen
 import pokitmons.pokit.settings.setting.SettingsScreen
 import pokitmons.pokit.success.SignUpSuccessScreen
 import pokitmons.pokit.terms.TermsOfServiceScreen
+import pokitmons.pokit.uncategorized.UncategorizedScreen
+import pokitmons.pokit.uncategorized.UncategorizedViewModelImpl
 
 @Composable
 fun RootNavHost(
@@ -192,7 +194,8 @@ fun RootNavHost(
                 onNavigateToPokitModify = { navHostController.navigate("${AddPokit.route}?${AddPokit.pokitIdArg}=$it") },
                 onNavigateToAlarm = { navHostController.navigate(Alarm.route) },
                 onNavigateToUnreadLinkList = { navHostController.navigate("${LinkList.route}/unread") },
-                onNavigateToBookmarkLinkList = { navHostController.navigate("${LinkList.route}/bookmark") }
+                onNavigateToBookmarkLinkList = { navHostController.navigate("${LinkList.route}/bookmark") },
+                onNavigateToUncategorizedLinkList = { navHostController.navigate(Uncategorized.route) }
             )
         }
 
@@ -219,6 +222,13 @@ fun RootNavHost(
                     navHostController.navigate("${AddLink.route}?${AddLink.linkIdArg}=$linkId")
                 }
             )
+        }
+
+        composable(
+            route = Uncategorized.route
+        ) {
+            val viewModel : UncategorizedViewModelImpl = hiltViewModel()
+            UncategorizedScreen(viewModel = viewModel)
         }
     }
 }
