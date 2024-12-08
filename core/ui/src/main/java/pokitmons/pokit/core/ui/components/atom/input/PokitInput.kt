@@ -40,7 +40,6 @@ fun PokitInput(
     isError: Boolean = false,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
     focusRequester: FocusRequester? = null,
-    applyInputDesignSystem: Boolean = true,
 ) {
     var focused by remember { mutableStateOf(false) }
     val state = remember(focused, isError, readOnly, enable) {
@@ -85,7 +84,6 @@ fun PokitInput(
                         state = state,
                         resourceId = icon.resourceId,
                         onClick = onClickIcon,
-                        applyInputDesignSystem = applyInputDesignSystem
                     )
                     Box(modifier = Modifier.width(8.dp))
                 }
@@ -103,7 +101,6 @@ fun PokitInput(
                         state = state,
                         resourceId = icon.resourceId,
                         onClick = onClickIcon,
-                        applyInputDesignSystem = applyInputDesignSystem
                     )
                 }
             }

@@ -260,7 +260,6 @@ fun AddLinkScreen(
                         hintText = stringResource(id = R.string.placeholder_link),
                         onChangeText = inputUrl,
                         enable = enable,
-                        applyInputDesignSystem = false,
                         onClickRemove = {
                             clearUrl()
                         }
@@ -275,7 +274,6 @@ fun AddLinkScreen(
                         hintText = stringResource(id = R.string.placeholder_title),
                         onChangeText = inputTitle,
                         enable = enable,
-                        applyInputDesignSystem = false,
                         onClickRemove = {
                             clearTitle()
                         }

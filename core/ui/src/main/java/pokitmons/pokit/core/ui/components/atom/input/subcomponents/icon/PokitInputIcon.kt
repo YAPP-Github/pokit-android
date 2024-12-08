@@ -17,13 +17,9 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 internal fun PokitInputIcon(
     state: PokitInputState,
     resourceId: Int,
-    applyInputDesignSystem: Boolean = true,
     onClick: (() -> Unit)? = null,
 ) {
-    val iconColor = getColor(
-        state = state,
-        applyInputDesignSystem = applyInputDesignSystem
-    )
+    val iconColor = getColor(state = state)
 
     Icon(
         painter = painterResource(id = resourceId),
@@ -42,14 +38,11 @@ internal fun PokitInputIcon(
 }
 
 @Composable
-private fun getColor(
-    state: PokitInputState,
-    applyInputDesignSystem: Boolean = true,
-): Color {
+private fun getColor(state: PokitInputState): Color {
     return when (state) {
         PokitInputState.DEFAULT -> PokitTheme.colors.iconSecondary
 
-        PokitInputState.INPUT -> if (applyInputDesignSystem) PokitTheme.colors.iconPrimary else PokitTheme.colors.iconSecondary
+        PokitInputState.INPUT -> PokitTheme.colors.iconPrimary
 
         PokitInputState.ACTIVE -> PokitTheme.colors.iconPrimary
 
