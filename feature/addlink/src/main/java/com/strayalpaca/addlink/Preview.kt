@@ -30,7 +30,9 @@ fun AddLinkScreenPreview() {
                 toggleRemindRadio = {},
                 onBackPressed = {},
                 onClickSaveButton = {},
-                closeToast = {}
+                closeToast = {},
+                clearUrl = {},
+                clearTitle = {}
             )
         }
     }

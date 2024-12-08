@@ -6,13 +6,15 @@ data class Pokit(
     val title: String,
     val id: String,
     val count: Int,
+    val image: String = "",
 ) {
     companion object {
         fun fromDomainPokit(pokit: DomainPokit): Pokit {
             return Pokit(
                 title = pokit.name,
                 id = pokit.categoryId.toString(),
-                count = pokit.linkCount
+                count = pokit.linkCount,
+                image = pokit.image.url
             )
         }
     }

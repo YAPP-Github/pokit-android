@@ -1,8 +1,11 @@
 package com.strayalpaca.addlink
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.LocalOverscrollConfiguration
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,12 +14,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -24,9 +28,11 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -42,17 +48,13 @@ import org.orbitmvi.orbit.compose.collectAsState
 import org.orbitmvi.orbit.compose.collectSideEffect
 import pokitmons.pokit.core.feature.model.paging.PagingState
 import pokitmons.pokit.core.ui.components.atom.button.PokitButton
-import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonIcon
-import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonIconPosition
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
 import pokitmons.pokit.core.ui.components.atom.inputarea.PokitInputArea
 import pokitmons.pokit.core.ui.components.block.labeledinput.LabeledInput
-import pokitmons.pokit.core.ui.components.block.pokitlist.PokitList
+import pokitmons.pokit.core.ui.components.block.pokitlist.PokitListVer2
 import pokitmons.pokit.core.ui.components.block.pokitlist.attributes.PokitListState
 import pokitmons.pokit.core.ui.components.block.pokittoast.PokitToast
 import pokitmons.pokit.core.ui.components.block.select.PokitSelect
-import pokitmons.pokit.core.ui.components.block.switchradio.PokitSwitchRadio
-import pokitmons.pokit.core.ui.components.block.switchradio.attributes.PokitSwitchRadioStyle
 import pokitmons.pokit.core.ui.components.template.bottomsheet.PokitBottomSheet
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
@@ -112,15 +114,47 @@ fun AddLinkScreenContainer(
             }
         }
 
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(84.dp)
+                .clickable(
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() },
+                    onClick = viewModel::checkPokitCount
+                ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Image(
+                modifier = Modifier.padding(start = 30.dp),
+                painter = painterResource(id = pokitmons.pokit.core.ui.R.drawable.image_add_pokit),
+                contentDescription = "포킷 추가 버튼"
+            )
+
+            Spacer(modifier = Modifier.size(20.dp))
+
+            Text(
+                text = "포킷 추가하기",
+                style = PokitTheme.typography.body1Bold
+            )
+        }
+
+        HorizontalDivider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 1.dp,
+            color = PokitTheme.colors.borderTertiary
+        )
+
         LazyColumn(
             state = lazyColumnListState
         ) {
             items(
                 items = pokitList
             ) { pokit ->
-                PokitList(
+                PokitListVer2(
                     item = pokit,
                     title = pokit.title,
+                    imageUrl = pokit.image,
                     sub = stringResource(id = R.string.count_format, pokit.count),
                     onClickItem = viewModel::selectPokit,
                     state = PokitListState.ACTIVE
@@ -143,7 +177,9 @@ fun AddLinkScreenContainer(
         toggleRemindRadio = viewModel::setRemind,
         onBackPressed = viewModel::onBackPressed,
         onClickSaveButton = viewModel::saveLink,
-        closeToast = viewModel::closeToastMessage
+        closeToast = viewModel::closeToastMessage,
+        clearTitle = viewModel::clearTitle,
+        clearUrl = viewModel::clearUrl
     )
 }
 
@@ -164,6 +200,8 @@ fun AddLinkScreen(
     onBackPressed: () -> Unit,
     onClickSaveButton: () -> Unit,
     closeToast: () -> Unit,
+    clearUrl: () -> Unit,
+    clearTitle: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
     val enable = remember(state.step) {
@@ -172,6 +210,10 @@ fun AddLinkScreen(
                 state.step == ScreenStep.LOADING ||
                 state.step == ScreenStep.POKIT_ADD_LOADING
             )
+    }
+
+    var currentUrl = remember {
+        mutableStateOf(url)
     }
 
     Column(
@@ -221,7 +263,10 @@ fun AddLinkScreen(
                         inputText = url,
                         hintText = stringResource(id = R.string.placeholder_link),
                         onChangeText = inputUrl,
-                        enable = enable
+                        enable = enable,
+                        onClickRemove = {
+                            clearUrl()
+                        }
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
@@ -232,7 +277,10 @@ fun AddLinkScreen(
                         inputText = title,
                         hintText = stringResource(id = R.string.placeholder_title),
                         onChangeText = inputTitle,
-                        enable = enable
+                        enable = enable,
+                        onClickRemove = {
+                            clearTitle()
+                        }
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
@@ -249,20 +297,9 @@ fun AddLinkScreen(
                             onClick = onClickSelectPokit,
                             enable = enable
                         )
-
-                        Spacer(modifier = Modifier.width(8.dp))
-
-                        PokitButton(
-                            text = null,
-                            icon = PokitButtonIcon(
-                                resourceId = pokitmons.pokit.core.ui.R.drawable.icon_24_plus,
-                                position = PokitButtonIconPosition.LEFT
-                            ),
-                            size = PokitButtonSize.LARGE,
-                            onClick = onClickAddPokit,
-                            enable = enable
-                        )
                     }
+
+                    // onClickAddPokit
 
                     Spacer(modifier = Modifier.height(24.dp))
 
@@ -302,41 +339,6 @@ fun AddLinkScreen(
                             textAlign = TextAlign.End
                         )
                     }
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    Text(
-                        text = stringResource(id = R.string.title_remind),
-                        style = PokitTheme.typography.body2Medium.copy(color = PokitTheme.colors.textSecondary)
-                    )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-
-                    PokitSwitchRadio(
-                        modifier = Modifier.fillMaxWidth(),
-                        itemList = listOf(
-                            Pair(stringResource(id = R.string.reject_remind), false),
-                            Pair(stringResource(id = R.string.accept_remind), true)
-                        ),
-                        style = PokitSwitchRadioStyle.STROKE,
-                        selectedItem = if (state.useRemind) {
-                            Pair(stringResource(id = R.string.accept_remind), true)
-                        } else {
-                            Pair(stringResource(id = R.string.reject_remind), false)
-                        },
-                        onClickItem = {
-                            toggleRemindRadio(it.second)
-                        },
-                        getTitleFromItem = { it.first },
-                        enabled = false
-                    )
-
-                    Spacer(modifier = Modifier.height(8.dp))
-
-                    Text(
-                        text = stringResource(id = R.string.see_you_soon),
-                        style = PokitTheme.typography.detail1.copy(color = PokitTheme.colors.textTertiary)
-                    )
 
                     Spacer(modifier = Modifier.height(32.dp))
                 }

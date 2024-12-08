@@ -80,7 +80,11 @@ fun PokitInput(
                 }
 
                 if (icon?.position == PokitInputIconPosition.LEFT) {
-                    PokitInputIcon(state = state, resourceId = icon.resourceId, onClick = onClickIcon)
+                    PokitInputIcon(
+                        state = state,
+                        resourceId = icon.resourceId,
+                        onClick = onClickIcon
+                    )
                     Box(modifier = Modifier.width(8.dp))
                 }
 
@@ -93,7 +97,11 @@ fun PokitInput(
                 }
 
                 if (icon?.position == PokitInputIconPosition.RIGHT) {
-                    PokitInputIcon(state = state, resourceId = icon.resourceId, onClick = onClickIcon)
+                    PokitInputIcon(
+                        state = state,
+                        resourceId = icon.resourceId,
+                        onClick = onClickIcon
+                    )
                 }
             }
         }

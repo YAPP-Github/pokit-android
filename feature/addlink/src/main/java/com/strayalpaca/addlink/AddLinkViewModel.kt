@@ -191,6 +191,14 @@ class AddLinkViewModel @Inject constructor(
         }
     }
 
+    fun clearUrl() {
+        this._linkUrl.update { "" }
+    }
+
+    fun clearTitle() {
+        this._title.update { "" }
+    }
+
     private suspend fun getLinkMetaData(linkUrl: String) = intent {
         val response = getLinkCardUseCase.getLinkCard(linkUrl)
         if (response is PokitResult.Success) {
@@ -327,6 +335,7 @@ class AddLinkViewModel @Inject constructor(
                 if (response.result >= MAX_POKIT_COUNT) {
                     reduce { state.copy(toastMessage = ToastMessageEvent.CANNOT_CREATE_POKIT_MORE) }
                 } else {
+                    reduce { state.copy(step = ScreenStep.IDLE) }
                     postSideEffect(AddLinkScreenSideEffect.OnNavigateToAddPokit)
                 }
             } else {

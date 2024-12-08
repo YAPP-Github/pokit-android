@@ -38,9 +38,7 @@ internal fun PokitInputIcon(
 }
 
 @Composable
-private fun getColor(
-    state: PokitInputState,
-): Color {
+private fun getColor(state: PokitInputState): Color {
     return when (state) {
         PokitInputState.DEFAULT -> PokitTheme.colors.iconSecondary
 

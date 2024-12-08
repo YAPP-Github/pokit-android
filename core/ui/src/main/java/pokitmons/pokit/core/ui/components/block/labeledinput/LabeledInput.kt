@@ -22,6 +22,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.components.atom.input.PokitInput
+import pokitmons.pokit.core.ui.components.atom.input.attributes.PokitInputIcon
+import pokitmons.pokit.core.ui.components.atom.input.attributes.PokitInputIconPosition
 import pokitmons.pokit.core.ui.components.atom.input.attributes.PokitInputState
 import pokitmons.pokit.core.ui.theme.PokitTheme
 
@@ -37,8 +39,10 @@ fun LabeledInput(
     readOnly: Boolean = false,
     enable: Boolean = true,
     isError: Boolean = false,
+    onClickRemove: () -> Unit = {},
 ) {
     var focused by remember { mutableStateOf(false) }
+
     val state = remember(focused, isError, readOnly, enable) {
         getState(
             enabled = enable,
@@ -67,7 +71,19 @@ fun LabeledInput(
             text = inputText,
             hintText = hintText,
             onChangeText = onChangeText,
-            icon = null,
+            icon = if (inputText.isNotEmpty()) {
+                PokitInputIcon(
+                    position = PokitInputIconPosition.RIGHT,
+                    resourceId = R.drawable.icon_24_xs
+                )
+            } else {
+                null
+            },
+            onClickIcon = remember {
+                {
+                    onClickRemove()
+                }
+            },
             isError = isError,
             enable = enable,
             readOnly = readOnly
