@@ -2,6 +2,7 @@ package pokitmons.pokit.navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -179,6 +180,16 @@ fun RootNavHost(
 
         composable(route = Home.route) {
             val viewModel: PokitViewModel = hiltViewModel()
+
+            LaunchedEffect(Unit) {
+                it.savedStateHandle.getLiveData<Boolean>("refresh").observe(it) { needRefresh ->
+                    if (needRefresh) {
+                        viewModel.refreshLinks()
+                        it.savedStateHandle["refresh"] = false
+                    }
+                }
+            }
+
             HomeScreen(
                 viewModel = viewModel,
                 onNavigateToSearch = { navHostController.navigate(Search.route) },
@@ -195,7 +206,9 @@ fun RootNavHost(
                 onNavigateToAlarm = { navHostController.navigate(Alarm.route) },
                 onNavigateToUnreadLinkList = { navHostController.navigate("${LinkList.route}/unread") },
                 onNavigateToBookmarkLinkList = { navHostController.navigate("${LinkList.route}/bookmark") },
-                onNavigateToUncategorizedLinkList = { navHostController.navigate(Uncategorized.route) }
+                onNavigateToUncategorizedLinkList = {
+                    navHostController.navigate(Uncategorized.route)
+                }
             )
         }
 
@@ -228,7 +241,16 @@ fun RootNavHost(
             route = Uncategorized.route
         ) {
             val viewModel : UncategorizedViewModelImpl = hiltViewModel()
-            UncategorizedScreen(viewModel = viewModel)
+            UncategorizedScreen(
+                viewModel = viewModel,
+                onBackPressed = {
+                    val needRefresh = viewModel.linkChanged
+                    navHostController.previousBackStackEntry
+                        ?.savedStateHandle
+                        ?.set("refresh", needRefresh)
+                    navHostController.popBackStack()
+                },
+            )
         }
     }
 }

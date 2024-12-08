@@ -39,6 +39,7 @@ interface UncategorizedViewModel {
     val linkListState : StateFlow<PagingState>
     val pokitList : StateFlow<List<Pokit>>
     val pokitListState: StateFlow<PagingState>
+    val linkChanged: Boolean
 }
 
 @HiltViewModel
@@ -93,6 +94,10 @@ class UncategorizedViewModelImpl @Inject constructor(
     private val _state = MutableStateFlow(UncategorizedScreenState(selectAll = false, updateLoading = false))
     override val state : StateFlow<UncategorizedScreenState> = _state.asStateFlow()
 
+    private var _linkChanged = false
+    override val linkChanged: Boolean
+        get() = _linkChanged
+
     init {
         viewModelScope.launch {
             linkPaging.refresh()
@@ -125,6 +130,7 @@ class UncategorizedViewModelImpl @Inject constructor(
             _state.update { it.copy(updateLoading = true) }
             val response = deleteLinkUseCase.deleteUncategorizedLinks(linkIds = selectedLinkIds)
             if (response is PokitResult.Success) {
+                _linkChanged = true
                 linkPaging.refresh()
             }
             _state.update { it.copy(updateLoading = false) }
@@ -150,6 +156,7 @@ class UncategorizedViewModelImpl @Inject constructor(
             _state.update { it.copy(showPokitSelectBottomSheet = false, updateLoading = true) }
             val response = modifyPokitOfLinksUseCase.modifyPokit(linkIds = selectedLinkIds, categoryId = pokitId.toInt())
             if (response is PokitResult.Success) {
+                _linkChanged = true
                 linkPaging.refresh()
             }
             _state.update { it.copy(updateLoading = false) }

@@ -1,5 +1,6 @@
 package pokitmons.pokit.uncategorized
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -43,13 +44,18 @@ import pokitmons.pokit.core.ui.R.drawable as coreDrawable
 
 @Composable
 fun UncategorizedScreen(
-    viewModel: UncategorizedViewModel
+    viewModel: UncategorizedViewModel,
+    onBackPressed: () -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
     val linkList by viewModel.linkList.collectAsState()
     val linkListState by viewModel.linkListState.collectAsState()
     val pokitList by viewModel.pokitList.collectAsState()
     val pokitListState by viewModel.pokitListState.collectAsState()
+
+    BackHandler {
+        onBackPressed()
+    }
 
     PokitBottomSheet(
         onHideBottomSheet = viewModel::hidePokitSelectBottomSheet,
@@ -113,7 +119,9 @@ fun UncategorizedScreen(
                     modifier = Modifier
                         .size(48.dp)
                         .align(Alignment.CenterStart),
-                    onClick = {}
+                    onClick = {
+                        onBackPressed()
+                    }
                 ) {
                     Icon(
                         painter = painterResource(id = coreDrawable.icon_24_x),

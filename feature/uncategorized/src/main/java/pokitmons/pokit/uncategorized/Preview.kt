@@ -16,7 +16,10 @@ import pokitmons.pokit.uncategorized.model.UncategorizedScreenState
 internal fun Preview() {
     PokitTheme {
         Column {
-            UncategorizedScreen(viewModel = dummyViewModel)
+            UncategorizedScreen(
+                viewModel = dummyViewModel,
+                onBackPressed = {}
+            )
         }
     }
 }
@@ -68,4 +71,6 @@ private val dummyViewModel = object : UncategorizedViewModel {
         get() = MutableStateFlow(emptyList())
     override val pokitListState: StateFlow<PagingState>
         get() = MutableStateFlow(PagingState.IDLE)
+    override val linkChanged: Boolean
+        get() = false
 }
