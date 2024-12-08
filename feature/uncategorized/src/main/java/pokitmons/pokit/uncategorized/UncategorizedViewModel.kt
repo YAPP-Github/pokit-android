@@ -12,7 +12,10 @@ import pokitmons.pokit.core.feature.model.paging.PagingLoadResult
 import pokitmons.pokit.core.feature.model.paging.PagingSource
 import pokitmons.pokit.core.feature.model.paging.PagingState
 import pokitmons.pokit.core.feature.model.paging.SimplePaging
+import pokitmons.pokit.domain.commom.PokitResult
+import pokitmons.pokit.domain.usecase.link.DeleteLinkUseCase
 import pokitmons.pokit.domain.usecase.link.GetLinksUseCase
+import pokitmons.pokit.domain.usecase.link.ModifyPokitOfLinksUseCase
 import pokitmons.pokit.domain.usecase.pokit.GetPokitsUseCase
 import pokitmons.pokit.uncategorized.model.Pokit
 import pokitmons.pokit.uncategorized.model.UncategorizedLink
@@ -42,6 +45,8 @@ interface UncategorizedViewModel {
 class UncategorizedViewModelImpl @Inject constructor(
     private val useCaseGetLinks: GetLinksUseCase,
     private val getPokitsUseCase: GetPokitsUseCase,
+    private val modifyPokitOfLinksUseCase: ModifyPokitOfLinksUseCase,
+    private val deleteLinkUseCase: DeleteLinkUseCase,
 ) : ViewModel(), UncategorizedViewModel {
     // uncategorized links paging
     private val linksPagingSource = object : PagingSource<UncategorizedLink> {
@@ -113,14 +118,21 @@ class UncategorizedViewModelImpl @Inject constructor(
     }
 
     override fun removeSelectedLinks() {
-        val selectedLinkIds = linkPaging.pagingData.value.map { it.link.id }
+        val selectedLinkIds = linkPaging.pagingData.value.filter{ it.isChecked }.map { it.link.id }
         if (selectedLinkIds.isEmpty()) return
 
-        // todo call useCase
+        viewModelScope.launch {
+            _state.update { it.copy(updateLoading = true) }
+            val response = deleteLinkUseCase.deleteUncategorizedLinks(linkIds = selectedLinkIds)
+            if (response is PokitResult.Success) {
+                linkPaging.refresh()
+            }
+            _state.update { it.copy(updateLoading = false) }
+        }
     }
 
     override fun showPokitSelectBottomSheet() {
-        val selectedLinkIds = linkPaging.pagingData.value.map { it.link.id }
+        val selectedLinkIds = linkPaging.pagingData.value.filter{ it.isChecked }.map { it.link.id }
         if (selectedLinkIds.isEmpty()) return
 
         _state.update { it.copy(showPokitSelectBottomSheet = true) }
@@ -131,13 +143,17 @@ class UncategorizedViewModelImpl @Inject constructor(
     }
 
     override fun moveSelectedLinks(pokitId: String) {
-        val selectedLinkIds = linkPaging.pagingData.value.map { it.link.id }
+        val selectedLinkIds = linkPaging.pagingData.value.filter{ it.isChecked }.map { it.link.id }
         if (selectedLinkIds.isEmpty()) return
 
-        _state.update { it.copy(showPokitSelectBottomSheet = false, updateLoading = true) }
-        // todo call useCase
-
-        // todo call move event
+        viewModelScope.launch {
+            _state.update { it.copy(showPokitSelectBottomSheet = false, updateLoading = true) }
+            val response = modifyPokitOfLinksUseCase.modifyPokit(linkIds = selectedLinkIds, categoryId = pokitId.toInt())
+            if (response is PokitResult.Success) {
+                linkPaging.refresh()
+            }
+            _state.update { it.copy(updateLoading = false) }
+        }
     }
 
     override fun loadNextLinks() {
@@ -157,6 +173,5 @@ class UncategorizedViewModelImpl @Inject constructor(
             pokitPaging.load()
         }
     }
-
 
 }

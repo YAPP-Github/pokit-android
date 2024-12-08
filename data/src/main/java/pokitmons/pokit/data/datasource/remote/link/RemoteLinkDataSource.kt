@@ -2,7 +2,9 @@ package pokitmons.pokit.data.datasource.remote.link
 
 import org.jsoup.Jsoup
 import pokitmons.pokit.data.api.LinkApi
+import pokitmons.pokit.data.model.link.request.DeleteUncategorizedLinksRequest
 import pokitmons.pokit.data.model.link.request.ModifyLinkRequest
+import pokitmons.pokit.data.model.link.request.ModifyPokitOfLinksRequest
 import pokitmons.pokit.data.model.link.response.GetLinkResponse
 import pokitmons.pokit.data.model.link.response.GetLinksResponse
 import pokitmons.pokit.data.model.link.response.LinkCardResponse
@@ -105,5 +107,13 @@ class RemoteLinkDataSource @Inject constructor(
 
     override suspend fun getUncategorizedLinks(page: Int, size: Int, sort: List<String>): GetLinksResponse {
         return linkApi.getUncategorizedLinks(page = page, size = size, sort = sort)
+    }
+
+    override suspend fun deleteUncategorizedLinks(deleteUncategorizedLinksRequest: DeleteUncategorizedLinksRequest) {
+        linkApi.deleteUncategorizedLinks(deleteUncategorizedLinksRequest = deleteUncategorizedLinksRequest)
+    }
+
+    override suspend fun modifyPokitOfLinks(modifyPokitOfLinksRequest: ModifyPokitOfLinksRequest) {
+        linkApi.modifyPokitOfLinks(modifyPokitOfLinksRequest = modifyPokitOfLinksRequest)
     }
 }
