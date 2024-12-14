@@ -240,7 +240,7 @@ fun RootNavHost(
         composable(
             route = Uncategorized.route
         ) {
-            val viewModel : UncategorizedViewModelImpl = hiltViewModel()
+            val viewModel: UncategorizedViewModelImpl = hiltViewModel()
             UncategorizedScreen(
                 viewModel = viewModel,
                 onBackPressed = {
@@ -249,7 +249,7 @@ fun RootNavHost(
                         ?.savedStateHandle
                         ?.set("refresh", needRefresh)
                     navHostController.popBackStack()
-                },
+                }
             )
         }
     }

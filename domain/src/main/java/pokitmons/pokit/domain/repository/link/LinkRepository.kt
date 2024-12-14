@@ -69,6 +69,6 @@ interface LinkRepository {
 
     suspend fun modifyPokitOfLinks(
         linkIds: List<Int>,
-        categoryId: Int
+        categoryId: Int,
     ): PokitResult<Unit>
 }

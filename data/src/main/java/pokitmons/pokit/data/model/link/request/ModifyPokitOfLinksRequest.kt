@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ModifyPokitOfLinksRequest(
     val contentIds: List<Int>,
-    val categoryId: Int
+    val categoryId: Int,
 )

@@ -29,7 +29,7 @@ fun FloatingBottomNavigationButton(
             modifier = Modifier.size(24.dp),
             painter = painterResource(id = iconResourceId),
             contentDescription = null,
-            tint = PokitTheme.colors.inverseWh,
+            tint = PokitTheme.colors.inverseWh
         )
 
         Spacer(modifier = Modifier.height(4.dp))

@@ -26,39 +26,30 @@ internal fun Preview() {
 
 private val dummyViewModel = object : UncategorizedViewModel {
     override fun toggleLinkSelected(linkId: String) {
-
     }
 
     override fun toggleAllLinksSelected() {
-
     }
 
     override fun removeSelectedLinks() {
-
     }
 
     override fun showPokitSelectBottomSheet() {
-
     }
 
     override fun hidePokitSelectBottomSheet() {
-
     }
 
     override fun moveSelectedLinks(pokitId: String) {
-
     }
 
     override fun loadNextLinks() {
-
     }
 
     override fun refreshPokits() {
-
     }
 
     override fun loadNextPokits() {
-
     }
 
     override val state: StateFlow<UncategorizedScreenState>

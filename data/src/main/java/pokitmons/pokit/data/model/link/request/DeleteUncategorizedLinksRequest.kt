@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class DeleteUncategorizedLinksRequest(
-    val contentId: List<Int>
+    val contentId: List<Int>,
 )

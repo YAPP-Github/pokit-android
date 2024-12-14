@@ -39,8 +39,8 @@ import pokitmons.pokit.core.ui.components.template.pookiempty.EmptyPooki
 import pokitmons.pokit.core.ui.components.template.pookierror.ErrorPooki
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.uncategorized.components.FloatingBottomNavigation
-import pokitmons.pokit.uncategorized.R.string as uncategorizedString
 import pokitmons.pokit.core.ui.R.drawable as coreDrawable
+import pokitmons.pokit.uncategorized.R.string as uncategorizedString
 
 @Composable
 fun UncategorizedScreen(

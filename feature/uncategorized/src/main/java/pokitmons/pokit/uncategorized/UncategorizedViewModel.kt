@@ -34,10 +34,10 @@ interface UncategorizedViewModel {
     fun refreshPokits()
     fun loadNextPokits()
 
-    val state : StateFlow<UncategorizedScreenState>
-    val linkList : StateFlow<List<UncategorizedLink>>
-    val linkListState : StateFlow<PagingState>
-    val pokitList : StateFlow<List<Pokit>>
+    val state: StateFlow<UncategorizedScreenState>
+    val linkList: StateFlow<List<UncategorizedLink>>
+    val linkListState: StateFlow<PagingState>
+    val pokitList: StateFlow<List<Pokit>>
     val pokitListState: StateFlow<PagingState>
     val linkChanged: Boolean
 }
@@ -67,8 +67,8 @@ class UncategorizedViewModelImpl @Inject constructor(
         coroutineScope = viewModelScope
     )
 
-    override val linkList : StateFlow<List<UncategorizedLink>> = linkPaging.pagingData
-    override val linkListState : StateFlow<PagingState> = linkPaging.pagingState
+    override val linkList: StateFlow<List<UncategorizedLink>> = linkPaging.pagingData
+    override val linkListState: StateFlow<PagingState> = linkPaging.pagingState
 
     // pokits paging
     private val pokitPagingSource = object : PagingSource<Pokit> {
@@ -92,7 +92,7 @@ class UncategorizedViewModelImpl @Inject constructor(
 
     // state
     private val _state = MutableStateFlow(UncategorizedScreenState(selectAll = false, updateLoading = false))
-    override val state : StateFlow<UncategorizedScreenState> = _state.asStateFlow()
+    override val state: StateFlow<UncategorizedScreenState> = _state.asStateFlow()
 
     private var _linkChanged = false
     override val linkChanged: Boolean
@@ -123,7 +123,7 @@ class UncategorizedViewModelImpl @Inject constructor(
     }
 
     override fun removeSelectedLinks() {
-        val selectedLinkIds = linkPaging.pagingData.value.filter{ it.isChecked }.map { it.link.id }
+        val selectedLinkIds = linkPaging.pagingData.value.filter { it.isChecked }.map { it.link.id }
         if (selectedLinkIds.isEmpty()) return
 
         viewModelScope.launch {
@@ -138,7 +138,7 @@ class UncategorizedViewModelImpl @Inject constructor(
     }
 
     override fun showPokitSelectBottomSheet() {
-        val selectedLinkIds = linkPaging.pagingData.value.filter{ it.isChecked }.map { it.link.id }
+        val selectedLinkIds = linkPaging.pagingData.value.filter { it.isChecked }.map { it.link.id }
         if (selectedLinkIds.isEmpty()) return
 
         _state.update { it.copy(showPokitSelectBottomSheet = true) }
@@ -149,7 +149,7 @@ class UncategorizedViewModelImpl @Inject constructor(
     }
 
     override fun moveSelectedLinks(pokitId: String) {
-        val selectedLinkIds = linkPaging.pagingData.value.filter{ it.isChecked }.map { it.link.id }
+        val selectedLinkIds = linkPaging.pagingData.value.filter { it.isChecked }.map { it.link.id }
         if (selectedLinkIds.isEmpty()) return
 
         viewModelScope.launch {
@@ -180,5 +180,4 @@ class UncategorizedViewModelImpl @Inject constructor(
             pokitPaging.load()
         }
     }
-
 }

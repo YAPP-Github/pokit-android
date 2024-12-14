@@ -48,7 +48,7 @@ fun PokitScreen(
     onNavigateToPokitModify: (String) -> Unit,
     onNavigateToAddLink: () -> Unit,
     onNavigateToAddPokit: () -> Unit,
-    onNavigateToUncategorizedLinkList: () ->  Unit,
+    onNavigateToUncategorizedLinkList: () -> Unit,
 ) {
     val pokits = viewModel.pokits.collectAsState()
     val pokitsState by viewModel.pokitsState.collectAsState()

@@ -80,11 +80,11 @@ interface LinkApi {
 
     @PUT("content/uncategorized")
     suspend fun deleteUncategorizedLinks(
-        @Body deleteUncategorizedLinksRequest: DeleteUncategorizedLinksRequest
+        @Body deleteUncategorizedLinksRequest: DeleteUncategorizedLinksRequest,
     ): Response<Unit>
 
     @PATCH("content")
     suspend fun modifyPokitOfLinks(
-        @Body modifyPokitOfLinksRequest: ModifyPokitOfLinksRequest
+        @Body modifyPokitOfLinksRequest: ModifyPokitOfLinksRequest,
     ): Response<Unit>
 }

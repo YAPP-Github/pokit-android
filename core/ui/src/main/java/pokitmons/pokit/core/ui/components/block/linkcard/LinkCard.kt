@@ -212,7 +212,7 @@ fun<T> LinkCard(
                     }
 
                     if (hasMember) {
-                        Box (
+                        Box(
                             modifier = Modifier.size(20.dp)
                         ) {
                             Icon(

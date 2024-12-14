@@ -12,8 +12,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.theme.PokitTheme
-import pokitmons.pokit.uncategorized.R.string as uncategorizedString
 import pokitmons.pokit.core.ui.R.drawable as coreDrawable
+import pokitmons.pokit.uncategorized.R.string as uncategorizedString
 
 @Composable
 fun FloatingBottomNavigation(
