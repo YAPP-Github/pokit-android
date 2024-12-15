@@ -2,7 +2,6 @@ package pokitmons.pokit.core.ui.components.block.linkcard
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,15 +40,15 @@ import pokitmons.pokit.core.ui.utils.noRippleClickable
 
 @Composable
 fun<T> LinkCard(
+    modifier: Modifier = Modifier,
     item: T,
     title: String,
     sub: String,
     painter: Painter,
     notRead: Boolean,
     badgeText: String?,
-    onClickKebab: (T) -> Unit,
     onClickItem: (T) -> Unit,
-    modifier: Modifier = Modifier,
+    onClickKebab: ((T) -> Unit)? = null,
     hasMemo: Boolean = false,
     hasMember: Boolean = false,
     bookmark: Boolean? = null,
@@ -134,14 +133,16 @@ fun<T> LinkCard(
                             overflow = TextOverflow.Ellipsis
                         )
 
-                        IconButton(
-                            onClick = { onClickKebab(item) },
-                            modifier = Modifier.size(24.dp)
-                        ) {
-                            Icon(
-                                painter = painterResource(id = R.drawable.icon_24_kebab),
-                                contentDescription = null
-                            )
+                        if (onClickKebab != null) {
+                            IconButton(
+                                onClick = { onClickKebab(item) },
+                                modifier = Modifier.size(24.dp)
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.icon_24_kebab),
+                                    contentDescription = null
+                                )
+                            }
                         }
                     }
 
@@ -161,17 +162,28 @@ fun<T> LinkCard(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(6.dp)
                 ) {
+                    if (badgeText?.isNotBlank() == true) {
+                        Text(
+                            text = badgeText,
+                            modifier = Modifier
+                                .weight(1f, fill = false)
+                                .background(
+                                    color = PokitTheme.colors.backgroundPrimary,
+                                    shape = RoundedCornerShape(4.dp)
+                                )
+                                .padding(horizontal = 8.dp, vertical = 4.dp),
+                            style = PokitTheme.typography.label4.copy(color = PokitTheme.colors.textTertiary),
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                    }
+
                     if (notRead) {
                         Text(
                             text = stringResource(id = R.string.not_read),
                             modifier = Modifier
-                                .border(
-                                    width = 1.dp,
-                                    color = PokitTheme.colors.brand,
-                                    shape = RoundedCornerShape(4.dp)
-                                )
                                 .background(
-                                    color = PokitTheme.colors.backgroundBase,
+                                    color = Color(0xFFFFF3EA),
                                     shape = RoundedCornerShape(4.dp)
                                 )
                                 .padding(horizontal = 8.dp, vertical = 4.dp),
@@ -179,55 +191,44 @@ fun<T> LinkCard(
                         )
                     }
 
-                    if (badgeText?.isNotBlank() == true) {
+                    if (hasMemo) {
                         Box(
-                            Modifier.weight(1f)
+                            modifier = Modifier.size(20.dp)
                         ) {
-                            Text(
-                                text = badgeText,
+                            Icon(
                                 modifier = Modifier
+                                    .height(20.dp)
+                                    .aspectRatio(1f)
                                     .background(
                                         color = PokitTheme.colors.backgroundPrimary,
                                         shape = RoundedCornerShape(4.dp)
                                     )
-                                    .padding(horizontal = 8.dp, vertical = 4.dp),
-                                style = PokitTheme.typography.label4.copy(color = PokitTheme.colors.textTertiary),
-                                maxLines = 1,
-                                overflow = TextOverflow.Ellipsis
+                                    .padding(2.dp),
+                                painter = painterResource(id = R.drawable.icon_24_file),
+                                tint = PokitTheme.colors.iconSecondary,
+                                contentDescription = "hasMemo"
                             )
                         }
                     }
 
-                    if (hasMemo) {
-                        Icon(
-                            modifier = Modifier
-                                .height(20.dp)
-                                .aspectRatio(1f)
-                                .background(
-                                    color = PokitTheme.colors.backgroundPrimary,
-                                    shape = RoundedCornerShape(4.dp)
-                                )
-                                .padding(2.dp),
-                            painter = painterResource(id = R.drawable.icon_24_file),
-                            tint = PokitTheme.colors.iconSecondary,
-                            contentDescription = "hasMemo"
-                        )
-                    }
-
                     if (hasMember) {
-                        Icon(
-                            modifier = Modifier
-                                .height(20.dp)
-                                .aspectRatio(1f)
-                                .background(
-                                    color = PokitTheme.colors.backgroundPrimary,
-                                    shape = RoundedCornerShape(4.dp)
-                                )
-                                .padding(2.dp),
-                            painter = painterResource(id = R.drawable.icon_24_member),
-                            tint = PokitTheme.colors.iconSecondary,
-                            contentDescription = "hasMemo"
-                        )
+                        Box(
+                            modifier = Modifier.size(20.dp)
+                        ) {
+                            Icon(
+                                modifier = Modifier
+                                    .height(20.dp)
+                                    .aspectRatio(1f)
+                                    .background(
+                                        color = PokitTheme.colors.backgroundPrimary,
+                                        shape = RoundedCornerShape(4.dp)
+                                    )
+                                    .padding(2.dp),
+                                painter = painterResource(id = R.drawable.icon_24_member),
+                                tint = PokitTheme.colors.iconSecondary,
+                                contentDescription = "hasMemo"
+                            )
+                        }
                     }
                 }
             }

@@ -10,4 +10,8 @@ class DeleteLinkUseCase @Inject constructor(
     suspend fun deleteLink(linkId: Int): PokitResult<Int> {
         return repository.deleteLink(linkId)
     }
+
+    suspend fun deleteUncategorizedLinks(linkIds: List<Int>): PokitResult<Unit> {
+        return repository.deleteUncategorizedLinks(linkIds = linkIds)
+    }
 }

@@ -10,4 +10,6 @@
     <string name="share_pokit_title"> 포킷을 공유받았어요!</string>
     <string name="share_pokit_description">소중한 링크들이 담긴 포킷을 Pokit\n앱에서 지금 바로 확인해보세요!</string>
     <string name="share_pokit_button_text">앱에서 보기</string>
+
+    <string name="modify">편집하기</string>
 </resources>

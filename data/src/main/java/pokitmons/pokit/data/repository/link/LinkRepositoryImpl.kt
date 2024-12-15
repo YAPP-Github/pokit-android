@@ -3,7 +3,9 @@ package pokitmons.pokit.data.repository.link
 import pokitmons.pokit.data.datasource.remote.link.LinkDataSource
 import pokitmons.pokit.data.mapper.link.LinkMapper
 import pokitmons.pokit.data.model.common.parseErrorResult
+import pokitmons.pokit.data.model.link.request.DeleteUncategorizedLinksRequest
 import pokitmons.pokit.data.model.link.request.ModifyLinkRequest
+import pokitmons.pokit.data.model.link.request.ModifyPokitOfLinksRequest
 import pokitmons.pokit.domain.commom.PokitResult
 import pokitmons.pokit.domain.model.link.Link
 import pokitmons.pokit.domain.model.link.LinkCard
@@ -165,6 +167,26 @@ class LinkRepositoryImpl @Inject constructor(
             val response = dataSource.getUncategorizedLinks(size = size, page = page, sort = listOf(sort.value))
             val mappedResponse = LinkMapper.mapperToLinks(response)
             PokitResult.Success(mappedResponse)
+        }.getOrElse { throwable ->
+            parseErrorResult(throwable)
+        }
+    }
+
+    override suspend fun deleteUncategorizedLinks(linkIds: List<Int>): PokitResult<Unit> {
+        return runCatching {
+            val request = DeleteUncategorizedLinksRequest(contentId = linkIds)
+            dataSource.deleteUncategorizedLinks(request)
+            PokitResult.Success(Unit)
+        }.getOrElse { throwable ->
+            parseErrorResult(throwable)
+        }
+    }
+
+    override suspend fun modifyPokitOfLinks(linkIds: List<Int>, categoryId: Int): PokitResult<Unit> {
+        return runCatching {
+            val request = ModifyPokitOfLinksRequest(contentIds = linkIds, categoryId = categoryId)
+            dataSource.modifyPokitOfLinks(request)
+            PokitResult.Success(Unit)
         }.getOrElse { throwable ->
             parseErrorResult(throwable)
         }

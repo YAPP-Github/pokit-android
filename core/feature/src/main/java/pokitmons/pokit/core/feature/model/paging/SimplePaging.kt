@@ -115,4 +115,8 @@ class SimplePaging<ITEM, KEY> (
             }
         }
     }
+
+    fun updateItems(newItemList: List<ITEM>) {
+        _pagingData.update { newItemList }
+    }
 }
