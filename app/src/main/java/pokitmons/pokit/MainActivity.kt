@@ -5,6 +5,7 @@ import android.content.ClipboardManager
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -37,7 +38,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        handleSharedLinkIntent(intent)
+        handleIntent(intent)
         setContent {
             var showSplash by remember { mutableStateOf(true) }
 
@@ -51,8 +52,14 @@ class MainActivity : ComponentActivity() {
             val currentDestination by remember(navBackStackEntry) { derivedStateOf { navBackStackEntry?.destination } }
 
             viewModel.navigationEvent.collectAsEffect { navigationEvent ->
-                if (navigationEvent is NavigationEvent.AddLink) {
-                    navHostController.navigate("${AddLink.route}?${AddLink.linkUrl}=${navigationEvent.url}")
+                when (navigationEvent) {
+                    is NavigationEvent.AddLink -> {
+                        navHostController.navigate("${AddLink.route}?${AddLink.linkUrl}=${navigationEvent.url}")
+                    }
+
+                    is NavigationEvent.AddSharedPokit -> {
+
+                    }
                 }
             }
 
@@ -74,7 +81,7 @@ class MainActivity : ComponentActivity() {
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        handleSharedLinkIntent(intent)
+        handleIntent(intent)
     }
 
     override fun onWindowFocusChanged(hasFocus: Boolean) {
@@ -95,13 +102,16 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun handleSharedLinkIntent(intent: Intent) {
-        val action = intent.action ?: return
+    private fun handleIntent(intent: Intent) {
+        when {
+            intent.data.toString().contains("kakaolink") -> {
+                viewModel.moveAddPokitScreen(intent.data.toString())
+            }
 
-        val isSharedLinkData = (action == Intent.ACTION_SEND && intent.type == "text/plain")
-        if (isSharedLinkData) {
-            intent.getStringExtra(Intent.EXTRA_TEXT)?.let { url ->
-                viewModel.setSharedLinkUrl(url)
+            (intent.action == Intent.ACTION_SEND) && (intent.type == "text/plain") -> {
+                intent.getStringExtra(Intent.EXTRA_TEXT)?.let { url ->
+                    viewModel.setSharedLinkUrl(url)
+                }
             }
         }
     }

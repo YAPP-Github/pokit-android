@@ -49,8 +49,17 @@ class MainViewModel @Inject constructor() : ViewModel() {
             }
         }
     }
+
+    fun moveAddPokitScreen(uri: String) {
+        if (currentRoute.value !in ROUTE_WITHOUT_LOGIN) {
+            viewModelScope.launch {
+                _navigationEvent.emit(NavigationEvent.AddSharedPokit(uri))
+            }
+        }
+    }
 }
 
 sealed class NavigationEvent {
     data class AddLink(val url: String) : NavigationEvent()
+    data class AddSharedPokit(val uri: String) : NavigationEvent()
 }
