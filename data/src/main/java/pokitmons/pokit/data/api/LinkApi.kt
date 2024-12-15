@@ -1,6 +1,8 @@
 package pokitmons.pokit.data.api
 
+import pokitmons.pokit.data.model.link.request.DeleteUncategorizedLinksRequest
 import pokitmons.pokit.data.model.link.request.ModifyLinkRequest
+import pokitmons.pokit.data.model.link.request.ModifyPokitOfLinksRequest
 import pokitmons.pokit.data.model.link.response.ApplyBookmarkResponse
 import pokitmons.pokit.data.model.link.response.GetLinkResponse
 import pokitmons.pokit.data.model.link.response.GetLinksResponse
@@ -75,4 +77,14 @@ interface LinkApi {
         @Query("size") size: Int = 10,
         @Query("sort") sort: List<String> = listOf(LinksSort.RECENT.value),
     ): GetLinksResponse
+
+    @PUT("content/uncategorized")
+    suspend fun deleteUncategorizedLinks(
+        @Body deleteUncategorizedLinksRequest: DeleteUncategorizedLinksRequest,
+    ): Response<Unit>
+
+    @PATCH("content")
+    suspend fun modifyPokitOfLinks(
+        @Body modifyPokitOfLinksRequest: ModifyPokitOfLinksRequest,
+    ): Response<Unit>
 }

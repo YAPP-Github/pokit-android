@@ -1,6 +1,8 @@
 package pokitmons.pokit.data.datasource.remote.link
 
+import pokitmons.pokit.data.model.link.request.DeleteUncategorizedLinksRequest
 import pokitmons.pokit.data.model.link.request.ModifyLinkRequest
+import pokitmons.pokit.data.model.link.request.ModifyPokitOfLinksRequest
 import pokitmons.pokit.data.model.link.response.GetLinkResponse
 import pokitmons.pokit.data.model.link.response.GetLinksResponse
 import pokitmons.pokit.data.model.link.response.LinkCardResponse
@@ -54,4 +56,8 @@ interface LinkDataSource {
         size: Int = 10,
         sort: List<String> = listOf(LinksSort.RECENT.value),
     ): GetLinksResponse
+
+    suspend fun deleteUncategorizedLinks(deleteUncategorizedLinksRequest: DeleteUncategorizedLinksRequest)
+
+    suspend fun modifyPokitOfLinks(modifyPokitOfLinksRequest: ModifyPokitOfLinksRequest)
 }

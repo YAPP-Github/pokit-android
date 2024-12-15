@@ -59,6 +59,7 @@ fun HomeScreen(
     onNavigateToAlarm: () -> Unit,
     onNavigateToBookmarkLinkList: () -> Unit,
     onNavigateToUnreadLinkList: () -> Unit,
+    onNavigateToUncategorizedLinkList: () -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -189,7 +190,8 @@ fun HomeScreen(
                                 onNavigateToLinkModify = onNavigateToLinkModify,
                                 onNavigateToPokitModify = onNavigateToPokitModify,
                                 onNavigateToAddLink = { onNavigateAddLink(null) },
-                                onNavigateToAddPokit = onNavigateAddPokit
+                                onNavigateToAddPokit = onNavigateAddPokit,
+                                onNavigateToUncategorizedLinkList = onNavigateToUncategorizedLinkList
                             )
                         }
 

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_classify_link">링크 분류하기</string>
+    <string name="label_select_all">전체 선택</string>
+    <string name="label_remove_link">링크 삭제</string>
+    <string name="label_move_pokit">포킷 이동</string>
+    <string name="count_format">링크 %d개</string>
+</resources>

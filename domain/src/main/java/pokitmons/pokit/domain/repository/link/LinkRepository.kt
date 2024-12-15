@@ -62,4 +62,13 @@ interface LinkRepository {
         page: Int = 0,
         sort: LinksSort = LinksSort.RECENT,
     ): PokitResult<List<Link>>
+
+    suspend fun deleteUncategorizedLinks(
+        linkIds: List<Int>,
+    ): PokitResult<Unit>
+
+    suspend fun modifyPokitOfLinks(
+        linkIds: List<Int>,
+        categoryId: Int,
+    ): PokitResult<Unit>
 }

@@ -2,6 +2,7 @@ package pokitmons.pokit.navigation
 
 import androidx.compose.foundation.background
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -31,6 +32,8 @@ import pokitmons.pokit.settings.nickname.EditNicknameScreen
 import pokitmons.pokit.settings.setting.SettingsScreen
 import pokitmons.pokit.success.SignUpSuccessScreen
 import pokitmons.pokit.terms.TermsOfServiceScreen
+import pokitmons.pokit.uncategorized.UncategorizedScreen
+import pokitmons.pokit.uncategorized.UncategorizedViewModelImpl
 
 @Composable
 fun RootNavHost(
@@ -177,6 +180,16 @@ fun RootNavHost(
 
         composable(route = Home.route) {
             val viewModel: PokitViewModel = hiltViewModel()
+
+            LaunchedEffect(Unit) {
+                it.savedStateHandle.getLiveData<Boolean>("refresh").observe(it) { needRefresh ->
+                    if (needRefresh) {
+                        viewModel.refreshLinks()
+                        it.savedStateHandle["refresh"] = false
+                    }
+                }
+            }
+
             HomeScreen(
                 viewModel = viewModel,
                 onNavigateToSearch = { navHostController.navigate(Search.route) },
@@ -192,7 +205,10 @@ fun RootNavHost(
                 onNavigateToPokitModify = { navHostController.navigate("${AddPokit.route}?${AddPokit.pokitIdArg}=$it") },
                 onNavigateToAlarm = { navHostController.navigate(Alarm.route) },
                 onNavigateToUnreadLinkList = { navHostController.navigate("${LinkList.route}/unread") },
-                onNavigateToBookmarkLinkList = { navHostController.navigate("${LinkList.route}/bookmark") }
+                onNavigateToBookmarkLinkList = { navHostController.navigate("${LinkList.route}/bookmark") },
+                onNavigateToUncategorizedLinkList = {
+                    navHostController.navigate(Uncategorized.route)
+                }
             )
         }
 
@@ -217,6 +233,22 @@ fun RootNavHost(
                 onBackPressed = navHostController::popBackStack,
                 onNavigateToLinkModify = { linkId ->
                     navHostController.navigate("${AddLink.route}?${AddLink.linkIdArg}=$linkId")
+                }
+            )
+        }
+
+        composable(
+            route = Uncategorized.route
+        ) {
+            val viewModel: UncategorizedViewModelImpl = hiltViewModel()
+            UncategorizedScreen(
+                viewModel = viewModel,
+                onBackPressed = {
+                    val needRefresh = viewModel.linkChanged
+                    navHostController.previousBackStackEntry
+                        ?.savedStateHandle
+                        ?.set("refresh", needRefresh)
+                    navHostController.popBackStack()
                 }
             )
         }

@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -26,10 +27,14 @@ import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonStyl
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonType
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.core.ui.utils.noRippleClickable
+import pokitmons.pokit.home.R
 import pokitmons.pokit.core.ui.R.drawable as DrawableResource
 
 @Composable
-fun HomeMid(viewModel: PokitViewModel = hiltViewModel()) {
+fun HomeMid(
+    viewModel: PokitViewModel = hiltViewModel(),
+    onClickModifyButton: () -> Unit,
+) {
     Spacer(modifier = Modifier.height(24.dp))
     Column(
         modifier = Modifier
@@ -83,15 +88,15 @@ fun HomeMid(viewModel: PokitViewModel = hiltViewModel()) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                Icon(
-                    modifier = Modifier.size(18.dp),
-                    painter = painterResource(id = DrawableResource.icon_24_align),
-                    contentDescription = null
-                )
-
-                Spacer(modifier = Modifier.padding(start = 2.dp))
-
                 if (viewModel.selectedCategory.value == Category.Pokit) {
+                    Icon(
+                        modifier = Modifier.size(18.dp),
+                        painter = painterResource(id = DrawableResource.icon_24_align),
+                        contentDescription = null
+                    )
+
+                    Spacer(modifier = Modifier.padding(start = 2.dp))
+
                     Text(
                         modifier = Modifier
                             .noRippleClickable {
@@ -111,17 +116,11 @@ fun HomeMid(viewModel: PokitViewModel = hiltViewModel()) {
                     Text(
                         modifier = Modifier
                             .noRippleClickable {
-                                when (viewModel.linksSortOrder.value) {
-                                    is UncategorizedLinksSortOrder.Latest -> viewModel.updateLinksSortOrder(UncategorizedLinksSortOrder.Older)
-                                    is UncategorizedLinksSortOrder.Older -> viewModel.updateLinksSortOrder(UncategorizedLinksSortOrder.Latest)
-                                }
+                                onClickModifyButton()
                             }
                             .align(Alignment.CenterVertically),
-                        text = when (viewModel.linksSortOrder.value) {
-                            is UncategorizedLinksSortOrder.Latest -> "최신순"
-                            is UncategorizedLinksSortOrder.Older -> "오래된순"
-                        },
-                        style = PokitTheme.typography.body3Medium
+                        text = stringResource(id = R.string.modify),
+                        style = PokitTheme.typography.body3Medium.copy(color = PokitTheme.colors.brand)
                     )
                 }
             }
@@ -133,5 +132,5 @@ fun HomeMid(viewModel: PokitViewModel = hiltViewModel()) {
 @Preview(showBackground = true)
 @Composable
 fun PreviewCustomRow() {
-    HomeMid()
+    HomeMid(onClickModifyButton = {})
 }

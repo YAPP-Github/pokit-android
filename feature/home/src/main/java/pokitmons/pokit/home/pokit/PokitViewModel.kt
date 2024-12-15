@@ -272,6 +272,12 @@ class PokitViewModel @Inject constructor(
         }
     }
 
+    fun refreshLinks() {
+        viewModelScope.launch {
+            linkPaging.refresh()
+        }
+    }
+
     fun updateScreenType(type: ScreenType) {
         screenType.value = type
     }
