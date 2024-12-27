@@ -10,7 +10,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.strayalpaca.addlink.AddLinkScreenContainer
-import com.strayalpaca.addlink.AddLinkViewModel
+import com.strayalpaca.addlink.AddLinkViewModelImpl
 import com.strayalpaca.addpokit.AddPokitScreenContainer
 import com.strayalpaca.addpokit.AddPokitViewModel
 import com.strayalpaca.pokitdetail.PokitDetailScreenContainer
@@ -100,7 +100,7 @@ fun RootNavHost(
             route = AddLink.routeWithArgs,
             arguments = AddLink.arguments
         ) {
-            val viewModel: AddLinkViewModel = hiltViewModel()
+            val viewModel: AddLinkViewModelImpl = hiltViewModel()
             AddLinkScreenContainer(
                 viewModel = viewModel,
                 onBackPressed = navHostController::popBackStack,
