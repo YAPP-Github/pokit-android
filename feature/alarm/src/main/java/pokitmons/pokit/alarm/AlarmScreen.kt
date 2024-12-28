@@ -17,7 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import pokitmons.pokit.alarm.components.alarmitem.AlarmItem
 import pokitmons.pokit.alarm.components.toolbar.Toolbar
-import pokitmons.pokit.alarm.model.Alarm
+import pokitmons.pokit.alarm.model.AlarmScreenSideEffect
+import pokitmons.pokit.core.feature.flow.collectAsEffect
 import pokitmons.pokit.core.feature.model.paging.PagingState
 import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
 import pokitmons.pokit.core.ui.components.template.pooki.Pooki
@@ -26,26 +27,21 @@ import pokitmons.pokit.core.ui.R.string as coreString
 
 @Composable
 fun AlarmScreenContainer(
-    viewModel: AlarmViewModel,
+    viewModel: AlarmViewModelInterface,
     onNavigateToLinkModify: (String) -> Unit = {},
     onBackPressed: () -> Unit,
 ) {
-    val alarms by viewModel.alarms.collectAsState()
-    val alarmsState by viewModel.alarmsState.collectAsState()
+    viewModel.sideEffect.collectAsEffect { sideEffect ->
+        when (sideEffect) {
+            is AlarmScreenSideEffect.NavigateToLinkModify -> {
+                onNavigateToLinkModify(sideEffect.linkId)
+            }
+        }
+    }
 
     AlarmScreen(
         onClickBack = onBackPressed,
-        onClickAlarm = remember {
-            { alarmId ->
-                viewModel.readAlarm(alarmId)
-                onNavigateToLinkModify(alarmId)
-            }
-        },
-        onClickAlarmRemove = viewModel::removeAlarm,
-        alarms = alarms,
-        alarmsState = alarmsState,
-        loadNextAlarms = viewModel::loadNextAlarms,
-        refreshAlarms = viewModel::refreshAlarms
+        viewModel = viewModel
     )
 }
 
@@ -53,13 +49,11 @@ fun AlarmScreenContainer(
 @Composable
 fun AlarmScreen(
     onClickBack: () -> Unit = {},
-    onClickAlarm: (String) -> Unit = {},
-    onClickAlarmRemove: (String) -> Unit = {},
-    alarms: List<Alarm> = emptyList(),
-    alarmsState: PagingState = PagingState.IDLE,
-    loadNextAlarms: () -> Unit = {},
-    refreshAlarms: () -> Unit = {},
+    viewModel: AlarmViewModelInterface
 ) {
+    val alarms by viewModel.alarms.collectAsState()
+    val alarmsState by viewModel.alarmsState.collectAsState()
+
     Column(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -79,7 +73,7 @@ fun AlarmScreen(
 
         LaunchedEffect(startAlarmPaging.value) {
             if (startAlarmPaging.value && alarmsState == PagingState.IDLE) {
-                loadNextAlarms()
+                viewModel.loadNextAlarms()
             }
         }
 
@@ -98,7 +92,7 @@ fun AlarmScreen(
                         .weight(1f),
                     title = stringResource(id = coreString.title_error),
                     sub = stringResource(id = coreString.sub_error),
-                    onClickRetry = refreshAlarms
+                    onClickRetry = viewModel::refreshAlarms
                 )
             }
             alarms.isEmpty() -> {
@@ -124,8 +118,8 @@ fun AlarmScreen(
                         AlarmItem(
                             modifier = Modifier.animateItemPlacement(),
                             alarm = alarm,
-                            onClickAlarm = onClickAlarm,
-                            onClickRemove = onClickAlarmRemove
+                            onClickAlarm = viewModel::readAlarmThenMoveToModifyLink,
+                            onClickRemove = viewModel::removeAlarm
                         )
                     }
                 }

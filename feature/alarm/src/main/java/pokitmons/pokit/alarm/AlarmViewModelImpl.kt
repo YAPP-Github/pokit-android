@@ -6,6 +6,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import pokitmons.pokit.alarm.model.Alarm
+import pokitmons.pokit.alarm.model.AlarmScreenSideEffect
+import pokitmons.pokit.core.feature.flow.EventFlow
+import pokitmons.pokit.core.feature.flow.MutableEventFlow
+import pokitmons.pokit.core.feature.flow.asEventFlow
 import pokitmons.pokit.core.feature.model.paging.PagingLoadResult
 import pokitmons.pokit.core.feature.model.paging.PagingSource
 import pokitmons.pokit.core.feature.model.paging.PagingState
@@ -16,10 +20,10 @@ import pokitmons.pokit.domain.usecase.alert.GetAlertsUseCase
 import javax.inject.Inject
 
 @HiltViewModel
-class AlarmViewModel @Inject constructor(
+class AlarmViewModelImpl @Inject constructor(
     private val getAlertsUseCase: GetAlertsUseCase,
     private val deleteAlertUseCase: DeleteAlertUseCase,
-) : ViewModel() {
+) : ViewModel(), AlarmViewModelInterface {
 
     private val alarmPagingSource = object : PagingSource<Alarm> {
         override suspend fun load(pageIndex: Int, pageSize: Int): PagingLoadResult<Alarm> {
@@ -37,8 +41,14 @@ class AlarmViewModel @Inject constructor(
         coroutineScope = viewModelScope
     )
 
-    val alarms: StateFlow<List<Alarm>> = alarmPaging.pagingData
-    val alarmsState: StateFlow<PagingState> = alarmPaging.pagingState
+    private val _sideEffect = MutableEventFlow<AlarmScreenSideEffect>()
+    override val sideEffect: EventFlow<AlarmScreenSideEffect>
+        get() = _sideEffect.asEventFlow()
+
+    override val alarms: StateFlow<List<Alarm>>
+        get() = alarmPaging.pagingData
+    override val alarmsState: StateFlow<PagingState>
+        get() = alarmPaging.pagingState
 
     init {
         viewModelScope.launch {
@@ -46,7 +56,19 @@ class AlarmViewModel @Inject constructor(
         }
     }
 
-    fun removeAlarm(alarmId: String) {
+    override fun loadNextAlarms() {
+        viewModelScope.launch {
+            alarmPaging.load()
+        }
+    }
+
+    override fun refreshAlarms() {
+        viewModelScope.launch {
+            alarmPaging.refresh()
+        }
+    }
+
+    override fun removeAlarm(alarmId: String) {
         val id = alarmId.toIntOrNull() ?: return
         viewModelScope.launch {
             val response = deleteAlertUseCase.deleteAlert(id)
@@ -58,23 +80,12 @@ class AlarmViewModel @Inject constructor(
         }
     }
 
-    fun loadNextAlarms() {
-        viewModelScope.launch {
-            alarmPaging.load()
-        }
-    }
-
-    fun refreshAlarms() {
-        viewModelScope.launch {
-            alarmPaging.refresh()
-        }
-    }
-
-    fun readAlarm(alarmId: String) {
+    override fun readAlarmThenMoveToModifyLink(alarmId: String) {
         val targetAlarm = alarms.value.find { it.id == alarmId } ?: return
 
         viewModelScope.launch {
             alarmPaging.modifyItem(targetItem = targetAlarm.copy(read = true))
+            _sideEffect.emit(AlarmScreenSideEffect.NavigateToLinkModify(linkId = targetAlarm.contentId))
         }
     }
 }

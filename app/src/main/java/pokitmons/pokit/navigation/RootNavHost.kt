@@ -17,7 +17,7 @@ import com.strayalpaca.pokitdetail.PokitDetailScreenContainer
 import com.strayalpaca.pokitdetail.PokitDetailViewModel
 import pokitmons.pokit.LoginViewModel
 import pokitmons.pokit.alarm.AlarmScreenContainer
-import pokitmons.pokit.alarm.AlarmViewModel
+import pokitmons.pokit.alarm.AlarmViewModelImpl
 import pokitmons.pokit.home.HomeScreen
 import pokitmons.pokit.home.pokit.PokitViewModel
 import pokitmons.pokit.keyword.KeywordScreen
@@ -213,7 +213,7 @@ fun RootNavHost(
         }
 
         composable(route = Alarm.route) {
-            val viewModel: AlarmViewModel = hiltViewModel()
+            val viewModel: AlarmViewModelImpl = hiltViewModel()
             AlarmScreenContainer(
                 viewModel = viewModel,
                 onBackPressed = navHostController::popBackStack,
