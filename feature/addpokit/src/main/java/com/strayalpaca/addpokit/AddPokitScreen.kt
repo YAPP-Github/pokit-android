@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -22,7 +21,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -41,17 +39,15 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.strayalpaca.addpokit.components.atom.PokitProfileImage
 import com.strayalpaca.addpokit.components.block.Toolbar
-import com.strayalpaca.addpokit.model.AddPokitScreenState
 import com.strayalpaca.addpokit.model.AddPokitScreenStep
 import com.strayalpaca.addpokit.model.AddPokitSideEffect
 import com.strayalpaca.addpokit.model.Pokit
-import com.strayalpaca.addpokit.model.PokitImage
-import com.strayalpaca.addpokit.utils.BackPressHandler
-import org.orbitmvi.orbit.compose.collectSideEffect
-import pokitmons.pokit.core.feature.model.NetworkState
+import com.strayalpaca.addpokit.model.PokitUpdateType
+import pokitmons.pokit.core.feature.flow.collectAsEffect
 import pokitmons.pokit.core.feature.model.paging.PagingState
 import pokitmons.pokit.core.ui.components.atom.button.PokitButton
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
+import pokitmons.pokit.core.ui.components.atom.loading.LoadingProgress
 import pokitmons.pokit.core.ui.components.block.labeledinput.LabeledInput
 import pokitmons.pokit.core.ui.components.block.pokitlist.PokitList
 import pokitmons.pokit.core.ui.components.block.pokitlist.attributes.PokitListState
@@ -67,22 +63,7 @@ fun AddPokitScreenContainer(
     viewModel: AddPokitViewModel,
     onBackPressed: () -> Unit,
 ) {
-    val state by viewModel.container.stateFlow.collectAsState()
-    val pokitName by viewModel.pokitName.collectAsState()
-    val images by viewModel.pokitImages.collectAsState()
-    val pokits by viewModel.pokitList.collectAsState()
-    val pokitsState by viewModel.pokitListState.collectAsState()
-
-    val saveButtonEnable = remember {
-        derivedStateOf {
-            state.step != AddPokitScreenStep.POKIT_SAVE_LOADING &&
-                state.pokitInputErrorMessage == null &&
-                state.errorToastMessage == null &&
-                state.pokitImage != null
-        }
-    }
-
-    viewModel.collectSideEffect { sideEffect ->
+    viewModel.sideEffect.collectAsEffect { sideEffect ->
         when (sideEffect) {
             AddPokitSideEffect.OnNavigationBack -> {
                 onBackPressed()
@@ -90,44 +71,21 @@ fun AddPokitScreenContainer(
         }
     }
 
-    BackPressHandler(onBackPressed = viewModel::onBackPressed)
-
     AddPokitScreen(
-        pokitName = pokitName,
-        state = state,
-        saveButtonEnable = saveButtonEnable.value,
-        onclickAddPokit = viewModel::savePokit,
-        inputPokitName = viewModel::inputPokitName,
-        onBackPressed = viewModel::onBackPressed,
-        hideProfileSelectBottomSheet = viewModel::hidePokitProfileSelectBottomSheet,
-        showSelectProfileBottomSheet = viewModel::showPokitProfileSelectBottomSheet,
-        selectPokitProfileImage = viewModel::selectPokitProfile,
-        hideToastMessage = viewModel::hideToastMessage,
-        pokits = pokits,
-        pokitsState = pokitsState,
-        loadPokits = viewModel::loadPokitList,
-        pokitImages = images
+        viewModel = viewModel,
+        onBackPressed = onBackPressed,
     )
 }
 
 @Composable
 fun AddPokitScreen(
-    pokitName: String = "",
-    state: AddPokitScreenState = AddPokitScreenState(),
-    saveButtonEnable: Boolean = true,
-    onclickAddPokit: () -> Unit = {},
-    inputPokitName: (String) -> Unit = {},
+    viewModel: AddPokitViewModel,
     onBackPressed: () -> Unit = {},
-    hideProfileSelectBottomSheet: () -> Unit = {},
-    showSelectProfileBottomSheet: () -> Unit = {},
-    selectPokitProfileImage: (PokitImage) -> Unit = {},
-    hideToastMessage: () -> Unit = {},
-    pokits: List<Pokit> = emptyList(),
-    pokitsState: PagingState = PagingState.IDLE,
-    loadPokits: () -> Unit = {},
-    pokitImages: List<PokitImage> = emptyList(),
-    pokitImagesState: NetworkState = NetworkState.IDLE,
 ) {
+    val state by viewModel.state.collectAsState()
+    val pokits by viewModel.pokitList.collectAsState()
+    val pokitsState by viewModel.pokitListState.collectAsState()
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -138,7 +96,7 @@ fun AddPokitScreen(
 
         Toolbar(
             onClickBack = onBackPressed,
-            title = stringResource(id = if (state.isModify) R.string.title_modify_pokit else R.string.title_add_pokit)
+            title = stringResource(id = if (state.pokitUpdateType is PokitUpdateType.Modify) R.string.title_modify_pokit else R.string.title_add_pokit)
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -171,7 +129,7 @@ fun AddPokitScreen(
                         shape = CircleShape
                     )
                     .noRippleClickable {
-                        showSelectProfileBottomSheet()
+                        viewModel.showPokitProfileImageSelectBottomSheet()
                     }
                     .padding(3.dp)
             ) {
@@ -192,9 +150,9 @@ fun AddPokitScreen(
         LabeledInput(
             modifier = Modifier.padding(horizontal = 20.dp),
             label = stringResource(id = R.string.pokit_name),
-            inputText = pokitName,
+            inputText = state.pokitName,
             hintText = stringResource(id = R.string.placeholder_pokit_name),
-            onChangeText = inputPokitName,
+            onChangeText = viewModel::inputPokitName,
             isError = state.pokitInputErrorMessage != null,
             sub = state.pokitInputErrorMessage ?: "",
             enable = (state.step != AddPokitScreenStep.POKIT_SAVE_LOADING),
@@ -230,7 +188,7 @@ fun AddPokitScreen(
 
             LaunchedEffect(startPokitPaging.value) {
                 if (startPokitPaging.value && pokitsState == PagingState.IDLE) {
-                    loadPokits()
+                    viewModel.loadNextPokits()
                 }
             }
 
@@ -249,14 +207,6 @@ fun AddPokitScreen(
                 }
             }
 
-            if (pokitImagesState == NetworkState.LOADING) {
-                CircularProgressIndicator(
-                    modifier = Modifier.width(64.dp),
-                    color = PokitTheme.colors.brand,
-                    trackColor = PokitTheme.colors.backgroundSecondary
-                )
-            }
-
             state.errorToastMessage?.let { message ->
                 PokitToast(
                     modifier = Modifier
@@ -264,7 +214,7 @@ fun AddPokitScreen(
                         .align(Alignment.BottomCenter)
                         .padding(start = 12.dp, end = 12.dp, bottom = 16.dp),
                     text = message,
-                    onClickClose = hideToastMessage
+                    onClickClose = viewModel::hideToastMessage
                 )
             }
         }
@@ -277,30 +227,38 @@ fun AddPokitScreen(
             PokitButton(
                 text = stringResource(id = R.string.save),
                 icon = null,
-                onClick = onclickAddPokit,
+                onClick = viewModel::savePokit,
                 modifier = Modifier.fillMaxWidth(),
                 size = PokitButtonSize.LARGE,
-                enable = saveButtonEnable
+                enable = state.saveButtonEnable
             )
         }
 
         PokitBottomSheet(
-            onHideBottomSheet = hideProfileSelectBottomSheet,
+            onHideBottomSheet = viewModel::hidePokitProfileImageSelectBottomSheet,
             show = state.step == AddPokitScreenStep.SELECT_PROFILE
         ) {
-            LazyVerticalGrid(
-                modifier = Modifier.padding(vertical = 12.dp, horizontal = 52.dp),
-                columns = GridCells.Adaptive(66.dp),
-                horizontalArrangement = Arrangement.spacedBy(20.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                items(pokitImages) { pokitImage ->
-                    PokitProfileImage(
-                        pokitImage = pokitImage,
-                        onClick = selectPokitProfileImage,
-                        focused = (state.pokitImage?.id == pokitImage.id)
-                    )
+            if (state.pokitProfileImages != null) {
+                LazyVerticalGrid(
+                    modifier = Modifier.padding(vertical = 12.dp, horizontal = 52.dp),
+                    columns = GridCells.Adaptive(66.dp),
+                    horizontalArrangement = Arrangement.spacedBy(20.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    items(state.pokitProfileImages!!) { pokitImage ->
+                        PokitProfileImage(
+                            pokitImage = pokitImage,
+                            onClick = viewModel::setPokitProfileImage,
+                            focused = (state.pokitImage?.id == pokitImage.id)
+                        )
+                    }
                 }
+            } else {
+                LoadingProgress(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 80.dp, horizontal = 52.dp),
+                )
             }
         }
     }
