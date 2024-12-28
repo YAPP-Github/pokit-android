@@ -22,7 +22,7 @@ import pokitmons.pokit.home.HomeScreen
 import pokitmons.pokit.home.pokit.PokitViewModel
 import pokitmons.pokit.keyword.KeywordScreen
 import pokitmons.pokit.linklist.LinkListScreenContainer
-import pokitmons.pokit.linklist.LinkListViewModel
+import pokitmons.pokit.linklist.LinkListViewModelImpl
 import pokitmons.pokit.login.LoginScreen
 import pokitmons.pokit.nickname.InputNicknameScreen
 import pokitmons.pokit.search.SearchScreenContainer
@@ -227,7 +227,7 @@ fun RootNavHost(
             route = LinkList.routeWithArgs,
             arguments = LinkList.arguments
         ) {
-            val viewModel: LinkListViewModel = hiltViewModel()
+            val viewModel: LinkListViewModelImpl = hiltViewModel()
             LinkListScreenContainer(
                 viewModel = viewModel,
                 onBackPressed = navHostController::popBackStack,
