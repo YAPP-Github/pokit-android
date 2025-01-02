@@ -14,7 +14,7 @@ import com.strayalpaca.addlink.AddLinkViewModelImpl
 import com.strayalpaca.addpokit.AddPokitScreenContainer
 import com.strayalpaca.addpokit.AddPokitViewModelImpl
 import com.strayalpaca.pokitdetail.PokitDetailScreenContainer
-import com.strayalpaca.pokitdetail.PokitDetailViewModel
+import com.strayalpaca.pokitdetail.PokitDetailViewModelImpl
 import pokitmons.pokit.LoginViewModel
 import pokitmons.pokit.alarm.AlarmScreenContainer
 import pokitmons.pokit.alarm.AlarmViewModelImpl
@@ -125,7 +125,7 @@ fun RootNavHost(
             route = PokitDetail.routeWithArgs,
             arguments = PokitDetail.arguments
         ) {
-            val viewModel: PokitDetailViewModel = hiltViewModel()
+            val viewModel: PokitDetailViewModelImpl = hiltViewModel()
             PokitDetailScreenContainer(
                 viewModel = viewModel,
                 onBackPressed = navHostController::popBackStack,
