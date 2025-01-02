@@ -9,6 +9,7 @@ data class SearchScreenState(
     val firstBottomSheetFilterType: FilterType = FilterType.Pokit,
     val linkBottomSheetType: LinkBottomSheetState? = null,
     val sortRecent: Boolean = true,
+    val searchWord: String = ""
 )
 
 enum class SearchScreenStep {

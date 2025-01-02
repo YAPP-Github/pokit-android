@@ -26,7 +26,7 @@ import pokitmons.pokit.linklist.LinkListViewModelImpl
 import pokitmons.pokit.login.LoginScreen
 import pokitmons.pokit.nickname.InputNicknameScreen
 import pokitmons.pokit.search.SearchScreenContainer
-import pokitmons.pokit.search.SearchViewModel
+import pokitmons.pokit.search.SearchViewModelImpl
 import pokitmons.pokit.settings.SettingViewModel
 import pokitmons.pokit.settings.nickname.EditNicknameScreen
 import pokitmons.pokit.settings.setting.SettingsScreen
@@ -144,7 +144,7 @@ fun RootNavHost(
         composable(
             route = Search.route
         ) {
-            val viewModel: SearchViewModel = hiltViewModel()
+            val viewModel: SearchViewModelImpl = hiltViewModel()
             SearchScreenContainer(
                 viewModel = viewModel,
                 onBackPressed = navHostController::popBackStack,

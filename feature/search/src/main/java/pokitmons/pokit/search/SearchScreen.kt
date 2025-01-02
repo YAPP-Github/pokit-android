@@ -31,7 +31,6 @@ import pokitmons.pokit.search.components.searchitemlist.SearchItemList
 import pokitmons.pokit.search.components.toolbar.Toolbar
 import pokitmons.pokit.search.model.Filter
 import pokitmons.pokit.search.model.FilterType
-import pokitmons.pokit.search.model.Link
 import pokitmons.pokit.search.model.LinkBottomSheetState
 import pokitmons.pokit.search.model.SearchScreenState
 import pokitmons.pokit.search.model.SearchScreenStep
@@ -44,9 +43,6 @@ fun SearchScreenContainer(
     onNavigateToLinkModify: (String) -> Unit,
 ) {
     val state by viewModel.state.collectAsState()
-    val searchWord by viewModel.searchWord.collectAsState()
-    val linkList by viewModel.linkList.collectAsState()
-    val linkPagingState by viewModel.linkPagingState.collectAsState()
     val pokitList by viewModel.pokitList.collectAsState()
     val pokitPagingState by viewModel.pokitPagingState.collectAsState()
 
@@ -76,7 +72,7 @@ fun SearchScreenContainer(
                         subText = stringResource(id = R.string.sub_remove_link),
                         onClickLeftButton = viewModel::hideLinkBottomSheet,
                         onClickRightButton = {
-                            viewModel.deleteLink()
+                            viewModel.deleteLink(linkBottomSheetState.link)
                             viewModel.hideLinkBottomSheet()
                         }
                     )
@@ -101,7 +97,7 @@ fun SearchScreenContainer(
                         onClickRemoveLink = {
                             viewModel.showLinkRemoveBottomSheet(linkBottomSheetState.link)
                         },
-                        onClickBookmark = viewModel::toggleBookmarkInBottomSheet
+                        onClickBookmark = { viewModel.toggleBookmark(linkBottomSheetState.link) }
                     )
                 }
             }
@@ -110,44 +106,20 @@ fun SearchScreenContainer(
 
     SearchScreen(
         state = state,
-        currentSearchWord = searchWord,
-        linkList = linkList,
-        linkPagingState = linkPagingState,
         onClickBack = onBackPressed,
-        inputSearchWord = viewModel::inputSearchWord,
-        onClickSearch = viewModel::applyCurrentSearchWord,
-        onClickRecentSearchWord = viewModel::applySearchWord,
-        onClickUseRecentSearchWord = viewModel::toggleUseRecentSearchWord,
-        onClickRemoveAllRecentSearchWord = viewModel::removeAllRecentSearchWord,
-        onClickRemoveRecentSearchWord = viewModel::removeRecentSearchWord,
-        onClickFilterSelect = viewModel::showFilterBottomSheet,
-        onClickFilterItem = viewModel::showFilterBottomSheetWithType,
-        toggleSortOrder = viewModel::toggleSortOrder,
-        showLinkDetailBottomSheet = viewModel::showLinkDetailBottomSheet,
-        loadNextLinks = viewModel::loadNextLinks
+        viewModel = viewModel
     )
 }
 
 @Composable
 fun SearchScreen(
     state: SearchScreenState = SearchScreenState(),
-    currentSearchWord: String = "",
-    linkList: List<Link> = emptyList(),
-    linkPagingState: PagingState = PagingState.IDLE,
     onClickBack: () -> Unit = {},
-    inputSearchWord: (String) -> Unit = {},
-    onClickSearch: () -> Unit = {},
-    onClickRecentSearchWord: (String) -> Unit = {},
-    onClickUseRecentSearchWord: () -> Unit = {},
-    onClickRemoveAllRecentSearchWord: () -> Unit = {},
-    onClickRemoveRecentSearchWord: (String) -> Unit = {},
-    onClickFilterSelect: () -> Unit = {},
-    onClickFilterItem: (FilterType) -> Unit = {},
-    toggleSortOrder: () -> Unit = {},
-    showLinkDetailBottomSheet: (Link) -> Unit = {},
-    loadNextLinks: () -> Unit = {},
+    viewModel: SearchViewModel,
 ) {
     val uriHandler = LocalUriHandler.current
+    val linkList by viewModel.linkList.collectAsState()
+    val linkPagingState by viewModel.linkPagingState.collectAsState()
 
     Column(
         modifier = Modifier
@@ -156,30 +128,30 @@ fun SearchScreen(
     ) {
         Toolbar(
             onClickBack = onClickBack,
-            inputSearchWord = inputSearchWord,
-            currentSearchWord = currentSearchWord,
-            onClickSearch = onClickSearch,
-            onClickRemove = remember { { inputSearchWord("") } }
+            inputSearchWord = viewModel::inputSearchWord,
+            currentSearchWord = state.searchWord,
+            onClickSearch = viewModel::searchByCurrentSearchWord,
+            onClickRemove = remember { { viewModel.inputSearchWord("") } }
         )
 
         if (state.step == SearchScreenStep.INPUT) {
             RecentSearchWord(
-                onClickRemoveAll = onClickRemoveAllRecentSearchWord,
-                onToggleAutoSave = onClickUseRecentSearchWord,
+                onClickRemoveAll = viewModel::removeAllRecentSearchWord,
+                onToggleAutoSave = viewModel::toggleUseRecentSearchWord,
                 useAutoSave = state.useRecentSearchWord,
                 recentSearchWords = state.recentSearchWords,
-                onClickRemoveSearchWord = onClickRemoveRecentSearchWord,
-                onClickSearchWord = onClickRecentSearchWord
+                onClickRemoveSearchWord = viewModel::removeRecentSearchWord,
+                onClickSearchWord = viewModel::inputSearchWordThenSearch
             )
         }
 
         if (state.step == SearchScreenStep.RESULT) {
             FilterArea(
                 filter = state.filter,
-                onClickFilter = onClickFilterSelect,
-                onClickBookmark = remember { { onClickFilterItem(FilterType.Collect) } },
-                onClickPokitName = remember { { onClickFilterItem(FilterType.Pokit) } },
-                onClickPeriod = remember { { onClickFilterItem(FilterType.Period) } }
+                onClickFilter = viewModel::showFilterBottomSheet,
+                onClickBookmark = remember { { viewModel.showFilterBottomSheetWithType(FilterType.Collect) } },
+                onClickPokitName = remember { { viewModel.showFilterBottomSheetWithType(FilterType.Pokit) } },
+                onClickPeriod = remember { { viewModel.showFilterBottomSheetWithType(FilterType.Period) } }
             )
         }
 
@@ -204,7 +176,7 @@ fun SearchScreen(
                             .weight(1f),
                         title = stringResource(id = coreString.title_error),
                         sub = stringResource(id = coreString.sub_error),
-                        onClickRetry = onClickSearch
+                        onClickRetry = viewModel::searchByCurrentSearchWord
                     )
                 }
                 (linkList.isEmpty()) -> {
@@ -221,15 +193,15 @@ fun SearchScreen(
                         modifier = Modifier
                             .fillMaxWidth()
                             .weight(1f),
-                        onToggleSort = toggleSortOrder,
+                        onToggleSort = viewModel::toggleSortOrder,
                         useRecentOrder = state.sortRecent,
-                        onClickLinkKebab = showLinkDetailBottomSheet,
+                        onClickLinkKebab = viewModel::showLinkDetailBottomSheet,
                         onClickLink = {
                             uriHandler.openUri(it.url)
                         },
                         links = linkList,
                         linkPagingState = linkPagingState,
-                        loadNextLinks = loadNextLinks
+                        loadNextLinks = viewModel::loadNextLinks
                     )
                 }
             }
