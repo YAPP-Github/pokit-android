@@ -83,6 +83,7 @@ dependencies {
     implementation(project(":feature:settings"))
     implementation(project(":feature:home"))
     implementation(project(":feature:linklist"))
+    implementation(project(":feature:sharedpokit"))
 
     // hilt
     implementation(libs.hilt)

@@ -17,6 +17,7 @@ import pokitmons.pokit.data.api.LinkApi
 import pokitmons.pokit.data.api.PokitApi
 import pokitmons.pokit.data.api.RemindApi
 import pokitmons.pokit.data.api.SettingApi
+import pokitmons.pokit.data.api.SharedApi
 import pokitmons.pokit.data.api.TokenApi
 import pokitmons.pokit.data.datasource.local.AuthAuthenticator
 import pokitmons.pokit.data.datasource.local.AuthManager
@@ -167,5 +168,10 @@ object NetworkModule {
     @Provides
     fun provideAlertService(@Named("BaseRetrofit") retrofit: Retrofit): AlertApi {
         return retrofit.create(AlertApi::class.java)
+    }
+
+    @Provides
+    fun provideSharedService(@Named("BaseRetrofit") retrofit: Retrofit): SharedApi {
+        return retrofit.create(SharedApi::class.java)
     }
 }
