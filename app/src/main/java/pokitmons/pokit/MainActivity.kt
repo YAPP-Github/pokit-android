@@ -31,6 +31,7 @@ import pokitmons.pokit.core.feature.flow.collectAsEffect
 import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.navigation.AddLink
 import pokitmons.pokit.navigation.RootNavHost
+import pokitmons.pokit.navigation.Shared
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -58,7 +59,7 @@ class MainActivity : ComponentActivity() {
                     }
 
                     is NavigationEvent.AddSharedPokit -> {
-
+                        navHostController.navigate(Shared.route)
                     }
                 }
             }

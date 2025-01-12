@@ -30,6 +30,7 @@ import pokitmons.pokit.search.SearchViewModel
 import pokitmons.pokit.settings.SettingViewModel
 import pokitmons.pokit.settings.nickname.EditNicknameScreen
 import pokitmons.pokit.settings.setting.SettingsScreen
+import pokitmons.pokit.sharedpokit.SharedPokitScreen
 import pokitmons.pokit.success.SignUpSuccessScreen
 import pokitmons.pokit.terms.TermsOfServiceScreen
 import pokitmons.pokit.uncategorized.UncategorizedScreen
@@ -251,6 +252,12 @@ fun RootNavHost(
                     navHostController.popBackStack()
                 }
             )
+        }
+
+        composable(
+            route = Shared.route
+        ) {
+            SharedPokitScreen()
         }
     }
 }

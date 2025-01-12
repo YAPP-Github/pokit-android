@@ -110,3 +110,7 @@ object LinkList {
 object Uncategorized {
     val route: String = "uncategorized"
 }
+
+object Shared {
+    val route: String = "shared"
+}
