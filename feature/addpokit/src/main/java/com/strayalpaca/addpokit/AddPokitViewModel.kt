@@ -9,10 +9,10 @@ import pokitmons.pokit.core.feature.flow.EventFlow
 import pokitmons.pokit.core.feature.model.paging.PagingState
 
 interface AddPokitViewModel {
-    val state : StateFlow<AddPokitScreenState>
-    val pokitList : StateFlow<List<Pokit>>
-    val pokitListState : StateFlow<PagingState>
-    val sideEffect : EventFlow<AddPokitSideEffect>
+    val state: StateFlow<AddPokitScreenState>
+    val pokitList: StateFlow<List<Pokit>>
+    val pokitListState: StateFlow<PagingState>
+    val sideEffect: EventFlow<AddPokitSideEffect>
 
     fun loadNextPokits()
     fun inputPokitName(pokitName: String)

@@ -53,7 +53,7 @@ class AddLinkViewModelImpl @Inject constructor(
     private val getUncategorizedPokitUseCase: GetUncategorizedPokitUseCase,
     getPokitsUseCase: GetPokitsUseCase,
     savedStateHandle: SavedStateHandle,
-) :  ViewModel(), AddLinkViewModel {
+) : ViewModel(), AddLinkViewModel {
     private val defaultDispatcher: CoroutineContext = Dispatchers.IO
 
     private val pokitPagingSource = object : PagingSource<Pokit> {
@@ -114,10 +114,10 @@ class AddLinkViewModelImpl @Inject constructor(
         } ?: LinkUpdateType.Create
 
         _state.update {
-            it.copy(linkUpdateType= linkUpdateType)
+            it.copy(linkUpdateType = linkUpdateType)
         }
 
-        when(linkUpdateType) {
+        when (linkUpdateType) {
             LinkUpdateType.Create -> {
                 setCurrentPokit(savedStateHandle)
             }
@@ -143,9 +143,9 @@ class AddLinkViewModelImpl @Inject constructor(
                         currentPokit = Pokit(
                             title = result.categoryName,
                             id = result.categoryId.toString(),
-                            count = 0,
+                            count = 0
                         ),
-                        step = ScreenStep.IDLE,
+                        step = ScreenStep.IDLE
                     )
                 }
                 prevPokitId = result.categoryId
@@ -162,7 +162,7 @@ class AddLinkViewModelImpl @Inject constructor(
             val result = response.result
             val title = if (state.value.title.isEmpty() && result.title.isNotEmpty()) result.title else state.value.title
 
-            _state.update{
+            _state.update {
                 it.copy(
                     step = ScreenStep.IDLE,
                     link = Link.fromDomainLinkCard(response.result),
@@ -224,7 +224,7 @@ class AddLinkViewModelImpl @Inject constructor(
 
             _state.update { currentState.copy(step = ScreenStep.LINK_LOADING) }
 
-            val response = when(currentState.linkUpdateType) {
+            val response = when (currentState.linkUpdateType) {
                 LinkUpdateType.Create -> {
                     createLinkUseCase.createLink(
                         data = currentState.link!!.url,
@@ -260,7 +260,7 @@ class AddLinkViewModelImpl @Inject constructor(
                     pokitId = currentSelectedPokit.id.toInt()
                 )
 
-                when(currentState.linkUpdateType) {
+                when (currentState.linkUpdateType) {
                     LinkUpdateType.Create -> {
                         LinkUpdateEvent.createSuccess(linkArg)
                     }

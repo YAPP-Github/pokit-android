@@ -49,7 +49,7 @@ fun AlarmScreenContainer(
 @Composable
 fun AlarmScreen(
     onClickBack: () -> Unit = {},
-    viewModel: AlarmViewModelInterface
+    viewModel: AlarmViewModelInterface,
 ) {
     val alarms by viewModel.alarms.collectAsState()
     val alarmsState by viewModel.alarmsState.collectAsState()

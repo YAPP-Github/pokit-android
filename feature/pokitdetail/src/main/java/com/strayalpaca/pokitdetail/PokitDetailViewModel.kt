@@ -16,7 +16,7 @@ interface PokitDetailViewModel {
     val linkListState: StateFlow<PagingState>
 
     val moveToBackEvent: EventFlow<Boolean>
-    val state : StateFlow<PokitDetailScreenState>
+    val state: StateFlow<PokitDetailScreenState>
 
     fun changePokit(pokit: Pokit)
     fun changeFilter(filter: Filter)

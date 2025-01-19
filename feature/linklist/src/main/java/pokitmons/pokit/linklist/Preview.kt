@@ -22,7 +22,7 @@ fun Preview() {
             LinkListScreen(
                 viewModel = dummyLinkListViewModel,
                 onBackPressed = { },
-                onClickModifyLink = {},
+                onClickModifyLink = {}
             )
         }
     }
@@ -55,5 +55,4 @@ private val dummyLinkListViewModel = object : LinkListViewModel {
     override fun hideCheckLinkRemoveBottomSheet() {}
 
     override fun removeLink(linkId: String) {}
-
 }

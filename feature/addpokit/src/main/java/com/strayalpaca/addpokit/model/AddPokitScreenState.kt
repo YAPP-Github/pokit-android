@@ -10,7 +10,7 @@ data class AddPokitScreenState(
     val errorToastMessage: String? = null,
     val pokitName: String = "",
     val pokitProfileImages: List<PokitImage>? = null,
-    val pokitUpdateType: PokitUpdateType = PokitUpdateType.Create
+    val pokitUpdateType: PokitUpdateType = PokitUpdateType.Create,
 ) {
     val saveButtonEnable
         get() = step != AddPokitScreenStep.POKIT_SAVE_LOADING &&

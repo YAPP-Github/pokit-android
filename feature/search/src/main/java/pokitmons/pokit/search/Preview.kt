@@ -138,5 +138,4 @@ val dummyViewModel = object : SearchViewModel {
     override fun toggleBookmark(link: Link) {}
 
     override fun deleteLink(link: Link) {}
-
 }

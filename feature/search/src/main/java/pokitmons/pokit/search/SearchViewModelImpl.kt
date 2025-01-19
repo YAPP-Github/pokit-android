@@ -256,8 +256,8 @@ class SearchViewModelImpl @Inject constructor(
             val currentBottomSheetState = state.value.linkBottomSheetType ?: return@launch
 
             val currentShowDetailLinkBottomSheet =
-                (currentBottomSheetState is LinkBottomSheetState.LinkDetail)
-                && (currentBottomSheetState.link.id == link.id)
+                (currentBottomSheetState is LinkBottomSheetState.LinkDetail) &&
+                    (currentBottomSheetState.link.id == link.id)
 
             if (response is PokitResult.Success && currentShowDetailLinkBottomSheet) {
                 val responseLink = Link.fromDomainLink(response.result).copy(imageUrl = link.imageUrl, isRead = true)

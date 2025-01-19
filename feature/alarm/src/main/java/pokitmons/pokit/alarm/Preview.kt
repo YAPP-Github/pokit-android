@@ -19,7 +19,7 @@ internal fun Preview() {
         Column {
             AlarmScreen(
                 onClickBack = {},
-                viewModel = dummyAlarmViewModel,
+                viewModel = dummyAlarmViewModel
             )
         }
     }
@@ -40,5 +40,4 @@ private val dummyAlarmViewModel = object : AlarmViewModelInterface {
     override fun removeAlarm(alarmId: String) {}
 
     override fun readAlarmThenMoveToModifyLink(alarmId: String) {}
-
 }

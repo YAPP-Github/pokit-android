@@ -124,7 +124,6 @@ class PokitDetailViewModelImpl @Inject constructor(
         initPokitUpdateEventDetector()
     }
 
-
     private fun initLinkAddEventDetector() {
         viewModelScope.launch {
             LinkUpdateEvent.addedLink.collectLatest { addedLink ->

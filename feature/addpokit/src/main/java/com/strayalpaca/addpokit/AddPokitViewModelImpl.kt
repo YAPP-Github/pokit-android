@@ -133,7 +133,7 @@ class AddPokitViewModelImpl @Inject constructor(
         }
     }
 
-    private suspend fun getPokitProfileImages() : List<PokitImage>? {
+    private suspend fun getPokitProfileImages(): List<PokitImage>? {
         val response = getPokitImagesUseCase.getImages()
         if (response is PokitResult.Success) {
             return response.result.map { PokitImage.fromDomainPokitImage(it) }
@@ -171,7 +171,7 @@ class AddPokitViewModelImpl @Inject constructor(
         _state.update { state -> state.copy(step = AddPokitScreenStep.POKIT_SAVE_LOADING) }
 
         viewModelScope.launch(defaultDispatcher) {
-            val response = when(currentState.pokitUpdateType) {
+            val response = when (currentState.pokitUpdateType) {
                 PokitUpdateType.Create -> {
                     createPokitUseCase.createPokit(
                         name = currentState.pokitName,
@@ -190,7 +190,7 @@ class AddPokitViewModelImpl @Inject constructor(
             if (response is PokitResult.Success) {
                 _state.update { state -> state.copy(step = AddPokitScreenStep.IDLE) }
 
-                when(currentState.pokitUpdateType) {
+                when (currentState.pokitUpdateType) {
                     PokitUpdateType.Create -> {
                         PokitUpdateEvent.createPokit(
                             PokitArg(

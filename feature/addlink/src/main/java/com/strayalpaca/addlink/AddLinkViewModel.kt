@@ -66,7 +66,6 @@ interface AddLinkViewModel {
             override fun refreshPokits() { }
 
             override fun setSelectedPokit(pokit: Pokit) { }
-
         }
     }
 }

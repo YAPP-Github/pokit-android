@@ -13,7 +13,7 @@ data class AddLinkScreenState(
     val useRemind: Boolean = false,
     val step: ScreenStep = ScreenStep.IDLE,
     val toastMessage: ToastMessageEvent? = null,
-    val linkUpdateType: LinkUpdateType = LinkUpdateType.Create
+    val linkUpdateType: LinkUpdateType = LinkUpdateType.Create,
 ) {
     val isModifyLink get() = (linkUpdateType is LinkUpdateType.Modify)
 }

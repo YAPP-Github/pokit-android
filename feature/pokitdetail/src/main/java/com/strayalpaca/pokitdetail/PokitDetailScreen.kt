@@ -71,7 +71,7 @@ fun PokitDetailScreenContainer(
         onClickPokitModify = onNavigateToPokitModify,
         onClickLinkModify = onNavigateToLinkModify,
         onClickAddLink = onNavigateToAddLink,
-        viewModel = viewModel,
+        viewModel = viewModel
     )
 }
 

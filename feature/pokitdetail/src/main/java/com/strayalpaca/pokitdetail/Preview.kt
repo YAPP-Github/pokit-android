@@ -84,5 +84,4 @@ val dummyViewModel = object : PokitDetailViewModel {
     override fun deleteLink(link: Link) {}
 
     override fun toggleBookmark(link: Link) {}
-
 }

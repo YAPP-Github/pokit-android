@@ -73,7 +73,7 @@ fun AddPokitScreenContainer(
 
     AddPokitScreen(
         viewModel = viewModel,
-        onBackPressed = onBackPressed,
+        onBackPressed = onBackPressed
     )
 }
 
@@ -257,7 +257,7 @@ fun AddPokitScreen(
                 LoadingProgress(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 80.dp, horizontal = 52.dp),
+                        .padding(vertical = 80.dp, horizontal = 52.dp)
                 )
             }
         }

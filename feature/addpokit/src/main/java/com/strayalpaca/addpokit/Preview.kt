@@ -53,7 +53,6 @@ private val dummyAddPokitViewModel = object : AddPokitViewModel {
     override fun setPokitProfileImage(pokitImage: PokitImage) {}
 
     override fun hideToastMessage() {}
-
 }
 
 private val samplePokitList = listOf(
