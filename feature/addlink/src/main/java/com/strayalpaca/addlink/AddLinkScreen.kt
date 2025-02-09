@@ -28,7 +28,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,12 +39,9 @@ import com.strayalpaca.addlink.components.block.Link
 import com.strayalpaca.addlink.components.block.LoadingLink
 import com.strayalpaca.addlink.components.block.Toolbar
 import com.strayalpaca.addlink.model.AddLinkScreenSideEffect
-import com.strayalpaca.addlink.model.AddLinkScreenState
 import com.strayalpaca.addlink.model.ScreenStep
 import com.strayalpaca.addlink.model.ToastMessageEvent
-import com.strayalpaca.addlink.utils.BackPressHandler
-import org.orbitmvi.orbit.compose.collectAsState
-import org.orbitmvi.orbit.compose.collectSideEffect
+import pokitmons.pokit.core.feature.flow.collectAsEffect
 import pokitmons.pokit.core.feature.model.paging.PagingState
 import pokitmons.pokit.core.ui.components.atom.button.PokitButton
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonSize
@@ -64,34 +60,23 @@ fun AddLinkScreenContainer(
     onBackPressed: () -> Unit,
     onNavigateToAddPokit: () -> Unit,
 ) {
-    val state by viewModel.collectAsState()
+    val state by viewModel.state.collectAsState()
 
-    BackPressHandler(onBackPressed = viewModel::onBackPressed)
-
-    viewModel.collectSideEffect { sideEffect ->
+    viewModel.sideEffect.collectAsEffect { sideEffect ->
         when (sideEffect) {
-            AddLinkScreenSideEffect.AddLinkSuccess -> {
-                onBackPressed()
-            }
-
-            AddLinkScreenSideEffect.OnNavigationBack -> {
-                onBackPressed()
-            }
-
-            AddLinkScreenSideEffect.OnNavigateToAddPokit -> {
+            AddLinkScreenSideEffect.NavigationEvent.AddPokit -> {
                 onNavigateToAddPokit()
+            }
+            AddLinkScreenSideEffect.NavigationEvent.Back -> {
+                onBackPressed()
             }
         }
     }
-
-    val url by viewModel.linkUrl.collectAsState()
-    val title by viewModel.title.collectAsState()
-    val memo by viewModel.memo.collectAsState()
     val pokitList by viewModel.pokitList.collectAsState()
     val pokitListState by viewModel.pokitListState.collectAsState()
 
     PokitBottomSheet(
-        onHideBottomSheet = viewModel::hideSelectPokitBottomSheet,
+        onHideBottomSheet = viewModel::hidePokitListBottomSheet,
         show = state.step == ScreenStep.POKIT_SELECT,
         skipPartiallyExpanded = false
     ) {
@@ -121,7 +106,7 @@ fun AddLinkScreenContainer(
                 .clickable(
                     indication = null,
                     interactionSource = remember { MutableInteractionSource() },
-                    onClick = viewModel::checkPokitCount
+                    onClick = viewModel::checkPokitCountThenNavigateToAddPokit
                 ),
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -156,7 +141,7 @@ fun AddLinkScreenContainer(
                     title = pokit.title,
                     imageUrl = pokit.image,
                     sub = stringResource(id = R.string.count_format, pokit.count),
-                    onClickItem = viewModel::selectPokit,
+                    onClickItem = viewModel::setSelectedPokit,
                     state = PokitListState.ACTIVE
                 )
             }
@@ -164,45 +149,19 @@ fun AddLinkScreenContainer(
     }
 
     AddLinkScreen(
-        isModifyLink = (viewModel.currentLinkId != null),
-        url = url,
-        title = title,
-        memo = memo,
-        state = state,
-        inputUrl = viewModel::inputLinkUrl,
-        inputTitle = viewModel::inputTitle,
-        inputMemo = viewModel::inputMemo,
-        onClickAddPokit = viewModel::checkPokitCount,
-        onClickSelectPokit = viewModel::showSelectPokitBottomSheet,
-        toggleRemindRadio = viewModel::setRemind,
-        onBackPressed = viewModel::onBackPressed,
-        onClickSaveButton = viewModel::saveLink,
-        closeToast = viewModel::closeToastMessage,
-        clearTitle = viewModel::clearTitle,
-        clearUrl = viewModel::clearUrl
+        onBackPressed = onBackPressed,
+        viewModel = viewModel
     )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun AddLinkScreen(
-    isModifyLink: Boolean,
-    url: String,
-    title: String,
-    memo: String,
-    state: AddLinkScreenState,
-    inputUrl: (String) -> Unit,
-    inputTitle: (String) -> Unit,
-    inputMemo: (String) -> Unit,
-    onClickAddPokit: () -> Unit,
-    onClickSelectPokit: () -> Unit,
-    toggleRemindRadio: (Boolean) -> Unit,
     onBackPressed: () -> Unit,
-    onClickSaveButton: () -> Unit,
-    closeToast: () -> Unit,
-    clearUrl: () -> Unit,
-    clearTitle: () -> Unit,
+    viewModel: AddLinkViewModel,
 ) {
+    val state by viewModel.state.collectAsState()
+
     val scrollState = rememberScrollState()
     val enable = remember(state.step) {
         !(
@@ -210,10 +169,6 @@ fun AddLinkScreen(
                 state.step == ScreenStep.LOADING ||
                 state.step == ScreenStep.POKIT_ADD_LOADING
             )
-    }
-
-    var currentUrl = remember {
-        mutableStateOf(url)
     }
 
     Column(
@@ -226,7 +181,7 @@ fun AddLinkScreen(
         Toolbar(
             modifier = Modifier.fillMaxWidth(),
             onClickBack = onBackPressed,
-            title = if (isModifyLink) stringResource(id = R.string.modify_link) else stringResource(id = R.string.add_link)
+            title = if (state.isModifyLink) stringResource(id = R.string.modify_link) else stringResource(id = R.string.add_link)
         )
 
         Box(
@@ -252,7 +207,7 @@ fun AddLinkScreen(
                         LoadingLink()
                         Spacer(modifier = Modifier.height(16.dp))
                     } else if (state.link != null) {
-                        Link(link = state.link, title = title.ifEmpty { null })
+                        Link(link = state.link!!, title = state.title.ifEmpty { null })
                         Spacer(modifier = Modifier.height(16.dp))
                     }
 
@@ -260,13 +215,11 @@ fun AddLinkScreen(
                         label = stringResource(id = R.string.link),
                         sub = "",
                         maxLength = null,
-                        inputText = url,
+                        inputText = state.linkUrl,
                         hintText = stringResource(id = R.string.placeholder_link),
-                        onChangeText = inputUrl,
+                        onChangeText = viewModel::inputLinkUrl,
                         enable = enable,
-                        onClickRemove = {
-                            clearUrl()
-                        }
+                        onClickRemove = viewModel::clearLinkUrl
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
@@ -274,13 +227,11 @@ fun AddLinkScreen(
                     LabeledInput(
                         label = stringResource(id = R.string.title),
                         sub = "",
-                        inputText = title,
+                        inputText = state.title,
                         hintText = stringResource(id = R.string.placeholder_title),
-                        onChangeText = inputTitle,
+                        onChangeText = viewModel::inputTitle,
                         enable = enable,
-                        onClickRemove = {
-                            clearTitle()
-                        }
+                        onClickRemove = viewModel::clearTitle
                     )
 
                     Spacer(modifier = Modifier.height(24.dp))
@@ -290,16 +241,14 @@ fun AddLinkScreen(
                         verticalAlignment = Alignment.Bottom
                     ) {
                         PokitSelect(
-                            text = if (state.currentPokit == null) stringResource(id = R.string.uncategorized) else state.currentPokit.title,
+                            text = if (state.currentPokit == null) stringResource(id = R.string.uncategorized) else state.currentPokit!!.title,
                             hintText = stringResource(id = R.string.uncategorized),
                             label = stringResource(id = R.string.pokit),
                             modifier = Modifier.weight(1f),
-                            onClick = onClickSelectPokit,
+                            onClick = viewModel::showPokitListBottomSheet,
                             enable = enable
                         )
                     }
-
-                    // onClickAddPokit
 
                     Spacer(modifier = Modifier.height(24.dp))
 
@@ -311,20 +260,20 @@ fun AddLinkScreen(
                     Spacer(modifier = Modifier.height(8.dp))
 
                     PokitInputArea(
-                        text = memo,
+                        text = state.memo,
                         hintText = stringResource(id = R.string.placeholder_memo),
-                        onChangeText = inputMemo,
+                        onChangeText = viewModel::inputMemo,
                         enable = enable,
-                        isError = memo.length >= 100
+                        isError = state.memo.length >= state.memoMaxLength
                     )
 
                     Spacer(modifier = Modifier.height(4.dp))
 
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        if (memo.length >= 100) {
+                        if (state.memo.length >= state.memoMaxLength) {
                             Text(
                                 color = PokitTheme.colors.error,
-                                text = "최대 100자까지 입력 가능합니다.",
+                                text = stringResource(id = R.string.memo_count_format, state.memoMaxLength),
                                 style = PokitTheme.typography.detail1
                             )
                         }
@@ -332,9 +281,9 @@ fun AddLinkScreen(
                         Spacer(modifier = Modifier.weight(1f))
 
                         Text(
-                            color = if (memo.length >= 100) PokitTheme.colors.error else PokitTheme.colors.textTertiary,
+                            color = if (state.memo.length >= state.memoMaxLength) PokitTheme.colors.error else PokitTheme.colors.textTertiary,
                             modifier = Modifier.weight(1f),
-                            text = "${memo.length}/100",
+                            text = "${state.memo.length}/${state.memoMaxLength}",
                             style = PokitTheme.typography.detail1,
                             textAlign = TextAlign.End
                         )
@@ -351,7 +300,7 @@ fun AddLinkScreen(
                         .align(Alignment.BottomCenter)
                         .padding(start = 12.dp, end = 12.dp, bottom = 16.dp),
                     text = stringResource(id = toastMessageEvent.stringResourceId),
-                    onClickClose = closeToast
+                    onClickClose = viewModel::hideToastMessage
                 )
             }
         }
@@ -360,7 +309,7 @@ fun AddLinkScreen(
             PokitButton(
                 text = stringResource(id = R.string.save),
                 icon = null,
-                onClick = onClickSaveButton,
+                onClick = viewModel::saveLink,
                 modifier = Modifier.fillMaxWidth(),
                 size = PokitButtonSize.LARGE
             )

@@ -5,8 +5,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import pokitmons.pokit.core.feature.model.paging.PagingState
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.search.model.Filter
+import pokitmons.pokit.search.model.FilterType
 import pokitmons.pokit.search.model.Link
+import pokitmons.pokit.search.model.Pokit
 import pokitmons.pokit.search.model.SearchScreenState
 import pokitmons.pokit.search.model.SearchScreenStep
 
@@ -19,7 +25,7 @@ private fun Preview() {
         ) {
             SearchScreen(
                 state = SearchScreenState(step = SearchScreenStep.RESULT),
-                linkList = sampleLinks
+                viewModel = dummyViewModel
             )
         }
     }
@@ -82,3 +88,54 @@ internal val sampleLinks = listOf(
         bookmark = true
     )
 )
+
+val dummyViewModel = object : SearchViewModel {
+    override val linkList: StateFlow<List<Link>>
+        get() = MutableStateFlow(sampleLinks)
+    override val linkPagingState: StateFlow<PagingState>
+        get() = MutableStateFlow(PagingState.IDLE)
+    override val pokitList: StateFlow<List<Pokit>>
+        get() = MutableStateFlow(emptyList())
+    override val pokitPagingState: StateFlow<PagingState>
+        get() = MutableStateFlow(PagingState.IDLE)
+    override val state: StateFlow<SearchScreenState>
+        get() = MutableStateFlow(SearchScreenState())
+
+    override fun inputSearchWord(searchWord: String) {}
+
+    override fun searchByCurrentSearchWord() {}
+
+    override fun inputSearchWordThenSearch(word: String) {}
+
+    override fun toggleUseRecentSearchWord() {}
+
+    override fun removeRecentSearchWord(word: String) {}
+
+    override fun removeAllRecentSearchWord() {}
+
+    override fun showFilterBottomSheet() {}
+
+    override fun showFilterBottomSheetWithType(type: FilterType) {}
+
+    override fun hideFilterBottomSheet() {}
+
+    override fun showLinkRemoveBottomSheet(link: Link) {}
+
+    override fun showLinkDetailBottomSheet(link: Link) {}
+
+    override fun hideLinkBottomSheet() {}
+
+    override fun setFilter(filter: Filter) {}
+
+    override fun toggleSortOrder() {}
+
+    override fun loadNextLinks() {}
+
+    override fun loadNextPokits() {}
+
+    override fun refreshPokits() {}
+
+    override fun toggleBookmark(link: Link) {}
+
+    override fun deleteLink(link: Link) {}
+}

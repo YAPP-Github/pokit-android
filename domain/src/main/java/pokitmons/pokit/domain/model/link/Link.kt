@@ -13,4 +13,8 @@ data class Link(
     val isRead: Boolean = false,
     val favorites: Boolean = false,
     val thumbnail: String = "",
-)
+) {
+    companion object {
+        const val MEMO_MAX_LENGTH = 100
+    }
+}

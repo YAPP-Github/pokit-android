@@ -10,23 +10,23 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.strayalpaca.addlink.AddLinkScreenContainer
-import com.strayalpaca.addlink.AddLinkViewModel
+import com.strayalpaca.addlink.AddLinkViewModelImpl
 import com.strayalpaca.addpokit.AddPokitScreenContainer
-import com.strayalpaca.addpokit.AddPokitViewModel
+import com.strayalpaca.addpokit.AddPokitViewModelImpl
 import com.strayalpaca.pokitdetail.PokitDetailScreenContainer
-import com.strayalpaca.pokitdetail.PokitDetailViewModel
+import com.strayalpaca.pokitdetail.PokitDetailViewModelImpl
 import pokitmons.pokit.LoginViewModel
 import pokitmons.pokit.alarm.AlarmScreenContainer
-import pokitmons.pokit.alarm.AlarmViewModel
+import pokitmons.pokit.alarm.AlarmViewModelImpl
 import pokitmons.pokit.home.HomeScreen
 import pokitmons.pokit.home.pokit.PokitViewModel
 import pokitmons.pokit.keyword.KeywordScreen
 import pokitmons.pokit.linklist.LinkListScreenContainer
-import pokitmons.pokit.linklist.LinkListViewModel
+import pokitmons.pokit.linklist.LinkListViewModelImpl
 import pokitmons.pokit.login.LoginScreen
 import pokitmons.pokit.nickname.InputNicknameScreen
 import pokitmons.pokit.search.SearchScreenContainer
-import pokitmons.pokit.search.SearchViewModel
+import pokitmons.pokit.search.SearchViewModelImpl
 import pokitmons.pokit.settings.SettingViewModel
 import pokitmons.pokit.settings.nickname.EditNicknameScreen
 import pokitmons.pokit.settings.setting.SettingsScreen
@@ -100,7 +100,7 @@ fun RootNavHost(
             route = AddLink.routeWithArgs,
             arguments = AddLink.arguments
         ) {
-            val viewModel: AddLinkViewModel = hiltViewModel()
+            val viewModel: AddLinkViewModelImpl = hiltViewModel()
             AddLinkScreenContainer(
                 viewModel = viewModel,
                 onBackPressed = navHostController::popBackStack,
@@ -114,7 +114,7 @@ fun RootNavHost(
             route = AddPokit.routeWithArgs,
             arguments = AddPokit.arguments
         ) {
-            val viewModel: AddPokitViewModel = hiltViewModel()
+            val viewModel: AddPokitViewModelImpl = hiltViewModel()
             AddPokitScreenContainer(
                 viewModel = viewModel,
                 onBackPressed = navHostController::popBackStack
@@ -125,7 +125,7 @@ fun RootNavHost(
             route = PokitDetail.routeWithArgs,
             arguments = PokitDetail.arguments
         ) {
-            val viewModel: PokitDetailViewModel = hiltViewModel()
+            val viewModel: PokitDetailViewModelImpl = hiltViewModel()
             PokitDetailScreenContainer(
                 viewModel = viewModel,
                 onBackPressed = navHostController::popBackStack,
@@ -144,7 +144,7 @@ fun RootNavHost(
         composable(
             route = Search.route
         ) {
-            val viewModel: SearchViewModel = hiltViewModel()
+            val viewModel: SearchViewModelImpl = hiltViewModel()
             SearchScreenContainer(
                 viewModel = viewModel,
                 onBackPressed = navHostController::popBackStack,
@@ -213,7 +213,7 @@ fun RootNavHost(
         }
 
         composable(route = Alarm.route) {
-            val viewModel: AlarmViewModel = hiltViewModel()
+            val viewModel: AlarmViewModelImpl = hiltViewModel()
             AlarmScreenContainer(
                 viewModel = viewModel,
                 onBackPressed = navHostController::popBackStack,
@@ -227,7 +227,7 @@ fun RootNavHost(
             route = LinkList.routeWithArgs,
             arguments = LinkList.arguments
         ) {
-            val viewModel: LinkListViewModel = hiltViewModel()
+            val viewModel: LinkListViewModelImpl = hiltViewModel()
             LinkListScreenContainer(
                 viewModel = viewModel,
                 onBackPressed = navHostController::popBackStack,

@@ -46,7 +46,6 @@ import pokitmons.pokit.core.ui.theme.PokitTheme
 import pokitmons.pokit.core.ui.utils.noRippleClickable
 import pokitmons.pokit.linklist.model.BottomSheetType
 import pokitmons.pokit.linklist.model.Link
-import pokitmons.pokit.linklist.model.LinkListScreenState
 import pokitmons.pokit.core.ui.R.drawable as CoreDrawable
 import pokitmons.pokit.core.ui.R.string as CoreString
 
@@ -56,43 +55,23 @@ fun LinkListScreenContainer(
     onBackPressed: () -> Unit,
     onNavigateToLinkModify: (String) -> Unit,
 ) {
-    val state by viewModel.state.collectAsState()
-    val linkList by viewModel.linkList.collectAsState()
-    val linkListState by viewModel.linkListState.collectAsState()
-
     LinkListScreen(
-        state = state,
         onBackPressed = onBackPressed,
-        loadNextLinkList = viewModel::loadNextLinks,
-        toggleSort = viewModel::toggleSort,
-        linkList = linkList,
-        linkListState = linkListState,
-        showLinkDetailBottomSheet = viewModel::showLinkDetailBottomSheet,
-        hideLinkDetailBottomSheet = viewModel::hideLinkDetailBottomSheet,
-        showCheckLinkRemoveBottomSheet = viewModel::showCheckLinkRemoveBottomSheet,
-        hideCheckLinkRemoveBottomSheet = viewModel::hideCheckLinkRemoveBottomSheet,
-        onClickLinkRemove = viewModel::removeLink,
         onClickModifyLink = onNavigateToLinkModify,
-        onClickBookmark = viewModel::toggleBookmark
+        viewModel = viewModel
     )
 }
 
 @Composable
 fun LinkListScreen(
-    state: LinkListScreenState,
     onBackPressed: () -> Unit,
-    linkList: List<Link> = emptyList(),
-    linkListState: PagingState = PagingState.IDLE,
-    loadNextLinkList: () -> Unit,
-    toggleSort: () -> Unit,
-    showLinkDetailBottomSheet: (Link) -> Unit,
-    hideLinkDetailBottomSheet: () -> Unit,
-    showCheckLinkRemoveBottomSheet: () -> Unit,
-    hideCheckLinkRemoveBottomSheet: () -> Unit,
-    onClickLinkRemove: () -> Unit,
     onClickModifyLink: (String) -> Unit,
-    onClickBookmark: () -> Unit,
+    viewModel: LinkListViewModel,
 ) {
+    val state by viewModel.state.collectAsState()
+    val linkList by viewModel.linkList.collectAsState()
+    val linkListState by viewModel.linkListState.collectAsState()
+
     val uriHandler = LocalUriHandler.current
 
     Column(
@@ -123,7 +102,7 @@ fun LinkListScreen(
             )
             Row(
                 modifier = Modifier
-                    .noRippleClickable { toggleSort() }
+                    .noRippleClickable { viewModel.toggleSortType() }
                     .padding(vertical = 12.dp)
             ) {
                 Icon(
@@ -151,7 +130,7 @@ fun LinkListScreen(
 
         LaunchedEffect(startLinkPaging.value) {
             if (startLinkPaging.value && linkListState == PagingState.IDLE) {
-                loadNextLinkList()
+                viewModel.loadNextLinks()
             }
         }
 
@@ -198,7 +177,7 @@ fun LinkListScreen(
                             painter = rememberAsyncImagePainter(link.imageUrl),
                             notRead = !link.isRead,
                             badgeText = link.pokitName,
-                            onClickKebab = showLinkDetailBottomSheet,
+                            onClickKebab = viewModel::showLinkDetailBottomSheet,
                             onClickItem = {
                                 uriHandler.openUri(link.url)
                             },
@@ -224,33 +203,35 @@ fun LinkListScreen(
             bookmark = link.bookmark,
             pokitName = link.pokitName,
             dateString = link.dateString,
-            onHideBottomSheet = hideLinkDetailBottomSheet,
+            onHideBottomSheet = viewModel::hideLinkDetailBottomSheet,
             show = state.bottomSheetInfo?.type == BottomSheetType.DETAIL,
             onClickShareLink = {
                 ShareUrlLink(context, link.url)
             },
             onClickModifyLink = {
-                hideLinkDetailBottomSheet()
+                viewModel.hideLinkDetailBottomSheet()
                 onClickModifyLink(link.id)
             },
             onClickRemoveLink = {
-                showCheckLinkRemoveBottomSheet()
+                viewModel.showCheckLinkRemoveBottomSheet()
             },
-            onClickBookmark = onClickBookmark
+            onClickBookmark = {
+                viewModel.toggleBookmark(link)
+            }
         )
 
         PokitBottomSheet(
-            onHideBottomSheet = hideCheckLinkRemoveBottomSheet,
+            onHideBottomSheet = viewModel::hideCheckLinkRemoveBottomSheet,
             show = state.bottomSheetInfo?.type == BottomSheetType.CHECK_REMOVE
         ) {
             TwoButtonBottomSheetContent(
                 title = stringResource(id = R.string.title_remove_link),
                 subText = stringResource(id = R.string.sub_remove_link),
-                onClickLeftButton = hideCheckLinkRemoveBottomSheet,
+                onClickLeftButton = viewModel::hideCheckLinkRemoveBottomSheet,
                 onClickRightButton = remember {
                     {
-                        onClickLinkRemove()
-                        hideCheckLinkRemoveBottomSheet()
+                        viewModel.removeLink(link.id)
+                        viewModel.hideCheckLinkRemoveBottomSheet()
                     }
                 }
             )

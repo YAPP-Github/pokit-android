@@ -37,10 +37,6 @@ import com.strayalpaca.pokitdetail.components.block.TitleArea
 import com.strayalpaca.pokitdetail.components.block.Toolbar
 import com.strayalpaca.pokitdetail.components.template.filterselectbottomsheet.FilterSelectBottomSheet
 import com.strayalpaca.pokitdetail.model.BottomSheetType
-import com.strayalpaca.pokitdetail.model.Filter
-import com.strayalpaca.pokitdetail.model.Link
-import com.strayalpaca.pokitdetail.model.Pokit
-import com.strayalpaca.pokitdetail.model.PokitDetailScreenState
 import pokitmons.pokit.core.feature.flow.collectAsEffect
 import pokitmons.pokit.core.feature.model.paging.PagingState
 import pokitmons.pokit.core.feature.utils.ShareUrlLink
@@ -66,86 +62,33 @@ fun PokitDetailScreenContainer(
     onNavigateToPokitModify: (String) -> Unit,
     onNavigateToAddLink: (String, String) -> Unit,
 ) {
-    val state by viewModel.state.collectAsState()
-    val linkList by viewModel.linkList.collectAsState()
-    val linkListState by viewModel.linkListState.collectAsState()
-    val pokitList by viewModel.pokitList.collectAsState()
-    val pokitListState by viewModel.pokitListState.collectAsState()
-
     viewModel.moveToBackEvent.collectAsEffect {
         onBackPressed()
     }
 
     PokitDetailScreen(
         onBackPressed = onBackPressed,
-        onClickFilter = viewModel::showFilterChangeBottomSheet,
-        hideFilterChangeBottomSheet = viewModel::hideFilterChangeBottomSheet,
-        changeFilter = viewModel::changeFilter,
-        showPokitSelectBottomSheet = viewModel::showPokitSelectBottomSheet,
-        hidePokitSelectBottomSheet = viewModel::hidePokitSelectBottomSheet,
-        changePokit = viewModel::changePokit,
-        showPokitModifyBottomSheet = viewModel::showPokitModifyBottomSheet,
-        showPokitRemoveBottomSheet = viewModel::showPokitRemoveBottomSheet,
-        hidePokitModifyBottomSheet = viewModel::hidePokitBottomSheet,
-        showLinkRemoveBottomSheet = viewModel::showLinkRemoveBottomSheet,
-        showLinkRemoveBottomSheetWithLink = remember {
-            { link ->
-                viewModel.hideLinkDetailBottomSheet()
-                viewModel.showLinkRemoveBottomSheet(link)
-            }
-        },
-        hideLinkModifyBottomSheet = viewModel::hideLinkBottomSheet,
-        hideLinkDetailBottomSheet = viewModel::hideLinkDetailBottomSheet,
-        state = state,
-        linkList = linkList,
-        linkListState = linkListState,
-        pokitList = pokitList,
-        pokitListState = pokitListState,
-        showLinkDetailBottomSheet = viewModel::showLinkDetailBottomSheet,
         onClickPokitModify = onNavigateToPokitModify,
-        onClickPokitRemove = viewModel::deletePokit,
         onClickLinkModify = onNavigateToLinkModify,
-        onClickLinkRemove = viewModel::deleteLink,
-        loadNextPokits = viewModel::loadNextPokits,
-        refreshPokits = viewModel::refreshPokits,
-        loadNextLinks = viewModel::loadNextLinks,
-        onClickBookmark = viewModel::toggleBookmark,
-        onClickAddLink = onNavigateToAddLink
+        onClickAddLink = onNavigateToAddLink,
+        viewModel = viewModel
     )
 }
 
 @Composable
 fun PokitDetailScreen(
     onBackPressed: () -> Unit = {},
-    onClickFilter: () -> Unit = {},
-    hideFilterChangeBottomSheet: () -> Unit = {},
-    changeFilter: (Filter) -> Unit = {},
-    showPokitSelectBottomSheet: () -> Unit = {},
-    hidePokitSelectBottomSheet: () -> Unit = {},
-    changePokit: (Pokit) -> Unit = {},
-    showPokitModifyBottomSheet: () -> Unit = {},
-    showPokitRemoveBottomSheet: () -> Unit = {},
-    hidePokitModifyBottomSheet: () -> Unit = {},
-    showLinkRemoveBottomSheet: () -> Unit = {},
-    showLinkRemoveBottomSheetWithLink: (Link) -> Unit = {},
-    hideLinkModifyBottomSheet: () -> Unit = {},
-    hideLinkDetailBottomSheet: () -> Unit = {},
-    state: PokitDetailScreenState = PokitDetailScreenState(),
-    linkList: List<Link> = emptyList(),
-    linkListState: PagingState = PagingState.IDLE,
-    pokitList: List<Pokit> = emptyList(),
-    pokitListState: PagingState = PagingState.IDLE,
-    showLinkDetailBottomSheet: (Link) -> Unit = {},
     onClickPokitModify: (String) -> Unit = {},
-    onClickPokitRemove: () -> Unit = {},
     onClickLinkModify: (String) -> Unit = {},
-    onClickLinkRemove: () -> Unit = {},
-    loadNextPokits: () -> Unit = {},
-    refreshPokits: () -> Unit = {},
-    loadNextLinks: () -> Unit = {},
-    onClickBookmark: () -> Unit = {},
     onClickAddLink: (String, String) -> Unit = { _, _ -> },
+    viewModel: PokitDetailViewModel,
 ) {
+    val state by viewModel.state.collectAsState()
+    val linkList by viewModel.linkList.collectAsState()
+    val linkListState by viewModel.linkListState.collectAsState()
+    val pokitList by viewModel.pokitList.collectAsState()
+    val pokitListState by viewModel.pokitListState.collectAsState()
+
     val uriHandler = LocalUriHandler.current
 
     Box(
@@ -158,7 +101,7 @@ fun PokitDetailScreen(
 
             Toolbar(
                 onBackPressed = onBackPressed,
-                onClickKebab = showPokitModifyBottomSheet
+                onClickKebab = viewModel::showPokitModifyBottomSheet
             )
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -166,8 +109,8 @@ fun PokitDetailScreen(
             TitleArea(
                 title = state.currentPokit?.title ?: "",
                 sub = stringResource(id = pokitmons.pokit.core.ui.R.string.pokit_count_format, state.currentPokit?.count ?: 0),
-                onClickSelectPokit = showPokitSelectBottomSheet,
-                onClickSelectFilter = onClickFilter
+                onClickSelectPokit = viewModel::showPokitSelectBottomSheet,
+                onClickSelectFilter = viewModel::showFilterChangeBottomSheet
             )
 
             val linkLazyColumnListState = rememberLazyListState()
@@ -181,7 +124,7 @@ fun PokitDetailScreen(
 
             LaunchedEffect(startLinkPaging.value) {
                 if (startLinkPaging.value && linkListState == PagingState.IDLE) {
-                    loadNextLinks()
+                    viewModel.loadNextLinks()
                 }
             }
 
@@ -229,7 +172,7 @@ fun PokitDetailScreen(
                                 painter = rememberAsyncImagePainter(link.imageUrl),
                                 notRead = !link.isRead,
                                 badgeText = link.pokitName,
-                                onClickKebab = showLinkDetailBottomSheet,
+                                onClickKebab = viewModel::showLinkDetailBottomSheet,
                                 onClickItem = {
                                     uriHandler.openUri(link.url)
                                 },
@@ -266,43 +209,45 @@ fun PokitDetailScreen(
             colorFilter = ColorFilter.tint(color = PokitTheme.colors.inverseWh)
         )
 
-        if (state.currentLink != null) {
+        state.currentLink?.let { currentLink ->
             val context: Context = LocalContext.current
             LinkDetailBottomSheet(
-                title = state.currentLink.title,
-                memo = state.currentLink.memo,
-                bookmark = state.currentLink.bookmark,
-                pokitName = state.currentLink.pokitName,
-                dateString = state.currentLink.dateString,
-                onHideBottomSheet = hideLinkDetailBottomSheet,
+                title = currentLink.title,
+                memo = currentLink.memo,
+                bookmark = currentLink.bookmark,
+                pokitName = currentLink.pokitName,
+                dateString = currentLink.dateString,
+                onHideBottomSheet = viewModel::hideLinkDetailBottomSheet,
                 show = state.linkDetailBottomSheetVisible,
                 onClickShareLink = {
                     ShareUrlLink(
                         context = context,
-                        url = state.currentLink.url
+                        url = currentLink.url
                     )
                 },
                 onClickModifyLink = {
-                    hideLinkDetailBottomSheet()
-                    onClickLinkModify(state.currentLink.id)
+                    viewModel.hideLinkDetailBottomSheet()
+                    onClickLinkModify(currentLink.id)
                 },
                 onClickRemoveLink = {
-                    hideLinkDetailBottomSheet()
-                    showLinkRemoveBottomSheetWithLink(state.currentLink)
+                    viewModel.hideLinkDetailBottomSheet()
+                    viewModel.showLinkRemoveBottomSheet(currentLink)
                 },
-                onClickBookmark = onClickBookmark
+                onClickBookmark = {
+                    viewModel.toggleBookmark(currentLink)
+                }
             )
         }
 
         FilterSelectBottomSheet(
             filter = state.currentFilter,
-            onHideRequest = hideFilterChangeBottomSheet,
-            onFilterChange = changeFilter,
+            onHideRequest = viewModel::hideFilterChangeBottomSheet,
+            onFilterChange = viewModel::changeFilter,
             show = state.filterChangeBottomSheetVisible
         )
 
         PokitBottomSheet(
-            onHideBottomSheet = hidePokitSelectBottomSheet,
+            onHideBottomSheet = viewModel::hidePokitSelectBottomSheet,
             show = state.pokitSelectBottomSheetVisible,
             skipPartiallyExpanded = false
         ) {
@@ -316,12 +261,12 @@ fun PokitDetailScreen(
             }
 
             LaunchedEffect(Unit) {
-                refreshPokits()
+                viewModel.refreshPokits()
             }
 
             LaunchedEffect(startPaging.value) {
                 if (startPaging.value && pokitListState == PagingState.IDLE) {
-                    loadNextPokits()
+                    viewModel.loadNextPokits()
                 }
             }
 
@@ -336,7 +281,7 @@ fun PokitDetailScreen(
                         item = pokit,
                         title = pokit.title,
                         sub = stringResource(id = R.string.link_count_format, pokit.count),
-                        onClickItem = changePokit,
+                        onClickItem = viewModel::changePokit,
                         state = PokitListState.ACTIVE
                     )
                 }
@@ -344,7 +289,7 @@ fun PokitDetailScreen(
         }
 
         PokitBottomSheet(
-            onHideBottomSheet = hideLinkModifyBottomSheet,
+            onHideBottomSheet = viewModel::hideLinkBottomSheet,
             show = state.linkBottomSheetType != null
         ) {
             val context: Context = LocalContext.current
@@ -360,12 +305,12 @@ fun PokitDetailScreen(
                         onClickModify = remember {
                             {
                                 state.currentLink?.let { link ->
-                                    hideLinkModifyBottomSheet()
+                                    viewModel.hideLinkBottomSheet()
                                     onClickLinkModify(link.id)
                                 }
                             }
                         },
-                        onClickRemove = showLinkRemoveBottomSheet
+                        onClickRemove = viewModel::showLinkRemoveBottomSheet
                     )
                 }
 
@@ -373,10 +318,12 @@ fun PokitDetailScreen(
                     TwoButtonBottomSheetContent(
                         title = stringResource(id = R.string.title_remove_link),
                         subText = stringResource(id = R.string.sub_remove_link),
-                        onClickLeftButton = hideLinkModifyBottomSheet,
+                        onClickLeftButton = viewModel::hideLinkBottomSheet,
                         onClickRightButton = {
-                            onClickLinkRemove()
-                            hideLinkModifyBottomSheet()
+                            state.currentLink?.let { currentLink ->
+                                viewModel.deleteLink(currentLink)
+                                viewModel.hideLinkBottomSheet()
+                            }
                         }
                     )
                 }
@@ -386,7 +333,7 @@ fun PokitDetailScreen(
         }
 
         PokitBottomSheet(
-            onHideBottomSheet = hidePokitModifyBottomSheet,
+            onHideBottomSheet = viewModel::hidePokitBottomSheet,
             show = state.pokitBottomSheetType != null
         ) {
             when (state.pokitBottomSheetType) {
@@ -401,11 +348,11 @@ fun PokitDetailScreen(
                         },
                         onClickModify = remember {
                             {
-                                hidePokitModifyBottomSheet()
+                                viewModel.hidePokitBottomSheet()
                                 onClickPokitModify(state.currentPokit!!.id)
                             }
                         },
-                        onClickRemove = showPokitRemoveBottomSheet
+                        onClickRemove = viewModel::showPokitRemoveBottomSheet
                     )
                 }
 
@@ -413,11 +360,11 @@ fun PokitDetailScreen(
                     TwoButtonBottomSheetContent(
                         title = stringResource(id = R.string.title_remove_pokit),
                         subText = stringResource(id = R.string.sub_remove_pokit),
-                        onClickLeftButton = hidePokitModifyBottomSheet,
+                        onClickLeftButton = viewModel::hidePokitBottomSheet,
                         onClickRightButton = remember {
                             {
-                                onClickPokitRemove()
-                                hidePokitModifyBottomSheet()
+                                viewModel.deletePokit(state.currentPokit!!)
+                                viewModel.hidePokitBottomSheet()
                             }
                         }
                     )
