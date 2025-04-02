@@ -4,10 +4,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -32,27 +34,37 @@ internal fun <T> SwitchRadioItem(
     val strokeColor = getStrokeColor(style = style, selected = selected, enabled = enabled)
     val textColor = getTextColor(style = style, selected = selected, enabled = enabled)
 
+    val pressedBackgroundColor = getPressedBackgroundColor(style = style)
+    val pressedStrokeColor = getPressedStrokeColor(style = style)
+    val pressedTextColor = getPressedTextColor(style = style)
+
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
     Text(
         text = text,
         modifier = modifier
             .clip(shape = shape)
             .clickable(
                 indication = null,
-                interactionSource = remember { MutableInteractionSource() },
+                interactionSource = interactionSource,
                 enabled = enabled,
                 onClick = { onClickItem(data) }
             )
             .background(
                 shape = shape,
-                color = backgroundColor
+                color = if (isPressed) pressedBackgroundColor else backgroundColor
             )
             .border(
                 width = 1.dp,
                 shape = shape,
-                color = strokeColor
+                color = if (isPressed) pressedStrokeColor else strokeColor
             )
             .padding(all = 16.dp),
-        style = PokitTheme.typography.body2Medium.copy(color = textColor),
+        style = PokitTheme
+            .typography
+            .body2Medium
+            .copy(color = if (isPressed) pressedTextColor else textColor),
         textAlign = TextAlign.Center
     )
 }
@@ -129,5 +141,35 @@ private fun getTextColor(
         else -> {
             Color.Unspecified
         }
+    }
+}
+
+@Composable
+private fun getPressedBackgroundColor(
+    style: PokitSwitchRadioStyle,
+): Color {
+    return when(style) {
+        PokitSwitchRadioStyle.FILLED -> PokitTheme.colors.brandLight
+        PokitSwitchRadioStyle.STROKE -> PokitTheme.colors.backgroundBase
+    }
+}
+
+@Composable
+private fun getPressedStrokeColor(
+    style: PokitSwitchRadioStyle,
+): Color {
+    return when(style) {
+        PokitSwitchRadioStyle.FILLED -> Color.Unspecified
+        PokitSwitchRadioStyle.STROKE -> PokitTheme.colors.brandLight
+    }
+}
+
+@Composable
+private fun getPressedTextColor(
+    style: PokitSwitchRadioStyle,
+): Color {
+    return when(style) {
+        PokitSwitchRadioStyle.FILLED -> PokitTheme.colors.inverseWh
+        PokitSwitchRadioStyle.STROKE -> PokitTheme.colors.brandLight
     }
 }

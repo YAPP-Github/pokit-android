@@ -2,13 +2,10 @@ package pokitmons.pokit.core.ui.components.atom.button.subcomponents.container
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -22,6 +19,7 @@ import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonStat
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonStyle
 import pokitmons.pokit.core.ui.components.atom.button.attributes.PokitButtonType
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.scaleClickable
 
 @Composable
 internal fun Modifier.pokitButtonContainerModifier(
@@ -44,11 +42,9 @@ internal fun Modifier.pokitButtonContainerModifier(
         .clip(
             shape = buttonShape
         )
-        .clickable(
+        .scaleClickable(
             enabled = (state != PokitButtonState.DISABLE),
             onClick = onClick,
-            indication = null,
-            interactionSource = remember { MutableInteractionSource() }
         )
         .background(
             shape = buttonShape,

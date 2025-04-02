@@ -20,7 +20,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.theme.PokitTheme
-import pokitmons.pokit.core.ui.utils.noRippleClickable
+import pokitmons.pokit.core.ui.utils.scaleClickable
 
 @Composable
 fun PushCard(
@@ -36,7 +36,7 @@ fun PushCard(
 
     Row(
         modifier = modifier
-            .noRippleClickable { onClick() }
+            .scaleClickable(pressedScale = 0.98f) { onClick() }
             .padding(all = 20.dp),
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically

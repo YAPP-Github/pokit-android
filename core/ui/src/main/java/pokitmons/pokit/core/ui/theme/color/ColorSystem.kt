@@ -24,6 +24,7 @@ data class PokitColors(
     val borderSecondary: Color = Gray200,
     val borderTertiary: Color = Gray100,
     val borderDisable: Color = Gray200,
+    val brandLight: Color = Orange200,
     val brand: Color = Brand,
     val brandBold: Color = Orange700,
     val info: Color = Blue700,
