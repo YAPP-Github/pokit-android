@@ -136,7 +136,8 @@ fun LinkDetailBottomSheetContent(
             painter = painterResource(
                 id = if (bookmark) R.drawable.icon_24_star else R.drawable.icon_24_star_1
             ),
-            tintColor = if (bookmark) PokitTheme.colors.brand else PokitTheme.colors.iconPrimary
+            tintColor = if (bookmark) PokitTheme.colors.brand else PokitTheme.colors.iconPrimary,
+            pressedTintColor = if (bookmark) PokitTheme.colors.brandLight else PokitTheme.colors.iconDisable,
         )
 
         HorizontalDivider(

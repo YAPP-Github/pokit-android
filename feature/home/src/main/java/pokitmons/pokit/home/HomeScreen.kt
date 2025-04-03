@@ -37,7 +37,7 @@ import pokitmons.pokit.core.feature.flow.collectAsEffect
 import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.components.block.pokittoast.PokitToast
 import pokitmons.pokit.core.ui.theme.PokitTheme
-import pokitmons.pokit.core.ui.utils.noRippleClickable
+import pokitmons.pokit.core.ui.utils.scaleClickable
 import pokitmons.pokit.home.model.HomeSideEffect
 import pokitmons.pokit.home.pokit.PokitScreen
 import pokitmons.pokit.home.pokit.PokitViewModel
@@ -100,18 +100,18 @@ fun HomeScreen(
                 ) {
                     Column(
                         modifier = Modifier
-                            .background(
-                                color = PokitTheme.colors.brand,
-                                shape = RoundedCornerShape(12.dp)
-                            )
-                            .size(96.dp)
-                            .noRippleClickable {
+                            .scaleClickable {
                                 scope.launch {
                                     sheetState.hide()
                                     showBottomSheet = false
                                     onNavigateAddLink(null)
                                 }
-                            },
+                            }
+                            .background(
+                                color = PokitTheme.colors.brand,
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            .size(96.dp),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -133,18 +133,18 @@ fun HomeScreen(
 
                     Column(
                         modifier = Modifier
-                            .background(
-                                color = PokitTheme.colors.brand,
-                                shape = RoundedCornerShape(12.dp)
-                            )
-                            .size(96.dp)
-                            .noRippleClickable {
+                            .scaleClickable {
                                 scope.launch {
                                     sheetState.hide()
                                     showBottomSheet = false
                                     viewModel.checkPokitCount()
                                 }
-                            },
+                            }
+                            .background(
+                                color = PokitTheme.colors.brand,
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            .size(96.dp),
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
@@ -237,7 +237,7 @@ fun HomeScreen(
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(bottom = 60.dp)
-                .noRippleClickable {
+                .scaleClickable {
                     showBottomSheet = true
                 },
             painter = painterResource(id = R.drawable.image_floating),

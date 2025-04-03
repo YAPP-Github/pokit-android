@@ -27,6 +27,7 @@ internal fun TextIconButton(
     title: String,
     painter: Painter,
     tintColor: Color? = PokitTheme.colors.iconPrimary,
+    pressedTintColor: Color? = PokitTheme.colors.iconDisable,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
     val isPressed by interactionSource.collectIsPressedAsState()
@@ -56,7 +57,7 @@ internal fun TextIconButton(
             modifier = Modifier.size(24.dp),
             painter = painter,
             contentDescription = null,
-            colorFilter = tintColor?.let { ColorFilter.tint(it) }
+            colorFilter = if (isPressed) pressedTintColor?.let { ColorFilter.tint(it) } else tintColor?.let { ColorFilter.tint(it) }
         )
     }
 }
