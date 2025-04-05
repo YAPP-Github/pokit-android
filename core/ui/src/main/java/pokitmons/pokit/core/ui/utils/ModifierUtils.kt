@@ -1,15 +1,16 @@
 package pokitmons.pokit.core.ui.utils
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.foundation.interaction.PressInteraction
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -43,13 +44,28 @@ fun Modifier.noRippleClickable(onClick: () -> Unit): Modifier {
 }
 
 @Composable
-fun Modifier.scaleClickable(pressedScale: Float = 0.95f, enabled: Boolean = true, onClick: () -> Unit): Modifier {
+fun Modifier.scaleClickable(originalScale: Float = 1f, pressedScale: Float = 0.95f, enabled: Boolean = true, onClick: () -> Unit): Modifier {
     val interactionSource = remember { MutableInteractionSource() }
-    val isPressed by interactionSource.collectIsPressedAsState()
-    val scale by animateFloatAsState(targetValue = if (isPressed) pressedScale else 1f, label = "scale")
+    val animatedScale = remember { Animatable(originalScale) }
+
+    LaunchedEffect(interactionSource) {
+        interactionSource.interactions.collect { interaction ->
+            when(interaction) {
+                is PressInteraction.Press -> {
+                    animatedScale.animateTo(pressedScale)
+                }
+                is PressInteraction.Release -> {
+                    animatedScale.animateTo(originalScale)
+                }
+                is PressInteraction.Cancel -> {
+                    animatedScale.animateTo(originalScale)
+                }
+            }
+        }
+    }
 
     return this
-        .scale(scale)
+        .scale(animatedScale.value)
         .clickable(
             interactionSource = interactionSource,
             indication = null,

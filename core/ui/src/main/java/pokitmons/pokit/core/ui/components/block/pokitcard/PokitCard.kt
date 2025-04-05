@@ -42,7 +42,7 @@ fun PokitCard(
             .clip(
                 shape = RoundedCornerShape(8.dp)
             )
-            .scaleClickable(pressedScale = 0.98f) { onClick() }
+            .scaleClickable { onClick() }
             .background(
                 color = PokitTheme.colors.backgroundPrimary,
                 shape = RoundedCornerShape(8.dp)
