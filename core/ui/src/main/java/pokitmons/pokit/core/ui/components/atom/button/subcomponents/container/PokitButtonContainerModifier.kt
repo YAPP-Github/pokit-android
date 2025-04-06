@@ -44,7 +44,7 @@ internal fun Modifier.pokitButtonContainerModifier(
         )
         .scaleClickable(
             enabled = (state != PokitButtonState.DISABLE),
-            onClick = onClick,
+            onClick = onClick
         )
         .background(
             shape = buttonShape,

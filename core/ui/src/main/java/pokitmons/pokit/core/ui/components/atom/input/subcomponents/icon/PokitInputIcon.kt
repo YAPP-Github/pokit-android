@@ -37,7 +37,7 @@ internal fun PokitInputIcon(
                     Modifier.clickable(
                         onClick = method,
                         indication = null,
-                        interactionSource = interactionSource,
+                        interactionSource = interactionSource
                     )
                 } ?: Modifier
             )

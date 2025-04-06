@@ -54,7 +54,7 @@ fun LinkUrlCard(
             .height(IntrinsicSize.Min)
             .clickable(
                 indication = null,
-                interactionSource = interactionSource,
+                interactionSource = interactionSource
             ) {
                 if (openWebBrowserByClick && !isLoading) {
                     uriHandler.openUri(url)
@@ -67,10 +67,12 @@ fun LinkUrlCard(
             )
     ) {
         if (isLoading) {
-            Box(modifier = Modifier
-                .width(124.dp)
-                .fillMaxHeight()
-                .shimmerEffect())
+            Box(
+                modifier = Modifier
+                    .width(124.dp)
+                    .fillMaxHeight()
+                    .shimmerEffect()
+            )
         } else {
             Image(
                 painter = thumbnailPainter,

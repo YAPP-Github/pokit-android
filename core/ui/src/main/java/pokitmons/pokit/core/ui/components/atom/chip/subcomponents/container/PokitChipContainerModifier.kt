@@ -35,7 +35,7 @@ internal fun Modifier.pokitChipContainerModifier(
         )
         .scaleClickable(
             enabled = (onClick != null && state != PokitChipState.DISABLED),
-            onClick = onClick ?: {},
+            onClick = onClick ?: {}
         )
         .background(
             shape = RoundedCornerShape(9999.dp),

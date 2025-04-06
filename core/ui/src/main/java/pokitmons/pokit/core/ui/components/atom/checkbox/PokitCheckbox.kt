@@ -168,7 +168,7 @@ private fun getBackgroundColor(
 
 @Composable
 private fun getPressedIconTintColor(style: PokitCheckboxStyle): Color {
-    return when(style) {
+    return when (style) {
         PokitCheckboxStyle.FILLED -> PokitTheme.colors.inverseWh
         PokitCheckboxStyle.STROKE -> PokitTheme.colors.brandLight
         PokitCheckboxStyle.ICON_ONLY -> PokitTheme.colors.brandLight
@@ -177,7 +177,7 @@ private fun getPressedIconTintColor(style: PokitCheckboxStyle): Color {
 
 @Composable
 private fun getPressedStrokeColor(style: PokitCheckboxStyle): Color {
-    return when(style) {
+    return when (style) {
         PokitCheckboxStyle.FILLED -> Color.Unspecified
         PokitCheckboxStyle.STROKE -> PokitTheme.colors.brandLight
         PokitCheckboxStyle.ICON_ONLY -> Color.Unspecified
@@ -188,7 +188,7 @@ private fun getPressedStrokeColor(style: PokitCheckboxStyle): Color {
 private fun getPressedBackgroundColor(
     style: PokitCheckboxStyle,
 ): Color {
-    return when(style) {
+    return when (style) {
         PokitCheckboxStyle.FILLED -> PokitTheme.colors.brandLight
         PokitCheckboxStyle.STROKE -> PokitTheme.colors.backgroundBase
         PokitCheckboxStyle.ICON_ONLY -> Color.Unspecified

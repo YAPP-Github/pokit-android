@@ -39,7 +39,6 @@ fun PokitToast(
             )
             .clip(RoundedCornerShape(9999.dp))
             .background(type.color)
-
             .padding(start = 20.dp, end = 14.dp, top = 12.dp, bottom = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

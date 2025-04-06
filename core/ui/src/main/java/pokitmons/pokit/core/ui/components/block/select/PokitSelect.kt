@@ -56,7 +56,7 @@ fun PokitSelect(
                 .clip(RoundedCornerShape(8.dp))
                 .clickable(
                     onClick = onClick,
-                    enabled = (state != PokitSelectState.DISABLE) && (state != PokitSelectState.READ_ONLY),
+                    enabled = (state != PokitSelectState.DISABLE) && (state != PokitSelectState.READ_ONLY)
                 )
                 .padding(all = 12.dp),
             verticalAlignment = Alignment.CenterVertically

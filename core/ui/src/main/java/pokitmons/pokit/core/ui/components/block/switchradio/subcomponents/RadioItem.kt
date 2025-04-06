@@ -148,7 +148,7 @@ private fun getTextColor(
 private fun getPressedBackgroundColor(
     style: PokitSwitchRadioStyle,
 ): Color {
-    return when(style) {
+    return when (style) {
         PokitSwitchRadioStyle.FILLED -> PokitTheme.colors.brandLight
         PokitSwitchRadioStyle.STROKE -> PokitTheme.colors.backgroundBase
     }
@@ -158,7 +158,7 @@ private fun getPressedBackgroundColor(
 private fun getPressedStrokeColor(
     style: PokitSwitchRadioStyle,
 ): Color {
-    return when(style) {
+    return when (style) {
         PokitSwitchRadioStyle.FILLED -> Color.Unspecified
         PokitSwitchRadioStyle.STROKE -> PokitTheme.colors.brandLight
     }
@@ -168,7 +168,7 @@ private fun getPressedStrokeColor(
 private fun getPressedTextColor(
     style: PokitSwitchRadioStyle,
 ): Color {
-    return when(style) {
+    return when (style) {
         PokitSwitchRadioStyle.FILLED -> PokitTheme.colors.inverseWh
         PokitSwitchRadioStyle.STROKE -> PokitTheme.colors.brandLight
     }

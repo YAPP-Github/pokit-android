@@ -55,7 +55,7 @@ fun SettingItem(
             contentDescription = null,
             modifier = Modifier
                 .size(24.dp),
-            tint = if (isPressed) PokitTheme.colors.iconDisable else PokitTheme.colors.iconPrimary,
+            tint = if (isPressed) PokitTheme.colors.iconDisable else PokitTheme.colors.iconPrimary
         )
     }
 }

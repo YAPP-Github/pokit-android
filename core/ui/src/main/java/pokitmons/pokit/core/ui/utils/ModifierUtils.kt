@@ -50,7 +50,7 @@ fun Modifier.scaleClickable(originalScale: Float = 1f, pressedScale: Float = 0.9
 
     LaunchedEffect(interactionSource) {
         interactionSource.interactions.collect { interaction ->
-            when(interaction) {
+            when (interaction) {
                 is PressInteraction.Press -> {
                     animatedScale.animateTo(pressedScale)
                 }
