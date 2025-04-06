@@ -43,7 +43,8 @@ fun <T> PokitTap(
             style = textStyle,
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .padding(bottom = 16.dp, top = 4.dp)
+                .padding(bottom = 16.dp, top = 4.dp),
+            color = if (isPressed) PokitTheme.colors.textDisable else PokitTheme.colors.textPrimary
         )
 
         if (selectedItem == data) {
