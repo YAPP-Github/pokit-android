@@ -1,17 +1,21 @@
 package pokitmons.pokit.core.ui.components.block.tap
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.theme.PokitTheme
-import pokitmons.pokit.core.ui.utils.noRippleClickable
 
 @Composable
 fun <T> PokitTap(
@@ -22,10 +26,15 @@ fun <T> PokitTap(
     modifier: Modifier = Modifier,
 ) {
     val textStyle = getTextStyle(selected = (data == selectedItem))
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
 
     Box(
         modifier = modifier
-            .noRippleClickable {
+            .clickable(
+                indication = null,
+                interactionSource = interactionSource
+            ) {
                 onClick(data)
             }
     ) {
@@ -34,13 +43,14 @@ fun <T> PokitTap(
             style = textStyle,
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                .padding(bottom = 16.dp, top = 4.dp)
+                .padding(bottom = 16.dp, top = 4.dp),
+            color = if (isPressed) PokitTheme.colors.textDisable else PokitTheme.colors.textPrimary
         )
 
         if (selectedItem == data) {
             HorizontalDivider(
                 thickness = 2.dp,
-                color = PokitTheme.colors.brand,
+                color = if (isPressed) PokitTheme.colors.brandLight else PokitTheme.colors.brand,
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()

@@ -47,10 +47,6 @@ fun SettingsScreen(
                 onNavigateToEditNickname()
             }
 
-//            SettingItem(title = stringResource(StringResource.notification_settings)) {
-//                // TODO 커스텀 토스트 메세지
-//            }
-
             DividerItem()
 
             SettingItem(title = stringResource(StringResource.announcements)) {
@@ -80,6 +76,8 @@ fun SettingsScreen(
                     changeBottomSheetHideState(true)
                 }
             }
+
+            DividerItem()
         }
     }
 

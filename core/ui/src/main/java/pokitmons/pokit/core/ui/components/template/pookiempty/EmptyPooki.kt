@@ -2,7 +2,6 @@ package pokitmons.pokit.core.ui.components.template.pookiempty
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,6 +18,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.scaleClickable
 
 @Composable
 fun EmptyPooki(
@@ -54,7 +54,7 @@ fun EmptyPooki(
 
                 Text(
                     modifier = Modifier.clip(shape = RoundedCornerShape(8.dp))
-                        .clickable { buttonInfo.onClick() }
+                        .scaleClickable { buttonInfo.onClick() }
                         .border(
                             shape = RoundedCornerShape(8.dp),
                             width = 1.dp,

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -16,7 +17,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.theme.PokitTheme
-import pokitmons.pokit.core.ui.utils.noRippleClickable
 import pokitmons.pokit.home.pokit.PokitViewModel
 import pokitmons.pokit.home.pokit.ScreenType
 
@@ -48,33 +48,39 @@ fun HomeHeader(
         Spacer(modifier = Modifier.weight(1f))
 
         Row {
-            Icon(
-                painterResource(id = R.drawable.icon_24_search),
-                contentDescription = "검색",
-                modifier = Modifier
-                    .size(36.dp)
-                    .noRippleClickable { onNavigateToSearch() }
-                    .padding(6.dp)
-            )
-            Icon(
-                painterResource(id = R.drawable.icon_24_bell),
-                contentDescription = "알림",
-                modifier = Modifier
-                    .size(36.dp)
-                    .noRippleClickable { onNavigateToAlarm() }
-                    .padding(6.dp)
-            )
+            IconButton(
+                modifier = Modifier.size(36.dp),
+                onClick = onNavigateToSearch
+            ) {
+                Icon(
+                    painterResource(id = R.drawable.icon_24_search),
+                    contentDescription = "검색",
+                    modifier = Modifier.padding(6.dp)
+                )
+            }
+            IconButton(
+                modifier = Modifier.size(36.dp),
+                onClick = onNavigateToAlarm
+            ) {
+                Icon(
+                    painterResource(id = R.drawable.icon_24_bell),
+                    contentDescription = "알림",
+                    modifier = Modifier.padding(6.dp)
+                )
+            }
 
             when (viewModel.screenType.value) {
                 is ScreenType.Pokit -> {
-                    Icon(
-                        painterResource(id = R.drawable.icon_24_setup),
-                        contentDescription = "설정",
-                        modifier = Modifier
-                            .size(36.dp)
-                            .noRippleClickable { onNavigateToSetting() }
-                            .padding(6.dp)
-                    )
+                    IconButton(
+                        modifier = Modifier.size(36.dp),
+                        onClick = onNavigateToSetting
+                    ) {
+                        Icon(
+                            painterResource(id = R.drawable.icon_24_setup),
+                            contentDescription = "설정",
+                            modifier = Modifier.padding(6.dp)
+                        )
+                    }
                 }
                 is ScreenType.Remind -> Unit
             }

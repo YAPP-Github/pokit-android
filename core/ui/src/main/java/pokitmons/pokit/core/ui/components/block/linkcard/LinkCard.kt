@@ -36,7 +36,7 @@ import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.components.atom.checkbox.PokitCheckbox
 import pokitmons.pokit.core.ui.components.atom.checkbox.attributes.PokitCheckboxStyle
 import pokitmons.pokit.core.ui.theme.PokitTheme
-import pokitmons.pokit.core.ui.utils.noRippleClickable
+import pokitmons.pokit.core.ui.utils.scaleClickable
 
 @Composable
 fun<T> LinkCard(
@@ -58,7 +58,9 @@ fun<T> LinkCard(
         Row(
             modifier = Modifier
                 .clip(RoundedCornerShape(8.dp))
-                .noRippleClickable { onClickItem(item) }
+                .scaleClickable(pressedScale = 0.98f) {
+                    onClickItem(item)
+                }
         ) {
             Box(
                 modifier = Modifier

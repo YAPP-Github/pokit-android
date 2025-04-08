@@ -3,7 +3,6 @@ package com.strayalpaca.pokitdetail
 import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -51,6 +50,7 @@ import pokitmons.pokit.core.ui.components.template.pookiempty.EmptyPooki
 import pokitmons.pokit.core.ui.components.template.pookierror.ErrorPooki
 import pokitmons.pokit.core.ui.components.template.removeItemBottomSheet.TwoButtonBottomSheetContent
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.scaleClickable
 import pokitmons.pokit.core.ui.R.drawable as coreDrawable
 import pokitmons.pokit.core.ui.R.string as coreString
 
@@ -195,14 +195,14 @@ fun PokitDetailScreen(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(bottom = 48.dp, end = 20.dp)
-                .size(60.dp)
-                .clip(shape = CircleShape)
-                .background(color = PokitTheme.colors.brand)
-                .clickable {
+                .scaleClickable {
                     state.currentPokit?.let { currentPokit ->
                         onClickAddLink(currentPokit.id, currentPokit.title)
                     }
                 }
+                .size(60.dp)
+                .clip(shape = CircleShape)
+                .background(color = PokitTheme.colors.brand)
                 .padding(12.dp),
             painter = painterResource(id = coreDrawable.icon_24_plus),
             contentDescription = "add link",

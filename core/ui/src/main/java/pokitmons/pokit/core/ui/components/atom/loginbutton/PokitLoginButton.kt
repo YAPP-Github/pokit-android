@@ -1,6 +1,9 @@
 package pokitmons.pokit.core.ui.components.atom.loginbutton
 
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,8 +15,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.R
@@ -29,9 +35,13 @@ fun PokitLoginButton(
     text: String,
 ) {
     val loginResource: PokitLoginResource = getLoginResource(loginType)
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val scale by animateFloatAsState(targetValue = if (isPressed) 0.95f else 1f, label = "scale")
 
     Surface(
         modifier = Modifier
+            .scale(scale)
             .height(50.dp)
             .border(
                 shape = RoundedCornerShape(8.dp),
@@ -40,7 +50,8 @@ fun PokitLoginButton(
             ),
         shape = RoundedCornerShape(8.dp),
         color = loginResource.backgroundColor,
-        onClick = onClick
+        onClick = onClick,
+        interactionSource = interactionSource
     ) {
         Row(
             modifier = modifier.fillMaxWidth(),

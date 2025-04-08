@@ -2,6 +2,7 @@ package pokitmons.pokit.settings.setting
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -24,6 +26,9 @@ fun SettingItem(
     title: String,
     onClick: () -> Unit,
 ) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -31,7 +36,7 @@ fun SettingItem(
             .padding(start = 24.dp, end = 24.dp)
             .clickable(
                 indication = null,
-                interactionSource = remember { MutableInteractionSource() }
+                interactionSource = interactionSource
             ) {
                 onClick()
             },
@@ -39,7 +44,8 @@ fun SettingItem(
     ) {
         Text(
             text = title,
-            style = PokitTheme.typography.title3
+            style = PokitTheme.typography.title3,
+            color = if (isPressed) PokitTheme.colors.textDisable else PokitTheme.colors.textPrimary
         )
 
         Spacer(modifier = Modifier.weight(1f))
@@ -48,7 +54,8 @@ fun SettingItem(
             painter = painterResource(id = R.drawable.icon_24_arrow_right),
             contentDescription = null,
             modifier = Modifier
-                .size(24.dp)
+                .size(24.dp),
+            tint = if (isPressed) PokitTheme.colors.iconDisable else PokitTheme.colors.iconPrimary
         )
     }
 }

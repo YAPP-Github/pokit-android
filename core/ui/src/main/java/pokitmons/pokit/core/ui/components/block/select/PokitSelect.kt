@@ -1,7 +1,6 @@
 package pokitmons.pokit.core.ui.components.block.select
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -57,9 +56,7 @@ fun PokitSelect(
                 .clip(RoundedCornerShape(8.dp))
                 .clickable(
                     onClick = onClick,
-                    enabled = (state != PokitSelectState.DISABLE) && (state != PokitSelectState.READ_ONLY),
-                    indication = null,
-                    interactionSource = remember { MutableInteractionSource() }
+                    enabled = (state != PokitSelectState.DISABLE) && (state != PokitSelectState.READ_ONLY)
                 )
                 .padding(all = 12.dp),
             verticalAlignment = Alignment.CenterVertically

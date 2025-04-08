@@ -1,7 +1,6 @@
 package pokitmons.pokit.core.ui.components.block.pokittoast
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
@@ -21,6 +20,7 @@ import androidx.compose.ui.unit.dp
 import pokitmons.pokit.core.ui.R
 import pokitmons.pokit.core.ui.components.block.pokittoast.attributes.PokitToastType
 import pokitmons.pokit.core.ui.theme.PokitTheme
+import pokitmons.pokit.core.ui.utils.scaleClickable
 
 @Composable
 fun PokitToast(
@@ -32,12 +32,13 @@ fun PokitToast(
 ) {
     Row(
         modifier = modifier
-            .clip(RoundedCornerShape(9999.dp))
-            .background(type.color)
-            .clickable(
+            .scaleClickable(
+                pressedScale = 0.98f,
                 enabled = onClick != null,
                 onClick = onClick ?: {}
             )
+            .clip(RoundedCornerShape(9999.dp))
+            .background(type.color)
             .padding(start = 20.dp, end = 14.dp, top = 12.dp, bottom = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {

@@ -1,5 +1,8 @@
 package pokitmons.pokit.home
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -12,6 +15,8 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -21,12 +26,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import pokitmons.pokit.core.ui.theme.PokitTheme
-import pokitmons.pokit.core.ui.utils.noRippleClickable
 import pokitmons.pokit.home.pokit.PokitViewModel
 import pokitmons.pokit.home.pokit.ScreenType
 import pokitmons.pokit.core.ui.R.drawable as DrawableResource
-
-// TODO : 바텀시트 아이템 컴포저블로 만들기
 
 @Composable
 fun BottomNavigationBar(viewModel: PokitViewModel = hiltViewModel()) {
@@ -40,62 +42,64 @@ fun BottomNavigationBar(viewModel: PokitViewModel = hiltViewModel()) {
             modifier = Modifier.height(92.dp),
             tonalElevation = 8.dp
         ) {
-            Column(
-                modifier = Modifier
-                    .weight(2f)
-                    .noRippleClickable { viewModel.updateScreenType(ScreenType.Pokit) }
-                    .padding(bottom = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Icon(
-                    painter = painterResource(id = DrawableResource.icon_24_folder),
-                    contentDescription = "리마인드",
-                    tint = when (viewModel.screenType.value) {
-                        is ScreenType.Pokit -> Color.Black
-                        is ScreenType.Remind -> PokitTheme.colors.iconTertiary
-                    },
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    color = when (viewModel.screenType.value) {
-                        is ScreenType.Pokit -> Color.Black
-                        is ScreenType.Remind -> PokitTheme.colors.textTertiary
-                    },
-                    style = PokitTheme.typography.detail2,
-                    text = "포킷",
-                    textAlign = TextAlign.Center
-                )
-            }
+            BottomNavigationBarButton(
+                modifier = Modifier.weight(2f),
+                contentDescription = "포킷",
+                text = "포킷",
+                iconResourceId = DrawableResource.icon_24_folder,
+                selected = viewModel.screenType.value == ScreenType.Pokit,
+                onClick = { viewModel.updateScreenType(ScreenType.Pokit) }
+            )
 
-            Column(
-                modifier = Modifier
-                    .weight(2f)
-                    .noRippleClickable { viewModel.updateScreenType(ScreenType.Remind) }
-                    .padding(bottom = 24.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Icon(
-                    painter = painterResource(id = DrawableResource.icon_24_remind),
-                    contentDescription = "리마인드",
-                    tint = when (viewModel.screenType.value) {
-                        is ScreenType.Remind -> Color.Black
-                        is ScreenType.Pokit -> PokitTheme.colors.iconTertiary
-                    },
-                    modifier = Modifier.size(24.dp)
-                )
-                Spacer(modifier = Modifier.height(4.dp))
-                Text(
-                    color = when (viewModel.screenType.value) {
-                        is ScreenType.Remind -> Color.Black
-                        is ScreenType.Pokit -> PokitTheme.colors.textTertiary
-                    },
-                    style = PokitTheme.typography.detail2,
-                    text = "리마인드",
-                    textAlign = TextAlign.Center
-                )
-            }
+            BottomNavigationBarButton(
+                modifier = Modifier.weight(2f),
+                contentDescription = "리마인드",
+                text = "리마인드",
+                iconResourceId = DrawableResource.icon_24_remind,
+                selected = viewModel.screenType.value == ScreenType.Remind,
+                onClick = { viewModel.updateScreenType(ScreenType.Remind) }
+            )
         }
+    }
+}
+
+@Composable
+private fun BottomNavigationBarButton(
+    modifier: Modifier = Modifier,
+    selected: Boolean,
+    contentDescription: String?,
+    text: String,
+    iconResourceId: Int,
+    onClick: () -> Unit,
+) {
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val iconColor = if (selected) Color.Black else PokitTheme.colors.iconTertiary
+    val textColor = if (selected) Color.Black else PokitTheme.colors.textTertiary
+
+    Column(
+        modifier = modifier
+            .clickable(
+                onClick = onClick,
+                indication = null,
+                interactionSource = interactionSource
+            )
+            .padding(bottom = 24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Icon(
+            painter = painterResource(id = iconResourceId),
+            contentDescription = contentDescription,
+            tint = if (isPressed) PokitTheme.colors.iconDisable else iconColor,
+            modifier = Modifier.size(24.dp)
+        )
+        Spacer(modifier = Modifier.height(4.dp))
+        Text(
+            color = if (isPressed) PokitTheme.colors.textDisable else textColor,
+            style = PokitTheme.typography.detail2,
+            text = text,
+            textAlign = TextAlign.Center
+        )
     }
 }
 

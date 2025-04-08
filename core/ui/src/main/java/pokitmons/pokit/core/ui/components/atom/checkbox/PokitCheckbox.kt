@@ -5,10 +5,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,10 +38,17 @@ fun PokitCheckbox(
     val iconTintColor = getIconTintColor(style = style, checked = checked, enabled = enabled)
     val strokeColor = getStrokeColor(style = style, checked = checked, enabled = enabled)
 
+    val pressedBackgroundColor = getPressedBackgroundColor(style = style)
+    val pressedIconTintColor = getPressedIconTintColor(style = style)
+    val pressedStrokeColor = getPressedStrokeColor(style = style)
+
+    val interactionSource = remember { MutableInteractionSource() }
+    val isPressed by interactionSource.collectIsPressedAsState()
+
     Image(
         painter = painterResource(id = R.drawable.icon_24_check),
         contentDescription = null,
-        colorFilter = ColorFilter.tint(iconTintColor),
+        colorFilter = ColorFilter.tint(if (isPressed) pressedIconTintColor else iconTintColor),
         modifier = Modifier
             .size(24.dp)
             .clip(
@@ -50,7 +59,7 @@ fun PokitCheckbox(
             ) {
                 clickable(
                     indication = null,
-                    interactionSource = remember { MutableInteractionSource() },
+                    interactionSource = interactionSource,
                     enabled = enabled,
                     onClick = {
                         onClick?.invoke(!checked)
@@ -58,11 +67,11 @@ fun PokitCheckbox(
                 )
             }
             .background(
-                color = backgroundColor
+                color = if (isPressed) pressedBackgroundColor else backgroundColor
             )
             .border(
                 width = 1.dp,
-                color = strokeColor,
+                color = if (isPressed) pressedStrokeColor else strokeColor,
                 shape = checkboxShape
             )
     )
@@ -154,5 +163,34 @@ private fun getBackgroundColor(
         else -> {
             Color.Unspecified
         }
+    }
+}
+
+@Composable
+private fun getPressedIconTintColor(style: PokitCheckboxStyle): Color {
+    return when (style) {
+        PokitCheckboxStyle.FILLED -> PokitTheme.colors.inverseWh
+        PokitCheckboxStyle.STROKE -> PokitTheme.colors.brandLight
+        PokitCheckboxStyle.ICON_ONLY -> PokitTheme.colors.brandLight
+    }
+}
+
+@Composable
+private fun getPressedStrokeColor(style: PokitCheckboxStyle): Color {
+    return when (style) {
+        PokitCheckboxStyle.FILLED -> Color.Unspecified
+        PokitCheckboxStyle.STROKE -> PokitTheme.colors.brandLight
+        PokitCheckboxStyle.ICON_ONLY -> Color.Unspecified
+    }
+}
+
+@Composable
+private fun getPressedBackgroundColor(
+    style: PokitCheckboxStyle,
+): Color {
+    return when (style) {
+        PokitCheckboxStyle.FILLED -> PokitTheme.colors.brandLight
+        PokitCheckboxStyle.STROKE -> PokitTheme.colors.backgroundBase
+        PokitCheckboxStyle.ICON_ONLY -> Color.Unspecified
     }
 }
