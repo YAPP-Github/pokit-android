@@ -1,6 +1,7 @@
 package pokitmons.pokit.navigation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
@@ -40,7 +41,7 @@ fun RootNavHost(
     navHostController: NavHostController,
 ) {
     NavHost(
-        modifier = Modifier.background(color = Color.White),
+        modifier = Modifier.background(color = Color.White).safeDrawingPadding(),
         navController = navHostController,
         startDestination = Login.route
     ) {
