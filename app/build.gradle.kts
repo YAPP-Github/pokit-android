@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.com.android.application)
     alias(libs.plugins.org.jetbrains.kotlin.android)
@@ -9,12 +11,35 @@ plugins {
 
 android {
     namespace = "pokitmons.pokit"
-    compileSdk = 34
+    compileSdk = 36
+
+    val properties =
+        Properties().apply {
+            val propFile = rootProject.file("local.properties")
+            if (propFile.exists()) {
+                load(propFile.inputStream())
+            }
+        }
+
+    signingConfigs {
+        create("release") {
+            storeFile = file("${properties["release.keystore.path"]}")
+            storePassword = properties["release.keystore.password"] as? String
+                ?: System.getenv("RELEASE_KEYSTORE_PASSWORD")
+                ?: throw GradleException("RELEASE_KEYSTORE_PASSWORD 값이 없습니다.")
+            keyAlias = properties["release.key.alias"] as? String
+                ?: System.getenv("RELEASE_KEY_ALIAS")
+                ?: throw GradleException("RELEASE_KEY_ALIAS 값이 없습니다.")
+            keyPassword = properties["release.key.password"] as? String
+                ?: System.getenv("RELEASE_KEY_PASSWORD")
+                ?: throw GradleException("RELEASE_KEY_PASSWORD 값이 없습니다.")
+        }
+    }
 
     defaultConfig {
         applicationId = "pokitmons.pokit"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 36
         versionCode = 4
         versionName = "1.0.2"
 
@@ -22,6 +47,11 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        val url = properties["pokit.prod.url"] as? String
+            ?: System.getenv("POKIT_PROD_URL")
+            ?: throw GradleException("pokit.prod.url 값이 없습니다.")
+        buildConfigField(type = "String", name = "BASE_URL", value = "\"$url\"")
     }
 
     buildTypes {
@@ -31,6 +61,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
@@ -42,6 +73,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
