@@ -25,7 +25,7 @@ import java.util.concurrent.TimeUnit
 import javax.inject.Named
 import javax.inject.Singleton
 
-private const val BASE_URL = "https://pokit.site"
+private const val BASE_URL = "https://pokit.cloud"
 private const val API = "api"
 private const val VERSION = "v1"
 
